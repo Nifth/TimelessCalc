@@ -41,9 +41,9 @@ my-poe-tree/
 │   │       ├── controls.ts         # Contrôles : boutons de filtre, zoom, reset
 │   │       └── tooltip.ts          # Affichage des tooltips (hover sur nodes)
 │   ├── main.ts                     # Point d’entrée : init Konva, charge JSON, lie les composants
-```
 │   └── index.html                  # Page HTML : canvas + sidebar
 ├── package.json                    # Dépendances front : konva, @types/konva, vite, typescript
 ├── tsconfig.json                   # Config TypeScript pour le front
 ├── vite.config.ts                  # Config Vite pour build et dev
 └── README.md                       # Doc : setup, scripts, déploiement
+```
