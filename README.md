@@ -1,7 +1,7 @@
 # TimelessCalc
 BUT LATER NEVER CAME
 
-
+```bash
 my-poe-tree/
 ├── data/                           # JSON statiques pour le front
 │   ├── tree.json                   # Skill tree : nodes (id, x, y, type, stats, connections), groupes (orbites)
@@ -41,6 +41,7 @@ my-poe-tree/
 │   │       ├── controls.ts         # Contrôles : boutons de filtre, zoom, reset
 │   │       └── tooltip.ts          # Affichage des tooltips (hover sur nodes)
 │   ├── main.ts                     # Point d’entrée : init Konva, charge JSON, lie les composants
+```
 │   └── index.html                  # Page HTML : canvas + sidebar
 ├── package.json                    # Dépendances front : konva, @types/konva, vite, typescript
 ├── tsconfig.json                   # Config TypeScript pour le front
