@@ -3,24 +3,6 @@ BUT LATER NEVER CAME
 
 ```bash
 my-poe-tree/
-├── data/                           # JSON statiques pour le front
-│   ├── tree.json                   # Skill tree : nodes (id, x, y, type, stats, connections), groupes (orbites)
-│   ├── jewels/                     # Données des Timeless Jewels
-│   │   ├── glorious_vanity.json    # Effets par seed pour Glorious Vanity
-│   │   ├── lethal_pride.json       # Idem pour Lethal Pride
-│   │   ├── elegant_hubris.json     # Idem pour Elegant Hubris
-│   │   └── ...                     # Autres jewels
-│   └── mods.json                   # Liste des mods possibles (pour la recherche) : { mod: string, weight: number }
-├── preprocessing/                  # Scripts pour générer les JSON
-│   ├── src/                        # Code source
-│   │   ├── types.ts                # Interfaces TS : Node, Tree, Jewel, Mod
-│   │   ├── parseTree.ts            # Parser le JSON du skill tree (ex. : depuis poe-dat ou site officiel)
-│   │   ├── parseJewels.ts          # Parser les données des jewels (ex. : depuis timeless-data)
-│   │   ├── generateMods.ts         # Générer mods.json avec tous les mods et leurs poids
-│   │   └── utils.ts                # Fonctions utilitaires : compression JSON, fetch, validation
-│   ├── package.json                # Dépendances : axios, zod, typescript
-│   ├── tsconfig.json               # Config TypeScript pour Node.js
-│   └── output/                     # JSON temporaires avant copie vers data/
 ├── src/                            # Code du front
 │   ├── assets/                     # Assets statiques
 │   │   ├── styles.css              # CSS global : layout, sidebar, canvas
