@@ -1,4 +1,3 @@
-import Konva from 'konva';
 import { renderTree } from './components/tree/renderer';
 import type { TreeData } from './components/tree/types';
 

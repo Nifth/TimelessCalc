@@ -1,26 +1,6 @@
 {
   "tree": "Default",
   "groups": {
-    "48": {
-      "x": -8947.77,
-      "y": -2419.3,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "5624"
-      ]
-    },
-    "51": {
-      "x": -8839.55,
-      "y": 2423.75,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "52282"
-      ]
-    },
     "63": {
       "x": -8302.22,
       "y": -2419.3,
@@ -94,16 +74,6 @@
         "4940",
         "24224",
         "23038"
-      ]
-    },
-    "69": {
-      "x": -8255.37,
-      "y": -473.585,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "40849"
       ]
     },
     "72": {
@@ -2304,16 +2274,6 @@
         "21650"
       ]
     },
-    "230": {
-      "x": -4160.65,
-      "y": -1539.94,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "14079"
-      ]
-    },
     "231": {
       "x": -4119.19,
       "y": -5843.48,
@@ -2330,16 +2290,6 @@
         "53957",
         "24229",
         "4977"
-      ]
-    },
-    "232": {
-      "x": -4076.67,
-      "y": 1474.49,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "13739"
       ]
     },
     "234": {
@@ -2389,16 +2339,6 @@
         "24720"
       ]
     },
-    "237": {
-      "x": -3883.4,
-      "y": -2130.94,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "4354"
-      ]
-    },
     "238": {
       "x": -3882.88,
       "y": 5786.8,
@@ -2433,16 +2373,6 @@
         "58869",
         "39986",
         "50540"
-      ]
-    },
-    "240": {
-      "x": -3822.96,
-      "y": 2423.75,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "38706"
       ]
     },
     "241": {
@@ -2596,16 +2526,6 @@
         "39916"
       ]
     },
-    "251": {
-      "x": -3692.82,
-      "y": -3114.59,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "37512"
-      ]
-    },
     "252": {
       "x": -3691.22,
       "y": 7146.75,
@@ -2679,16 +2599,6 @@
         "38701",
         "18767",
         "48298"
-      ]
-    },
-    "256": {
-      "x": -3508.25,
-      "y": 2135.16,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "14587"
       ]
     },
     "257": {
@@ -2904,16 +2814,6 @@
         "35221"
       ]
     },
-    "273": {
-      "x": -3214.93,
-      "y": 2951.63,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "32853"
-      ]
-    },
     "274": {
       "x": -3163.95,
       "y": -6892.09,
@@ -3064,8 +2964,7 @@
       },
       "nodes": [
         "63965",
-        "20228",
-        "61525"
+        "20228"
       ]
     },
     "285": {
@@ -3081,7 +2980,6 @@
       },
       "nodes": [
         "50904",
-        "47175",
         "31628"
       ]
     },
@@ -4105,16 +4003,6 @@
         "62588"
       ]
     },
-    "354": {
-      "x": -1041.83,
-      "y": -4099.38,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "5574"
-      ]
-    },
     "355": {
       "x": -1017.52,
       "y": 1491.77,
@@ -4262,16 +4150,6 @@
         "30842",
         "36972",
         "43412"
-      ]
-    },
-    "364": {
-      "x": -663.955,
-      "y": 3776.28,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "20605"
       ]
     },
     "365": {
@@ -4540,16 +4418,6 @@
         "56158"
       ]
     },
-    "384": {
-      "x": -4.055,
-      "y": -8805.58,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "16246"
-      ]
-    },
     "385": {
       "x": -4.055,
       "y": -7490.3,
@@ -4629,38 +4497,7 @@
       },
       "nodes": [
         "57226",
-        "57264",
-        "54447"
-      ]
-    },
-    "389": {
-      "x": -2.225,
-      "y": -4029.12,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "62596"
-      ]
-    },
-    "390": {
-      "x": -1.355,
-      "y": -3709.31,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "33722"
-      ]
-    },
-    "391": {
-      "x": -0.205,
-      "y": -2625.07,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "27781"
+        "57264"
       ]
     },
     "392": {
@@ -4694,7 +4531,6 @@
       },
       "nodes": [
         "39725",
-        "50986",
         "47389"
       ]
     },
@@ -4788,7 +4624,6 @@
         "2151",
         "48828",
         "62103",
-        "58833",
         "47062"
       ]
     },
@@ -4825,16 +4660,6 @@
       ],
       "nodes": [
         "19144"
-      ]
-    },
-    "402": {
-      "x": 4.565,
-      "y": 3613.13,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "41169"
       ]
     },
     "403": {
@@ -5096,16 +4921,6 @@
         "48807"
       ]
     },
-    "419": {
-      "x": 659.775,
-      "y": 3773.93,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "56146"
-      ]
-    },
     "420": {
       "x": 664.085,
       "y": 1939.77,
@@ -5270,16 +5085,6 @@
         "29185",
         "58803",
         "32059"
-      ]
-    },
-    "430": {
-      "x": 1037.99,
-      "y": -4096.44,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "56274"
       ]
     },
     "431": {
@@ -5639,16 +5444,6 @@
         "17020",
         "8410",
         "34284"
-      ]
-    },
-    "456": {
-      "x": 1719.48,
-      "y": 2174.13,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "56207"
       ]
     },
     "457": {
@@ -6277,16 +6072,6 @@
         "6363"
       ]
     },
-    "500": {
-      "x": 2844.17,
-      "y": -1627.81,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "44683"
-      ]
-    },
     "501": {
       "x": 2844.17,
       "y": 1642.43,
@@ -6300,8 +6085,7 @@
       },
       "nodes": [
         "45035",
-        "39821",
-        "50459"
+        "39821"
       ]
     },
     "502": {
@@ -6453,16 +6237,6 @@
         "544"
       ]
     },
-    "512": {
-      "x": 3119.9,
-      "y": 2789.5,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "203"
-      ]
-    },
     "513": {
       "x": 3165.88,
       "y": 4078.63,
@@ -6527,16 +6301,6 @@
       ],
       "nodes": [
         "63139"
-      ]
-    },
-    "517": {
-      "x": 3312.19,
-      "y": 2131.76,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "24358"
       ]
     },
     "518": {
@@ -6718,16 +6482,6 @@
         "12873"
       ]
     },
-    "530": {
-      "x": 3597.43,
-      "y": -1313.9,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "23549"
-      ]
-    },
     "531": {
       "x": 3627.66,
       "y": -1604.45,
@@ -6793,16 +6547,6 @@
         "33989"
       ]
     },
-    "535": {
-      "x": 3687.33,
-      "y": -3111.88,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "1365"
-      ]
-    },
     "536": {
       "x": 3702.12,
       "y": -5959.63,
@@ -6847,16 +6591,6 @@
         "65093"
       ]
     },
-    "539": {
-      "x": 3793.6,
-      "y": 1307.06,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "3195"
-      ]
-    },
     "540": {
       "x": 3802.19,
       "y": 1551.91,
@@ -6893,16 +6627,6 @@
         "6799",
         "53615",
         "63194"
-      ]
-    },
-    "543": {
-      "x": 3865.28,
-      "y": 2133.7,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "41307"
       ]
     },
     "544": {
@@ -6959,16 +6683,6 @@
         "29870",
         "56149",
         "720"
-      ]
-    },
-    "547": {
-      "x": 3884.04,
-      "y": -2123.36,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "51360"
       ]
     },
     "548": {
@@ -7133,16 +6847,6 @@
         "58271",
         "3042",
         "19069"
-      ]
-    },
-    "561": {
-      "x": 4215.76,
-      "y": -7959.34,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "53759"
       ]
     },
     "562": {
@@ -7719,16 +7423,6 @@
         "22217",
         "6383",
         "59866"
-      ]
-    },
-    "608": {
-      "x": 5072.35,
-      "y": 7475.25,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "64217"
       ]
     },
     "609": {
@@ -9487,16 +9181,6 @@
         "52213"
       ]
     },
-    "731": {
-      "x": 8532.18,
-      "y": 1593.66,
-      "orbits": [
-        0
-      ],
-      "nodes": [
-        "57006"
-      ]
-    },
     "732": {
       "x": 8533.09,
       "y": 939.335,
@@ -9650,24 +9334,6 @@
         "4105",
         "27659"
       ],
-      "in": []
-    },
-    "203": {
-      "skill": 203,
-      "name": "Vinespike Cordial",
-      "icon": "PathfinderAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Inflict a Grasping Vine on Hit against Enemies with fewer than\n8 Grasping Vines during Effect of any Life Flask"
-      ],
-      "reminderText": [
-        "(Up to 10 Vines can grasp you, inflicting 8% less Movement Speed per Vine. Broken by moving)"
-      ],
-      "group": 512,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
       "in": []
     },
     "223": {
@@ -10466,21 +10132,6 @@
         "487"
       ]
     },
-    "1365": {
-      "skill": 1365,
-      "name": "Knowledge Barrier",
-      "icon": "TricksterAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "6% increased Energy Shield Recharge Rate for each different type of Mastery you have Allocated"
-      ],
-      "group": 535,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "1371": {
       "skill": 1371,
       "name": "Projectile Damage",
@@ -11033,7 +10684,6 @@
       "orbit": 3,
       "orbitIndex": 15,
       "out": [
-        "58833",
         "37690",
         "5560"
       ],
@@ -11655,21 +11305,6 @@
       "in": [
         "54142"
       ]
-    },
-    "3195": {
-      "skill": 3195,
-      "name": "Legacy of the Wilds",
-      "icon": "WardenAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Tinctures have 40% increased effect while at or above 10 stacks of Mana Burn"
-      ],
-      "group": 539,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "3309": {
       "skill": 3309,
@@ -12376,21 +12011,6 @@
       "in": [
         "7082"
       ]
-    },
-    "4354": {
-      "skill": 4354,
-      "name": "Beacon of Hope",
-      "icon": "GuardianAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "80% increased Area of Effect of Aura Skills"
-      ],
-      "group": 237,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "4367": {
       "skill": 4367,
@@ -13303,21 +12923,6 @@
         "2151"
       ]
     },
-    "5574": {
-      "skill": 5574,
-      "name": "Force of Darkness",
-      "icon": "OccultistAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Damage Penetrates 15% Chaos Resistance"
-      ],
-      "group": 354,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "5591": {
       "skill": 5591,
       "name": "Energy Shield Recharge Rate",
@@ -13406,25 +13011,6 @@
       "in": [
         "6"
       ]
-    },
-    "5624": {
-      "skill": 5624,
-      "name": "Crusader",
-      "icon": "MindPact.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "8% increased maximum Mana",
-        "Transfiguration of Mind"
-      ],
-      "reminderText": [
-        "(Increases and Reductions to Maximum Mana also apply to Damage at 30% of their value)"
-      ],
-      "group": 48,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "5629": {
       "skill": 5629,
@@ -19624,24 +19210,6 @@
         "46578"
       ]
     },
-    "13739": {
-      "skill": 13739,
-      "name": "Always Angry",
-      "icon": "BeserkerAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "+8 to Minimum Rage"
-      ],
-      "reminderText": [
-        "(Every Rage grants 1% more Attack Damage. Maximum Rage is 30. Lose 10 Rage per second if you have not been Hit or gained Rage in the last 2 seconds)"
-      ],
-      "group": 232,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "13753": {
       "skill": 13753,
       "name": "Energy Shield",
@@ -19966,24 +19534,6 @@
         "Recover 2% of Energy Shield when you Kill a Cursed Enemy"
       ]
     },
-    "14079": {
-      "skill": 14079,
-      "name": "Wood, Stone, and Spell",
-      "icon": "HeirophantAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "10% increased effect of Arcane Surge on you per Summoned Totem"
-      ],
-      "reminderText": [
-        "(Arcane Surge grants 20% increased Cast Speed and 30% increased Mana Regeneration rate)"
-      ],
-      "group": 230,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "14084": {
       "skill": 14084,
       "name": "Axe and Sword Damage",
@@ -20289,24 +19839,6 @@
       "reminderText": [
         "(Leeched Mana is recovered over time. Multiple Leeches can occur simultaneously, up to a maximum rate)"
       ]
-    },
-    "14587": {
-      "skill": 14587,
-      "name": "Adaptive Steel",
-      "icon": "JuggernautAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "5% chance to Defend with 200% of Armour for each\ntime you've been Hit by an Enemy Recently, up to 30%"
-      ],
-      "reminderText": [
-        "(Recently refers to the past 4 seconds)"
-      ],
-      "group": 256,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "14606": {
       "skill": 14606,
@@ -20706,7 +20238,6 @@
       "orbit": 3,
       "orbitIndex": 4,
       "out": [
-        "58833",
         "3992"
       ],
       "in": [
@@ -21523,26 +21054,6 @@
       "in": [
         "56920"
       ]
-    },
-    "16246": {
-      "skill": 16246,
-      "name": "Tranquility",
-      "icon": "SoulPact.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "5% increased maximum Energy Shield",
-        "Transfiguration of Soul"
-      ],
-      "reminderText": [
-        "(Increases and Reductions to Maximum Energy Shield",
-        "also apply to Spell Damage at 30% of their value)"
-      ],
-      "group": 384,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "16351": {
       "skill": 16351,
@@ -24006,9 +23517,7 @@
       "group": 284,
       "orbit": 3,
       "orbitIndex": 12,
-      "out": [
-        "61525"
-      ],
+      "out": [],
       "in": [
         "39916",
         "17352"
@@ -24187,24 +23696,6 @@
       "in": [
         "61198"
       ]
-    },
-    "20605": {
-      "skill": 20605,
-      "name": "No Forgiveness",
-      "icon": "GladiatorAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "20% chance for used Retaliation Skills to remain Usable and not consume a Cooldown Use"
-      ],
-      "reminderText": [
-        "(They will also not be put on cooldown if they remain Usable)"
-      ],
-      "group": 364,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "20675": {
       "skill": 20675,
@@ -26364,25 +25855,6 @@
         "26620"
       ]
     },
-    "23549": {
-      "skill": 23549,
-      "name": "Incorporeal",
-      "icon": "AssassinAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Elusive on you reduces in effect 50% slower",
-        "Elusive is removed from you at 20% effect"
-      ],
-      "reminderText": [
-        "(Elusive initially grants 15% chance to Avoid All Damage from Hits, and 30% increased Movement Speed. The buff reduces its effect over time, removing itself at 0% effect. If you already have an Elusive buff, you cannot gain Elusive)"
-      ],
-      "group": 530,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "23616": {
       "skill": 23616,
       "name": "Physical and Chaos Damage",
@@ -26893,21 +26365,6 @@
         "Minions deal 20% increased Damage while you are affected by a Herald",
         "Summoned Sentinels have 25% increased Cooldown Recovery Rate"
       ]
-    },
-    "24358": {
-      "skill": 24358,
-      "name": "Selective Precision",
-      "icon": "DeadeyeAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "First and Final shots of Barrage sequences fire Projectiles that Return to you"
-      ],
-      "group": 517,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "24362": {
       "skill": 24362,
@@ -29515,25 +28972,6 @@
       "in": [
         "46904"
       ]
-    },
-    "27781": {
-      "skill": 27781,
-      "name": "Worship the Blightheart",
-      "icon": "AnointOnlyKeystone.png",
-      "isKeystone": true,
-      "isBlighted": true,
-      "stats": [
-        "Create Fungal Ground instead of Consecrated Ground"
-      ],
-      "reminderText": [
-        "(Allies on your Consecrated Ground Regenerate a percentage of their Maximum Life per second, and Curses have 50% reduced effect on them)",
-        "(Allies on your Fungal Ground have +25% to Chaos Resistance. Enemies on your Fungal Ground have -10% to all Resistances.)"
-      ],
-      "group": 391,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "27788": {
       "skill": 27788,
@@ -32223,8 +31661,7 @@
         "9511"
       ],
       "in": [
-        "33988",
-        "47175"
+        "33988"
       ]
     },
     "31680": {
@@ -33113,21 +32550,6 @@
         "64709"
       ]
     },
-    "32853": {
-      "skill": 32853,
-      "name": "Sione's Ambition",
-      "icon": "CheiftainAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Strike Skills which target additional Enemies can do so from 40% further away"
-      ],
-      "group": 273,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "32932": {
       "skill": 32932,
       "name": "Sovereignty",
@@ -33641,21 +33063,6 @@
       "in": [
         "9995"
       ]
-    },
-    "33722": {
-      "skill": 33722,
-      "name": "Hollow Effigy",
-      "icon": "NecromancerAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Your Offering Skills do not require a Corpse"
-      ],
-      "group": 390,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "33725": {
       "skill": 33725,
@@ -36597,25 +36004,6 @@
         "18670"
       ]
     },
-    "37512": {
-      "skill": 37512,
-      "name": "Bastion of Faith",
-      "icon": "InquisitorAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Consecrated Ground you create also grants\n50% reduced duration of Damaging Ailments on you"
-      ],
-      "reminderText": [
-        "(Allies on your Consecrated Ground Regenerate a percentage of their Maximum Life per second, and Curses have 50% reduced effect on them)",
-        "(Ailments that deal Damage are Bleeding, Ignited, and Poisoned)"
-      ],
-      "group": 251,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "37532": {
       "skill": 37532,
       "name": "Lightning Mastery",
@@ -37108,7 +36496,6 @@
       "orbit": 0,
       "orbitIndex": 0,
       "out": [
-        "44683",
         "11334",
         "63639"
       ],
@@ -37623,24 +37010,6 @@
       "in": [
         "12250"
       ]
-    },
-    "38706": {
-      "skill": 38706,
-      "name": "Way of the Warrior",
-      "icon": "EyesOfThePowerful.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "16% increased Melee Damage",
-        "16% increased Armour",
-        "+16 to maximum Life",
-        "+30 to Strength"
-      ],
-      "group": 240,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "38772": {
       "skill": 38772,
@@ -38301,9 +37670,7 @@
         "63649",
         "24377"
       ],
-      "in": [
-        "50986"
-      ]
+      "in": []
     },
     "39738": {
       "skill": 39738,
@@ -38447,9 +37814,7 @@
         "52904",
         "2094"
       ],
-      "in": [
-        "50459"
-      ]
+      "in": []
     },
     "39836": {
       "skill": 39836,
@@ -39297,22 +38662,6 @@
         "6741"
       ]
     },
-    "40849": {
-      "skill": 40849,
-      "name": "Persistence",
-      "icon": "ShrugOff.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "-10 Physical Damage taken from Hits",
-        "-1 Physical Damage taken from Hits per Level"
-      ],
-      "group": 69,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "40858": {
       "skill": 40858,
       "name": "Adrenaline",
@@ -39525,25 +38874,6 @@
         "3309"
       ]
     },
-    "41169": {
-      "skill": 41169,
-      "name": "Jagged Wounds",
-      "icon": "SlayerAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "20% increased Maximum total Life Recovery per second from\nLeech if you've dealt a Critical Strike recently"
-      ],
-      "reminderText": [
-        "(Recently refers to the past 4 seconds)",
-        "(Leeched Life is recovered over time. Multiple Leeches can occur simultaneously, up to a maximum rate)"
-      ],
-      "group": 402,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "41190": {
       "skill": 41190,
       "name": "Minion Damage and Life",
@@ -39691,24 +39021,6 @@
         "5203",
         "10989"
       ]
-    },
-    "41307": {
-      "skill": 41307,
-      "name": "Deadly Inclinations",
-      "icon": "EyesOfTheDeadly.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "18% increased Evasion Rating",
-        "+12 to maximum Life",
-        "16% increased Projectile Damage",
-        "+30 to Dexterity"
-      ],
-      "group": 543,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "41355": {
       "skill": 41355,
@@ -42057,22 +41369,6 @@
         "(Maimed enemies have 30% reduced Movement Speed)"
       ]
     },
-    "44683": {
-      "skill": 44683,
-      "name": "SIX",
-      "icon": "tempint.png",
-      "stats": [],
-      "classStartIndex": 6,
-      "group": 500,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [
-        "45272"
-      ],
-      "in": [
-        "38129"
-      ]
-    },
     "44723": {
       "skill": 44723,
       "name": "Spell Critical Strike Chance",
@@ -42407,9 +41703,7 @@
         "59370",
         "465"
       ],
-      "in": [
-        "50459"
-      ]
+      "in": []
     },
     "45067": {
       "skill": 45067,
@@ -42557,7 +41851,6 @@
       "orbitIndex": 30,
       "out": [],
       "in": [
-        "44683",
         "8640",
         "41689"
       ]
@@ -43804,7 +43097,6 @@
       "orbit": 3,
       "orbitIndex": 1,
       "out": [
-        "58833",
         "56153",
         "63845"
       ],
@@ -43846,21 +43138,6 @@
       "in": [
         "15452"
       ]
-    },
-    "47175": {
-      "skill": 47175,
-      "name": "MARAUDER",
-      "icon": "blankStr.png",
-      "stats": [],
-      "classStartIndex": 1,
-      "group": 285,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [
-        "31628",
-        "50904"
-      ],
-      "in": []
     },
     "47192": {
       "skill": 47192,
@@ -44029,7 +43306,6 @@
       "orbit": 3,
       "orbitIndex": 9,
       "out": [
-        "50986",
         "42911",
         "5612"
       ],
@@ -44999,7 +44275,6 @@
       "orbit": 3,
       "orbitIndex": 9,
       "out": [
-        "58833",
         "62662",
         "45887",
         "33508"
@@ -46376,21 +45651,6 @@
         "32245"
       ]
     },
-    "50459": {
-      "skill": 50459,
-      "name": "RANGER",
-      "icon": "blankDex.png",
-      "stats": [],
-      "classStartIndex": 2,
-      "group": 501,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [
-        "39821",
-        "45035"
-      ],
-      "in": []
-    },
     "50472": {
       "skill": 50472,
       "name": "Wand Damage",
@@ -46670,8 +45930,7 @@
         "6981"
       ],
       "in": [
-        "22627",
-        "47175"
+        "22627"
       ]
     },
     "50969": {
@@ -46689,22 +45948,6 @@
       ],
       "in": [
         "11700"
-      ]
-    },
-    "50986": {
-      "skill": 50986,
-      "name": "DUELIST",
-      "icon": "damagedualwield.png",
-      "stats": [],
-      "classStartIndex": 4,
-      "group": 393,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [
-        "39725"
-      ],
-      "in": [
-        "47389"
       ]
     },
     "51042": {
@@ -46900,24 +46143,6 @@
       "in": [
         "5560"
       ]
-    },
-    "51360": {
-      "skill": 51360,
-      "name": "Mixed Munitions",
-      "icon": "SaboteurAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "5% increased Cooldown Recovery Rate for throwing Traps per Mine Detonated Recently"
-      ],
-      "reminderText": [
-        "(Recently refers to the past 4 seconds)"
-      ],
-      "group": 547,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "51382": {
       "skill": 51382,
@@ -47587,25 +46812,6 @@
       "in": [
         "29379"
       ]
-    },
-    "52282": {
-      "skill": 52282,
-      "name": "Tenacity",
-      "icon": "BloodPact.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "5% increased maximum Life",
-        "Transfiguration of Body"
-      ],
-      "reminderText": [
-        "(Increases and Reductions to Maximum Life also apply to Attack Damage at 30% of their value)"
-      ],
-      "group": 51,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "52288": {
       "skill": 52288,
@@ -48510,21 +47716,6 @@
         "24157"
       ]
     },
-    "53759": {
-      "skill": 53759,
-      "name": "Cleansed Thoughts",
-      "icon": "ChaoticPotential.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Chaos Resistance is doubled"
-      ],
-      "group": 561,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "53793": {
       "skill": 53793,
       "name": "Strength",
@@ -48956,22 +48147,6 @@
         "1% increased Cold Damage per 25 Dexterity",
         "1% increased Cold Damage per 25 Intelligence",
         "1% increased Cold Damage per 25 Strength"
-      ]
-    },
-    "54447": {
-      "skill": 54447,
-      "name": "WITCH",
-      "icon": "blankInt.png",
-      "stats": [],
-      "classStartIndex": 3,
-      "group": 388,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [
-        "57264"
-      ],
-      "in": [
-        "57226"
       ]
     },
     "54452": {
@@ -49665,7 +48840,6 @@
       "orbit": 3,
       "orbitIndex": 12,
       "out": [
-        "58833",
         "38048",
         "17674"
       ],
@@ -50336,24 +49510,6 @@
         "22972"
       ]
     },
-    "56146": {
-      "skill": 56146,
-      "name": "Deliberate Brutality",
-      "icon": "ChampionAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Impales you inflict gain 50% increased Effect once 1 second of Duration has expired"
-      ],
-      "reminderText": [
-        "(When an Impaled enemy is hit, the Impale reflects 10% of the physical damage of the Impaling hit to that enemy. Impale lasts for 5 hits or 8 seconds)"
-      ],
-      "group": 419,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "56149": {
       "skill": 56149,
       "name": "Accuracy and Attack Damage",
@@ -50443,22 +49599,6 @@
         "11162"
       ]
     },
-    "56207": {
-      "skill": 56207,
-      "name": "Hardened Scars",
-      "icon": "DarkestHour.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "15% increased Life Recovery from Flasks",
-        "25% less Damage over Time taken during Effect of any Life Flask"
-      ],
-      "group": 456,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "56231": {
       "skill": 56231,
       "name": "Dual Wield Damage and Block",
@@ -50476,24 +49616,6 @@
       "in": [
         "49547"
       ]
-    },
-    "56274": {
-      "skill": 56274,
-      "name": "Lasting Tempest",
-      "icon": "ElementalistAnointNotable.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "50% increased Duration of Elemental Ailments on Enemies"
-      ],
-      "reminderText": [
-        "(Elemental Ailments are Ignited, Scorched, Chilled, Frozen, Brittle, Shocked, and Sapped)"
-      ],
-      "group": 430,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "56276": {
       "skill": 56276,
@@ -51005,21 +50127,6 @@
       ],
       "in": []
     },
-    "57006": {
-      "skill": 57006,
-      "name": "Vengeant Cascade",
-      "icon": "Boomerang.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "Returning Projectiles have 150% increased Speed"
-      ],
-      "group": 731,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
-    },
     "57011": {
       "skill": 57011,
       "name": "Stun Duration per Endurance Charge",
@@ -51197,8 +50304,7 @@
       "orbit": 3,
       "orbitIndex": 1,
       "out": [
-        "21678",
-        "54447"
+        "21678"
       ],
       "in": [
         "59650"
@@ -51287,8 +50393,7 @@
         "33296"
       ],
       "in": [
-        "37569",
-        "54447"
+        "37569"
       ]
     },
     "57266": {
@@ -52306,25 +51411,6 @@
       ],
       "in": [
         "39023"
-      ]
-    },
-    "58833": {
-      "skill": 58833,
-      "name": "Seven",
-      "icon": "tempdex.png",
-      "stats": [],
-      "classStartIndex": 0,
-      "group": 399,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": [
-        "15144",
-        "55373",
-        "2151",
-        "48828",
-        "62103",
-        "47062"
       ]
     },
     "58851": {
@@ -54152,22 +53238,6 @@
         "(Recently refers to the past 4 seconds)"
       ]
     },
-    "61525": {
-      "skill": 61525,
-      "name": "TEMPLAR",
-      "icon": "axedmgspeed.png",
-      "stats": [],
-      "classStartIndex": 5,
-      "group": 284,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [
-        "63965"
-      ],
-      "in": [
-        "20228"
-      ]
-    },
     "61529": {
       "skill": 61529,
       "name": "Recovery Mastery",
@@ -54624,7 +53694,6 @@
       "orbit": 3,
       "orbitIndex": 7,
       "out": [
-        "58833",
         "39773",
         "60532"
       ],
@@ -54928,24 +53997,6 @@
       "in": [
         "1325"
       ]
-    },
-    "62596": {
-      "skill": 62596,
-      "name": "Mystic Talents",
-      "icon": "EyesOfTheSavant.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "16% increased Spell Damage",
-        "+14 to maximum Energy Shield",
-        "25% increased Mana Regeneration Rate",
-        "+30 to Intelligence"
-      ],
-      "group": 389,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "62618": {
       "skill": 62618,
@@ -56104,8 +55155,7 @@
         "14151"
       ],
       "in": [
-        "35724",
-        "61525"
+        "35724"
       ]
     },
     "63969": {
@@ -56246,24 +55296,6 @@
         "5743",
         "7444"
       ]
-    },
-    "64217": {
-      "skill": 64217,
-      "name": "Aspect of Stone",
-      "icon": "IgnorePain.png",
-      "isNotable": true,
-      "isBlighted": true,
-      "stats": [
-        "20% chance to Avoid Physical Damage from Hits"
-      ],
-      "reminderText": [
-        "(No chance to avoid damage can be higher than 75%)"
-      ],
-      "group": 608,
-      "orbit": 0,
-      "orbitIndex": 0,
-      "out": [],
-      "in": []
     },
     "64221": {
       "skill": 64221,
@@ -57303,15 +56335,7 @@
       "group": 0,
       "orbit": 0,
       "orbitIndex": 0,
-      "out": [
-        "50459",
-        "47175",
-        "50986",
-        "61525",
-        "54447",
-        "44683",
-        "58833"
-      ],
+      "out": [],
       "in": []
     }
   },
@@ -60750,12 +59774,6 @@
         "w": 312,
         "h": 459,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 408,
-            "w": 17,
-            "h": 17
-          },
           "BrandKeystone.png": {
             "x": 17,
             "y": 408,
@@ -61081,12 +60099,6 @@
         "w": 520,
         "h": 775,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 688,
-            "w": 28,
-            "h": 29
-          },
           "BrandKeystone.png": {
             "x": 28,
             "y": 688,
@@ -61412,12 +60424,6 @@
         "w": 754,
         "h": 1117,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 994,
-            "w": 40,
-            "h": 41
-          },
           "BrandKeystone.png": {
             "x": 40,
             "y": 994,
@@ -61743,12 +60749,6 @@
         "w": 962,
         "h": 1433,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 1274,
-            "w": 52,
-            "h": 53
-          },
           "BrandKeystone.png": {
             "x": 52,
             "y": 1274,
@@ -62076,12 +61076,6 @@
         "w": 312,
         "h": 459,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 408,
-            "w": 17,
-            "h": 17
-          },
           "BrandKeystone.png": {
             "x": 17,
             "y": 408,
@@ -62407,12 +61401,6 @@
         "w": 520,
         "h": 775,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 688,
-            "w": 28,
-            "h": 29
-          },
           "BrandKeystone.png": {
             "x": 28,
             "y": 688,
@@ -62738,12 +61726,6 @@
         "w": 754,
         "h": 1117,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 994,
-            "w": 40,
-            "h": 41
-          },
           "BrandKeystone.png": {
             "x": 40,
             "y": 994,
@@ -63069,12 +62051,6 @@
         "w": 962,
         "h": 1433,
         "coords": {
-          "AnointOnlyKeystone.png": {
-            "x": 0,
-            "y": 1274,
-            "w": 52,
-            "h": 53
-          },
           "BrandKeystone.png": {
             "x": 52,
             "y": 1274,
@@ -64572,30 +63548,6 @@
             "w": 8,
             "h": 8
           },
-          "axedmgspeed.png": {
-            "x": 288,
-            "y": 56,
-            "w": 8,
-            "h": 8
-          },
-          "blankDex.png": {
-            "x": 296,
-            "y": 56,
-            "w": 8,
-            "h": 8
-          },
-          "blankInt.png": {
-            "x": 304,
-            "y": 56,
-            "w": 8,
-            "h": 8
-          },
-          "blankStr.png": {
-            "x": 0,
-            "y": 64,
-            "w": 8,
-            "h": 8
-          },
           "blastradius.png": {
             "x": 8,
             "y": 64,
@@ -65124,18 +64076,6 @@
             "w": 8,
             "h": 8
           },
-          "tempdex.png": {
-            "x": 120,
-            "y": 80,
-            "w": 8,
-            "h": 8
-          },
-          "tempint.png": {
-            "x": 128,
-            "y": 80,
-            "w": 8,
-            "h": 8
-          },
           "totemandbrandattackspeed.png": {
             "x": 136,
             "y": 80,
@@ -66325,30 +65265,6 @@
             "w": 14,
             "h": 14
           },
-          "axedmgspeed.png": {
-            "x": 182,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
-          "blankDex.png": {
-            "x": 196,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
-          "blankInt.png": {
-            "x": 210,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
-          "blankStr.png": {
-            "x": 224,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
           "blastradius.png": {
             "x": 238,
             "y": 112,
@@ -66873,18 +65789,6 @@
           },
           "stunstr.png": {
             "x": 476,
-            "y": 140,
-            "w": 14,
-            "h": 14
-          },
-          "tempdex.png": {
-            "x": 490,
-            "y": 140,
-            "w": 14,
-            "h": 14
-          },
-          "tempint.png": {
-            "x": 504,
             "y": 140,
             "w": 14,
             "h": 14
@@ -68078,30 +66982,6 @@
             "w": 20,
             "h": 20
           },
-          "axedmgspeed.png": {
-            "x": 260,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
-          "blankDex.png": {
-            "x": 280,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
-          "blankInt.png": {
-            "x": 300,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
-          "blankStr.png": {
-            "x": 320,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
           "blastradius.png": {
             "x": 340,
             "y": 160,
@@ -68626,18 +67506,6 @@
           },
           "stunstr.png": {
             "x": 680,
-            "y": 200,
-            "w": 20,
-            "h": 20
-          },
-          "tempdex.png": {
-            "x": 700,
-            "y": 200,
-            "w": 20,
-            "h": 20
-          },
-          "tempint.png": {
-            "x": 720,
             "y": 200,
             "w": 20,
             "h": 20
@@ -69831,30 +68699,6 @@
             "w": 26,
             "h": 26
           },
-          "axedmgspeed.png": {
-            "x": 338,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
-          "blankDex.png": {
-            "x": 364,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
-          "blankInt.png": {
-            "x": 390,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
-          "blankStr.png": {
-            "x": 416,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
           "blastradius.png": {
             "x": 442,
             "y": 208,
@@ -70383,18 +69227,6 @@
             "w": 26,
             "h": 26
           },
-          "tempdex.png": {
-            "x": 910,
-            "y": 260,
-            "w": 26,
-            "h": 26
-          },
-          "tempint.png": {
-            "x": 936,
-            "y": 260,
-            "w": 26,
-            "h": 26
-          },
           "totemandbrandattackspeed.png": {
             "x": 0,
             "y": 286,
@@ -70554,12 +69386,6 @@
             "w": 12,
             "h": 12
           },
-          "AssassinAnointNotable.png": {
-            "x": 24,
-            "y": 108,
-            "w": 12,
-            "h": 12
-          },
           "AttackBlindNotable.png": {
             "x": 216,
             "y": 108,
@@ -70668,12 +69494,6 @@
             "w": 12,
             "h": 12
           },
-          "BeserkerAnointNotable.png": {
-            "x": 204,
-            "y": 120,
-            "w": 12,
-            "h": 12
-          },
           "BladeBarrierNotable.png": {
             "x": 216,
             "y": 120,
@@ -70722,12 +69542,6 @@
             "w": 12,
             "h": 12
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 132,
-            "w": 12,
-            "h": 12
-          },
           "BloodSiphon.png": {
             "x": 12,
             "y": 132,
@@ -70736,12 +69550,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 24,
-            "y": 132,
-            "w": 12,
-            "h": 12
-          },
-          "Boomerang.png": {
-            "x": 36,
             "y": 132,
             "w": 12,
             "h": 12
@@ -70812,12 +69620,6 @@
             "w": 12,
             "h": 12
           },
-          "ChampionAnointNotable.png": {
-            "x": 264,
-            "y": 132,
-            "w": 12,
-            "h": 12
-          },
           "ChaosDamage2.png": {
             "x": 276,
             "y": 132,
@@ -70838,18 +69640,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 144,
-            "w": 12,
-            "h": 12
-          },
-          "ChaoticPotential.png": {
-            "x": 12,
-            "y": 144,
-            "w": 12,
-            "h": 12
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 24,
             "y": 144,
             "w": 12,
             "h": 12
@@ -71022,18 +69812,6 @@
             "w": 12,
             "h": 12
           },
-          "DarkestHour.png": {
-            "x": 144,
-            "y": 156,
-            "w": 12,
-            "h": 12
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 204,
-            "y": 156,
-            "w": 12,
-            "h": 12
-          },
           "DeepBreathsNotable.png": {
             "x": 216,
             "y": 156,
@@ -71142,12 +69920,6 @@
             "w": 12,
             "h": 12
           },
-          "ElementalistAnointNotable.png": {
-            "x": 216,
-            "y": 168,
-            "w": 12,
-            "h": 12
-          },
           "EnduranceChargeNotable.png": {
             "x": 228,
             "y": 168,
@@ -71204,24 +69976,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 24,
-            "y": 180,
-            "w": 12,
-            "h": 12
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 36,
-            "y": 180,
-            "w": 12,
-            "h": 12
-          },
-          "EyesOfThePowerful.png": {
-            "x": 48,
-            "y": 180,
-            "w": 12,
-            "h": 12
-          },
-          "EyesOfTheSavant.png": {
-            "x": 60,
             "y": 180,
             "w": 12,
             "h": 12
@@ -71322,12 +70076,6 @@
             "w": 12,
             "h": 12
           },
-          "GladiatorAnointNotable.png": {
-            "x": 36,
-            "y": 192,
-            "w": 12,
-            "h": 12
-          },
           "GolemsNotable.png": {
             "x": 48,
             "y": 192,
@@ -71342,12 +70090,6 @@
           },
           "GrowthandDecay.png": {
             "x": 72,
-            "y": 192,
-            "w": 12,
-            "h": 12
-          },
-          "GuardianAnointNotable.png": {
-            "x": 168,
             "y": 192,
             "w": 12,
             "h": 12
@@ -71378,12 +70120,6 @@
           },
           "Hearty.png": {
             "x": 228,
-            "y": 192,
-            "w": 12,
-            "h": 12
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 240,
             "y": 192,
             "w": 12,
             "h": 12
@@ -71444,12 +70180,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 144,
-            "y": 204,
-            "w": 12,
-            "h": 12
-          },
-          "IgnorePain.png": {
-            "x": 156,
             "y": 204,
             "w": 12,
             "h": 12
@@ -71580,12 +70310,6 @@
             "w": 12,
             "h": 12
           },
-          "InquisitorAnointNotable.png": {
-            "x": 108,
-            "y": 216,
-            "w": 12,
-            "h": 12
-          },
           "Inspiration.png": {
             "x": 204,
             "y": 216,
@@ -71595,12 +70319,6 @@
           "IntensifyNotable.png": {
             "x": 216,
             "y": 216,
-            "w": 12,
-            "h": 12
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 228,
             "w": 12,
             "h": 12
           },
@@ -71868,12 +70586,6 @@
             "w": 12,
             "h": 12
           },
-          "MindPact.png": {
-            "x": 240,
-            "y": 240,
-            "w": 12,
-            "h": 12
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 252,
             "y": 240,
@@ -71910,27 +70622,9 @@
             "w": 12,
             "h": 12
           },
-          "NecromancerAnointNotable.png": {
-            "x": 120,
-            "y": 252,
-            "w": 12,
-            "h": 12
-          },
-          "OccultistAnointNotable.png": {
-            "x": 216,
-            "y": 252,
-            "w": 12,
-            "h": 12
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 228,
             "y": 252,
-            "w": 12,
-            "h": 12
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 12,
-            "y": 264,
             "w": 12,
             "h": 12
           },
@@ -72156,12 +70850,6 @@
             "w": 12,
             "h": 12
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
           "Sanctuary.png": {
             "x": 12,
             "y": 288,
@@ -72204,26 +70892,8 @@
             "w": 12,
             "h": 12
           },
-          "ShrugOff.png": {
-            "x": 96,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
           "SkitteringRunes.png": {
             "x": 108,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
-          "SlayerAnointNotable.png": {
-            "x": 204,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
-          "SoulPact.png": {
-            "x": 216,
             "y": 288,
             "w": 12,
             "h": 12
@@ -72420,12 +71090,6 @@
             "w": 12,
             "h": 12
           },
-          "TricksterAnointNotable.png": {
-            "x": 108,
-            "y": 312,
-            "w": 12,
-            "h": 12
-          },
           "TrueStriker.png": {
             "x": 120,
             "y": 312,
@@ -72494,12 +71158,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 24,
-            "y": 324,
-            "w": 12,
-            "h": 12
-          },
-          "WardenAnointNotable.png": {
-            "x": 180,
             "y": 324,
             "w": 12,
             "h": 12
@@ -73495,12 +72153,6 @@
             "w": 20,
             "h": 20
           },
-          "AssassinAnointNotable.png": {
-            "x": 40,
-            "y": 188,
-            "w": 20,
-            "h": 20
-          },
           "AttackBlindNotable.png": {
             "x": 360,
             "y": 188,
@@ -73609,12 +72261,6 @@
             "w": 20,
             "h": 20
           },
-          "BeserkerAnointNotable.png": {
-            "x": 340,
-            "y": 208,
-            "w": 20,
-            "h": 20
-          },
           "BladeBarrierNotable.png": {
             "x": 360,
             "y": 208,
@@ -73663,12 +72309,6 @@
             "w": 20,
             "h": 20
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 228,
-            "w": 20,
-            "h": 20
-          },
           "BloodSiphon.png": {
             "x": 20,
             "y": 228,
@@ -73677,12 +72317,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 40,
-            "y": 228,
-            "w": 20,
-            "h": 20
-          },
-          "Boomerang.png": {
-            "x": 60,
             "y": 228,
             "w": 20,
             "h": 20
@@ -73753,12 +72387,6 @@
             "w": 20,
             "h": 20
           },
-          "ChampionAnointNotable.png": {
-            "x": 440,
-            "y": 228,
-            "w": 20,
-            "h": 20
-          },
           "ChaosDamage2.png": {
             "x": 460,
             "y": 228,
@@ -73779,18 +72407,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 248,
-            "w": 20,
-            "h": 20
-          },
-          "ChaoticPotential.png": {
-            "x": 20,
-            "y": 248,
-            "w": 20,
-            "h": 20
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 40,
             "y": 248,
             "w": 20,
             "h": 20
@@ -73963,18 +72579,6 @@
             "w": 20,
             "h": 20
           },
-          "DarkestHour.png": {
-            "x": 240,
-            "y": 268,
-            "w": 20,
-            "h": 20
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 340,
-            "y": 268,
-            "w": 20,
-            "h": 20
-          },
           "DeepBreathsNotable.png": {
             "x": 360,
             "y": 268,
@@ -74083,12 +72687,6 @@
             "w": 20,
             "h": 20
           },
-          "ElementalistAnointNotable.png": {
-            "x": 360,
-            "y": 288,
-            "w": 20,
-            "h": 20
-          },
           "EnduranceChargeNotable.png": {
             "x": 380,
             "y": 288,
@@ -74145,24 +72743,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 40,
-            "y": 308,
-            "w": 20,
-            "h": 20
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 60,
-            "y": 308,
-            "w": 20,
-            "h": 20
-          },
-          "EyesOfThePowerful.png": {
-            "x": 80,
-            "y": 308,
-            "w": 20,
-            "h": 20
-          },
-          "EyesOfTheSavant.png": {
-            "x": 100,
             "y": 308,
             "w": 20,
             "h": 20
@@ -74263,12 +72843,6 @@
             "w": 20,
             "h": 20
           },
-          "GladiatorAnointNotable.png": {
-            "x": 60,
-            "y": 328,
-            "w": 20,
-            "h": 20
-          },
           "GolemsNotable.png": {
             "x": 80,
             "y": 328,
@@ -74283,12 +72857,6 @@
           },
           "GrowthandDecay.png": {
             "x": 120,
-            "y": 328,
-            "w": 20,
-            "h": 20
-          },
-          "GuardianAnointNotable.png": {
-            "x": 280,
             "y": 328,
             "w": 20,
             "h": 20
@@ -74319,12 +72887,6 @@
           },
           "Hearty.png": {
             "x": 380,
-            "y": 328,
-            "w": 20,
-            "h": 20
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 400,
             "y": 328,
             "w": 20,
             "h": 20
@@ -74385,12 +72947,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 240,
-            "y": 348,
-            "w": 20,
-            "h": 20
-          },
-          "IgnorePain.png": {
-            "x": 260,
             "y": 348,
             "w": 20,
             "h": 20
@@ -74521,12 +73077,6 @@
             "w": 20,
             "h": 20
           },
-          "InquisitorAnointNotable.png": {
-            "x": 180,
-            "y": 368,
-            "w": 20,
-            "h": 20
-          },
           "Inspiration.png": {
             "x": 340,
             "y": 368,
@@ -74536,12 +73086,6 @@
           "IntensifyNotable.png": {
             "x": 360,
             "y": 368,
-            "w": 20,
-            "h": 20
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 388,
             "w": 20,
             "h": 20
           },
@@ -74809,12 +73353,6 @@
             "w": 20,
             "h": 20
           },
-          "MindPact.png": {
-            "x": 400,
-            "y": 408,
-            "w": 20,
-            "h": 20
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 420,
             "y": 408,
@@ -74851,27 +73389,9 @@
             "w": 20,
             "h": 20
           },
-          "NecromancerAnointNotable.png": {
-            "x": 200,
-            "y": 428,
-            "w": 20,
-            "h": 20
-          },
-          "OccultistAnointNotable.png": {
-            "x": 360,
-            "y": 428,
-            "w": 20,
-            "h": 20
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 380,
             "y": 428,
-            "w": 20,
-            "h": 20
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 20,
-            "y": 448,
             "w": 20,
             "h": 20
           },
@@ -75097,12 +73617,6 @@
             "w": 20,
             "h": 20
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
           "Sanctuary.png": {
             "x": 20,
             "y": 488,
@@ -75145,26 +73659,8 @@
             "w": 20,
             "h": 20
           },
-          "ShrugOff.png": {
-            "x": 160,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
           "SkitteringRunes.png": {
             "x": 180,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
-          "SlayerAnointNotable.png": {
-            "x": 340,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
-          "SoulPact.png": {
-            "x": 360,
             "y": 488,
             "w": 20,
             "h": 20
@@ -75361,12 +73857,6 @@
             "w": 20,
             "h": 20
           },
-          "TricksterAnointNotable.png": {
-            "x": 180,
-            "y": 528,
-            "w": 20,
-            "h": 20
-          },
           "TrueStriker.png": {
             "x": 200,
             "y": 528,
@@ -75435,12 +73925,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 40,
-            "y": 548,
-            "w": 20,
-            "h": 20
-          },
-          "WardenAnointNotable.png": {
-            "x": 300,
             "y": 548,
             "w": 20,
             "h": 20
@@ -76436,12 +74920,6 @@
             "w": 29,
             "h": 29
           },
-          "AssassinAnointNotable.png": {
-            "x": 58,
-            "y": 269,
-            "w": 29,
-            "h": 29
-          },
           "AttackBlindNotable.png": {
             "x": 522,
             "y": 269,
@@ -76550,12 +75028,6 @@
             "w": 29,
             "h": 29
           },
-          "BeserkerAnointNotable.png": {
-            "x": 493,
-            "y": 298,
-            "w": 29,
-            "h": 29
-          },
           "BladeBarrierNotable.png": {
             "x": 522,
             "y": 298,
@@ -76604,12 +75076,6 @@
             "w": 29,
             "h": 29
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 327,
-            "w": 29,
-            "h": 29
-          },
           "BloodSiphon.png": {
             "x": 29,
             "y": 327,
@@ -76618,12 +75084,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 58,
-            "y": 327,
-            "w": 29,
-            "h": 29
-          },
-          "Boomerang.png": {
-            "x": 87,
             "y": 327,
             "w": 29,
             "h": 29
@@ -76694,12 +75154,6 @@
             "w": 29,
             "h": 29
           },
-          "ChampionAnointNotable.png": {
-            "x": 638,
-            "y": 327,
-            "w": 29,
-            "h": 29
-          },
           "ChaosDamage2.png": {
             "x": 667,
             "y": 327,
@@ -76720,18 +75174,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 356,
-            "w": 29,
-            "h": 29
-          },
-          "ChaoticPotential.png": {
-            "x": 29,
-            "y": 356,
-            "w": 29,
-            "h": 29
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 58,
             "y": 356,
             "w": 29,
             "h": 29
@@ -76904,18 +75346,6 @@
             "w": 29,
             "h": 29
           },
-          "DarkestHour.png": {
-            "x": 348,
-            "y": 385,
-            "w": 29,
-            "h": 29
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 493,
-            "y": 385,
-            "w": 29,
-            "h": 29
-          },
           "DeepBreathsNotable.png": {
             "x": 522,
             "y": 385,
@@ -77024,12 +75454,6 @@
             "w": 29,
             "h": 29
           },
-          "ElementalistAnointNotable.png": {
-            "x": 522,
-            "y": 414,
-            "w": 29,
-            "h": 29
-          },
           "EnduranceChargeNotable.png": {
             "x": 551,
             "y": 414,
@@ -77086,24 +75510,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 58,
-            "y": 443,
-            "w": 29,
-            "h": 29
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 87,
-            "y": 443,
-            "w": 29,
-            "h": 29
-          },
-          "EyesOfThePowerful.png": {
-            "x": 116,
-            "y": 443,
-            "w": 29,
-            "h": 29
-          },
-          "EyesOfTheSavant.png": {
-            "x": 145,
             "y": 443,
             "w": 29,
             "h": 29
@@ -77204,12 +75610,6 @@
             "w": 29,
             "h": 29
           },
-          "GladiatorAnointNotable.png": {
-            "x": 87,
-            "y": 472,
-            "w": 29,
-            "h": 29
-          },
           "GolemsNotable.png": {
             "x": 116,
             "y": 472,
@@ -77224,12 +75624,6 @@
           },
           "GrowthandDecay.png": {
             "x": 174,
-            "y": 472,
-            "w": 29,
-            "h": 29
-          },
-          "GuardianAnointNotable.png": {
-            "x": 406,
             "y": 472,
             "w": 29,
             "h": 29
@@ -77260,12 +75654,6 @@
           },
           "Hearty.png": {
             "x": 551,
-            "y": 472,
-            "w": 29,
-            "h": 29
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 580,
             "y": 472,
             "w": 29,
             "h": 29
@@ -77326,12 +75714,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 348,
-            "y": 501,
-            "w": 29,
-            "h": 29
-          },
-          "IgnorePain.png": {
-            "x": 377,
             "y": 501,
             "w": 29,
             "h": 29
@@ -77462,12 +75844,6 @@
             "w": 29,
             "h": 29
           },
-          "InquisitorAnointNotable.png": {
-            "x": 261,
-            "y": 530,
-            "w": 29,
-            "h": 29
-          },
           "Inspiration.png": {
             "x": 493,
             "y": 530,
@@ -77477,12 +75853,6 @@
           "IntensifyNotable.png": {
             "x": 522,
             "y": 530,
-            "w": 29,
-            "h": 29
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 559,
             "w": 29,
             "h": 29
           },
@@ -77750,12 +76120,6 @@
             "w": 29,
             "h": 29
           },
-          "MindPact.png": {
-            "x": 580,
-            "y": 588,
-            "w": 29,
-            "h": 29
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 609,
             "y": 588,
@@ -77792,27 +76156,9 @@
             "w": 29,
             "h": 29
           },
-          "NecromancerAnointNotable.png": {
-            "x": 290,
-            "y": 617,
-            "w": 29,
-            "h": 29
-          },
-          "OccultistAnointNotable.png": {
-            "x": 522,
-            "y": 617,
-            "w": 29,
-            "h": 29
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 551,
             "y": 617,
-            "w": 29,
-            "h": 29
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 29,
-            "y": 646,
             "w": 29,
             "h": 29
           },
@@ -78038,12 +76384,6 @@
             "w": 29,
             "h": 29
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
           "Sanctuary.png": {
             "x": 29,
             "y": 704,
@@ -78086,26 +76426,8 @@
             "w": 29,
             "h": 29
           },
-          "ShrugOff.png": {
-            "x": 232,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
           "SkitteringRunes.png": {
             "x": 261,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
-          "SlayerAnointNotable.png": {
-            "x": 493,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
-          "SoulPact.png": {
-            "x": 522,
             "y": 704,
             "w": 29,
             "h": 29
@@ -78302,12 +76624,6 @@
             "w": 29,
             "h": 29
           },
-          "TricksterAnointNotable.png": {
-            "x": 261,
-            "y": 762,
-            "w": 29,
-            "h": 29
-          },
           "TrueStriker.png": {
             "x": 290,
             "y": 762,
@@ -78376,12 +76692,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 58,
-            "y": 791,
-            "w": 29,
-            "h": 29
-          },
-          "WardenAnointNotable.png": {
-            "x": 435,
             "y": 791,
             "w": 29,
             "h": 29
@@ -79377,12 +77687,6 @@
             "w": 37,
             "h": 37
           },
-          "AssassinAnointNotable.png": {
-            "x": 74,
-            "y": 349,
-            "w": 37,
-            "h": 37
-          },
           "AttackBlindNotable.png": {
             "x": 666,
             "y": 349,
@@ -79491,12 +77795,6 @@
             "w": 37,
             "h": 37
           },
-          "BeserkerAnointNotable.png": {
-            "x": 629,
-            "y": 386,
-            "w": 37,
-            "h": 37
-          },
           "BladeBarrierNotable.png": {
             "x": 666,
             "y": 386,
@@ -79545,12 +77843,6 @@
             "w": 37,
             "h": 37
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 423,
-            "w": 37,
-            "h": 37
-          },
           "BloodSiphon.png": {
             "x": 37,
             "y": 423,
@@ -79559,12 +77851,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 74,
-            "y": 423,
-            "w": 37,
-            "h": 37
-          },
-          "Boomerang.png": {
-            "x": 111,
             "y": 423,
             "w": 37,
             "h": 37
@@ -79635,12 +77921,6 @@
             "w": 37,
             "h": 37
           },
-          "ChampionAnointNotable.png": {
-            "x": 814,
-            "y": 423,
-            "w": 37,
-            "h": 37
-          },
           "ChaosDamage2.png": {
             "x": 851,
             "y": 423,
@@ -79661,18 +77941,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 460,
-            "w": 37,
-            "h": 37
-          },
-          "ChaoticPotential.png": {
-            "x": 37,
-            "y": 460,
-            "w": 37,
-            "h": 37
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 74,
             "y": 460,
             "w": 37,
             "h": 37
@@ -79845,18 +78113,6 @@
             "w": 37,
             "h": 37
           },
-          "DarkestHour.png": {
-            "x": 444,
-            "y": 497,
-            "w": 37,
-            "h": 37
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 629,
-            "y": 497,
-            "w": 37,
-            "h": 37
-          },
           "DeepBreathsNotable.png": {
             "x": 666,
             "y": 497,
@@ -79965,12 +78221,6 @@
             "w": 37,
             "h": 37
           },
-          "ElementalistAnointNotable.png": {
-            "x": 666,
-            "y": 534,
-            "w": 37,
-            "h": 37
-          },
           "EnduranceChargeNotable.png": {
             "x": 703,
             "y": 534,
@@ -80027,24 +78277,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 74,
-            "y": 571,
-            "w": 37,
-            "h": 37
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 111,
-            "y": 571,
-            "w": 37,
-            "h": 37
-          },
-          "EyesOfThePowerful.png": {
-            "x": 148,
-            "y": 571,
-            "w": 37,
-            "h": 37
-          },
-          "EyesOfTheSavant.png": {
-            "x": 185,
             "y": 571,
             "w": 37,
             "h": 37
@@ -80145,12 +78377,6 @@
             "w": 37,
             "h": 37
           },
-          "GladiatorAnointNotable.png": {
-            "x": 111,
-            "y": 608,
-            "w": 37,
-            "h": 37
-          },
           "GolemsNotable.png": {
             "x": 148,
             "y": 608,
@@ -80165,12 +78391,6 @@
           },
           "GrowthandDecay.png": {
             "x": 222,
-            "y": 608,
-            "w": 37,
-            "h": 37
-          },
-          "GuardianAnointNotable.png": {
-            "x": 518,
             "y": 608,
             "w": 37,
             "h": 37
@@ -80201,12 +78421,6 @@
           },
           "Hearty.png": {
             "x": 703,
-            "y": 608,
-            "w": 37,
-            "h": 37
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 740,
             "y": 608,
             "w": 37,
             "h": 37
@@ -80267,12 +78481,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 444,
-            "y": 645,
-            "w": 37,
-            "h": 37
-          },
-          "IgnorePain.png": {
-            "x": 481,
             "y": 645,
             "w": 37,
             "h": 37
@@ -80403,12 +78611,6 @@
             "w": 37,
             "h": 37
           },
-          "InquisitorAnointNotable.png": {
-            "x": 333,
-            "y": 682,
-            "w": 37,
-            "h": 37
-          },
           "Inspiration.png": {
             "x": 629,
             "y": 682,
@@ -80418,12 +78620,6 @@
           "IntensifyNotable.png": {
             "x": 666,
             "y": 682,
-            "w": 37,
-            "h": 37
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 719,
             "w": 37,
             "h": 37
           },
@@ -80691,12 +78887,6 @@
             "w": 37,
             "h": 37
           },
-          "MindPact.png": {
-            "x": 740,
-            "y": 756,
-            "w": 37,
-            "h": 37
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 777,
             "y": 756,
@@ -80733,27 +78923,9 @@
             "w": 37,
             "h": 37
           },
-          "NecromancerAnointNotable.png": {
-            "x": 370,
-            "y": 793,
-            "w": 37,
-            "h": 37
-          },
-          "OccultistAnointNotable.png": {
-            "x": 666,
-            "y": 793,
-            "w": 37,
-            "h": 37
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 703,
             "y": 793,
-            "w": 37,
-            "h": 37
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 37,
-            "y": 830,
             "w": 37,
             "h": 37
           },
@@ -80979,12 +79151,6 @@
             "w": 37,
             "h": 37
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
           "Sanctuary.png": {
             "x": 37,
             "y": 904,
@@ -81027,26 +79193,8 @@
             "w": 37,
             "h": 37
           },
-          "ShrugOff.png": {
-            "x": 296,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
           "SkitteringRunes.png": {
             "x": 333,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
-          "SlayerAnointNotable.png": {
-            "x": 629,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
-          "SoulPact.png": {
-            "x": 666,
             "y": 904,
             "w": 37,
             "h": 37
@@ -81243,12 +79391,6 @@
             "w": 37,
             "h": 37
           },
-          "TricksterAnointNotable.png": {
-            "x": 333,
-            "y": 978,
-            "w": 37,
-            "h": 37
-          },
           "TrueStriker.png": {
             "x": 370,
             "y": 978,
@@ -81317,12 +79459,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 74,
-            "y": 1015,
-            "w": 37,
-            "h": 37
-          },
-          "WardenAnointNotable.png": {
-            "x": 555,
             "y": 1015,
             "w": 37,
             "h": 37
@@ -83352,30 +81488,6 @@
             "w": 8,
             "h": 8
           },
-          "axedmgspeed.png": {
-            "x": 288,
-            "y": 56,
-            "w": 8,
-            "h": 8
-          },
-          "blankDex.png": {
-            "x": 296,
-            "y": 56,
-            "w": 8,
-            "h": 8
-          },
-          "blankInt.png": {
-            "x": 304,
-            "y": 56,
-            "w": 8,
-            "h": 8
-          },
-          "blankStr.png": {
-            "x": 0,
-            "y": 64,
-            "w": 8,
-            "h": 8
-          },
           "blastradius.png": {
             "x": 8,
             "y": 64,
@@ -83904,18 +82016,6 @@
             "w": 8,
             "h": 8
           },
-          "tempdex.png": {
-            "x": 120,
-            "y": 80,
-            "w": 8,
-            "h": 8
-          },
-          "tempint.png": {
-            "x": 128,
-            "y": 80,
-            "w": 8,
-            "h": 8
-          },
           "totemandbrandattackspeed.png": {
             "x": 136,
             "y": 80,
@@ -85105,30 +83205,6 @@
             "w": 14,
             "h": 14
           },
-          "axedmgspeed.png": {
-            "x": 182,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
-          "blankDex.png": {
-            "x": 196,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
-          "blankInt.png": {
-            "x": 210,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
-          "blankStr.png": {
-            "x": 224,
-            "y": 112,
-            "w": 14,
-            "h": 14
-          },
           "blastradius.png": {
             "x": 238,
             "y": 112,
@@ -85653,18 +83729,6 @@
           },
           "stunstr.png": {
             "x": 476,
-            "y": 140,
-            "w": 14,
-            "h": 14
-          },
-          "tempdex.png": {
-            "x": 490,
-            "y": 140,
-            "w": 14,
-            "h": 14
-          },
-          "tempint.png": {
-            "x": 504,
             "y": 140,
             "w": 14,
             "h": 14
@@ -86858,30 +84922,6 @@
             "w": 20,
             "h": 20
           },
-          "axedmgspeed.png": {
-            "x": 260,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
-          "blankDex.png": {
-            "x": 280,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
-          "blankInt.png": {
-            "x": 300,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
-          "blankStr.png": {
-            "x": 320,
-            "y": 160,
-            "w": 20,
-            "h": 20
-          },
           "blastradius.png": {
             "x": 340,
             "y": 160,
@@ -87406,18 +85446,6 @@
           },
           "stunstr.png": {
             "x": 680,
-            "y": 200,
-            "w": 20,
-            "h": 20
-          },
-          "tempdex.png": {
-            "x": 700,
-            "y": 200,
-            "w": 20,
-            "h": 20
-          },
-          "tempint.png": {
-            "x": 720,
             "y": 200,
             "w": 20,
             "h": 20
@@ -88611,30 +86639,6 @@
             "w": 26,
             "h": 26
           },
-          "axedmgspeed.png": {
-            "x": 338,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
-          "blankDex.png": {
-            "x": 364,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
-          "blankInt.png": {
-            "x": 390,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
-          "blankStr.png": {
-            "x": 416,
-            "y": 208,
-            "w": 26,
-            "h": 26
-          },
           "blastradius.png": {
             "x": 442,
             "y": 208,
@@ -89163,18 +87167,6 @@
             "w": 26,
             "h": 26
           },
-          "tempdex.png": {
-            "x": 910,
-            "y": 260,
-            "w": 26,
-            "h": 26
-          },
-          "tempint.png": {
-            "x": 936,
-            "y": 260,
-            "w": 26,
-            "h": 26
-          },
           "totemandbrandattackspeed.png": {
             "x": 0,
             "y": 286,
@@ -89334,12 +87326,6 @@
             "w": 12,
             "h": 12
           },
-          "AssassinAnointNotable.png": {
-            "x": 24,
-            "y": 108,
-            "w": 12,
-            "h": 12
-          },
           "AttackBlindNotable.png": {
             "x": 216,
             "y": 108,
@@ -89448,12 +87434,6 @@
             "w": 12,
             "h": 12
           },
-          "BeserkerAnointNotable.png": {
-            "x": 204,
-            "y": 120,
-            "w": 12,
-            "h": 12
-          },
           "BladeBarrierNotable.png": {
             "x": 216,
             "y": 120,
@@ -89502,12 +87482,6 @@
             "w": 12,
             "h": 12
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 132,
-            "w": 12,
-            "h": 12
-          },
           "BloodSiphon.png": {
             "x": 12,
             "y": 132,
@@ -89516,12 +87490,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 24,
-            "y": 132,
-            "w": 12,
-            "h": 12
-          },
-          "Boomerang.png": {
-            "x": 36,
             "y": 132,
             "w": 12,
             "h": 12
@@ -89592,12 +87560,6 @@
             "w": 12,
             "h": 12
           },
-          "ChampionAnointNotable.png": {
-            "x": 264,
-            "y": 132,
-            "w": 12,
-            "h": 12
-          },
           "ChaosDamage2.png": {
             "x": 276,
             "y": 132,
@@ -89618,18 +87580,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 144,
-            "w": 12,
-            "h": 12
-          },
-          "ChaoticPotential.png": {
-            "x": 12,
-            "y": 144,
-            "w": 12,
-            "h": 12
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 24,
             "y": 144,
             "w": 12,
             "h": 12
@@ -89802,18 +87752,6 @@
             "w": 12,
             "h": 12
           },
-          "DarkestHour.png": {
-            "x": 144,
-            "y": 156,
-            "w": 12,
-            "h": 12
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 204,
-            "y": 156,
-            "w": 12,
-            "h": 12
-          },
           "DeepBreathsNotable.png": {
             "x": 216,
             "y": 156,
@@ -89922,12 +87860,6 @@
             "w": 12,
             "h": 12
           },
-          "ElementalistAnointNotable.png": {
-            "x": 216,
-            "y": 168,
-            "w": 12,
-            "h": 12
-          },
           "EnduranceChargeNotable.png": {
             "x": 228,
             "y": 168,
@@ -89984,24 +87916,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 24,
-            "y": 180,
-            "w": 12,
-            "h": 12
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 36,
-            "y": 180,
-            "w": 12,
-            "h": 12
-          },
-          "EyesOfThePowerful.png": {
-            "x": 48,
-            "y": 180,
-            "w": 12,
-            "h": 12
-          },
-          "EyesOfTheSavant.png": {
-            "x": 60,
             "y": 180,
             "w": 12,
             "h": 12
@@ -90102,12 +88016,6 @@
             "w": 12,
             "h": 12
           },
-          "GladiatorAnointNotable.png": {
-            "x": 36,
-            "y": 192,
-            "w": 12,
-            "h": 12
-          },
           "GolemsNotable.png": {
             "x": 48,
             "y": 192,
@@ -90122,12 +88030,6 @@
           },
           "GrowthandDecay.png": {
             "x": 72,
-            "y": 192,
-            "w": 12,
-            "h": 12
-          },
-          "GuardianAnointNotable.png": {
-            "x": 168,
             "y": 192,
             "w": 12,
             "h": 12
@@ -90158,12 +88060,6 @@
           },
           "Hearty.png": {
             "x": 228,
-            "y": 192,
-            "w": 12,
-            "h": 12
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 240,
             "y": 192,
             "w": 12,
             "h": 12
@@ -90224,12 +88120,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 144,
-            "y": 204,
-            "w": 12,
-            "h": 12
-          },
-          "IgnorePain.png": {
-            "x": 156,
             "y": 204,
             "w": 12,
             "h": 12
@@ -90360,12 +88250,6 @@
             "w": 12,
             "h": 12
           },
-          "InquisitorAnointNotable.png": {
-            "x": 108,
-            "y": 216,
-            "w": 12,
-            "h": 12
-          },
           "Inspiration.png": {
             "x": 204,
             "y": 216,
@@ -90375,12 +88259,6 @@
           "IntensifyNotable.png": {
             "x": 216,
             "y": 216,
-            "w": 12,
-            "h": 12
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 228,
             "w": 12,
             "h": 12
           },
@@ -90648,12 +88526,6 @@
             "w": 12,
             "h": 12
           },
-          "MindPact.png": {
-            "x": 240,
-            "y": 240,
-            "w": 12,
-            "h": 12
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 252,
             "y": 240,
@@ -90690,27 +88562,9 @@
             "w": 12,
             "h": 12
           },
-          "NecromancerAnointNotable.png": {
-            "x": 120,
-            "y": 252,
-            "w": 12,
-            "h": 12
-          },
-          "OccultistAnointNotable.png": {
-            "x": 216,
-            "y": 252,
-            "w": 12,
-            "h": 12
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 228,
             "y": 252,
-            "w": 12,
-            "h": 12
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 12,
-            "y": 264,
             "w": 12,
             "h": 12
           },
@@ -90936,12 +88790,6 @@
             "w": 12,
             "h": 12
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
           "Sanctuary.png": {
             "x": 12,
             "y": 288,
@@ -90984,26 +88832,8 @@
             "w": 12,
             "h": 12
           },
-          "ShrugOff.png": {
-            "x": 96,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
           "SkitteringRunes.png": {
             "x": 108,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
-          "SlayerAnointNotable.png": {
-            "x": 204,
-            "y": 288,
-            "w": 12,
-            "h": 12
-          },
-          "SoulPact.png": {
-            "x": 216,
             "y": 288,
             "w": 12,
             "h": 12
@@ -91200,12 +89030,6 @@
             "w": 12,
             "h": 12
           },
-          "TricksterAnointNotable.png": {
-            "x": 108,
-            "y": 312,
-            "w": 12,
-            "h": 12
-          },
           "TrueStriker.png": {
             "x": 120,
             "y": 312,
@@ -91274,12 +89098,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 24,
-            "y": 324,
-            "w": 12,
-            "h": 12
-          },
-          "WardenAnointNotable.png": {
-            "x": 180,
             "y": 324,
             "w": 12,
             "h": 12
@@ -92275,12 +90093,6 @@
             "w": 20,
             "h": 20
           },
-          "AssassinAnointNotable.png": {
-            "x": 40,
-            "y": 188,
-            "w": 20,
-            "h": 20
-          },
           "AttackBlindNotable.png": {
             "x": 360,
             "y": 188,
@@ -92389,12 +90201,6 @@
             "w": 20,
             "h": 20
           },
-          "BeserkerAnointNotable.png": {
-            "x": 340,
-            "y": 208,
-            "w": 20,
-            "h": 20
-          },
           "BladeBarrierNotable.png": {
             "x": 360,
             "y": 208,
@@ -92443,12 +90249,6 @@
             "w": 20,
             "h": 20
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 228,
-            "w": 20,
-            "h": 20
-          },
           "BloodSiphon.png": {
             "x": 20,
             "y": 228,
@@ -92457,12 +90257,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 40,
-            "y": 228,
-            "w": 20,
-            "h": 20
-          },
-          "Boomerang.png": {
-            "x": 60,
             "y": 228,
             "w": 20,
             "h": 20
@@ -92533,12 +90327,6 @@
             "w": 20,
             "h": 20
           },
-          "ChampionAnointNotable.png": {
-            "x": 440,
-            "y": 228,
-            "w": 20,
-            "h": 20
-          },
           "ChaosDamage2.png": {
             "x": 460,
             "y": 228,
@@ -92559,18 +90347,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 248,
-            "w": 20,
-            "h": 20
-          },
-          "ChaoticPotential.png": {
-            "x": 20,
-            "y": 248,
-            "w": 20,
-            "h": 20
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 40,
             "y": 248,
             "w": 20,
             "h": 20
@@ -92743,18 +90519,6 @@
             "w": 20,
             "h": 20
           },
-          "DarkestHour.png": {
-            "x": 240,
-            "y": 268,
-            "w": 20,
-            "h": 20
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 340,
-            "y": 268,
-            "w": 20,
-            "h": 20
-          },
           "DeepBreathsNotable.png": {
             "x": 360,
             "y": 268,
@@ -92863,12 +90627,6 @@
             "w": 20,
             "h": 20
           },
-          "ElementalistAnointNotable.png": {
-            "x": 360,
-            "y": 288,
-            "w": 20,
-            "h": 20
-          },
           "EnduranceChargeNotable.png": {
             "x": 380,
             "y": 288,
@@ -92925,24 +90683,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 40,
-            "y": 308,
-            "w": 20,
-            "h": 20
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 60,
-            "y": 308,
-            "w": 20,
-            "h": 20
-          },
-          "EyesOfThePowerful.png": {
-            "x": 80,
-            "y": 308,
-            "w": 20,
-            "h": 20
-          },
-          "EyesOfTheSavant.png": {
-            "x": 100,
             "y": 308,
             "w": 20,
             "h": 20
@@ -93043,12 +90783,6 @@
             "w": 20,
             "h": 20
           },
-          "GladiatorAnointNotable.png": {
-            "x": 60,
-            "y": 328,
-            "w": 20,
-            "h": 20
-          },
           "GolemsNotable.png": {
             "x": 80,
             "y": 328,
@@ -93063,12 +90797,6 @@
           },
           "GrowthandDecay.png": {
             "x": 120,
-            "y": 328,
-            "w": 20,
-            "h": 20
-          },
-          "GuardianAnointNotable.png": {
-            "x": 280,
             "y": 328,
             "w": 20,
             "h": 20
@@ -93099,12 +90827,6 @@
           },
           "Hearty.png": {
             "x": 380,
-            "y": 328,
-            "w": 20,
-            "h": 20
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 400,
             "y": 328,
             "w": 20,
             "h": 20
@@ -93165,12 +90887,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 240,
-            "y": 348,
-            "w": 20,
-            "h": 20
-          },
-          "IgnorePain.png": {
-            "x": 260,
             "y": 348,
             "w": 20,
             "h": 20
@@ -93301,12 +91017,6 @@
             "w": 20,
             "h": 20
           },
-          "InquisitorAnointNotable.png": {
-            "x": 180,
-            "y": 368,
-            "w": 20,
-            "h": 20
-          },
           "Inspiration.png": {
             "x": 340,
             "y": 368,
@@ -93316,12 +91026,6 @@
           "IntensifyNotable.png": {
             "x": 360,
             "y": 368,
-            "w": 20,
-            "h": 20
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 388,
             "w": 20,
             "h": 20
           },
@@ -93589,12 +91293,6 @@
             "w": 20,
             "h": 20
           },
-          "MindPact.png": {
-            "x": 400,
-            "y": 408,
-            "w": 20,
-            "h": 20
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 420,
             "y": 408,
@@ -93631,27 +91329,9 @@
             "w": 20,
             "h": 20
           },
-          "NecromancerAnointNotable.png": {
-            "x": 200,
-            "y": 428,
-            "w": 20,
-            "h": 20
-          },
-          "OccultistAnointNotable.png": {
-            "x": 360,
-            "y": 428,
-            "w": 20,
-            "h": 20
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 380,
             "y": 428,
-            "w": 20,
-            "h": 20
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 20,
-            "y": 448,
             "w": 20,
             "h": 20
           },
@@ -93877,12 +91557,6 @@
             "w": 20,
             "h": 20
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
           "Sanctuary.png": {
             "x": 20,
             "y": 488,
@@ -93925,26 +91599,8 @@
             "w": 20,
             "h": 20
           },
-          "ShrugOff.png": {
-            "x": 160,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
           "SkitteringRunes.png": {
             "x": 180,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
-          "SlayerAnointNotable.png": {
-            "x": 340,
-            "y": 488,
-            "w": 20,
-            "h": 20
-          },
-          "SoulPact.png": {
-            "x": 360,
             "y": 488,
             "w": 20,
             "h": 20
@@ -94141,12 +91797,6 @@
             "w": 20,
             "h": 20
           },
-          "TricksterAnointNotable.png": {
-            "x": 180,
-            "y": 528,
-            "w": 20,
-            "h": 20
-          },
           "TrueStriker.png": {
             "x": 200,
             "y": 528,
@@ -94215,12 +91865,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 40,
-            "y": 548,
-            "w": 20,
-            "h": 20
-          },
-          "WardenAnointNotable.png": {
-            "x": 300,
             "y": 548,
             "w": 20,
             "h": 20
@@ -95216,12 +92860,6 @@
             "w": 29,
             "h": 29
           },
-          "AssassinAnointNotable.png": {
-            "x": 58,
-            "y": 269,
-            "w": 29,
-            "h": 29
-          },
           "AttackBlindNotable.png": {
             "x": 522,
             "y": 269,
@@ -95330,12 +92968,6 @@
             "w": 29,
             "h": 29
           },
-          "BeserkerAnointNotable.png": {
-            "x": 493,
-            "y": 298,
-            "w": 29,
-            "h": 29
-          },
           "BladeBarrierNotable.png": {
             "x": 522,
             "y": 298,
@@ -95384,12 +93016,6 @@
             "w": 29,
             "h": 29
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 327,
-            "w": 29,
-            "h": 29
-          },
           "BloodSiphon.png": {
             "x": 29,
             "y": 327,
@@ -95398,12 +93024,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 58,
-            "y": 327,
-            "w": 29,
-            "h": 29
-          },
-          "Boomerang.png": {
-            "x": 87,
             "y": 327,
             "w": 29,
             "h": 29
@@ -95474,12 +93094,6 @@
             "w": 29,
             "h": 29
           },
-          "ChampionAnointNotable.png": {
-            "x": 638,
-            "y": 327,
-            "w": 29,
-            "h": 29
-          },
           "ChaosDamage2.png": {
             "x": 667,
             "y": 327,
@@ -95500,18 +93114,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 356,
-            "w": 29,
-            "h": 29
-          },
-          "ChaoticPotential.png": {
-            "x": 29,
-            "y": 356,
-            "w": 29,
-            "h": 29
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 58,
             "y": 356,
             "w": 29,
             "h": 29
@@ -95684,18 +93286,6 @@
             "w": 29,
             "h": 29
           },
-          "DarkestHour.png": {
-            "x": 348,
-            "y": 385,
-            "w": 29,
-            "h": 29
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 493,
-            "y": 385,
-            "w": 29,
-            "h": 29
-          },
           "DeepBreathsNotable.png": {
             "x": 522,
             "y": 385,
@@ -95804,12 +93394,6 @@
             "w": 29,
             "h": 29
           },
-          "ElementalistAnointNotable.png": {
-            "x": 522,
-            "y": 414,
-            "w": 29,
-            "h": 29
-          },
           "EnduranceChargeNotable.png": {
             "x": 551,
             "y": 414,
@@ -95866,24 +93450,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 58,
-            "y": 443,
-            "w": 29,
-            "h": 29
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 87,
-            "y": 443,
-            "w": 29,
-            "h": 29
-          },
-          "EyesOfThePowerful.png": {
-            "x": 116,
-            "y": 443,
-            "w": 29,
-            "h": 29
-          },
-          "EyesOfTheSavant.png": {
-            "x": 145,
             "y": 443,
             "w": 29,
             "h": 29
@@ -95984,12 +93550,6 @@
             "w": 29,
             "h": 29
           },
-          "GladiatorAnointNotable.png": {
-            "x": 87,
-            "y": 472,
-            "w": 29,
-            "h": 29
-          },
           "GolemsNotable.png": {
             "x": 116,
             "y": 472,
@@ -96004,12 +93564,6 @@
           },
           "GrowthandDecay.png": {
             "x": 174,
-            "y": 472,
-            "w": 29,
-            "h": 29
-          },
-          "GuardianAnointNotable.png": {
-            "x": 406,
             "y": 472,
             "w": 29,
             "h": 29
@@ -96040,12 +93594,6 @@
           },
           "Hearty.png": {
             "x": 551,
-            "y": 472,
-            "w": 29,
-            "h": 29
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 580,
             "y": 472,
             "w": 29,
             "h": 29
@@ -96106,12 +93654,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 348,
-            "y": 501,
-            "w": 29,
-            "h": 29
-          },
-          "IgnorePain.png": {
-            "x": 377,
             "y": 501,
             "w": 29,
             "h": 29
@@ -96242,12 +93784,6 @@
             "w": 29,
             "h": 29
           },
-          "InquisitorAnointNotable.png": {
-            "x": 261,
-            "y": 530,
-            "w": 29,
-            "h": 29
-          },
           "Inspiration.png": {
             "x": 493,
             "y": 530,
@@ -96257,12 +93793,6 @@
           "IntensifyNotable.png": {
             "x": 522,
             "y": 530,
-            "w": 29,
-            "h": 29
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 559,
             "w": 29,
             "h": 29
           },
@@ -96530,12 +94060,6 @@
             "w": 29,
             "h": 29
           },
-          "MindPact.png": {
-            "x": 580,
-            "y": 588,
-            "w": 29,
-            "h": 29
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 609,
             "y": 588,
@@ -96572,27 +94096,9 @@
             "w": 29,
             "h": 29
           },
-          "NecromancerAnointNotable.png": {
-            "x": 290,
-            "y": 617,
-            "w": 29,
-            "h": 29
-          },
-          "OccultistAnointNotable.png": {
-            "x": 522,
-            "y": 617,
-            "w": 29,
-            "h": 29
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 551,
             "y": 617,
-            "w": 29,
-            "h": 29
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 29,
-            "y": 646,
             "w": 29,
             "h": 29
           },
@@ -96818,12 +94324,6 @@
             "w": 29,
             "h": 29
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
           "Sanctuary.png": {
             "x": 29,
             "y": 704,
@@ -96866,26 +94366,8 @@
             "w": 29,
             "h": 29
           },
-          "ShrugOff.png": {
-            "x": 232,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
           "SkitteringRunes.png": {
             "x": 261,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
-          "SlayerAnointNotable.png": {
-            "x": 493,
-            "y": 704,
-            "w": 29,
-            "h": 29
-          },
-          "SoulPact.png": {
-            "x": 522,
             "y": 704,
             "w": 29,
             "h": 29
@@ -97082,12 +94564,6 @@
             "w": 29,
             "h": 29
           },
-          "TricksterAnointNotable.png": {
-            "x": 261,
-            "y": 762,
-            "w": 29,
-            "h": 29
-          },
           "TrueStriker.png": {
             "x": 290,
             "y": 762,
@@ -97156,12 +94632,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 58,
-            "y": 791,
-            "w": 29,
-            "h": 29
-          },
-          "WardenAnointNotable.png": {
-            "x": 435,
             "y": 791,
             "w": 29,
             "h": 29
@@ -98157,12 +95627,6 @@
             "w": 37,
             "h": 37
           },
-          "AssassinAnointNotable.png": {
-            "x": 74,
-            "y": 349,
-            "w": 37,
-            "h": 37
-          },
           "AttackBlindNotable.png": {
             "x": 666,
             "y": 349,
@@ -98271,12 +95735,6 @@
             "w": 37,
             "h": 37
           },
-          "BeserkerAnointNotable.png": {
-            "x": 629,
-            "y": 386,
-            "w": 37,
-            "h": 37
-          },
           "BladeBarrierNotable.png": {
             "x": 666,
             "y": 386,
@@ -98325,12 +95783,6 @@
             "w": 37,
             "h": 37
           },
-          "BloodPact.png": {
-            "x": 0,
-            "y": 423,
-            "w": 37,
-            "h": 37
-          },
           "BloodSiphon.png": {
             "x": 37,
             "y": 423,
@@ -98339,12 +95791,6 @@
           },
           "BloodyBludgeon.png": {
             "x": 74,
-            "y": 423,
-            "w": 37,
-            "h": 37
-          },
-          "Boomerang.png": {
-            "x": 111,
             "y": 423,
             "w": 37,
             "h": 37
@@ -98415,12 +95861,6 @@
             "w": 37,
             "h": 37
           },
-          "ChampionAnointNotable.png": {
-            "x": 814,
-            "y": 423,
-            "w": 37,
-            "h": 37
-          },
           "ChaosDamage2.png": {
             "x": 851,
             "y": 423,
@@ -98441,18 +95881,6 @@
           },
           "ChaosResistNotable.png": {
             "x": 0,
-            "y": 460,
-            "w": 37,
-            "h": 37
-          },
-          "ChaoticPotential.png": {
-            "x": 37,
-            "y": 460,
-            "w": 37,
-            "h": 37
-          },
-          "CheiftainAnointNotable.png": {
-            "x": 74,
             "y": 460,
             "w": 37,
             "h": 37
@@ -98625,18 +96053,6 @@
             "w": 37,
             "h": 37
           },
-          "DarkestHour.png": {
-            "x": 444,
-            "y": 497,
-            "w": 37,
-            "h": 37
-          },
-          "DeadeyeAnointNotable.png": {
-            "x": 629,
-            "y": 497,
-            "w": 37,
-            "h": 37
-          },
           "DeepBreathsNotable.png": {
             "x": 666,
             "y": 497,
@@ -98745,12 +96161,6 @@
             "w": 37,
             "h": 37
           },
-          "ElementalistAnointNotable.png": {
-            "x": 666,
-            "y": 534,
-            "w": 37,
-            "h": 37
-          },
           "EnduranceChargeNotable.png": {
             "x": 703,
             "y": 534,
@@ -98807,24 +96217,6 @@
           },
           "ExplosiveRunes.png": {
             "x": 74,
-            "y": 571,
-            "w": 37,
-            "h": 37
-          },
-          "EyesOfTheDeadly.png": {
-            "x": 111,
-            "y": 571,
-            "w": 37,
-            "h": 37
-          },
-          "EyesOfThePowerful.png": {
-            "x": 148,
-            "y": 571,
-            "w": 37,
-            "h": 37
-          },
-          "EyesOfTheSavant.png": {
-            "x": 185,
             "y": 571,
             "w": 37,
             "h": 37
@@ -98925,12 +96317,6 @@
             "w": 37,
             "h": 37
           },
-          "GladiatorAnointNotable.png": {
-            "x": 111,
-            "y": 608,
-            "w": 37,
-            "h": 37
-          },
           "GolemsNotable.png": {
             "x": 148,
             "y": 608,
@@ -98945,12 +96331,6 @@
           },
           "GrowthandDecay.png": {
             "x": 222,
-            "y": 608,
-            "w": 37,
-            "h": 37
-          },
-          "GuardianAnointNotable.png": {
-            "x": 518,
             "y": 608,
             "w": 37,
             "h": 37
@@ -98981,12 +96361,6 @@
           },
           "Hearty.png": {
             "x": 703,
-            "y": 608,
-            "w": 37,
-            "h": 37
-          },
-          "HeirophantAnointNotable.png": {
-            "x": 740,
             "y": 608,
             "w": 37,
             "h": 37
@@ -99047,12 +96421,6 @@
           },
           "IgniteStunNotable.png": {
             "x": 444,
-            "y": 645,
-            "w": 37,
-            "h": 37
-          },
-          "IgnorePain.png": {
-            "x": 481,
             "y": 645,
             "w": 37,
             "h": 37
@@ -99183,12 +96551,6 @@
             "w": 37,
             "h": 37
           },
-          "InquisitorAnointNotable.png": {
-            "x": 333,
-            "y": 682,
-            "w": 37,
-            "h": 37
-          },
           "Inspiration.png": {
             "x": 629,
             "y": 682,
@@ -99198,12 +96560,6 @@
           "IntensifyNotable.png": {
             "x": 666,
             "y": 682,
-            "w": 37,
-            "h": 37
-          },
-          "JuggernautAnointNotable.png": {
-            "x": 0,
-            "y": 719,
             "w": 37,
             "h": 37
           },
@@ -99471,12 +96827,6 @@
             "w": 37,
             "h": 37
           },
-          "MindPact.png": {
-            "x": 740,
-            "y": 756,
-            "w": 37,
-            "h": 37
-          },
           "MineAreaOfEffectNotable.png": {
             "x": 777,
             "y": 756,
@@ -99513,27 +96863,9 @@
             "w": 37,
             "h": 37
           },
-          "NecromancerAnointNotable.png": {
-            "x": 370,
-            "y": 793,
-            "w": 37,
-            "h": 37
-          },
-          "OccultistAnointNotable.png": {
-            "x": 666,
-            "y": 793,
-            "w": 37,
-            "h": 37
-          },
           "OneHandedPhysicalAndLeechNotable.png": {
             "x": 703,
             "y": 793,
-            "w": 37,
-            "h": 37
-          },
-          "PathfinderAnointNotable.png": {
-            "x": 37,
-            "y": 830,
             "w": 37,
             "h": 37
           },
@@ -99759,12 +97091,6 @@
             "w": 37,
             "h": 37
           },
-          "SaboteurAnointNotable.png": {
-            "x": 0,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
           "Sanctuary.png": {
             "x": 37,
             "y": 904,
@@ -99807,26 +97133,8 @@
             "w": 37,
             "h": 37
           },
-          "ShrugOff.png": {
-            "x": 296,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
           "SkitteringRunes.png": {
             "x": 333,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
-          "SlayerAnointNotable.png": {
-            "x": 629,
-            "y": 904,
-            "w": 37,
-            "h": 37
-          },
-          "SoulPact.png": {
-            "x": 666,
             "y": 904,
             "w": 37,
             "h": 37
@@ -100023,12 +97331,6 @@
             "w": 37,
             "h": 37
           },
-          "TricksterAnointNotable.png": {
-            "x": 333,
-            "y": 978,
-            "w": 37,
-            "h": 37
-          },
           "TrueStriker.png": {
             "x": 370,
             "y": 978,
@@ -100097,12 +97399,6 @@
           },
           "WarcryGainDamageNotable.png": {
             "x": 74,
-            "y": 1015,
-            "w": 37,
-            "h": 37
-          },
-          "WardenAnointNotable.png": {
-            "x": 555,
             "y": 1015,
             "w": 37,
             "h": 37

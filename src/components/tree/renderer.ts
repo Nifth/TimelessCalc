@@ -1,7 +1,10 @@
 import Konva from 'konva';
+import { createSprite, preloadSprites } from './sprites';
 import type { TreeData, Group, Node } from './types';
 
+//https://konvajs.org/docs/sandbox/10000_Shapes_with_Tooltip.html pour tooltip?
 export function renderTree(container: HTMLDivElement, treeData: TreeData) {
+	preloadSprites(treeData.sprites)
 	// Fullscreen
 	container.style.position = 'fixed';
 	container.style.top = '0';
@@ -62,6 +65,46 @@ export function renderTree(container: HTMLDivElement, treeData: TreeData) {
 		y: centerScreenY - centerTreeY * minZoom,
 	});
 
+	let testGroups: Group[] = [];
+	Object.entries(treeData.groups).forEach(([groupId, group]) => {
+		let hasNode = false;
+		group.nodes.forEach((nodeId, idx) => {
+			if (['57264',
+				'33296',
+				'36774',
+				'17579',
+				'21934',
+				'1957',
+				'739',
+				'18866',
+				'11420',
+				'48362',
+				'11128',
+				'27203',
+				'8135',
+				'2292',
+				'11659',
+				'27929',
+				'40637',
+				'55643',
+				'6949',
+				'25222',
+				'9650',
+				'19374',
+				'59650',
+				'4397',
+				'36542',
+				'37569',
+				'57226'].includes(nodeId)) {
+					hasNode = true;
+				}
+		})
+		if (!hasNode) {return};
+
+		testGroups.push(group);
+	});
+	console.log(testGroups);
+
 	Object.entries(treeData.groups).forEach(([groupId, group]) => {
 		// Group center
 		const centerX = group.x - minX;
@@ -71,9 +114,9 @@ export function renderTree(container: HTMLDivElement, treeData: TreeData) {
 			x: centerX,
 			y: centerY,
 			radius: 40,
-			stroke: '#fff',
-			strokeWidth: 1,
-			opacity: 0.3,
+			stroke: '#F00',
+			strokeWidth: 3,
+			opacity: 1,
 		});
 		layer.add(groupCircle);
 
@@ -84,18 +127,34 @@ export function renderTree(container: HTMLDivElement, treeData: TreeData) {
 			const orbitIndex = node?.orbitIndex ?? idx;
 			const radius = orbitRadii[orbit] || 0;
 			const angle = (2 * Math.PI * orbitIndex) / (node?.orbit != null ? (treeData.constants?.skillsPerOrbit?.[orbit] || 1) : group.nodes.length);
-			const nodeX = centerX + radius * Math.cos(angle);
-			const nodeY = centerY + radius * Math.sin(angle);
+			const nodeX = centerX + radius * Math.sin(angle);
+			const nodeY = centerY - radius * Math.cos(angle);
 
 			const nodeCircle = new Konva.Circle({
 				x: nodeX,
 				y: nodeY,
-				radius: node?.isNotable ? 14 : 9,
-				fill: node?.isNotable ? '#0af' : '#ff0',
+				radius: node?.isNotable ? 18 : 12,
 				stroke: '#333',
-				strokeWidth: 2,
+				strokeWidth: 3,
 			});
 			layer.add(nodeCircle);
+			if (node.isJewelSocket) {
+				// todo: récupérer le crop au bon endroit
+				const image = createSprite(
+					'frame',
+					{
+						crop: {
+							x: 72,
+							y: 78,
+							width: 18,
+							height: 19
+						},
+						x: nodeX,
+						y: nodeY
+					}
+				)
+				layer.add(image)
+			}
 
 			// Label (hidden by default, shown on hover)
 			let label: Konva.Text | null = null;

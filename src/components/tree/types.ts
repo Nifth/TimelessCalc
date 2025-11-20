@@ -15,6 +15,7 @@ export interface Node {
 	icon?: string;
 	isNotable?: boolean;
 	isMastery?: boolean;
+	isJewelSocket?: boolean;
 	stats?: string[];
 	group?: number;
 	orbit?: number;
@@ -23,6 +24,20 @@ export interface Node {
 	in?: string[];
 	reminderText?: string[];
 	inactiveIcon?: string;
+}
+
+export interface CropConfig {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface Sprite {
+	filename: string,
+	w: number,
+	h: number,
+	coords: Record<string, CropConfig>
 }
 
 export interface TreeData {
@@ -39,4 +54,5 @@ export interface TreeData {
 	max_x?: number;
 	max_y?: number;
 	imageZoomLevels?: number[];
+	sprites: Record<string, Record<string, Sprite>>;
 }
