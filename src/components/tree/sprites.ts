@@ -34,7 +34,7 @@ function createSprite(
     spriteConfig.y += spriteConfig.height!;
     spriteConfig.x += spriteConfig.width! * 2;
     spriteConfig.offsetX = spriteConfig.width! * 1.5
-    spriteConfig.scaleY = -2.5;
+    spriteConfig.scaleY = -2;
   }
 
   return new Konva.Image({
@@ -56,7 +56,7 @@ function getSpriteConfig(
   }
   const crop = sprite.coords[part];
   if (!crop) {
-    throw new Error(`Crop part not found: ${part} in sprite: ${spriteKey} at zoom: ${zoom}`);
+    throw new Error(`Crop part not found: ${part} in sprite: ${spriteKey}`);
   }
 
   return {
@@ -81,7 +81,6 @@ function getSpriteConfig(
 function preloadSprites(sprites: Record<string, Record<string, Sprite>>) {
     Object.entries(sprites).forEach(([type, config]) => {
       const neededSprite = config[Object.keys(config)[Object.keys(config).length - 1]];
-      console.log(neededSprite);
       if (!neededSprite) {
         throw new Error(`No sprites found for type: ${type}`);
       }

@@ -61,9 +61,9 @@ export interface TreeData {
 	tree: string;
 	groups: Record<string, Group>;
 	nodes: Record<string, Node>;
-	constants?: {
+	constants: {
 		orbitRadii: number[];
-		skillsPerOrbit?: number[];
+		skillsPerOrbit: number[];
 		[key: string]: any;
 	};
 	min_x?: number;
