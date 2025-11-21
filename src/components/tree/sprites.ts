@@ -18,20 +18,76 @@ interface SpriteConfig {
 
 // Cache typé
 const spriteCache: { [key: string]: HTMLImageElement } = {};
+let spriteConfig: Record<string, Sprite> = {};
 
-function createSprite(spriteKey: string, config: SpriteConfig): Konva.Image {
+function createSprite(
+  spriteKey: string,
+  part: string,
+  nodeX: number,
+  nodeY: number,
+  move?: 'halfUp' | 'halfDown'
+): Konva.Image {
+  const spriteConfig = getSpriteConfig(spriteKey, part, nodeX, nodeY);
+  if (move === 'halfUp' && spriteConfig.y) {
+    spriteConfig.y -= spriteConfig.height!;
+  } else if (move === 'halfDown' && spriteConfig.y && spriteConfig.x) {
+    spriteConfig.y += spriteConfig.height!;
+    spriteConfig.x += spriteConfig.width! * 2;
+    spriteConfig.offsetX = spriteConfig.width! * 1.5
+    spriteConfig.scaleY = -2.5;
+  }
+
   return new Konva.Image({
+    ...spriteConfig,
     image: spriteCache[spriteKey],
-    ...config
+    cornerRadius: 900
   });
 }
 
+function getSpriteConfig(
+  spriteKey: string,
+  part: string,
+  nodeX: number,
+  nodeY: number
+): Konva.ImageConfig {
+  const sprite = spriteConfig[spriteKey];
+  if (!sprite) {
+    throw new Error(`Sprite not found for key: ${spriteKey}`);
+  }
+  const crop = sprite.coords[part];
+  if (!crop) {
+    throw new Error(`Crop part not found: ${part} in sprite: ${spriteKey} at zoom: ${zoom}`);
+  }
+
+  return {
+    image: undefined,
+    crop: {
+      x: crop.x,
+      y: crop.y,
+      width: crop.w,
+      height: crop.h,
+    },
+    scaleX: 2,
+    scaleY: 2,
+    width: crop.w,
+    height: crop.h,
+    offsetX: crop.w / 2,
+    offsetY: crop.h / 2,
+    x: nodeX,
+    y: nodeY,
+  };
+}
+
 function preloadSprites(sprites: Record<string, Record<string, Sprite>>) {
-    Object.entries(sprites).forEach(([type, spriteConfig]) => {
-        console.log('Preload sprites for ' + type)
-        Object.entries(spriteConfig).slice(0,1).forEach(([zoom, sprite]) => {
-            preloadSprite(sprite.filename, type)
-        })
+    Object.entries(sprites).forEach(([type, config]) => {
+      const neededSprite = config[Object.keys(config)[Object.keys(config).length - 1]];
+      console.log(neededSprite);
+      if (!neededSprite) {
+        throw new Error(`No sprites found for type: ${type}`);
+      }
+      spriteConfig[type] = neededSprite;
+      console.log('Preload sprites for ' + type)
+      preloadSprite(neededSprite.filename, type)
     })
 }
 
@@ -45,7 +101,7 @@ function preloadSprite(spriteUrl: string, spriteKey: string): HTMLImageElement {
         spriteCache[spriteKey] = img;
     }
     
-    return spriteCache[spriteKey]
+    return spriteCache[spriteKey];
 }
 
 // Export pour utilisation dans d'autres fichiers

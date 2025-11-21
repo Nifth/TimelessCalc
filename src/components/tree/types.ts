@@ -3,10 +3,18 @@ export interface Group {
 	y: number;
 	isProxy: boolean;
 	orbits: number[];
-	background: {
+	background?: {
 		image: string;
+		isHalfImage?: boolean;
 	};
 	nodes: string[];
+}
+
+export interface ExpansionJewel {
+	size: number;
+	index: number;
+	proxy: string;
+	parent?: string;
 }
 
 export interface Node {
@@ -15,7 +23,9 @@ export interface Node {
 	icon?: string;
 	isNotable?: boolean;
 	isMastery?: boolean;
+	isKeystone?: boolean;
 	isJewelSocket?: boolean;
+	expansionJewel?: ExpansionJewel;
 	stats?: string[];
 	group?: number;
 	orbit?: number;
@@ -33,11 +43,18 @@ export interface CropConfig {
   height: number;
 }
 
+export interface Coords {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 export interface Sprite {
 	filename: string,
 	w: number,
 	h: number,
-	coords: Record<string, CropConfig>
+	coords: Record<string, Coords>
 }
 
 export interface TreeData {

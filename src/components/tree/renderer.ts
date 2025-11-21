@@ -1,6 +1,7 @@
 import Konva from 'konva';
 import { createSprite, preloadSprites } from './sprites';
 import type { TreeData, Group, Node } from './types';
+import type { Layer } from 'konva/lib/Layer';
 
 //https://konvajs.org/docs/sandbox/10000_Shapes_with_Tooltip.html pour tooltip?
 export function renderTree(container: HTMLDivElement, treeData: TreeData) {
@@ -109,16 +110,8 @@ export function renderTree(container: HTMLDivElement, treeData: TreeData) {
 		// Group center
 		const centerX = group.x - minX;
 		const centerY = group.y - minY;
-		// Draw group background
-		const groupCircle = new Konva.Circle({
-			x: centerX,
-			y: centerY,
-			radius: 40,
-			stroke: '#F00',
-			strokeWidth: 3,
-			opacity: 1,
-		});
-		layer.add(groupCircle);
+		
+		renderGroup(group, centerX, centerY, layer);
 
 		// Draw nodes on their orbit
 		group.nodes.forEach((nodeId, idx) => {
@@ -130,57 +123,154 @@ export function renderTree(container: HTMLDivElement, treeData: TreeData) {
 			const nodeX = centerX + radius * Math.sin(angle);
 			const nodeY = centerY - radius * Math.cos(angle);
 
-			const nodeCircle = new Konva.Circle({
-				x: nodeX,
-				y: nodeY,
-				radius: node?.isNotable ? 18 : 12,
-				stroke: '#333',
-				strokeWidth: 3,
-			});
-			layer.add(nodeCircle);
 			if (node.isJewelSocket) {
-				// todo: récupérer le crop au bon endroit
-				const image = createSprite(
-					'frame',
-					{
-						crop: {
-							x: 72,
-							y: 78,
-							width: 18,
-							height: 19
-						},
-						x: nodeX,
-						y: nodeY
-					}
-				)
-				layer.add(image)
+				renderSocket(node, nodeX, nodeY, layer);
+			} else {
+				renderNode(node, nodeX, nodeY, layer);
 			}
-
-			// Label (hidden by default, shown on hover)
-			let label: Konva.Text | null = null;
-			if (node?.name) {
-				label = new Konva.Text({
-					x: nodeX + 18,
-					y: nodeY - 8,
-					text: node.name,
-					fontSize: 24,
-					fill: '#fff',
-					visible: false,
-				});
-				layer.add(label);
-			}
-			nodeCircle.on('mouseenter', () => {
-				document.body.style.cursor = 'pointer';
-				if (label) label.visible(true);
-				layer.batchDraw();
-			});
-			nodeCircle.on('mouseleave', () => {
-				document.body.style.cursor = 'default';
-				if (label) label.visible(false);
-				layer.batchDraw();
-			});
 		});
 	});
 
 	stage.add(layer);
+}
+
+function renderGroup(group: Group, centerX: number, centerY: number, layer: Layer) {
+	if (!group.background) return;
+	if (!group.background.isHalfImage) {
+		const image = createSprite(
+			'groupBackground',
+			group.background.image,
+			centerX,
+			centerY,
+		)
+		layer.add(image);
+		return;
+	}
+	
+	// move half-image groups up by half their height
+	const halfUp = createSprite(
+		'groupBackground',
+		group.background.image,
+		centerX,
+		centerY,
+		'halfUp'
+	)
+	layer.add(halfUp);
+	const halfDown = createSprite(
+		'groupBackground',
+		group.background.image,
+		centerX,
+		centerY,
+		'halfDown'
+	)
+	layer.add(halfDown);
+
+}
+
+function renderSocket(node: Node, nodeX: number, nodeY: number, layer: Layer) {
+	let jewelType = 'JewelFrameUnallocated';
+	if (node.expansionJewel) {
+		jewelType = 'JewelSocketAltNormal';
+	}
+	const image = createSprite(
+		'frame',
+		jewelType,
+		nodeX,
+		nodeY,
+	)
+	layer.add(image)
+}
+
+function renderNode(node: Node, nodeX: number, nodeY: number, layer: Layer) {
+	let nodeType = 'small';
+	if (node.isNotable) {
+		nodeType = 'notable';
+	} else if (node.isMastery) {
+		nodeType = 'mastery';
+	} else if (node.isKeystone) {
+		nodeType = 'keystone';
+	}
+	// Label (hidden by default, shown on hover)
+	let label: Konva.Text | null = null;
+	if (node?.name) {
+		label = new Konva.Text({
+			x: nodeX + 18,
+			y: nodeY - 8,
+			text: node.name,
+			fontSize: 24,
+			fill: '#fff',
+			visible: false,
+		});
+		layer.add(label);
+	}
+
+	let spriteKey: string;
+	switch (nodeType) {
+		case 'small':
+			spriteKey = 'normalInactive';
+			break;
+		case 'notable':
+			spriteKey = 'notableInactive';
+			break
+		case 'mastery':
+			spriteKey = 'masteryInactive';
+			break;
+		case 'keystone':
+			spriteKey = 'keystoneInactive';
+			break;
+		default:
+			spriteKey = 'normalInactive';
+			break;
+	};
+
+	const background = createSprite(
+		spriteKey,
+		node.inactiveIcon || node.icon || 'DefaultInactive',
+		nodeX,
+		nodeY
+	)
+	layer.add(background);
+
+	if (['keystone', 'notable', 'small'].includes(nodeType)) {
+		let frameType: string;
+		switch (nodeType) {
+			case 'keystone':
+				frameType = 'KeystoneFrameUnallocated';
+				break;
+			case 'notable':
+				frameType = 'NotableFrameUnallocated';
+				break;
+			default:
+				frameType = 'PSSkillFrame';
+				break;
+		}
+		const border = createSprite(
+			'frame',
+			frameType,
+			nodeX,
+			nodeY
+		)
+		layer.add(border);
+	}
+	
+
+	const nodeCircle = new Konva.Circle({
+		x: nodeX,
+		y: nodeY,
+		radius: node?.isNotable ? 18 : 12,
+		stroke: '#333',
+		strokeWidth: 3,
+	});
+	layer.add(nodeCircle);
+
+	nodeCircle.on('mouseenter', () => {
+		document.body.style.cursor = 'pointer';
+		if (label) label.visible(true);
+		layer.batchDraw();
+	});
+	nodeCircle.on('mouseleave', () => {
+		document.body.style.cursor = 'default';
+		if (label) label.visible(false);
+		layer.batchDraw();
+	});
 }
