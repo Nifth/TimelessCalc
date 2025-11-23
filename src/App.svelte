@@ -23,6 +23,7 @@
   let pos = { x: 0, y: 0 };
   let hovered: any = null;
   let chosenSocket: Node | null = null;
+  const allocated = new Map<string, number>();
   const jewelRadiusImages = new Map<string, {a: Konva.Image, b: Konva.Image}>(); // conqueror type → images
   const jewelSocketImages = new Map<number, Konva.Image>(); // skill → Konva.Image
   const nodePos: Record<string, { x: number; y: number }> = {};
@@ -283,6 +284,8 @@
             }
             return;
           }
+          allocated.set(node.name + '-' + node.skill, node.skill)
+          console.log(allocated)
         }
       });
       cleanup = () => {
