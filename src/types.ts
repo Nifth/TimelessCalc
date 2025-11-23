@@ -20,6 +20,7 @@ export interface ExpansionJewel {
 export interface Node {
 	skill: number;
 	name: string;
+	classStartIndex: number,
 	icon?: string;
 	isNotable?: boolean;
 	isMastery?: boolean;
