@@ -4,14 +4,16 @@ import { createSprite } from '$lib/konva/utils/sprites';
 import type { Node } from '$lib/types';
 import { treeStore } from '$lib/stores/treeStore';
 import { get } from 'svelte/store';
+import { TREE_CONSTANTS } from '$lib/constants/tree';
+import { getHighlighteableNodes } from './nodes';
+import { canvas } from '$lib/konva/canvasContext';
 
-export function updateJewelSockets(
-  jewelImages: Map<number, Konva.Image>,
-  jewelRadiusImages: Map<string, {a: Konva.Image, b: Konva.Image}>,
-  layer: Konva.Layer,
-  nodes: Record<string, Node>
-) {
+export function updateJewelSockets() {
+  const jewelImages = canvas.jewelImages,
+    layer = canvas.mainLayer!,
+    data = canvas.treeData;
   const chosenSocket = get(treeStore).chosenSocket;
+  const nodes = data.nodes;
   jewelImages.forEach((img, skill) => {
     const node = Object.values(nodes).find((n: any) => n.skill === skill);
     if (!node?.isJewelSocket) return;
@@ -20,17 +22,27 @@ export function updateJewelSockets(
     const isSelected = chosenSocket?.skill === skill;
 
     const type = isSelected
-      ? (isExpansion ? 'JewelSocketAltActive' : 'JewelFrameAllocated')
-      : (isExpansion ? 'JewelSocketAltNormal' : 'JewelFrameUnallocated');
+      ? (isExpansion ? TREE_CONSTANTS.SPRITES.CLUSTER_ACTIVE : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_ACTIVE)
+      : (isExpansion ? TREE_CONSTANTS.SPRITES.CLUSTER_UNALLOCATED : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_UNALLOCATED);
 
-    const sprite = createSprite('frame', type, img.x(), img.y());
+    const sprite = createSprite(TREE_CONSTANTS.SPRITES.FRAME, type, img.x(), img.y());
     img.crop(sprite.crop());
     img.offsetX(sprite.offsetX());
     img.offsetY(sprite.offsetY());
     img.width(sprite.width());
     img.height(sprite.height());
 
-    // split en 2 fonction + changer le crop du radius en fonction du jewel type
+    changeRadius(chosenSocket)
+  });
+  highlightNodes(chosenSocket)
+
+  layer.batchDraw();
+}
+
+function changeRadius(
+  chosenSocket: Node | null
+) {
+  const jewelRadiusImages = canvas.jewelRadiusImages;
     const radiusImages = jewelRadiusImages.get('default'); // utiliser un store
     if (chosenSocket && radiusImages) {
       const socketX = chosenSocket.x || 0;
@@ -40,7 +52,7 @@ export function updateJewelSockets(
       radiusImg.visible(true);
       radiusImg.x(socketX);
       radiusImg.y(socketY);
-      if ('default' !== 'default') { // utiliser un store
+      if ('default' !== TREE_CONSTANTS.SOCKET.DEFAULT) { // utiliser un store
         radiusImg2.visible(true);
         radiusImg2.x(socketX);
         radiusImg2.y(socketY);
@@ -51,9 +63,6 @@ export function updateJewelSockets(
       radiusImages.a.visible(false);
       radiusImages.b.visible(false);
     }
-  });
-
-  layer.batchDraw();
 }
 
 function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
@@ -66,4 +75,87 @@ function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
         const angle = (frame.time * 360) / 180000;
         image.rotation(reverse ? - (angle % 360) : angle % 360);
     }, image.getLayer()).start();
+}
+
+function highlightNodes(
+  socket: Node | null,
+) {
+  const data = canvas.treeData;
+  const highlightableNodes = getHighlighteableNodes()
+  if (!socket) {
+    for (const [nodeId, node] of highlightableNodes) {
+      showInactive(node)
+    }
+    return;
+  }
+  for (const [nodeId, node] of highlightableNodes) {
+    if (data.socketNodes[socket.skill].includes(nodeId)) {
+      showActive(node);
+    } else {
+      showInactive(node);
+    }
+  }
+  canvas.mainLayer?.batchDraw()
+}
+
+function showActive(node: Node)
+{
+  const {icon, frame} = canvas.nodeImages.get(node.skill)!
+  const spriteKey = node.isKeystone ? TREE_CONSTANTS.SPRITES.KEYSTONE_ACTIVE :
+          node.isNotable ? TREE_CONSTANTS.SPRITES.NOTABLE_ACTIVE : TREE_CONSTANTS.SPRITES.NORMAL_ACTIVE;
+  const activeSprite = createSprite(
+    spriteKey,
+    node.icon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
+    icon.x(),
+    icon.y()
+  );
+  icon.image(activeSprite.image());
+  icon.crop(activeSprite.crop());
+  icon.offsetX(activeSprite.offsetX());
+  icon.offsetY(activeSprite.offsetY());
+  icon.width(activeSprite.width());
+  icon.height(activeSprite.height());
+
+  const activeFrame =  createSprite(
+    TREE_CONSTANTS.SPRITES.FRAME,
+    node.isKeystone ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_ACTIVE : node.isNotable ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_ACTIVE : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME_ACTIVE,
+    frame.x(),
+    frame.y()
+  );
+  frame.crop(activeFrame.crop());
+  frame.offsetX(activeFrame.offsetX());
+  frame.offsetY(activeFrame.offsetY());
+  frame.width(activeFrame.width());
+  frame.height(activeFrame.height());
+}
+
+function showInactive(node: Node)
+{
+  const {icon, frame} = canvas.nodeImages.get(node.skill)!
+  const spriteKey = node.isKeystone ? TREE_CONSTANTS.SPRITES.KEYSTONE_INACTIVE :
+          node.isNotable ? TREE_CONSTANTS.SPRITES.NOTABLE_INACTIVE : TREE_CONSTANTS.SPRITES.NORMAL_INACTIVE;
+  const inactiveSprite = createSprite(
+    spriteKey,
+    node.icon || node.inactiveIcon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
+    icon.x(),
+    icon.y()
+  );
+  icon.image(inactiveSprite.image());
+  icon.crop(inactiveSprite.crop());
+  icon.offsetX(inactiveSprite.offsetX());
+  icon.offsetY(inactiveSprite.offsetY());
+  icon.width(inactiveSprite.width());
+  icon.height(inactiveSprite.height());
+
+  const inactiveFrame =  createSprite(
+    TREE_CONSTANTS.SPRITES.FRAME,
+    node.isKeystone ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_UNALLOCATED : node.isNotable ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_UNALLOCATED : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME,
+    frame.x(),
+    frame.y()
+  );
+  frame.crop(inactiveFrame.crop());
+  frame.offsetX(inactiveFrame.offsetX());
+  frame.offsetY(inactiveFrame.offsetY());
+  frame.width(inactiveFrame.width());
+  frame.height(inactiveFrame.height());
 }

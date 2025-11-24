@@ -39,13 +39,6 @@ export interface Node {
 	y: number;
 }
 
-export interface CropConfig {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 export interface Coords {
   x: number;
   y: number;
@@ -75,4 +68,5 @@ export interface TreeData {
 	max_y?: number;
 	imageZoomLevels?: number[];
 	sprites: Record<string, Record<string, Sprite>>;
+	socketNodes: Record<string, string[]>;
 }

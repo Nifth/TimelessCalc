@@ -1,9 +1,10 @@
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from 'svelte/store';
-import type Konva from "konva";
+import { canvas } from "$lib/konva/canvasContext";
 
-export function setupZoom(stage: Konva.Stage)
+export function setupZoom()
 {
+    const stage = canvas.stage!;
     stage.on('wheel', (e) => {
         e.evt.preventDefault();
         e.evt.stopPropagation();

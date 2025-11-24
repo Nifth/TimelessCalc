@@ -1,18 +1,37 @@
-import type { TreeData } from "$lib/types";
-import type Konva from "konva";
 import { createSprite } from "$lib/konva/utils/sprites";
+import { TREE_CONSTANTS } from "$lib/constants/tree";
+import { canvas } from "$lib/konva/canvasContext";
 
-export function drawBackground(layer: Konva.Layer, data: TreeData)
+export function drawBackground()
 {
+    const layer = canvas.backgroundLayer!,
+        data = canvas.treeData;
     Object.entries(data.groups).forEach(([_, group]: [any, any]) => {
         // background
         if (group.background) {
           if (group.background.isHalfImage) {
-            const up = createSprite('groupBackground', group.background.image, group.x, group.y, 'halfUp');
-            const down = createSprite('groupBackground', group.background.image, group.x, group.y, 'halfDown');
+            const up = createSprite(
+              TREE_CONSTANTS.SPRITES.GROUP_BACKGROUND,
+              group.background.image,
+              group.x,
+              group.y,
+              TREE_CONSTANTS.SPRITES.HALF_UP
+            );
+            const down = createSprite(
+              TREE_CONSTANTS.SPRITES.GROUP_BACKGROUND,
+              group.background.image,
+              group.x,
+              group.y,
+              TREE_CONSTANTS.SPRITES.HALF_DOWN
+            );
             layer.add(up, down);
           } else {
-            const bg = createSprite('groupBackground', group.background.image, group.x, group.y);
+            const bg = createSprite(
+              TREE_CONSTANTS.SPRITES.GROUP_BACKGROUND,
+              group.background.image,
+              group.x,
+              group.y
+            );
             layer.add(bg);
           }
         }

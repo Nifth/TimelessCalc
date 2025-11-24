@@ -1,22 +1,8 @@
 import Konva from "konva";
-import type { CropConfig, Sprite } from "./types";
+import type { Sprite } from "$lib/types";
+import type { HalfDirectionValue } from "$lib/constants/tree";
+import { TREE_CONSTANTS } from "$lib/constants/tree";
 
-
-
-interface SpriteConfig {
-  x: number;
-  y: number;
-  crop: CropConfig;
-  // Autres propriétés Konva optionnelles
-  width?: number;
-  height?: number;
-  scaleX?: number;
-  scaleY?: number;
-  rotation?: number;
-  opacity?: number;
-}
-
-// Cache typé
 const spriteCache: { [key: string]: HTMLImageElement } = {};
 let spriteConfig: Record<string, Sprite> = {};
 
@@ -25,12 +11,12 @@ function createSprite(
   part: string,
   nodeX: number,
   nodeY: number,
-  move?: 'halfUp' | 'halfDown'
+  move?: HalfDirectionValue
 ): Konva.Image {
   const spriteConfig = getSpriteConfig(spriteKey, part, nodeX, nodeY);
-  if (move === 'halfUp' && spriteConfig.y) {
+  if (move === TREE_CONSTANTS.SPRITES.HALF_UP && spriteConfig.y) {
     spriteConfig.y -= spriteConfig.height!;
-  } else if (move === 'halfDown' && spriteConfig.y && spriteConfig.x) {
+  } else if (move === TREE_CONSTANTS.SPRITES.HALF_DOWN && spriteConfig.y && spriteConfig.x) {
     spriteConfig.y += spriteConfig.height!;
     spriteConfig.x += spriteConfig.width! * 2;
     spriteConfig.offsetX = spriteConfig.width! * 1.5
@@ -85,7 +71,6 @@ function preloadSprites(sprites: Record<string, Record<string, Sprite>>) {
         throw new Error(`No sprites found for type: ${type}`);
       }
       spriteConfig[type] = neededSprite;
-      console.log('Preload sprites for ' + type)
       preloadSprite(neededSprite.filename, type)
     })
 }
@@ -93,9 +78,8 @@ function preloadSprites(sprites: Record<string, Record<string, Sprite>>) {
 function preloadSprite(spriteUrl: string, spriteKey: string): HTMLImageElement {
     if (!spriteCache[spriteKey]) {
         const img = new Image();
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        img.crossOrigin = 'Anonymous';
-        img.src = proxyUrl + spriteUrl;
+        const url = spriteUrl.replace('https://web.poecdn.com/image/passive-skill/', 'assets/');
+        img.src = url;
 
         spriteCache[spriteKey] = img;
     }
@@ -103,6 +87,4 @@ function preloadSprite(spriteUrl: string, spriteKey: string): HTMLImageElement {
     return spriteCache[spriteKey];
 }
 
-// Export pour utilisation dans d'autres fichiers
 export { createSprite, preloadSprites };
-export type { SpriteConfig };

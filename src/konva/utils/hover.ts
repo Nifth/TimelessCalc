@@ -1,10 +1,13 @@
 import Konva from "konva";
 import { mouseStore } from "$lib/stores/mouseStore"
 import { treeStore } from "$lib/stores/treeStore";
-import type { Node } from "$lib/types";
+import { canvas } from "$lib/konva/canvasContext";
 
-export function setupHover(stage: Konva.Stage, hitLayer: Konva.Layer, nodes: Record<string, Node>)
+export function setupHover()
 {
+    const stage = canvas.stage!,
+        hitLayer = canvas.hitLayer!,
+        nodes = canvas.treeData.nodes;
     // ---------- HOVER ----------
     stage.on('mousemove', () => {
         const p = stage.getPointerPosition()!;

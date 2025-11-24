@@ -6,6 +6,7 @@
   import { preloadSprites } from '$lib/konva/utils/sprites';
   import type { TreeData } from '$lib/types';
 
+  import { canvas } from '$lib/konva/canvasContext';
   import { drawBackground } from '$lib/konva/layers/background';
   import { drawLines } from '$lib/konva/layers/lines';
   import { drawBaseRadius, drawNodes } from '$lib/konva/layers/nodes';
@@ -14,23 +15,14 @@
   import { setupHover } from '$lib/konva/utils/hover';
   import { setupClick } from '$lib/konva/utils/click';
   import { updateJewelSockets } from '$lib/konva/utils/jewelHighlight';
-    import { treeStore } from './stores/treeStore';
-    import { mouseStore } from './stores/mouseStore';
+  import { treeStore } from './stores/treeStore';
+  import { mouseStore } from './stores/mouseStore';
+    import { getHighlighteableNodes } from './konva/utils/nodes';
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
 
-  let stage: Konva.Stage;
-  let backgroundLayer: Konva.Layer;
-  let mainLayer: Konva.Layer;
-  let lineLayer: Konva.Layer;
-  let hitLayer: Konva.Layer;
   let tooltip: HTMLDivElement; // todo: improve tooltip to ressemble poe one
-  const jewelImages = new Map<number, Konva.Image>();
-  const jewelRadiusImages = new Map<string, {a: Konva.Image, b: Konva.Image}>(); // jewel type → images
 
-  // todo: Avoir un fichier constants, on en peut plus là
-  // todo: Highlight les nodes dispo dans le radius du socket sélectionné
-  // todo: mettre en valeur les socket
   // todo: pouvoir déselectionné / re selectionné les nodes dans le radius
   // tood: tooltip au hover
 
@@ -39,7 +31,7 @@
     (async () => {
       await preloadSprites(data.sprites);
 
-      stage = new Konva.Stage({
+      canvas.stage = new Konva.Stage({
         container: document.getElementById('tree')! as HTMLDivElement,
         width: window.innerWidth,
         height: window.innerHeight,
@@ -48,43 +40,50 @@
       tooltip = document.getElementById('tooltip')! as HTMLDivElement;
 
       // init
-      stage.scale({ x: 0.2, y: 0.2 });
-      stage.position({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+      canvas.stage.scale({ x: 0.2, y: 0.2 });
+      canvas.stage.position({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
-      backgroundLayer = new Konva.Layer({ listening: false });
-      mainLayer = new Konva.Layer({ listening: false });
-      lineLayer = new Konva.Layer({ listening: false });
-      hitLayer = new Konva.Layer({ listening: true });
+      canvas.backgroundLayer = new Konva.Layer({ listening: false });
+      canvas.mainLayer = new Konva.Layer({ listening: false });
+      canvas.lineLayer = new Konva.Layer({ listening: false });
+      canvas.hitLayer = new Konva.Layer({ listening: true });
+      canvas.treeData = data;
 
-      stage.add(backgroundLayer, lineLayer, mainLayer, hitLayer);
+      canvas.stage.add(
+        canvas.backgroundLayer,
+        canvas.lineLayer,
+        canvas.mainLayer,
+        canvas.hitLayer
+      );
 
+      getHighlighteableNodes() // initialise the highlighteable nodes cache
       // dessin une fois
-      drawBackground(backgroundLayer, data);
-      drawNodes(mainLayer, data, jewelImages);
-      drawLines(lineLayer, data);
-      drawBaseRadius(mainLayer, jewelRadiusImages);
-      createHitLayer(hitLayer, data);
+      drawBackground();
+      drawNodes();
+      drawLines();
+      drawBaseRadius();
+      createHitLayer();
 
       // interactions
-      setupZoom(stage);
-      setupHover(stage, hitLayer, data.nodes);
-      setupClick(stage, data.nodes);
+      setupZoom();
+      setupHover();
+      setupClick();
 
-      mainLayer.batchDraw();
-      lineLayer.batchDraw();
+      canvas.mainLayer.batchDraw();
+      canvas.lineLayer.batchDraw();
 
       // mise à jour réactive des jewels
 
       cleanup = () => {
-        stage?.destroy();
+        canvas.stage?.destroy();
       };
     })();
 
     return () => cleanup();
   });
 
-  $: if (mainLayer && $treeStore.chosenSocket !== undefined) {
-    updateJewelSockets(jewelImages, jewelRadiusImages, mainLayer, data.nodes);
+  $: if (canvas.mainLayer && $treeStore.chosenSocket !== undefined) {
+    updateJewelSockets();
   }
 
   $: if ($treeStore.hovered && tooltip) {

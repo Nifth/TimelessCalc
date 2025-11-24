@@ -1,11 +1,13 @@
-import type { TreeData } from "$lib/types";
+import { TREE_CONSTANTS } from "$lib/constants/tree";
 import Konva from "konva";
+import { canvas } from "$lib/konva/canvasContext";
 
-export function drawLines(layer: Konva.Layer, data: TreeData)
+export function drawLines()
 {
-    const skillsPerOrbit = data.constants.skillsPerOrbit;
-    const orbitRadii = data.constants.orbitRadii;
-
+    const layer = canvas.lineLayer!,
+        data = canvas.treeData,
+        skillsPerOrbit = data.constants.skillsPerOrbit,
+        orbitRadii = data.constants.orbitRadii;
     Object.entries(data.groups).forEach(([_, group]: [any, any]) => {
         group.nodes.forEach((nodeId: string, idx: number) => {
           const node = data.nodes[nodeId];
@@ -49,8 +51,8 @@ export function drawLines(layer: Konva.Layer, data: TreeData)
                             angle: delta * 180 / Math.PI,
                             rotation: angleA * 180 / Math.PI,
                             clockwise: delta < 0,
-                            stroke: '#9f7140',
-                            strokeWidth: 2.5,
+                            stroke: TREE_CONSTANTS.LINE_COLOR,
+                            strokeWidth: TREE_CONSTANTS.LINE_WIDTH,
                             lineCap: 'round',
                             listening: false
                         });
@@ -58,11 +60,11 @@ export function drawLines(layer: Konva.Layer, data: TreeData)
                         layer.add(arc);
                     } else {
                         const line = new Konva.Line({
-                        points: [a.x, a.y, b.x, b.y],
-                        stroke: '#9f7140',
-                        strokeWidth: 3,
-                        lineCap: 'round',
-                        listening: false,
+                            points: [a.x, a.y, b.x, b.y],
+                            stroke: TREE_CONSTANTS.LINE_COLOR,
+                            strokeWidth: TREE_CONSTANTS.LINE_WIDTH,
+                            lineCap: 'round',
+                            listening: false,
                         });
                         layer.add(line);
                     }
