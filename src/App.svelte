@@ -26,7 +26,6 @@
   const allocated = new Map<string, number>();
   const jewelRadiusImages = new Map<string, {a: Konva.Image, b: Konva.Image}>(); // conqueror type → images
   const jewelSocketImages = new Map<number, Konva.Image>(); // skill → Konva.Image
-  const nodePos: Record<string, { x: number; y: number }> = {};
 
   onMount(() => {
     let cleanup: () => void = () => {};
@@ -82,9 +81,8 @@
           const radius = orbitRadii[orbit] || 0;
           const angle = (2 * Math.PI * orbitIndex) /
             (node.orbit != null ? (skillsPerOrbit?.[orbit] || 1) : group.nodes.length);
-          const nodeX = group.x + radius * Math.sin(angle);
-          const nodeY = group.y - radius * Math.cos(angle);
-          nodePos[nodeId] = { x: nodeX, y: nodeY };
+          const nodeX = node.x;
+          const nodeY = node.y;
 
           // node sprite
           if (node.classStartIndex !== undefined) {
@@ -152,8 +150,8 @@
               (window as any).drawn = (window as any).drawn || new Set();
               (window as any).drawn.add(key);
 
-              const a = nodePos[nodeId];
-              const b = nodePos[targetId];
+              const a = node;
+              const b = target;
               if (!a || !b) return;
               const sameGroup = node.group === target.group;
               const sameOrbit = node.orbit === target.orbit && node.orbit! > 0;
@@ -310,6 +308,32 @@
   }
 
   $: if (chosenSocket !== null || chosenSocket === null) {
+    toggleJewelSocket(chosenSocket)
+    // rendre visible le radius de jewel + le placer centrer sur le socket
+    const radiusImages = jewelRadiusImages.get(conqueror);
+    if (chosenSocket && radiusImages) {
+      const socketX = chosenSocket.x || 0;
+      const socketY = chosenSocket.y || 0;
+      const radiusImg = radiusImages.a;
+      const radiusImg2 = radiusImages.b;
+      radiusImg.visible(true);
+      radiusImg.x(socketX);
+      radiusImg.y(socketY);
+      if (conqueror !== 'default') {
+        radiusImg2.visible(true);
+        radiusImg2.x(socketX);
+        radiusImg2.y(socketY);
+        startJewelRotation(radiusImg, true);
+        startJewelRotation(radiusImg2);
+      }
+    } else if (radiusImages) {
+      radiusImages.a.visible(false);
+      radiusImages.b.visible(false);
+    }
+    mainLayer?.batchDraw();
+  }
+
+  function toggleJewelSocket(chosenSocket: Node | null) {
     // On met à jour tous les jewel sockets
     jewelSocketImages.forEach((img, skill) => {
       const node = Object.values(data.nodes).find(n => n.skill === skill);
@@ -328,28 +352,6 @@
       const newSprite = createSprite('frame', newType, img.x(), img.y());
       img.crop(newSprite.crop());
     });
-    // rendre visible le radius de jewel + le placer centrer sur le socket
-    const radiusImages = jewelRadiusImages.get(conqueror);
-    if (chosenSocket && radiusImages) {
-      const socketX = nodePos[chosenSocket.skill].x || 0;
-      const socketY = nodePos[chosenSocket.skill].y || 0;
-      const radiusImg = radiusImages.a;
-      const radiusImg2 = radiusImages.b;
-      radiusImg.visible(true);
-      radiusImg.x(socketX);
-      radiusImg.y(socketY);
-      if (conqueror !== 'default') {
-        radiusImg2.visible(true);
-        radiusImg2.x(socketX);
-        radiusImg2.y(socketY);
-        startJewelRotation(radiusImg, true);
-        startJewelRotation(radiusImg2);
-      }
-    } else if (radiusImages) {
-      radiusImages.a.visible(false);
-      radiusImages.b.visible(false);
-    }
-    mainLayer?.batchDraw();
   }
 
   function startJewelRotation(image: Konva.Image, reverse: boolean = false) {

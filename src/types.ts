@@ -35,6 +35,8 @@ export interface Node {
 	in?: string[];
 	reminderText?: string[];
 	inactiveIcon?: string;
+	x: number;
+	y: number;
 }
 
 export interface CropConfig {
