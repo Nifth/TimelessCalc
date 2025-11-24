@@ -6,7 +6,7 @@
   import Konva from 'konva';
   import type { TreeData, Node } from './types';
   import treeData from './data/tree.json' with { type: 'json'}; // ton tree.json complet
-  import { preloadSprites, createSprite } from './sprites';
+  import { preloadSprites, createSprite } from './konva/utils/sprites';
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const jewelRadius = 1800;
@@ -306,71 +306,9 @@
   } else if (tooltip) {
     tooltip.style.display = 'none';
   }
-
-  $: if (chosenSocket !== null || chosenSocket === null) {
-    toggleJewelSocket(chosenSocket)
-    // rendre visible le radius de jewel + le placer centrer sur le socket
-    const radiusImages = jewelRadiusImages.get(conqueror);
-    if (chosenSocket && radiusImages) {
-      const socketX = chosenSocket.x || 0;
-      const socketY = chosenSocket.y || 0;
-      const radiusImg = radiusImages.a;
-      const radiusImg2 = radiusImages.b;
-      radiusImg.visible(true);
-      radiusImg.x(socketX);
-      radiusImg.y(socketY);
-      if (conqueror !== 'default') {
-        radiusImg2.visible(true);
-        radiusImg2.x(socketX);
-        radiusImg2.y(socketY);
-        startJewelRotation(radiusImg, true);
-        startJewelRotation(radiusImg2);
-      }
-    } else if (radiusImages) {
-      radiusImages.a.visible(false);
-      radiusImages.b.visible(false);
-    }
-    mainLayer?.batchDraw();
-  }
-
-  function toggleJewelSocket(chosenSocket: Node | null) {
-    // On met à jour tous les jewel sockets
-    jewelSocketImages.forEach((img, skill) => {
-      const node = Object.values(data.nodes).find(n => n.skill === skill);
-      if (!node?.isJewelSocket) return;
-
-      let newType = 'JewelFrameUnallocated';
-      if (node.expansionJewel) {
-        newType = 'JewelSocketAltNormal';
-      }
-
-      // Si c'est le socket choisi → version "allocated/active"
-      if (chosenSocket?.skill === skill) {
-        newType = node.expansionJewel ? 'JewelSocketAltActive' : 'JewelFrameAllocated';
-      }
-
-      const newSprite = createSprite('frame', newType, img.x(), img.y());
-      img.crop(newSprite.crop());
-    });
-  }
-
-  function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
-    // Si déjà en train de tourner → on ne fait rien
-    if (image.getAttr('rotating')) return;
-
-    image.setAttr('rotating', true);
-
-    new Konva.Animation((frame) => {
-      if (!frame) return;
-      // 1 tour complet en 8 secondes → 360° / 8000ms
-      const angle = (frame.time * 360) / 180000;
-      image.rotation(reverse ? - (angle % 360) : angle % 360);
-    }, image.getLayer()).start();
-  }
 </script>
 
 <div id="tree" style="position:fixed;inset:0;background:#070c11"></div>
-<div id="tooltip" style="position:fixed;display:none;background:rgba(0,0,0,0.92);color:#e8e1d2;padding:12px 18px;border-radius:8px;font:20px Fontin;pointer-events:none;z-index:9999"></div>
 
 <style>
   :global(body) { margin:0; overflow:hidden; font-family: Fontin, sans-serif; }

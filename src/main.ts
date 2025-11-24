@@ -1,8 +1,8 @@
 import { mount } from 'svelte'
 import './app.css'
-import App from './App.svelte'
+import Tree from './Tree.svelte'
 
-const app = mount(App, {
+const app = mount(Tree, {
   target: document.getElementById('app')!,
 })
 
