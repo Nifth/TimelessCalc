@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { Node } from '../types';
+import type { Node } from '$lib/types';
 
 export const treeStore = writable({
   chosenSocket: null as Node | null,
