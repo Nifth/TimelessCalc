@@ -39,7 +39,6 @@ export function drawNodes()
 
                 layer.add(image)
             } else {
-                // todo: mettre dans store aussi, sauf mastery, si possible filtrer pour ne mettre que les nodes qui peuvent être changés dans le store
                 const key = node.isMastery ? (node.inactiveIcon ? TREE_CONSTANTS.SPRITES.MASTERY_INACTIVE : TREE_CONSTANTS.SPRITES.MASTERY) :
                             node.isKeystone ? TREE_CONSTANTS.SPRITES.KEYSTONE_INACTIVE :
                             node.isNotable ? TREE_CONSTANTS.SPRITES.NOTABLE_INACTIVE : TREE_CONSTANTS.SPRITES.NORMAL_INACTIVE;

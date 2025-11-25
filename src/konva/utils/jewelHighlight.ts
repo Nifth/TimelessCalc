@@ -34,7 +34,7 @@ export function updateJewelSockets() {
 
     changeRadius(chosenSocket)
   });
-  highlightNodes(chosenSocket)
+  setAllocatedNodes(chosenSocket)
 
   layer.batchDraw();
 }
@@ -77,24 +77,27 @@ function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
     }, image.getLayer()).start();
 }
 
-function highlightNodes(
+function setAllocatedNodes(
   socket: Node | null,
 ) {
   const data = canvas.treeData;
   const highlightableNodes = getHighlighteableNodes()
   if (!socket) {
-    for (const [nodeId, node] of highlightableNodes) {
-      showInactive(node)
-    }
+    treeStore.update(state => {
+      state.allocated.clear();
+      return state;
+    });
     return;
   }
-  for (const [nodeId, node] of highlightableNodes) {
-    if (data.socketNodes[socket.skill].includes(nodeId)) {
-      showActive(node);
-    } else {
-      showInactive(node);
-    }
-  }
+  console.log('lol');
+  let allocatedNodes = new Map<string, Node>();
+  data.socketNodes[socket.skill].forEach(nodeId => {
+    allocatedNodes.set(nodeId, data.nodes[nodeId]);
+  })
+  treeStore.update(state => {
+    state.allocated = allocatedNodes
+    return state;
+  })
   canvas.mainLayer?.batchDraw()
 }
 
@@ -158,4 +161,19 @@ function showInactive(node: Node)
   frame.offsetY(inactiveFrame.offsetY());
   frame.width(inactiveFrame.width());
   frame.height(inactiveFrame.height());
+}
+
+export function updateAllocatedDisplay() {
+  const allocatedNodes = get(treeStore).allocated;
+  const highlightableNodes = getHighlighteableNodes();
+
+  for (const [nodeId, node] of allocatedNodes) {
+    showActive(node);
+  }
+
+  for (const [nodeId, node] of highlightableNodes) {
+    if (!allocatedNodes.has(nodeId)) {
+      showInactive(node);
+    }
+  }
 }

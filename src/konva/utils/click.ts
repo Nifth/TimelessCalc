@@ -6,7 +6,8 @@ import { canvas } from "$lib/konva/canvasContext";
 export function setupClick()
 {
     const stage = canvas.stage!,
-        nodes = canvas.treeData.nodes;
+        nodes = canvas.treeData.nodes,
+        socketNodes = canvas.treeData.socketNodes;
     // ---------- CLIC ----------
     stage.on('click tap', e => {
         const treeState = get(treeStore);
@@ -14,6 +15,7 @@ export function setupClick()
         if (shape instanceof Konva.Circle) {
             const skill = Number(shape.name());
             const node = nodes[Object.keys(nodes).find(k => nodes[k].skill === skill)!];
+            const nodeId = String(node.skill)
             if (node.isJewelSocket) {
                 if (treeState.chosenSocket === node) {
                     treeStore.update(state => {
@@ -28,10 +30,16 @@ export function setupClick()
                 }
                 return;
             }
-            treeStore.update(state => {
-                state.allocated.set(node.name + '-' + node.skill, node.skill)
-                return state;
-            })
+            if (treeState.chosenSocket && socketNodes[treeState.chosenSocket.skill].includes(nodeId)) {
+                treeStore.update(state => {
+                    if (state.allocated.has(nodeId)) {
+                        state.allocated.delete(nodeId)
+                    } else {
+                        state.allocated.set(nodeId, node)
+                    }
+                    return state;
+                })
+            }
         }
     });
 }

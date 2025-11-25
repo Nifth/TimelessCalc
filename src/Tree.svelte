@@ -14,7 +14,7 @@
   import { setupZoom } from '$lib/konva/utils/zoom';
   import { setupHover } from '$lib/konva/utils/hover';
   import { setupClick } from '$lib/konva/utils/click';
-  import { updateJewelSockets } from '$lib/konva/utils/jewelHighlight';
+  import { updateAllocatedDisplay, updateJewelSockets } from '$lib/konva/utils/jewelHighlight';
   import { treeStore } from './stores/treeStore';
   import { mouseStore } from './stores/mouseStore';
     import { getHighlighteableNodes } from './konva/utils/nodes';
@@ -22,8 +22,7 @@
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
 
   let tooltip: HTMLDivElement; // todo: improve tooltip to ressemble poe one
-
-  // todo: pouvoir déselectionné / re selectionné les nodes dans le radius
+  let previousSkill: number | null = null;
   // tood: tooltip au hover
 
   onMount(() => {
@@ -82,8 +81,14 @@
     return () => cleanup();
   });
 
-  $: if (canvas.mainLayer && $treeStore.chosenSocket !== undefined) {
+  $: currentSkill = $treeStore.chosenSocket?.skill ?? null;
+  $: if (canvas.mainLayer && currentSkill !== previousSkill) {
     updateJewelSockets();
+    previousSkill = currentSkill;
+  }
+
+  $: if (canvas.mainLayer && $treeStore.allocated) {
+    updateAllocatedDisplay();
   }
 
   $: if ($treeStore.hovered && tooltip) {
