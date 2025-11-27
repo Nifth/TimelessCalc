@@ -17,13 +17,13 @@
   import { updateAllocatedDisplay, updateJewelSockets } from '$lib/konva/utils/jewelHighlight';
   import { treeStore } from './stores/treeStore';
   import { mouseStore } from './stores/mouseStore';
-    import { getHighlighteableNodes } from './konva/utils/nodes';
+  import { getHighlighteableNodes } from './konva/utils/nodes';
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
 
   let tooltip: HTMLDivElement; // todo: improve tooltip to ressemble poe one
   let previousSkill: number | null = null;
-  // tood: tooltip au hover
+  // todo: tooltip au hover
 
   onMount(() => {
     let cleanup: () => void = () => {};
@@ -55,7 +55,7 @@
         canvas.hitLayer
       );
 
-      getHighlighteableNodes() // initialise the highlighteable nodes cache
+      getHighlighteableNodes(); // initialise the highlighteable nodes cache
       // dessin une fois
       drawBackground();
       drawNodes();
