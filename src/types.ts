@@ -70,3 +70,15 @@ export interface TreeData {
 	sprites: Record<string, Record<string, Sprite>>;
 	socketNodes: Record<string, string[]>;
 }
+
+export interface JewelType {
+	label: string;
+	name: string;
+	id: number;
+}
+
+export interface Conqueror {
+	label: string;
+	id: number;
+	keystone: string;
+}

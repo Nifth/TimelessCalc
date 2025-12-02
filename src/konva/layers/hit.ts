@@ -15,14 +15,18 @@ export function createHitLayer()
         const hit = new Konva.Circle({
             x: nodeX,
             y: nodeY,
-            stroke: 'white',
+            stroke: 'rgba(183, 0, 255, 1)',
             strokeWidth: 15,
             radius: node.isJewelSocket ? 100 : (node.isNotable || node.isKeystone) ? 90 : 50,
             name: node.skill.toString(),
             opacity: node.isJewelSocket ? 1 : 0,
             listening: true,
-          });
-          
-          layer.add(hit);
+        });
+ 
+        if (node.isJewelSocket) {
+            canvas.nodesHighlight.set(node.skill, hit)
+        }
+
+        layer.add(hit);
     });
 }

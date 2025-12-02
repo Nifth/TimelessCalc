@@ -25,6 +25,11 @@ export function updateJewelSockets() {
       ? (isExpansion ? TREE_CONSTANTS.SPRITES.CLUSTER_ACTIVE : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_ACTIVE)
       : (isExpansion ? TREE_CONSTANTS.SPRITES.CLUSTER_UNALLOCATED : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_UNALLOCATED);
 
+    if (isSelected) {
+      canvas.nodesHighlight.get(skill)?.opacity(0);
+    } else {
+      canvas.nodesHighlight.get(skill)?.opacity(1);
+    }
     const sprite = createSprite(TREE_CONSTANTS.SPRITES.FRAME, type, img.x(), img.y());
     img.crop(sprite.crop());
     img.offsetX(sprite.offsetX());
@@ -89,7 +94,7 @@ function setAllocatedNodes(
     });
     return;
   }
-  console.log('lol');
+
   let allocatedNodes = new Map<string, Node>();
   data.socketNodes[socket.skill].forEach(nodeId => {
     allocatedNodes.set(nodeId, data.nodes[nodeId]);

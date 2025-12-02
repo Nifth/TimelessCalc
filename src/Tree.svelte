@@ -1,6 +1,6 @@
-<!-- src/Tree.svelte -->
 <script lang="ts">
   import { onMount } from 'svelte';
+  import Sidebar from './ui/Sidebar.svelte';
   import Konva from 'konva';
   import treeData from '$lib/data/tree.json' with { type: 'json' };
   import { preloadSprites } from '$lib/konva/utils/sprites';
@@ -56,7 +56,6 @@
       );
 
       getHighlighteableNodes(); // initialise the highlighteable nodes cache
-      // dessin une fois
       drawBackground();
       drawNodes();
       drawLines();
@@ -70,8 +69,6 @@
 
       canvas.mainLayer.batchDraw();
       canvas.lineLayer.batchDraw();
-
-      // mise à jour réactive des jewels
 
       cleanup = () => {
         canvas.stage?.destroy();
@@ -107,6 +104,7 @@
 
 <div id="tree" style="position:fixed;inset:0;background:#070c11"></div>
 <div id="tooltip" style="position:fixed;display:none;background:rgba(0,0,0,0.92);color:#e8e1d2;padding:12px 18px;border-radius:8px;font:20px Fontin;pointer-events:none;z-index:9999"></div>
+<Sidebar/>
 
 <style>
   :global(body) { margin:0; overflow:hidden; font-family: Fontin, sans-serif; }

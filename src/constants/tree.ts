@@ -65,5 +65,4 @@ export const TREE_CONSTANTS = {
     LINE_WIDTH: 3,
 } as const;
 
-export type JewelType = keyof typeof TREE_CONSTANTS.SOCKET.RADIUS_SPRITES;
 export type HalfDirectionValue = typeof TREE_CONSTANTS.SPRITES['HALF_UP' | 'HALF_DOWN'];
