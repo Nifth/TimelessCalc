@@ -75,6 +75,8 @@ export interface JewelType {
 	label: string;
 	name: string;
 	id: number;
+	min: number;
+	max: number;
 }
 
 export interface Conqueror {
@@ -84,8 +86,15 @@ export interface Conqueror {
 	type: string;
 }
 
-export interface StatItem {
+export interface Stat {
 	statKey: number;
-	weight: number;
-	minWeight: number;
+	label: string;
+	weight: number | undefined;
+	minWeight: number | undefined;
+}
+
+export interface Translation {
+	from: number|undefined,
+	to: number|undefined,
+	translation: string,
 }

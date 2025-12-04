@@ -1,11 +1,11 @@
 import type { Conqueror, JewelType } from "$lib/types";
 
 export const jewelTypes = [
-    { label: "Glorious Vanity", name: "vaal", id: 1 },
-    { label: "Lethal Pride", name: "karui", id: 2 },
-    { label: "Brutal Restraint", name: "maraketh", id: 3 },
-    { label: "Militant Faith", name: "templar", id: 4 },
-    { label: "Elegant Hubris", name: "eternal", id: 5 },
+    { label: "Glorious Vanity", name: "vaal", id: 1, min: 100, max: 8000 },
+    { label: "Lethal Pride", name: "karui", id: 2, min: 10000, max: 18000 },
+    { label: "Brutal Restraint", name: "maraketh", id: 3, min: 500, max: 8000 },
+    { label: "Militant Faith", name: "templar", id: 4, min: 2000, max: 10000 },
+    { label: "Elegant Hubris", name: "eternal", id: 5, min: 2000, max: 160000 },
 ] as JewelType[];
 
 export const conquerors = {

@@ -1,18 +1,17 @@
 <script lang="ts">
   import { writable, type Writable } from 'svelte/store';
   import { conquerors, jewelTypes } from '$lib/constants/timeless';
-  import type { Conqueror, JewelType } from '$lib/types';
+  import type { Conqueror, JewelType, Stat, Translation } from '$lib/types';
   import { searchStore } from '$lib/stores/searchStore';
+  import jewelStatsJson from '$lib/data/jewelstats.json' with { type: 'json' };
+  import translationsJson from '$lib/data/translation.json' with { type: 'json' };
 
-  interface StatItem {
-    name: string;
-    weight: number;
-    minWeight: number;
-  }
+  const jewelStats: Record<string, number[]> = JSON.parse(JSON.stringify(jewelStatsJson));
+  const translation: Record<string, Translation[]> = JSON.parse(JSON.stringify(translationsJson));
 
   // === Stores (exportés pour usage externe) ===
   export const selectedSeed: Writable<string> = writable('');
-  export const selectedStats: Writable<StatItem[]> = writable([]);
+  export const selectedStats: Writable<Stat[]> = writable([]);
 
   // === État local ===
   let isOpen = true; // Sidebar ouverte par défaut
@@ -20,7 +19,7 @@
 
   let seedInput = '';
   let searchValue = '';
-  let statsArray: StatItem[] = [];
+  let statsArray: Stat[] = [];
 
   // === Options ligne 2 (4 cards) — dépend de ligne 1 ===
   $: conquerorOptions = getConquerorOptions($searchStore.jewelType);
@@ -29,24 +28,23 @@
     return selected ? (conquerors[selected.name] || []) : [];
   }
 
-  // === Autocomplete stats (exemple de données) ===
-  const statOptions: string[] = [
-    'HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed',
-    'Accuracy', 'Evasion', 'Crit Rate', 'IV HP', 'IV Atk'
-  ];
+  $: statOptions = getStatsOptions($searchStore.jewelType);
 
-  // === Ajouter une stat ===
-  function addStat() {
-    if (!searchValue.trim()) return;
-
-    const exists = statsArray.some(s => s.name === searchValue);
-    if (exists) return;
-
-    statsArray = [
-      ...statsArray,
-      { name: searchValue, weight: 1, minWeight: 0 }
-    ];
-    searchValue = '';
+  function getStatsOptions(selected: JewelType | null): Stat[] {
+    if (!selected || !jewelStats[selected.name]) return []
+    const stats = jewelStats[selected.name];
+    let statOptions: Stat[] = [];
+    stats.forEach(statId => {
+      console.log(translation);
+      console.log(statId);
+      statOptions.push({
+        statKey: statId,
+        label: translation[statId][0].translation.replace('{0}', ''),
+        weight: 0,
+        minWeight: 1,
+      })
+    })
+    return statOptions;
   }
 
   // === Supprimer une stat ===
@@ -54,11 +52,35 @@
     statsArray = statsArray.filter((_, i) => i !== index);
   }
 
+  function handleStatSelect(selectedStat: Stat) {
+    const exists = statsArray.some(s => s.label === selectedStat.label);
+    if (exists) {
+      searchValue = ''; // reset input
+      return;
+    }
+
+    statsArray = [
+      ...statsArray,
+      { label: selectedStat.label, statKey: selectedStat.statKey, weight: 1, minWeight: 1 }
+    ];
+
+    searchValue = ''; // vide l'input après ajout
+  }
+
+  // Empêche le blur de l'input quand on clique sur une option
+  function handleInput(e: Event) {
+    const input = e.target as HTMLInputElement;
+    // Rien à faire ici, on garde juste la réactivité
+  }
+
   // === Soumission finale ===
   function handleSearch() {
     // Synchronise les stores avant traitement
     selectedSeed.set(seedInput);
-    selectedStats.set(statsArray);
+    searchStore.update(state => {
+      state.selectedStats = statsArray
+      return state;
+    });
 
     // Tu feras ton traitement ici
     console.log('Submit:', {
@@ -171,23 +193,21 @@
                 bind:value={searchValue}
                 list="stats-datalist"
                 placeholder="Rechercher une stat..."
-                on:keydown={(e) => e.key === 'Enter' && addStat()}
+                on:input={handleInput}
+                on:focus={() => searchValue = ''}
               />
               <datalist id="stats-datalist">
                 {#each statOptions as stat}
-                  <option value={stat}></option>
+                  <option value={stat} on:mousedown|preventDefault={handleStatSelect.bind(null, stat)}>{stat.label}</option>
                 {/each}
               </datalist>
-              <button on:click={addStat} disabled={!searchValue.trim()}>
-                Ajouter
-              </button>
             </div>
 
             <!-- Liste des stats ajoutées -->
             <div class="stats-list">
               {#each statsArray as stat, i}
                 <div class="stat-row">
-                  <span class="stat-name">{stat.name}</span>
+                  <span class="stat-name">{stat.label}</span>
                   <input
                     type="number"
                     bind:value={stat.weight}

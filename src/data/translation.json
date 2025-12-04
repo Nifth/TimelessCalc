@@ -1,0 +1,1188 @@
+{
+  "23": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Defences from Equipped Shield"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Defences from Equipped Shield"
+    }
+  ],
+  "25": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Spell Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Spell Damage"
+    }
+  ],
+  "26": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Global Physical Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Global Physical Damage"
+    }
+  ],
+  "42": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Fire Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Fire Damage"
+    }
+  ],
+  "49": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Cold Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Cold Damage"
+    }
+  ],
+  "56": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Lightning Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Lightning Damage"
+    }
+  ],
+  "63": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Chaos Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Chaos Damage"
+    }
+  ],
+  "70": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Attack Speed"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Attack Speed"
+    }
+  ],
+  "84": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Global Accuracy Rating"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Global Accuracy Rating"
+    }
+  ],
+  "95": [
+    {
+      "translation": "{0}% to Global Critical Strike Multiplier"
+    }
+  ],
+  "97": [
+    {
+      "from": 1,
+      "translation": "You take {0}% reduced Extra Damage from Critical Strikes"
+    },
+    {
+      "to": -1,
+      "translation": "You take {0}% increased Extra Damage from Critical Strikes"
+    }
+  ],
+  "108": [
+    {
+      "from": 1,
+      "translation": "{0}% reduced Enemy Stun Threshold"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% increased Enemy Stun Threshold"
+    }
+  ],
+  "117": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Armour"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Armour"
+    }
+  ],
+  "120": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Evasion Rating"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Evasion Rating"
+    }
+  ],
+  "122": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Evasion Rating per Frenzy Charge"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Evasion Rating per Frenzy Charge"
+    }
+  ],
+  "125": [
+    {
+      "from": 1,
+      "translation": "{0}% increased maximum Life"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced maximum Life"
+    }
+  ],
+  "129": [
+    {
+      "from": 1,
+      "translation": "{0}% increased maximum Mana"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced maximum Mana"
+    }
+  ],
+  "131": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Mana Regeneration Rate"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Mana Regeneration Rate"
+    }
+  ],
+  "135": [
+    {
+      "from": 1,
+      "translation": "{0}% increased maximum Energy Shield"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced maximum Energy Shield"
+    }
+  ],
+  "139": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Energy Shield Recharge Rate"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Energy Shield Recharge Rate"
+    }
+  ],
+  "142": [
+    {
+      "translation": "{0}% to all Elemental Resistances"
+    }
+  ],
+  "146": [
+    {
+      "translation": "{0}% to Fire Resistance"
+    }
+  ],
+  "148": [
+    {
+      "translation": "{0}% to Cold Resistance"
+    }
+  ],
+  "150": [
+    {
+      "translation": "{0}% to Lightning Resistance"
+    }
+  ],
+  "152": [
+    {
+      "translation": "{0}% to Chaos Resistance"
+    }
+  ],
+  "161": [
+    {
+      "from": 1,
+      "translation": "Minions have {0}% increased maximum Life"
+    },
+    {
+      "to": -1,
+      "translation": "Minions have {0}% reduced maximum Life"
+    }
+  ],
+  "177": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Projectile Speed"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Projectile Speed"
+    }
+  ],
+  "179": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Movement Speed"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Movement Speed"
+    }
+  ],
+  "188": [
+    {
+      "from": 1,
+      "translation": "{0}% chance to gain a Frenzy Charge on Hit"
+    }
+  ],
+  "192": [
+    {
+      "from": 1,
+      "translation": "{0}% chance to Avoid being Chilled"
+    }
+  ],
+  "195": [
+    {
+      "from": 1,
+      "translation": "{0}% chance to Avoid being Shocked"
+    }
+  ],
+  "211": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Burning Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Burning Damage"
+    }
+  ],
+  "217": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Skill Effect Duration"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Skill Effect Duration"
+    }
+  ],
+  "218": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Cast Speed"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Cast Speed"
+    }
+  ],
+  "342": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Stun Duration on Enemies"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Stun Duration on Enemies"
+    }
+  ],
+  "436": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Area of Effect"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Area of Effect"
+    }
+  ],
+  "449": [
+    {
+      "from": 1,
+      "translation": "Gain {0}% of Physical Damage as Extra Fire Damage"
+    }
+  ],
+  "450": [
+    {
+      "from": 1,
+      "translation": "Gain {0}% of Physical Damage as Extra Cold Damage"
+    }
+  ],
+  "453": [
+    {
+      "from": 1,
+      "translation": "Regenerate {0}% of Life per second"
+    },
+    {
+      "to": -1,
+      "translation": "Regenerate {0}% of Life per second"
+    }
+  ],
+  "462": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Flask Charges gained"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Flask Charges gained"
+    }
+  ],
+  "484": [
+    {
+      "translation": "{0}% of Physical Damage Converted to Fire Damage"
+    }
+  ],
+  "485": [
+    {
+      "translation": "{0}% of Physical Damage Converted to Cold Damage"
+    }
+  ],
+  "486": [
+    {
+      "translation": "{0}% of Physical Damage Converted to Lightning Damage"
+    }
+  ],
+  "488": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Elemental Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Elemental Damage"
+    }
+  ],
+  "490": [
+    {
+      "from": 1,
+      "translation": "Minions deal {0}% increased Damage"
+    },
+    {
+      "to": -1,
+      "translation": "Minions deal {0}% reduced Damage"
+    }
+  ],
+  "492": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Melee Physical Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Melee Physical Damage"
+    }
+  ],
+  "500": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Projectile Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Projectile Damage"
+    }
+  ],
+  "556": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Global Critical Strike Chance"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Global Critical Strike Chance"
+    }
+  ],
+  "558": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Spell Critical Strike Chance"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Spell Critical Strike Chance"
+    }
+  ],
+  "575": [
+    {
+      "translation": "{0} to Strength"
+    }
+  ],
+  "581": [
+    {
+      "translation": "{0} to Dexterity"
+    }
+  ],
+  "595": [
+    {
+      "from": 1,
+      "translation": "Damage Penetrates {0}% Fire Resistance"
+    },
+    {
+      "to": -1,
+      "translation": "Your Hits treat Fire Resistance as {0}% higher than actual value"
+    }
+  ],
+  "596": [
+    {
+      "from": 1,
+      "translation": "Damage Penetrates {0}% Cold Resistance"
+    },
+    {
+      "to": -1,
+      "translation": "Your Hits treat Cold Resistance as {0}% higher than actual value"
+    }
+  ],
+  "597": [
+    {
+      "from": 1,
+      "translation": "Damage Penetrates {0}% Lightning Resistance"
+    },
+    {
+      "to": -1,
+      "translation": "Your Hits treat Lightning Resistance as {0}% higher than actual value"
+    }
+  ],
+  "613": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to Ignite"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Always Ignite"
+    }
+  ],
+  "619": [
+    {
+      "from": 1,
+      "translation": "Minions have {0}% increased Movement Speed"
+    },
+    {
+      "to": -1,
+      "translation": "Minions have {0}% reduced Movement Speed"
+    }
+  ],
+  "621": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Area Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Area Damage"
+    }
+  ],
+  "622": [
+    {
+      "from": 1,
+      "translation": "{0}% chance to Avoid Elemental Ailments"
+    }
+  ],
+  "661": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to Shock"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Always Shock"
+    }
+  ],
+  "741": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Flask Effect Duration"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Flask Effect Duration"
+    }
+  ],
+  "846": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Area of Effect of Aura Skills"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Area of Effect of Aura Skills"
+    }
+  ],
+  "944": [
+    {
+      "translation": "{0}% to maximum Fire Resistance"
+    }
+  ],
+  "945": [
+    {
+      "translation": "{0}% to maximum Cold Resistance"
+    }
+  ],
+  "946": [
+    {
+      "translation": "{0}% to maximum Lightning Resistance"
+    }
+  ],
+  "947": [
+    {
+      "translation": "{0}% to maximum Chaos Resistance"
+    }
+  ],
+  "976": [
+    {
+      "translation": "{0}% Global chance to Blind Enemies on hit"
+    }
+  ],
+  "1037": [
+    {
+      "translation": "{0}% additional Physical Damage Reduction"
+    }
+  ],
+  "1085": [
+    {
+      "translation": "{0}% Chance to Block Attack Damage"
+    }
+  ],
+  "1255": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to gain a Power Charge on Critical Strike"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Gain a Power Charge on Critical Strike"
+    }
+  ],
+  "1298": [
+    {
+      "translation": "{0}% to Melee Critical Strike Multiplier"
+    }
+  ],
+  "1333": [
+    {
+      "translation": "Ignites you inflict deal Damage {0}% faster"
+    }
+  ],
+  "1347": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Totem Placement speed"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Totem Placement speed"
+    }
+  ],
+  "1357": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to gain a Frenzy Charge on Kill"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Gain a Frenzy Charge on Kill"
+    }
+  ],
+  "1359": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Melee Critical Strike Chance"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Melee Critical Strike Chance"
+    }
+  ],
+  "1366": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Melee Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Melee Damage"
+    }
+  ],
+  "1369": [
+    {
+      "from": 1,
+      "translation": "{0} Life gained when you Block"
+    },
+    {
+      "to": -1,
+      "translation": "Lose {0} Life when you Block"
+    }
+  ],
+  "1392": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Effect of your Curses"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Effect of your Curses"
+    }
+  ],
+  "1409": [
+    {
+      "from": 1,
+      "translation": "You gain Onslaught for {0} seconds on Kill"
+    }
+  ],
+  "1660": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Damage per Frenzy Charge"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Damage per Frenzy Charge"
+    }
+  ],
+  "1794": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Totem Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Totem Damage"
+    }
+  ],
+  "1914": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Attack and Cast Speed"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Attack and Cast Speed"
+    }
+  ],
+  "1984": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Damage over Time"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Damage over Time"
+    }
+  ],
+  "2039": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Dexterity"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Dexterity"
+    }
+  ],
+  "2040": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Strength"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Strength"
+    }
+  ],
+  "2100": [
+    {
+      "translation": "{0}% Chance to Block Spell Damage"
+    }
+  ],
+  "2142": [
+    {
+      "from": 1,
+      "translation": "{0}% of Chaos Damage Leeched as Life"
+    }
+  ],
+  "2618": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Attack Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Attack Damage"
+    }
+  ],
+  "2672": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Duration of Elemental Ailments on Enemies"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Duration of Elemental Ailments on Enemies"
+    }
+  ],
+  "2707": [
+    {
+      "from": 1,
+      "translation": "{0}% of Attack Damage Leeched as Life"
+    }
+  ],
+  "3122": [
+    {
+      "from": 1,
+      "translation": "{0}% of Physical Damage Leeched as Life"
+    }
+  ],
+  "3123": [
+    {
+      "from": 1,
+      "translation": "{0}% of Fire Damage Leeched as Life"
+    }
+  ],
+  "3124": [
+    {
+      "from": 1,
+      "translation": "{0}% of Cold Damage Leeched as Life"
+    }
+  ],
+  "3125": [
+    {
+      "from": 1,
+      "translation": "{0}% of Lightning Damage Leeched as Life"
+    }
+  ],
+  "3382": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Damage with Poison"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Damage with Poison"
+    }
+  ],
+  "3409": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Damage per Endurance Charge"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Damage per Endurance Charge"
+    }
+  ],
+  "3582": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Effect of Chill"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Effect of Chill"
+    }
+  ],
+  "3583": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Effect of Shock"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Effect of Shock"
+    }
+  ],
+  "3859": [
+    {
+      "from": 1,
+      "translation": "{0}% increased effect of Non-Curse Auras from your Skills"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced effect of Non-Curse Auras from your Skills"
+    }
+  ],
+  "3898": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to gain an Endurance Charge on Kill"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Gain an Endurance Charge on Kill"
+    }
+  ],
+  "4974": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Projectile Attack Damage"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Projectile Attack Damage"
+    }
+  ],
+  "5563": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Warcry Buff Effect"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Warcry Buff Effect"
+    }
+  ],
+  "5865": [
+    {
+      "translation": "{0}% chance to deal Double Damage"
+    }
+  ],
+  "6092": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Damage with Bleeding"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Damage with Bleeding"
+    }
+  ],
+  "6098": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Fire Damage with Attack Skills"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Fire Damage with Attack Skills"
+    }
+  ],
+  "6099": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Cold Damage with Attack Skills"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Cold Damage with Attack Skills"
+    }
+  ],
+  "6100": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Lightning Damage with Attack Skills"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Lightning Damage with Attack Skills"
+    }
+  ],
+  "6135": [
+    {
+      "from": 1,
+      "translation": "{0}% chance to Avoid being Stunned"
+    }
+  ],
+  "6187": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Damage per Power Charge"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Damage per Power Charge"
+    }
+  ],
+  "6359": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Effect of Non-Damaging Ailments"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Effect of Non-Damaging Ailments"
+    }
+  ],
+  "7557": [
+    {
+      "from": 1,
+      "to": 1,
+      "translation": "Gain {0} Endurance Charge every second if you've been Hit Recently"
+    },
+    {
+      "from": 2,
+      "translation": "Gain {0} Endurance Charges every second if you've been Hit Recently"
+    }
+  ],
+  "8241": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to Intimidate Enemies for 4 seconds on Hit"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Intimidate Enemies for 4 seconds on Hit"
+    }
+  ],
+  "8283": [
+    {
+      "translation": "{0}% increased Armour per Endurance Charge"
+    }
+  ],
+  "8285": [
+    {
+      "translation": "{0}% increased Energy Shield per Power Charge"
+    }
+  ],
+  "8902": [
+    {
+      "from": 1,
+      "translation": "{0}% of Spell Damage Leeched as Energy Shield"
+    }
+  ],
+  "8958": [
+    {
+      "from": 1,
+      "translation": "Curse Skills have {0}% increased Skill Effect Duration"
+    },
+    {
+      "to": -1,
+      "translation": "Curse Skills have {0}% reduced Skill Effect Duration"
+    }
+  ],
+  "9140": [
+    {
+      "translation": "Poisons you inflict deal Damage {0}% faster"
+    }
+  ],
+  "9141": [
+    {
+      "translation": "Bleeding you inflict deals Damage {0}% faster"
+    }
+  ],
+  "9444": [
+    {
+      "translation": "Inner Conviction"
+    }
+  ],
+  "9454": [
+    {
+      "translation": "Eternal Youth"
+    }
+  ],
+  "9496": [
+    {
+      "translation": "Corrupted Soul"
+    }
+  ],
+  "9497": [
+    {
+      "translation": "The Agnostic"
+    }
+  ],
+  "9498": [
+    {
+      "translation": "Divine Flesh"
+    }
+  ],
+  "9626": [
+    {
+      "translation": "Glancing Blows"
+    }
+  ],
+  "9635": [
+    {
+      "translation": "Supreme Decadence"
+    }
+  ],
+  "9679": [
+    {
+      "translation": "Wind Dancer"
+    }
+  ],
+  "9761": [
+    {
+      "from": 1,
+      "translation": "{0}% of Physical Damage Converted to Fire Damage while you have at least 150 Devotion"
+    }
+  ],
+  "9762": [
+    {
+      "from": 1,
+      "translation": "{0}% of Physical Damage Converted to Cold Damage while you have at least 150 Devotion"
+    }
+  ],
+  "9763": [
+    {
+      "from": 1,
+      "translation": "{0}% of Physical Damage Converted to Lightning Damage while you have at least 150 Devotion"
+    }
+  ],
+  "9764": [
+    {
+      "translation": "Gain {0}% of Maximum Mana as Extra Maximum Energy Shield while you have at least 150 Devotion"
+    }
+  ],
+  "9765": [
+    {
+      "translation": "Gain Arcane Surge on Hit with Spells if you have at least 150 Devotion"
+    }
+  ],
+  "9766": [
+    {
+      "translation": "{0} to Minimum Endurance Charges while you have at least 150 Devotion"
+    }
+  ],
+  "9767": [
+    {
+      "translation": "{0} to Minimum Power Charges while you have at least 150 Devotion"
+    }
+  ],
+  "9768": [
+    {
+      "translation": "{0} to Minimum Frenzy Charges while you have at least 150 Devotion"
+    }
+  ],
+  "9769": [
+    {
+      "translation": "Immune to Elemental Ailments while on Consecrated Ground if you have at least 150 Devotion"
+    }
+  ],
+  "9770": [
+    {
+      "translation": "{0}% additional Physical Damage Reduction while you have at least 150 Devotion"
+    }
+  ],
+  "9771": [
+    {
+      "translation": "{0}% to all maximum Resistances if you have at least 150 Devotion"
+    }
+  ],
+  "9772": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to inflict Fire Exposure on Hit if you have at least 150 Devotion"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Inflict Fire Exposure on Hit if you have at least 150 Devotion"
+    }
+  ],
+  "9773": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to inflict Cold Exposure on Hit if you have at least 150 Devotion"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Inflict Cold Exposure on Hit if you have at least 150 Devotion"
+    }
+  ],
+  "9774": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to inflict Lightning Exposure on Hit if you have at least 150 Devotion"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Inflict Lightning Exposure on Hit if you have at least 150 Devotion"
+    }
+  ],
+  "9790": [
+    {
+      "translation": "Supreme Ego"
+    }
+  ],
+  "9822": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to inflict Withered for 2 seconds on Hit"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Inflict Withered for 2 seconds on Hit"
+    }
+  ],
+  "11951": [
+    {
+      "translation": "Transcendence"
+    }
+  ],
+  "12152": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to gain Alchemist's Genius when you use a Flask"
+    },
+    {
+      "from": 100,
+      "to": 100,
+      "translation": "Gain Alchemist's Genius when you use a Flask"
+    }
+  ],
+  "14783": [
+    {
+      "from": 1,
+      "translation": "{0}% increased Mana Reservation Efficiency of Skills"
+    },
+    {
+      "to": -1,
+      "translation": "{0}% reduced Mana Reservation Efficiency of Skills"
+    }
+  ],
+  "14819": [
+    {
+      "translation": "{0}% chance to Suppress Spell Damage"
+    }
+  ],
+  "14894": [
+    {
+      "translation": "{0} to maximum Fortification"
+    }
+  ],
+  "20682": [
+    {
+      "translation": "Gain {0} Rage on Melee Hit"
+    }
+  ]
+}
