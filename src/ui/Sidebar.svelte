@@ -28,6 +28,7 @@
     return selected ? (conquerors[selected.name] || []) : [];
   }
 
+  // fix l'autocomplete, il affiche [Object object] ce con
   $: statOptions = getStatsOptions($searchStore.jewelType);
 
   function getStatsOptions(selected: JewelType | null): Stat[] {
@@ -35,8 +36,6 @@
     const stats = jewelStats[selected.name];
     let statOptions: Stat[] = [];
     stats.forEach(statId => {
-      console.log(translation);
-      console.log(statId);
       statOptions.push({
         statKey: statId,
         label: translation[statId][0].translation.replace('{0}', ''),
