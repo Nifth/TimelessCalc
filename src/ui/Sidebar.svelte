@@ -1,17 +1,8 @@
 <script lang="ts">
   import { writable, type Writable } from 'svelte/store';
   import { conquerors, jewelTypes } from '$lib/constants/timeless';
-
-  // === Types ===
-  interface Line1Option {
-    value: string;
-    label: string;
-  }
-
-  interface Line2Option {
-    value: string;
-    label: string;
-  }
+  import type { Conqueror, JewelType } from '$lib/types';
+  import { searchStore } from '$lib/stores/searchStore';
 
   interface StatItem {
     name: string;
@@ -20,8 +11,6 @@
   }
 
   // === Stores (exportés pour usage externe) ===
-  export const selectedLine1: Writable<number> = writable();
-  export const selectedLine2: Writable<string> = writable('');
   export const selectedSeed: Writable<string> = writable('');
   export const selectedStats: Writable<StatItem[]> = writable([]);
 
@@ -33,47 +22,11 @@
   let searchValue = '';
   let statsArray: StatItem[] = [];
 
-  // === Options ligne 1 (5 cards) ===
-  const line1Options = jewelTypes;
-
   // === Options ligne 2 (4 cards) — dépend de ligne 1 ===
-  $: line2Options = getLine2Options($selectedLine1);
+  $: conquerorOptions = getConquerorOptions($searchStore.jewelType);
 
-  function getLine2Options(selected: number): Line2Option[] {
-    const map: Record<string, Line2Option[]> = {
-      option1: [
-        { value: 'sub1a', label: 'Sub 1A' },
-        { value: 'sub1b', label: 'Sub 1B' },
-        { value: 'sub1c', label: 'Sub 1C' },
-        { value: 'sub1d', label: 'Sub 1D' }
-      ],
-      option2: [
-        { value: 'sub2a', label: 'Sub 2A' },
-        { value: 'sub2b', label: 'Sub 2B' },
-        { value: 'sub2c', label: 'Sub 2C' },
-        { value: 'sub2d', label: 'Sub 2D' }
-      ],
-      option3: [
-        { value: 'sub3a', label: 'Sub 3A' },
-        { value: 'sub3b', label: 'Sub 3B' },
-        { value: 'sub3c', label: 'Sub 3C' },
-        { value: 'sub3d', label: 'Sub 3D' }
-      ],
-      option4: [
-        { value: 'sub4a', label: 'Sub 4A' },
-        { value: 'sub4b', label: 'Sub 4B' },
-        { value: 'sub4c', label: 'Sub 4C' },
-        { value: 'sub4d', label: 'Sub 4D' }
-      ],
-      option5: [
-        { value: 'sub5a', label: 'Sub 5A' },
-        { value: 'sub5b', label: 'Sub 5B' },
-        { value: 'sub5c', label: 'Sub 5C' },
-        { value: 'sub5d', label: 'Sub 5D' }
-      ]
-    };
-
-    return map[selected] || map.option1;
+  function getConquerorOptions(selected: JewelType | null): Conqueror[] {
+    return selected ? (conquerors[selected.name] || []) : [];
   }
 
   // === Autocomplete stats (exemple de données) ===
@@ -109,8 +62,8 @@
 
     // Tu feras ton traitement ici
     console.log('Submit:', {
-      line1: $selectedLine1,
-      line2: $selectedLine2,
+      line1: $searchStore.jewelType,
+      line2: $searchStore.conqueror,
       mode,
       seed: seedInput,
       stats: statsArray
@@ -126,11 +79,12 @@
   }
 
   $: {
-    const newOptions = getLine2Options($selectedLine1);
-
     // Si la valeur actuelle de line2 n'existe plus dans les nouvelles options
-    if (!newOptions.some(opt => opt.value === $selectedLine2)) {
-      selectedLine2.set('');
+    if (!conquerorOptions.some(conqueror => conqueror === $searchStore.conqueror)) {
+      searchStore.update(state => {
+        state.conqueror = null;
+        return state;
+      })
       // Optionnel : reset mode + stats
       mode = null;
       statsArray = [];
@@ -151,33 +105,33 @@
   <aside class="sidebar">
     <!-- Ligne 1 : 5 cards radio -->
     <section class="line line1">
-      {#each line1Options as opt}
-        <label class="card" class:selected={$selectedLine1 === opt.id}>
+      {#each jewelTypes as jewelType}
+        <label class="card" class:selected={$searchStore.jewelType === jewelType}>
           <input
             type="radio"
-            bind:group={$selectedLine1}
-            value={opt.id}
+            bind:group={$searchStore.jewelType}
+            value={jewelType}
           />
-          <div class="card-label">{opt.label}</div>
+          <div class="card-label">{jewelType.label}</div>
         </label>
       {/each}
     </section>
 
-    {#if $selectedLine1}
+    {#if $searchStore.jewelType}
       <!-- Ligne 2 : 4 cards radio (dépend de ligne 1) -->
       <section class="line line2">
-        {#each line2Options as opt}
-          <label class="card" class:selected={$selectedLine2 === opt.value}>
+        {#each conquerorOptions as conqueror}
+          <label class="card" class:selected={$searchStore.conqueror === conqueror}>
             <input
               type="radio"
-              bind:group={$selectedLine2}
-              value={opt.value}
+              bind:group={$searchStore.conqueror}
+              value={conqueror}
             />
-            <div class="card-label">{opt.label}</div>
+            <div class="card-label">{conqueror.label}</div>
           </label>
         {/each}
       </section>
-      {#if $selectedLine2}
+      {#if $searchStore.conqueror}
         <!-- Ligne 3 : Choix du mode -->
         <section class="line line3">
           <button
@@ -221,7 +175,7 @@
               />
               <datalist id="stats-datalist">
                 {#each statOptions as stat}
-                  <option value={stat} />
+                  <option value={stat}></option>
                 {/each}
               </datalist>
               <button on:click={addStat} disabled={!searchValue.trim()}>

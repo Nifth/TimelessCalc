@@ -81,4 +81,11 @@ export interface Conqueror {
 	label: string;
 	id: number;
 	keystone: string;
+	type: string;
+}
+
+export interface StatItem {
+	statKey: number;
+	weight: number;
+	minWeight: number;
 }
