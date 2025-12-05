@@ -37,23 +37,23 @@ export const TREE_CONSTANTS = {
                 default: 'JewelCircle1',
                 inverse: 'JewelCircle1Inverse',
             },
-            LETHAL: {
+            karui: {
                 default: 'KaruiJewelCircle1',
                 inverse: 'KaruiJewelCircle2',
             },
-            GLORIOUS: {
+            vaal: {
                 default: 'VaalJewelCircle1',
                 inverse: 'VaalJewelCircle2',
             },
-            MILITANT: {
+            templar: {
                 default: 'TemplarJewelCircle1',
                 inverse: 'TemplarJewelCircle2',
             },
-            ELEGANT: {
+            eternal: {
                 default: 'EternalEmpireJewelCircle1',
                 inverse: 'EternalEmpireJewelCircle2',
             },
-            BRUTAL: {
+            maraketh: {
                 default: 'MarakethJewelCircle1',
                 inverse: 'MarakethJewelCircle2',
             }
@@ -66,3 +66,4 @@ export const TREE_CONSTANTS = {
 } as const;
 
 export type HalfDirectionValue = typeof TREE_CONSTANTS.SPRITES['HALF_UP' | 'HALF_DOWN'];
+export type JewelCode = 'karui' | 'vaal' | 'templar' | 'eternal' | 'maraketh';

@@ -4,9 +4,10 @@ import { createSprite } from '$lib/konva/utils/sprites';
 import type { Node } from '$lib/types';
 import { treeStore } from '$lib/stores/treeStore';
 import { get } from 'svelte/store';
-import { TREE_CONSTANTS } from '$lib/constants/tree';
+import { TREE_CONSTANTS, type JewelCode } from '$lib/constants/tree';
 import { getHighlighteableNodes } from './nodes';
 import { canvas } from '$lib/konva/canvasContext';
+import { searchStore } from '$lib/stores/searchStore';
 
 export function updateJewelSockets() {
   const jewelImages = canvas.jewelImages,
@@ -39,17 +40,19 @@ export function updateJewelSockets() {
 
     changeRadius(chosenSocket)
   });
+  changeKeystone(chosenSocket)
   setAllocatedNodes(chosenSocket)
 
   layer.batchDraw();
 }
 
-function changeRadius(
+export function changeRadius(
   chosenSocket: Node | null
 ) {
   const jewelRadiusImages = canvas.jewelRadiusImages;
     const radiusImages = jewelRadiusImages.get('default'); // utiliser un store
     if (chosenSocket && radiusImages) {
+      const jewelType = get(searchStore).jewelType?.name as JewelCode | undefined;
       const socketX = chosenSocket.x || 0;
       const socketY = chosenSocket.y || 0;
       const radiusImg = radiusImages.a;
@@ -57,12 +60,30 @@ function changeRadius(
       radiusImg.visible(true);
       radiusImg.x(socketX);
       radiusImg.y(socketY);
-      if ('default' !== TREE_CONSTANTS.SOCKET.DEFAULT) { // utiliser un store
+      if (jewelType) {
+        const sprit = createSprite(
+          TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
+          TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[jewelType].default,
+          0,
+          0
+        );
+        radiusImg.crop(sprit.crop());
+      }
+      if (jewelType) { // utiliser un store
         radiusImg2.visible(true);
         radiusImg2.x(socketX);
         radiusImg2.y(socketY);
+        const sprit2 = createSprite(
+          TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
+          TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[jewelType].inverse,
+          0,
+          0
+        );
+        radiusImg2.crop(sprit2.crop());
         startJewelRotation(radiusImg, true);
         startJewelRotation(radiusImg2);
+      } else {
+        radiusImg2.visible(false);
       }
     } else if (radiusImages) {
       radiusImages.a.visible(false);
@@ -86,7 +107,6 @@ function setAllocatedNodes(
   socket: Node | null,
 ) {
   const data = canvas.treeData;
-  const highlightableNodes = getHighlighteableNodes()
   if (!socket) {
     treeStore.update(state => {
       state.allocated.clear();
@@ -108,7 +128,7 @@ function setAllocatedNodes(
 
 function showActive(node: Node)
 {
-  const {icon, frame} = canvas.nodeImages.get(node.skill)!
+  const {icon, frame} = canvas.nodes.get(node.skill)!
   const spriteKey = node.isKeystone ? TREE_CONSTANTS.SPRITES.KEYSTONE_ACTIVE :
           node.isNotable ? TREE_CONSTANTS.SPRITES.NOTABLE_ACTIVE : TREE_CONSTANTS.SPRITES.NORMAL_ACTIVE;
   const activeSprite = createSprite(
@@ -139,7 +159,7 @@ function showActive(node: Node)
 
 function showInactive(node: Node)
 {
-  const {icon, frame} = canvas.nodeImages.get(node.skill)!
+  const {icon, frame} = canvas.nodes.get(node.skill)!
   const spriteKey = node.isKeystone ? TREE_CONSTANTS.SPRITES.KEYSTONE_INACTIVE :
           node.isNotable ? TREE_CONSTANTS.SPRITES.NOTABLE_INACTIVE : TREE_CONSTANTS.SPRITES.NORMAL_INACTIVE;
   const inactiveSprite = createSprite(
@@ -181,4 +201,24 @@ export function updateAllocatedDisplay() {
       showInactive(node);
     }
   }
+}
+
+export function changeKeystone(chosenSocket: Node | null) {
+  const conqueror = get(searchStore).conqueror
+  canvas.nodes.forEach(n => n.node.conqueredName = null)
+  if (!chosenSocket) return;
+  const treeData = canvas.treeData;
+  const socketNodes = treeData.socketNodes[chosenSocket.skill];
+  const keystones = socketNodes.filter(n => {
+    const node = treeData.nodes[n]
+    return node.isKeystone;
+  })
+  keystones.forEach(k => {
+    const keystoneNode = canvas.nodes.get(Number(k))
+    if (conqueror) {
+      keystoneNode!.node.conqueredName = conqueror!.keystone
+    } else {
+      keystoneNode!.node.conqueredName = null;
+    }
+  })
 }

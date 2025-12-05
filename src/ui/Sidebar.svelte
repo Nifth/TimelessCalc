@@ -1,25 +1,21 @@
 <script lang="ts">
-  import { writable, type Writable } from 'svelte/store';
   import { conquerors, jewelTypes } from '$lib/constants/timeless';
   import type { Conqueror, JewelType, Stat, Translation } from '$lib/types';
   import { searchStore } from '$lib/stores/searchStore';
+  import { treeStore } from '$lib/stores/treeStore';
   import jewelStatsJson from '$lib/data/jewelstats.json' with { type: 'json' };
   import translationsJson from '$lib/data/translation.json' with { type: 'json' };
+    import { changeKeystone, changeRadius } from '$lib/konva/utils/jewelHighlight';
 
   const jewelStats: Record<string, number[]> = JSON.parse(JSON.stringify(jewelStatsJson));
   const translation: Record<string, Translation[]> = JSON.parse(JSON.stringify(translationsJson));
-
-  // === Stores (exportés pour usage externe) ===
-  export const selectedSeed: Writable<string> = writable('');
-  export const selectedStats: Writable<Stat[]> = writable([]);
 
   // === État local ===
   let isOpen = true; // Sidebar ouverte par défaut
   let mode: 'seed' | 'stats' | null = null;
 
-  let seedInput = '';
+  let seedInput: number | null = null;
   let searchValue = '';
-  let statsArray: Stat[] = [];
 
   // === Options ligne 2 (4 cards) — dépend de ligne 1 ===
   $: conquerorOptions = getConquerorOptions($searchStore.jewelType);
@@ -28,66 +24,82 @@
     return selected ? (conquerors[selected.name] || []) : [];
   }
 
-  // fix l'autocomplete, il affiche [Object object] ce con
   $: statOptions = getStatsOptions($searchStore.jewelType);
 
   function getStatsOptions(selected: JewelType | null): Stat[] {
     if (!selected || !jewelStats[selected.name]) return []
     const stats = jewelStats[selected.name];
-    let statOptions: Stat[] = [];
+    let options: Map<number, Stat> = new Map<number, Stat>();
     stats.forEach(statId => {
-      statOptions.push({
+      options.set(statId, {
         statKey: statId,
-        label: translation[statId][0].translation.replace('{0}', ''),
+        label: translation[statId][0].translation.replace('{0}', '#'),
         weight: 0,
         minWeight: 1,
       })
-    })
-    return statOptions;
+    });
+    return Array.from(options.values());
   }
 
   // === Supprimer une stat ===
   function removeStat(index: number) {
-    statsArray = statsArray.filter((_, i) => i !== index);
+    searchStore.update(state => {
+      state.selectedStats = state.selectedStats.filter((_, i) => i !== index)
+      return state;
+    })
   }
 
-  function handleStatSelect(selectedStat: Stat) {
-    const exists = statsArray.some(s => s.label === selectedStat.label);
-    if (exists) {
-      searchValue = ''; // reset input
+  let showDropdown = false;
+  let filteredStats: Stat[] = [];
+  let inputElement: HTMLInputElement;
+  // Filtre les stats en temps réel
+  function filterStats() {
+    const query = searchValue.toLowerCase().trim();
+    if (!query) {
+      filteredStats = statOptions;
+      showDropdown = true;
       return;
     }
 
-    statsArray = [
-      ...statsArray,
-      { label: selectedStat.label, statKey: selectedStat.statKey, weight: 1, minWeight: 1 }
-    ];
+    filteredStats = statOptions
+      .filter(stat => stat.label.toLowerCase().includes(query))
+      .filter(stat => !$searchStore.selectedStats.some(s => s.label === stat.label));
 
-    searchValue = ''; // vide l'input après ajout
+    showDropdown = true;
   }
 
-  // Empêche le blur de l'input quand on clique sur une option
-  function handleInput(e: Event) {
-    const input = e.target as HTMLInputElement;
-    // Rien à faire ici, on garde juste la réactivité
+  // Sélectionne une stat
+  function selectStat(stat: Stat) {
+    if (!$searchStore.selectedStats.some(s => s.label === stat.label)) {
+      searchStore.update(state => {
+        state.selectedStats.push({ label: stat.label, statKey:stat.statKey, weight: 1, minWeight: 0 });
+        return state;
+      })
+    }
+    searchValue = '';
+    showDropdown = false;
+    
+    if (inputElement) {
+      inputElement.blur();
+    }
+  }
+
+  // Ferme le dropdown si clic dehors (avec délai pour mousedown)
+  function handleBlur() {
+    setTimeout(() => {
+      showDropdown = false;
+    }, 150);
   }
 
   // === Soumission finale ===
   function handleSearch() {
-    // Synchronise les stores avant traitement
-    selectedSeed.set(seedInput);
-    searchStore.update(state => {
-      state.selectedStats = statsArray
-      return state;
-    });
-
     // Tu feras ton traitement ici
     console.log('Submit:', {
       line1: $searchStore.jewelType,
       line2: $searchStore.conqueror,
       mode,
-      seed: seedInput,
-      stats: statsArray
+      seed: $searchStore.seed,
+      stats: $searchStore.selectedStats
     });
 
     // Exemple : alert ou appel API
@@ -96,7 +108,7 @@
 
   // Réactivité : synchroniser seedInput avec mode
   $: if (mode === 'seed') {
-    seedInput = $selectedSeed;
+    seedInput = $searchStore.seed;
   }
 
   $: {
@@ -104,15 +116,27 @@
     if (!conquerorOptions.some(conqueror => conqueror === $searchStore.conqueror)) {
       searchStore.update(state => {
         state.conqueror = null;
+        state.selectedStats = []
+        state.seed = null
         return state;
       })
       // Optionnel : reset mode + stats
       mode = null;
-      statsArray = [];
-      selectedStats.set([]);
-      seedInput = '';
-      selectedSeed.set('');
     }
+  }
+  let previousJewelType: JewelType | null = null;
+  let previousConqueror: Conqueror | null = null;
+
+  $: currentJewelType = $searchStore.jewelType;
+  $: if (currentJewelType !== previousJewelType) {
+    console.log('e');
+    changeRadius($treeStore.chosenSocket);
+    previousJewelType = currentJewelType;
+  }
+  $: currentConqueror = $searchStore.conqueror;
+  $: if (currentConqueror !== previousConqueror) {
+    changeKeystone($treeStore.chosenSocket)
+    previousConqueror = currentConqueror
   }
 </script>
 
@@ -185,26 +209,36 @@
         <!-- Mode Stats -->
         {#if mode === 'stats'}
           <div class="mode-content stats">
-            <!-- Recherche avec autocomplete -->
-            <div class="search-input">
+            <!-- Input + Dropdown custom -->
+            <div class="autocomplete-wrapper">
               <input
+                bind:this={inputElement}
                 type="text"
                 bind:value={searchValue}
-                list="stats-datalist"
                 placeholder="Rechercher une stat..."
-                on:input={handleInput}
-                on:focus={() => searchValue = ''}
+                on:input={filterStats}
+                on:focus={() => {showDropdown = true; filterStats()}}
+                on:blur={handleBlur}
               />
-              <datalist id="stats-datalist">
-                {#each statOptions as stat}
-                  <option value={stat} on:mousedown|preventDefault={handleStatSelect.bind(null, stat)}>{stat.label}</option>
-                {/each}
-              </datalist>
+
+              {#if showDropdown && filteredStats.length > 0}
+                <div class="dropdown">
+                  {#each filteredStats as stat}
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div
+                      class="dropdown-item"
+                      on:mousedown|preventDefault={() => selectStat(stat)}
+                    >
+                      {stat.label}
+                    </div>
+                  {/each}
+                </div>
+              {/if}
             </div>
 
             <!-- Liste des stats ajoutées -->
             <div class="stats-list">
-              {#each statsArray as stat, i}
+              {#each $searchStore.selectedStats as stat, i}
                 <div class="stat-row">
                   <span class="stat-name">{stat.label}</span>
                   <input
@@ -224,7 +258,7 @@
                   <button on:click={() => removeStat(i)} class="delete">Supprimer</button>
                 </div>
               {/each}
-              {#if statsArray.length === 0}
+              {#if $searchStore.selectedStats.length === 0}
                 <p class="empty">Aucune stat sélectionnée</p>
               {/if}
             </div>
@@ -425,5 +459,48 @@
   }
   .search-btn:hover {
     background: #218838;
+  }
+
+  .autocomplete-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .autocomplete-wrapper input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ced4da;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .dropdown-item {
+    padding: 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+  }
+
+  .dropdown-item:hover {
+    background: #007bff;
+    color: white;
+  }
+
+  .dropdown-item:last-child {
+    border-bottom: none;
   }
 </style>

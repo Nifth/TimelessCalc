@@ -35,6 +35,8 @@ export interface Node {
 	in?: string[];
 	reminderText?: string[];
 	inactiveIcon?: string;
+	conqueredName?: string|null;
+	timelessStats?: string[];
 	x: number;
 	y: number;
 }

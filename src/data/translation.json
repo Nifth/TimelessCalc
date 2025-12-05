@@ -339,6 +339,13 @@
       "translation": "Regenerate {0}% of Life per second"
     }
   ],
+  "457": [
+    {
+      "from": 0,
+      "to": 99,
+      "translation": "{0}% chance to Freeze"
+    }
+  ],
   "462": [
     {
       "from": 1,
@@ -1027,6 +1034,11 @@
       "translation": "Supreme Decadence"
     }
   ],
+  "9671": [
+    {
+      "translation": "Devotion"
+    }
+  ],
   "9679": [
     {
       "translation": "Wind Dancer"
@@ -1146,6 +1158,14 @@
   "11951": [
     {
       "translation": "Transcendence"
+    }
+  ],
+  "12111": [
+    {
+      "translation": "Immortal Ambition"
+    },
+    {
+      "translation": "Your Energy Shield starts at zero"
     }
   ],
   "12152": [

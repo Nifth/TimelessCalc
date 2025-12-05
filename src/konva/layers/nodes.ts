@@ -54,7 +54,7 @@ export function drawNodes()
                         nodeY
                     );
                     layer.add(frame);
-                    canvas.nodeImages.set(node.skill, {icon: icon, frame: frame});
+                    canvas.nodes.set(node.skill, {node: node, icon: icon, frame: frame});
                 }
             }
         }

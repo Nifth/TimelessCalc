@@ -95,7 +95,7 @@
     const screenY = $mouseStore.y;
     tooltip.style.left = screenX + 20 + 'px';
     tooltip.style.top = screenY - 20 + 'px';
-    tooltip.textContent = hovered.name;
+    tooltip.textContent = hovered.conqueredName || hovered.name;
     tooltip.style.display = 'block';
   } else if (tooltip) {
     tooltip.style.display = 'none';

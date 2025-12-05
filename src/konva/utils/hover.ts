@@ -7,7 +7,8 @@ export function setupHover()
 {
     const stage = canvas.stage!,
         hitLayer = canvas.hitLayer!,
-        nodes = canvas.treeData.nodes;
+        nodes = canvas.nodes,
+        treeNodes = canvas.treeData.nodes;
     // ---------- HOVER ----------
     stage.on('mousemove', () => {
         const p = stage.getPointerPosition()!;
@@ -15,7 +16,10 @@ export function setupHover()
         mouseStore.set({x: p.x, y: p.y});
         if (shape instanceof Konva.Circle) {
             const skill = Number(shape.name());
-            const hovered = nodes[Object.keys(nodes).find(k => nodes[k].skill === skill)!];
+            const hovered = nodes.get(skill)?.node || treeNodes[Object.keys(treeNodes).find(k => treeNodes[k].skill === skill)!];
+            if (!hovered) {
+                return;
+            }
             treeStore.update(state => {
                 state.hovered = hovered
                 return state;
