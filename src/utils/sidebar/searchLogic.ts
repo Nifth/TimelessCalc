@@ -3,6 +3,7 @@ import { getJewelData, preloadJewels } from "$lib/providers/jewels";
 import { canvas } from "$lib/konva/canvasContext";
 import { parseKey, getTranslation } from "./sidebarUtils";
 import type { JewelType, Conqueror, Stat, Translation } from "$lib/types";
+import { searchStore } from "$lib/stores/searchStore";
 
 export async function handleSearch(
   mode: "seed" | "stats" | null,
@@ -13,17 +14,26 @@ export async function handleSearch(
   seed: number | null,
   selectedStats: Stat[],
 ) {
-  if (mode === "seed" && seedInput !== null) {
+  if (mode === "seed") {
+    if (!seedInput) {
+      searchStore.update((state) => {
+        state.searched = false;
+        return state;
+      });
+      return;
+    }
     // Assurer que les données sont chargées
     await preloadJewels();
     const jewelData = getJewelData(jewelType!.name);
     if (!jewelData) {
-      alert("Failed to load jewel data");
       return;
     }
     const entry = jewelData[seedInput];
     if (!entry) {
-      alert("Seed not found");
+      searchStore.update((state) => {
+        state.searched = false;
+        return state;
+      });
       return;
     }
 
@@ -97,6 +107,10 @@ export async function handleSearch(
         }
       }
       return state;
+    });
+    searchStore.update((state) => {
+        state.searched = true;
+        return state;
     });
   } else {
     // Pour le mode stats, on peut implémenter plus tard

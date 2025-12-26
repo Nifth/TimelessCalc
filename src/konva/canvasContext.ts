@@ -7,6 +7,7 @@ export const canvas = {
   backgroundLayer: null as Konva.Layer | null,
   lineLayer: null as Konva.Layer | null,
   hitLayer: null as Konva.Layer | null,
+  highlightLayer: null as Konva.Layer | null,
 
   treeData: {} as TreeData,
   jewelImages: new Map<number, Konva.Image>(),

@@ -242,3 +242,16 @@ export function changeKeystone(chosenSocket: Node | null) {
     }
   });
 }
+
+export function resetHighlights() {
+  canvas.highlightLayer?.destroyChildren();
+  canvas.highlightLayer?.batchDraw();
+  const chosenSocket = get(treeStore).chosenSocket;
+  if (chosenSocket) {
+    const socketNodeIds = canvas.treeData.socketNodes[chosenSocket.skill];
+    for (const nodeId of socketNodeIds) {
+      const node = canvas.treeData.nodes[nodeId];
+      node.timelessStats = undefined;
+    }
+  }
+}

@@ -11,10 +11,13 @@
   } from "$lib/utils/sidebar/options";
   import { filterStats } from "$lib/utils/sidebar/sidebarUtils";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
+  import { canvas } from "$lib/konva/canvasContext";
   import {
     changeKeystone,
     changeRadius,
+    resetHighlights,
   } from "$lib/konva/utils/jewelHighlight";
+  import Konva from "konva";
 
   const jewelStats: Record<string, number[]> = JSON.parse(
     JSON.stringify(jewelStatsJson),
@@ -39,12 +42,55 @@
     translation,
   );
 
+  $: timelessStats =
+    $treeStore.chosenSocket && $searchStore.searched ? getTimelessStats() : {};
+
   // === Supprimer une stat ===
   function removeStat(index: number) {
     searchStore.update((state) => {
       state.selectedStats = state.selectedStats.filter((_, i) => i !== index);
       return state;
     });
+  }
+
+  // === Récupérer les timelessStats du socket choisi ===
+  function getTimelessStats(): Record<string, number> {
+    const chosenSocket = $treeStore.chosenSocket;
+    if (!chosenSocket) return {};
+
+    const statsCount: Record<string, number> = {};
+
+    for (const node of $treeStore.allocated.values()) {
+      if (node?.timelessStats) {
+        for (const stat of node.timelessStats) {
+          if (node.stats?.includes(stat)) continue;
+          statsCount[stat] = (statsCount[stat] || 0) + 1;
+        }
+      }
+    }
+
+    return statsCount;
+  }
+
+  // === Highlight les nodes avec une stat spécifique ===
+  function highlightNodesWithStat(stat: string) {
+    canvas.highlightLayer?.destroyChildren();
+
+    // Create circles for nodes that have this stat
+    for (const node of $treeStore.allocated.values()) {
+      if (node?.timelessStats?.includes(stat)) {
+        const circle = new Konva.Circle({
+          x: node.x,
+          y: node.y,
+          radius: node.isNotable ? 70 : 50,
+          stroke: "yellow",
+          strokeWidth: 10,
+        });
+        canvas.highlightLayer?.add(circle);
+      }
+    }
+
+    canvas.highlightLayer?.batchDraw();
   }
 
   let showDropdown = false;
@@ -103,15 +149,25 @@
   }
 
   // Réactivité : synchroniser seedInput avec mode
+  let searchTimeout: number | null = null;
   $: if (mode === "seed") {
-    seedInput = $searchStore.seed;
-  }
-
-  $: if (mode === "seed" && seedInput !== $searchStore.seed) {
-    searchStore.update((state) => {
-      state.seed = seedInput;
-      return state;
-    });
+    if (seedInput !== $searchStore.seed) {
+      searchStore.update((state) => {
+        state.seed = seedInput;
+        return state;
+      });
+    }
+    // Lancer la recherche automatiquement si seed valide, avec debounce
+    if (
+      seedInput &&
+      seedInput >= ($searchStore.jewelType?.min || 0) &&
+      seedInput <= ($searchStore.jewelType?.max || 0)
+    ) {
+      if (searchTimeout) window.clearTimeout(searchTimeout);
+      searchTimeout = window.setTimeout(() => {
+        handleSearch();
+      }, 250);
+    }
   }
 
   $: {
@@ -122,6 +178,7 @@
       )
     ) {
       searchStore.update((state) => {
+        state.searched = false;
         state.conqueror = null;
         state.selectedStats = [];
         state.seed = null;
@@ -136,6 +193,7 @@
 
   $: currentJewelType = $searchStore.jewelType;
   $: if (currentJewelType !== previousJewelType) {
+    resetHighlights();
     changeRadius($treeStore.chosenSocket);
     previousJewelType = currentJewelType;
   }
@@ -222,6 +280,20 @@
             <p>
               From {$searchStore.jewelType.min} to {$searchStore.jewelType.max}
             </p>
+
+            <!-- Liste des timelessStats -->
+            {#if Object.keys(timelessStats).length > 0}
+              <div class="timeless-stats">
+                {#each Object.entries(timelessStats) as [stat, count] (stat)}
+                  <div
+                    class="timeless-stat"
+                    on:click={() => highlightNodesWithStat(stat)}
+                  >
+                    ({count}) {stat}
+                  </div>
+                {/each}
+              </div>
+            {/if}
           </div>
         {/if}
 
@@ -292,7 +364,9 @@
     {/if}
 
     <!-- Bouton de recherche -->
-    <button class="search-btn" on:click={handleSearch}> Search </button>
+    {#if mode !== "seed"}
+      <button class="search-btn" on:click={handleSearch}>Search</button>
+    {/if}
   </aside>
 {/if}
 
@@ -403,6 +477,28 @@
     border: 1px solid #ced4da;
     border-radius: 6px;
     font-size: 1rem;
+  }
+
+  .timeless-stats {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: #2a2a2a;
+    border-radius: 6px;
+  }
+
+  .timeless-stat {
+    color: #e7f3ff;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+  }
+
+  .timeless-stat:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .timeless-stat:last-child {
+    margin-bottom: 0;
   }
 
   .stats-list {

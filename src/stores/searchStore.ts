@@ -6,4 +6,5 @@ export const searchStore = writable({
   conqueror: null as Conqueror | null,
   seed: null as number | null,
   selectedStats: [] as Stat[],
+  searched: false as boolean,
 });

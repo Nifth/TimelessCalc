@@ -52,6 +52,7 @@
       canvas.mainLayer = new Konva.Layer({ listening: false });
       canvas.lineLayer = new Konva.Layer({ listening: false });
       canvas.hitLayer = new Konva.Layer({ listening: true });
+      canvas.highlightLayer = new Konva.Layer({ listening: false });
       canvas.treeData = data;
 
       canvas.stage.add(
@@ -59,6 +60,7 @@
         canvas.lineLayer,
         canvas.mainLayer,
         canvas.hitLayer,
+        canvas.highlightLayer,
       );
 
       getHighlighteableNodes(); // initialise the highlighteable nodes cache
