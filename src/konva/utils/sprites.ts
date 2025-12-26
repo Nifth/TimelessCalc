@@ -4,29 +4,33 @@ import type { HalfDirectionValue } from "$lib/constants/tree";
 import { TREE_CONSTANTS } from "$lib/constants/tree";
 
 const spriteCache: { [key: string]: HTMLImageElement } = {};
-let spriteConfig: Record<string, Sprite> = {};
+const spriteConfig: Record<string, Sprite> = {};
 
 function createSprite(
   spriteKey: string,
   part: string,
   nodeX: number,
   nodeY: number,
-  move?: HalfDirectionValue
+  move?: HalfDirectionValue,
 ): Konva.Image {
   const spriteConfig = getSpriteConfig(spriteKey, part, nodeX, nodeY);
   if (move === TREE_CONSTANTS.SPRITES.HALF_UP && spriteConfig.y) {
     spriteConfig.y -= spriteConfig.height!;
-  } else if (move === TREE_CONSTANTS.SPRITES.HALF_DOWN && spriteConfig.y && spriteConfig.x) {
+  } else if (
+    move === TREE_CONSTANTS.SPRITES.HALF_DOWN &&
+    spriteConfig.y &&
+    spriteConfig.x
+  ) {
     spriteConfig.y += spriteConfig.height!;
     spriteConfig.x += spriteConfig.width! * 2;
-    spriteConfig.offsetX = spriteConfig.width! * 1.5
+    spriteConfig.offsetX = spriteConfig.width! * 1.5;
     spriteConfig.scaleY = -2;
   }
 
   return new Konva.Image({
     ...spriteConfig,
     image: spriteCache[spriteKey],
-    cornerRadius: 900
+    cornerRadius: 900,
   });
 }
 
@@ -34,7 +38,7 @@ function getSpriteConfig(
   spriteKey: string,
   part: string,
   nodeX: number,
-  nodeY: number
+  nodeY: number,
 ): Konva.ImageConfig {
   const sprite = spriteConfig[spriteKey];
   if (!sprite) {
@@ -65,26 +69,30 @@ function getSpriteConfig(
 }
 
 function preloadSprites(sprites: Record<string, Record<string, Sprite>>) {
-    Object.entries(sprites).forEach(([type, config]) => {
-      const neededSprite = config[Object.keys(config)[Object.keys(config).length - 1]];
-      if (!neededSprite) {
-        throw new Error(`No sprites found for type: ${type}`);
-      }
-      spriteConfig[type] = neededSprite;
-      preloadSprite(neededSprite.filename, type)
-    })
+  Object.entries(sprites).forEach(([type, config]) => {
+    const neededSprite =
+      config[Object.keys(config)[Object.keys(config).length - 1]];
+    if (!neededSprite) {
+      throw new Error(`No sprites found for type: ${type}`);
+    }
+    spriteConfig[type] = neededSprite;
+    preloadSprite(neededSprite.filename, type);
+  });
 }
 
 function preloadSprite(spriteUrl: string, spriteKey: string): HTMLImageElement {
-    if (!spriteCache[spriteKey]) {
-        const img = new Image();
-        const url = spriteUrl.replace('https://web.poecdn.com/image/passive-skill/', 'assets/');
-        img.src = url;
+  if (!spriteCache[spriteKey]) {
+    const img = new Image();
+    const url = spriteUrl.replace(
+      "https://web.poecdn.com/image/passive-skill/",
+      "assets/",
+    );
+    img.src = url;
 
-        spriteCache[spriteKey] = img;
-    }
-    
-    return spriteCache[spriteKey];
+    spriteCache[spriteKey] = img;
+  }
+
+  return spriteCache[spriteKey];
 }
 
 export { createSprite, preloadSprites };

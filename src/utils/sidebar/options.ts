@@ -1,0 +1,25 @@
+import { conquerors } from "$lib/constants/timeless";
+import type { Conqueror, JewelType, Stat, Translation } from "$lib/types";
+
+export function getConquerorOptions(selected: JewelType | null): Conqueror[] {
+  return selected ? conquerors[selected.name] || [] : [];
+}
+
+export function getStatsOptions(
+  selected: JewelType | null,
+  jewelStats: Record<string, number[]>,
+  translation: Record<string, Translation[]>,
+): Stat[] {
+  if (!selected || !jewelStats[selected.name]) return [];
+  const stats = jewelStats[selected.name];
+  const options: Map<number, Stat> = new Map<number, Stat>();
+  stats.forEach((statId) => {
+    options.set(statId, {
+      statKey: statId,
+      label: translation[statId][0].translation.replace("{0}", "#"),
+      weight: 0,
+      minWeight: 1,
+    });
+  });
+  return Array.from(options.values());
+}

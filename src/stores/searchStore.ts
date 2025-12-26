@@ -1,5 +1,5 @@
-import type { Conqueror, JewelType, Stat } from '$lib/types';
-import { writable } from 'svelte/store';
+import type { Conqueror, JewelType, Stat } from "$lib/types";
+import { writable } from "svelte/store";
 
 export const searchStore = writable({
   jewelType: null as JewelType | null,

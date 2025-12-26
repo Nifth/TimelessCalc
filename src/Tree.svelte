@@ -1,46 +1,52 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import Sidebar from './ui/Sidebar.svelte';
-  import Konva from 'konva';
-  import treeData from '$lib/data/tree.json' with { type: 'json' };
-  import { preloadSprites } from '$lib/konva/utils/sprites';
-  import type { TreeData } from '$lib/types';
+  import { onMount } from "svelte";
+  import Sidebar from "./ui/Sidebar.svelte";
+  import Tooltip from "./ui/Tooltip.svelte";
+  import Konva from "konva";
+  import treeData from "$lib/data/tree.json" with { type: "json" };
+  import { preloadSprites } from "$lib/konva/utils/sprites";
+  import type { TreeData } from "$lib/types";
 
-  import { canvas } from '$lib/konva/canvasContext';
-  import { drawBackground } from '$lib/konva/layers/background';
-  import { drawLines } from '$lib/konva/layers/lines';
-  import { drawBaseRadius, drawNodes } from '$lib/konva/layers/nodes';
-  import { createHitLayer } from '$lib/konva/layers/hit';
-  import { setupZoom } from '$lib/konva/utils/zoom';
-  import { setupHover } from '$lib/konva/utils/hover';
-  import { setupClick } from '$lib/konva/utils/click';
-  import { updateAllocatedDisplay, updateJewelSockets } from '$lib/konva/utils/jewelHighlight';
-  import { treeStore } from './stores/treeStore';
-  import { mouseStore } from './stores/mouseStore';
-  import { getHighlighteableNodes } from './konva/utils/nodes';
+  import { canvas } from "$lib/konva/canvasContext";
+  import { drawBackground } from "$lib/konva/layers/background";
+  import { drawLines } from "$lib/konva/layers/lines";
+  import { drawBaseRadius, drawNodes } from "$lib/konva/layers/nodes";
+  import { createHitLayer } from "$lib/konva/layers/hit";
+  import { setupZoom } from "$lib/konva/utils/zoom";
+  import { setupHover } from "$lib/konva/utils/hover";
+  import { setupClick } from "$lib/konva/utils/click";
+  import {
+    updateAllocatedDisplay,
+    updateJewelSockets,
+  } from "$lib/konva/utils/jewelHighlight";
+  import { treeStore } from "./stores/treeStore";
+  import { mouseStore } from "./stores/mouseStore";
+  import { getHighlighteableNodes } from "./konva/utils/nodes";
+  import { preloadJewels } from "./providers/jewels";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
 
-  let tooltip: HTMLDivElement; // todo: improve tooltip to ressemble poe one
   let previousSkill: number | null = null;
-  // todo: tooltip au hover
 
   onMount(() => {
     let cleanup: () => void = () => {};
     (async () => {
-      await preloadSprites(data.sprites);
+      preloadSprites(data.sprites);
+      await preloadJewels();
 
       canvas.stage = new Konva.Stage({
-        container: document.getElementById('tree')! as HTMLDivElement,
+        container: document.getElementById("tree")! as HTMLDivElement,
         width: window.innerWidth,
         height: window.innerHeight,
         draggable: true,
       });
-      tooltip = document.getElementById('tooltip')! as HTMLDivElement;
 
       // init
       canvas.stage.scale({ x: 0.2, y: 0.2 });
-      canvas.stage.position({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+      canvas.stage.position({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      });
 
       canvas.backgroundLayer = new Konva.Layer({ listening: false });
       canvas.mainLayer = new Konva.Layer({ listening: false });
@@ -52,7 +58,7 @@
         canvas.backgroundLayer,
         canvas.lineLayer,
         canvas.mainLayer,
-        canvas.hitLayer
+        canvas.hitLayer,
       );
 
       getHighlighteableNodes(); // initialise the highlighteable nodes cache
@@ -87,25 +93,16 @@
   $: if (canvas.mainLayer && $treeStore.allocated) {
     updateAllocatedDisplay();
   }
-
-  $: if ($treeStore.hovered && tooltip) {
-    const hovered = $treeStore.hovered;
-    const abs = { x: hovered.x || 0, y: hovered.y || 0 };
-    const screenX = $mouseStore.x;
-    const screenY = $mouseStore.y;
-    tooltip.style.left = screenX + 20 + 'px';
-    tooltip.style.top = screenY - 20 + 'px';
-    tooltip.textContent = hovered.conqueredName || hovered.name;
-    tooltip.style.display = 'block';
-  } else if (tooltip) {
-    tooltip.style.display = 'none';
-  }
 </script>
 
 <div id="tree" style="position:fixed;inset:0;background:#070c11"></div>
-<div id="tooltip" style="position:fixed;display:none;background:rgba(0,0,0,0.92);color:#e8e1d2;padding:12px 18px;border-radius:8px;font:20px Fontin;pointer-events:none;z-index:9999"></div>
-<Sidebar/>
+<Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
+<Sidebar />
 
 <style>
-  :global(body) { margin:0; overflow:hidden; font-family: Fontin, sans-serif; }
+  :global(body) {
+    margin: 0;
+    overflow: hidden;
+    font-family: Fontin, sans-serif;
+  }
 </style>

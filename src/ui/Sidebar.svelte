@@ -1,84 +1,82 @@
 <script lang="ts">
-  import { conquerors, jewelTypes } from '$lib/constants/timeless';
-  import type { Conqueror, JewelType, Stat, Translation } from '$lib/types';
-  import { searchStore } from '$lib/stores/searchStore';
-  import { treeStore } from '$lib/stores/treeStore';
-  import jewelStatsJson from '$lib/data/jewelstats.json' with { type: 'json' };
-  import translationsJson from '$lib/data/translation.json' with { type: 'json' };
-    import { changeKeystone, changeRadius } from '$lib/konva/utils/jewelHighlight';
+  import { jewelTypes } from "$lib/constants/timeless";
+  import type { Conqueror, JewelType, Stat, Translation } from "$lib/types";
+  import { searchStore } from "$lib/stores/searchStore";
+  import { treeStore } from "$lib/stores/treeStore";
+  import jewelStatsJson from "$lib/data/jewelstats.json" with { type: "json" };
+  import translationsJson from "$lib/data/translation.json" with { type: "json" };
+  import {
+    getConquerorOptions,
+    getStatsOptions,
+  } from "$lib/utils/sidebar/options";
+  import { filterStats } from "$lib/utils/sidebar/sidebarUtils";
+  import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
+  import {
+    changeKeystone,
+    changeRadius,
+  } from "$lib/konva/utils/jewelHighlight";
 
-  const jewelStats: Record<string, number[]> = JSON.parse(JSON.stringify(jewelStatsJson));
-  const translation: Record<string, Translation[]> = JSON.parse(JSON.stringify(translationsJson));
+  const jewelStats: Record<string, number[]> = JSON.parse(
+    JSON.stringify(jewelStatsJson),
+  );
+  const translation: Record<string, Translation[]> = JSON.parse(
+    JSON.stringify(translationsJson),
+  );
 
   // === État local ===
   let isOpen = true; // Sidebar ouverte par défaut
-  let mode: 'seed' | 'stats' | null = null;
+  let mode: "seed" | "stats" | null = null;
 
   let seedInput: number | null = null;
-  let searchValue = '';
+  let searchValue = "";
 
   // === Options ligne 2 (4 cards) — dépend de ligne 1 ===
   $: conquerorOptions = getConquerorOptions($searchStore.jewelType);
 
-  function getConquerorOptions(selected: JewelType | null): Conqueror[] {
-    return selected ? (conquerors[selected.name] || []) : [];
-  }
-
-  $: statOptions = getStatsOptions($searchStore.jewelType);
-
-  function getStatsOptions(selected: JewelType | null): Stat[] {
-    if (!selected || !jewelStats[selected.name]) return []
-    const stats = jewelStats[selected.name];
-    let options: Map<number, Stat> = new Map<number, Stat>();
-    stats.forEach(statId => {
-      options.set(statId, {
-        statKey: statId,
-        label: translation[statId][0].translation.replace('{0}', '#'),
-        weight: 0,
-        minWeight: 1,
-      })
-    });
-    return Array.from(options.values());
-  }
+  $: statOptions = getStatsOptions(
+    $searchStore.jewelType,
+    jewelStats,
+    translation,
+  );
 
   // === Supprimer une stat ===
   function removeStat(index: number) {
-    searchStore.update(state => {
-      state.selectedStats = state.selectedStats.filter((_, i) => i !== index)
+    searchStore.update((state) => {
+      state.selectedStats = state.selectedStats.filter((_, i) => i !== index);
       return state;
-    })
+    });
   }
 
   let showDropdown = false;
   let filteredStats: Stat[] = [];
   let inputElement: HTMLInputElement;
+
   // Filtre les stats en temps réel
-  function filterStats() {
-    const query = searchValue.toLowerCase().trim();
-    if (!query) {
-      filteredStats = statOptions;
-      showDropdown = true;
-      return;
-    }
-
-    filteredStats = statOptions
-      .filter(stat => stat.label.toLowerCase().includes(query))
-      .filter(stat => !$searchStore.selectedStats.some(s => s.label === stat.label));
-
+  function updateFilteredStats() {
+    filteredStats = filterStats(
+      searchValue,
+      statOptions,
+      $searchStore.selectedStats,
+    );
     showDropdown = true;
   }
 
   // Sélectionne une stat
   function selectStat(stat: Stat) {
-    if (!$searchStore.selectedStats.some(s => s.label === stat.label)) {
-      searchStore.update(state => {
-        state.selectedStats.push({ label: stat.label, statKey:stat.statKey, weight: 1, minWeight: 0 });
+    if (!$searchStore.selectedStats.some((s) => s.label === stat.label)) {
+      searchStore.update((state) => {
+        state.selectedStats.push({
+          label: stat.label,
+          statKey: stat.statKey,
+          weight: 1,
+          minWeight: 0,
+        });
         return state;
-      })
+      });
     }
-    searchValue = '';
+    searchValue = "";
     showDropdown = false;
-    
+
     if (inputElement) {
       inputElement.blur();
     }
@@ -92,34 +90,43 @@
   }
 
   // === Soumission finale ===
-  function handleSearch() {
-    // Tu feras ton traitement ici
-    console.log('Submit:', {
-      line1: $searchStore.jewelType,
-      line2: $searchStore.conqueror,
+  async function handleSearch() {
+    await performSearch(
       mode,
-      seed: $searchStore.seed,
-      stats: $searchStore.selectedStats
-    });
-
-    // Exemple : alert ou appel API
-    alert('Recherche lancée ! (voir console)');
+      seedInput,
+      translation,
+      $searchStore.jewelType,
+      $searchStore.conqueror,
+      $searchStore.seed,
+      $searchStore.selectedStats,
+    );
   }
 
   // Réactivité : synchroniser seedInput avec mode
-  $: if (mode === 'seed') {
+  $: if (mode === "seed") {
     seedInput = $searchStore.seed;
+  }
+
+  $: if (mode === "seed" && seedInput !== $searchStore.seed) {
+    searchStore.update((state) => {
+      state.seed = seedInput;
+      return state;
+    });
   }
 
   $: {
     // Si la valeur actuelle de line2 n'existe plus dans les nouvelles options
-    if (!conquerorOptions.some(conqueror => conqueror === $searchStore.conqueror)) {
-      searchStore.update(state => {
+    if (
+      !conquerorOptions.some(
+        (conqueror) => conqueror === $searchStore.conqueror,
+      )
+    ) {
+      searchStore.update((state) => {
         state.conqueror = null;
-        state.selectedStats = []
-        state.seed = null
+        state.selectedStats = [];
+        state.seed = null;
         return state;
-      })
+      });
       // Optionnel : reset mode + stats
       mode = null;
     }
@@ -129,19 +136,22 @@
 
   $: currentJewelType = $searchStore.jewelType;
   $: if (currentJewelType !== previousJewelType) {
-    console.log('e');
     changeRadius($treeStore.chosenSocket);
     previousJewelType = currentJewelType;
   }
   $: currentConqueror = $searchStore.conqueror;
   $: if (currentConqueror !== previousConqueror) {
-    changeKeystone($treeStore.chosenSocket)
-    previousConqueror = currentConqueror
+    changeKeystone($treeStore.chosenSocket);
+    previousConqueror = currentConqueror;
   }
 </script>
 
 <!-- Burger Button -->
-<button on:click={() => (isOpen = !isOpen)} class="burger" aria-label="Toggle menu">
+<button
+  on:click={() => (isOpen = !isOpen)}
+  class="burger"
+  aria-label="Toggle menu"
+>
   <span></span><span></span><span></span>
 </button>
 
@@ -150,8 +160,11 @@
   <aside class="sidebar">
     <!-- Ligne 1 : 5 cards radio -->
     <section class="line line1">
-      {#each jewelTypes as jewelType}
-        <label class="card" class:selected={$searchStore.jewelType === jewelType}>
+      {#each jewelTypes as jewelType (jewelType.name)}
+        <label
+          class="card"
+          class:selected={$searchStore.jewelType === jewelType}
+        >
           <input
             type="radio"
             bind:group={$searchStore.jewelType}
@@ -165,8 +178,11 @@
     {#if $searchStore.jewelType}
       <!-- Ligne 2 : 4 cards radio (dépend de ligne 1) -->
       <section class="line line2">
-        {#each conquerorOptions as conqueror}
-          <label class="card" class:selected={$searchStore.conqueror === conqueror}>
+        {#each conquerorOptions as conqueror (conqueror.label)}
+          <label
+            class="card"
+            class:selected={$searchStore.conqueror === conqueror}
+          >
             <input
               type="radio"
               bind:group={$searchStore.conqueror}
@@ -180,21 +196,21 @@
         <!-- Ligne 3 : Choix du mode -->
         <section class="line line3">
           <button
-            on:click={() => (mode = 'seed')}
-            class:active={mode === 'seed'}
+            on:click={() => (mode = "seed")}
+            class:active={mode === "seed"}
           >
             Enter seed
           </button>
           <button
-            on:click={() => (mode = 'stats')}
-            class:active={mode === 'stats'}
+            on:click={() => (mode = "stats")}
+            class:active={mode === "stats"}
           >
             Select stats
           </button>
         </section>
 
         <!-- Mode Seed -->
-        {#if mode === 'seed'}
+        {#if mode === "seed"}
           <div class="mode-content seed">
             <input
               type="number"
@@ -203,11 +219,14 @@
               min="0"
               step="1"
             />
+            <p>
+              From {$searchStore.jewelType.min} to {$searchStore.jewelType.max}
+            </p>
           </div>
         {/if}
 
         <!-- Mode Stats -->
-        {#if mode === 'stats'}
+        {#if mode === "stats"}
           <div class="mode-content stats">
             <!-- Input + Dropdown custom -->
             <div class="autocomplete-wrapper">
@@ -216,14 +235,17 @@
                 type="text"
                 bind:value={searchValue}
                 placeholder="Rechercher une stat..."
-                on:input={filterStats}
-                on:focus={() => {showDropdown = true; filterStats()}}
+                on:input={updateFilteredStats}
+                on:focus={() => {
+                  showDropdown = true;
+                  updateFilteredStats();
+                }}
                 on:blur={handleBlur}
               />
 
               {#if showDropdown && filteredStats.length > 0}
                 <div class="dropdown">
-                  {#each filteredStats as stat}
+                  {#each filteredStats as stat (stat.statKey)}
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                       class="dropdown-item"
@@ -238,7 +260,7 @@
 
             <!-- Liste des stats ajoutées -->
             <div class="stats-list">
-              {#each $searchStore.selectedStats as stat, i}
+              {#each $searchStore.selectedStats as stat, i (i)}
                 <div class="stat-row">
                   <span class="stat-name">{stat.label}</span>
                   <input
@@ -255,7 +277,9 @@
                     min="0"
                     step="0.1"
                   />
-                  <button on:click={() => removeStat(i)} class="delete">Supprimer</button>
+                  <button on:click={() => removeStat(i)} class="delete"
+                    >Supprimer</button
+                  >
                 </div>
               {/each}
               {#if $searchStore.selectedStats.length === 0}
@@ -268,9 +292,7 @@
     {/if}
 
     <!-- Bouton de recherche -->
-    <button class="search-btn" on:click={handleSearch}>
-      Search
-    </button>
+    <button class="search-btn" on:click={handleSearch}> Search </button>
   </aside>
 {/if}
 
@@ -312,7 +334,7 @@
     background: #1a1a1ad3;
     padding: 5rem 1.5rem 1.5rem;
     overflow-y: auto;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 999;
   }
 
@@ -320,7 +342,8 @@
     margin-bottom: 1.5rem;
   }
 
-  .line1, .line2 {
+  .line1,
+  .line2 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 0.75rem;
@@ -380,29 +403,6 @@
     border: 1px solid #ced4da;
     border-radius: 6px;
     font-size: 1rem;
-  }
-
-  .search-input {
-    display: flex;
-    gap: 0.5rem;
-  }
-  .search-input input {
-    flex: 1;
-    padding: 0.75rem;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-  }
-  .search-input button {
-    padding: 0 1rem;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .search-input button:disabled {
-    background: #6c757d;
-    cursor: not-allowed;
   }
 
   .stats-list {
@@ -486,13 +486,17 @@
     border-top: none;
     border-radius: 0 0 6px 6px;
     z-index: 10;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .dropdown-item {
     padding: 0.75rem;
     cursor: pointer;
     border-bottom: 1px solid #eee;
+  }
+
+  p {
+    color: white;
   }
 
   .dropdown-item:hover {

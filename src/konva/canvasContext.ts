@@ -1,5 +1,5 @@
-import type { Node, TreeData } from '$lib/types';
-import Konva from 'konva';
+import type { Node, TreeData } from "$lib/types";
+import Konva from "konva";
 
 export const canvas = {
   stage: null as Konva.Stage | null,
@@ -10,7 +10,10 @@ export const canvas = {
 
   treeData: {} as TreeData,
   jewelImages: new Map<number, Konva.Image>(),
-  jewelRadiusImages: new Map<string, {a: Konva.Image, b: Konva.Image}>(),
-  nodes: new Map<number, {node: Node, icon: Konva.Image, frame: Konva.Image}>(),
+  jewelRadiusImages: new Map<string, { a: Konva.Image; b: Konva.Image }>(),
+  nodes: new Map<
+    number,
+    { node: Node; icon: Konva.Image; frame: Konva.Image }
+  >(),
   nodesHighlight: new Map<number, Konva.Node>(),
 };
