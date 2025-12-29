@@ -11,6 +11,7 @@
   } from "$lib/utils/sidebar/options";
   import { filterStats } from "$lib/utils/sidebar/sidebarUtils";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
+  import { applySeed } from "$lib/utils/sidebar/searchLogic";
   import { canvas } from "$lib/konva/canvasContext";
   import {
     changeKeystone,
@@ -32,6 +33,12 @@
 
   let seedInput: number | null = null;
   let searchValue = "";
+
+  let showDropdown = false;
+  let filteredStats: Stat[] = [];
+  let inputElement: HTMLInputElement;
+
+  let expandedGroups: Record<number, boolean> = {};
 
   // === Options ligne 2 (4 cards) — dépend de ligne 1 ===
   $: conquerorOptions = getConquerorOptions($searchStore.jewelType);
@@ -93,9 +100,28 @@
     canvas.highlightLayer?.batchDraw();
   }
 
-  let showDropdown = false;
-  let filteredStats: Stat[] = [];
-  let inputElement: HTMLInputElement;
+  // === Highlight les nodes avec les stats recherchées ===
+  function highlightSearchedStats() {
+    canvas.highlightLayer?.destroyChildren();
+
+    const searchedLabels = $searchStore.selectedStats.map(s => s.label);
+
+    // Create circles for nodes that have any searched stat
+    for (const node of $treeStore.allocated.values()) {
+      if (node?.timelessStats?.some(stat => searchedLabels.includes(stat))) {
+        const circle = new Konva.Circle({
+          x: node.x,
+          y: node.y,
+          radius: node.isNotable ? 70 : 50,
+          stroke: "yellow",
+          strokeWidth: 10,
+        });
+        canvas.highlightLayer?.add(circle);
+      }
+    }
+
+    canvas.highlightLayer?.batchDraw();
+  }
 
   // Filtre les stats en temps réel
   function updateFilteredStats() {
@@ -122,10 +148,6 @@
     }
     searchValue = "";
     showDropdown = false;
-
-    if (inputElement) {
-      inputElement.blur();
-    }
   }
 
   // Ferme le dropdown si clic dehors (avec délai pour mousedown)
@@ -142,10 +164,15 @@
       seedInput,
       translation,
       $searchStore.jewelType,
-      $searchStore.conqueror,
-      $searchStore.seed,
       $searchStore.selectedStats,
     );
+  }
+
+  // === Appliquer une seed depuis les résultats de stats ===
+  async function applySeedFromResults(seed: number) {
+    await applySeed(seed, $searchStore.jewelType!, $searchStore.conqueror!, translation);
+    searchStore.update(s => { s.searched = true; s.seed = seed; return s; });
+    highlightSearchedStats();
   }
 
   // Réactivité : synchroniser seedInput avec mode
@@ -182,6 +209,8 @@
         state.conqueror = null;
         state.selectedStats = [];
         state.seed = null;
+        state.statsResults = {};
+        state.minTotalWeight = 0;
         return state;
       });
       // Optionnel : reset mode + stats
@@ -280,20 +309,6 @@
             <p>
               From {$searchStore.jewelType.min} to {$searchStore.jewelType.max}
             </p>
-
-            <!-- Liste des timelessStats -->
-            {#if Object.keys(timelessStats).length > 0}
-              <div class="timeless-stats">
-                {#each Object.entries(timelessStats) as [stat, count] (stat)}
-                  <div
-                    class="timeless-stat"
-                    on:click={() => highlightNodesWithStat(stat)}
-                  >
-                    ({count}) {stat}
-                  </div>
-                {/each}
-              </div>
-            {/if}
           </div>
         {/if}
 
@@ -315,17 +330,23 @@
                 on:blur={handleBlur}
               />
 
-              {#if showDropdown && filteredStats.length > 0}
+              {#if showDropdown}
                 <div class="dropdown">
-                  {#each filteredStats as stat (stat.statKey)}
-                    <!-- svelte-ignore a11y_no_static_element_interactions -->
-                    <div
-                      class="dropdown-item"
-                      on:mousedown|preventDefault={() => selectStat(stat)}
-                    >
-                      {stat.label}
-                    </div>
-                  {/each}
+                  {#if filteredStats.length > 0}
+                    {#each filteredStats as stat (stat.statKey)}
+                      <!-- svelte-ignore a11y_no_static_element_interactions -->
+                      <div
+                        class="dropdown-item"
+                        on:mousedown|preventDefault={() => selectStat(stat)}
+                      >
+                        {stat.label}
+                      </div>
+                    {/each}
+                  {:else if searchValue}
+                    <div class="dropdown-item">Aucune stat trouvée</div>
+                  {:else}
+                    <div class="dropdown-item">Tapez pour rechercher...</div>
+                  {/if}
                 </div>
               {/if}
             </div>
@@ -358,9 +379,75 @@
                 <p class="empty">Aucune stat sélectionnée</p>
               {/if}
             </div>
+
+            <!-- Min total weight -->
+            {#if $searchStore.selectedStats.length > 0}
+              <div class="min-weight-wrapper">
+                <label for="minTotalWeight">Poids total minimum (0 = auto):</label>
+                <input
+                  id="minTotalWeight"
+                  type="number"
+                  bind:value={$searchStore.minTotalWeight}
+                  placeholder="0"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            {/if}
+
+            <!-- Résultats de recherche par stats -->
+            {#if $searchStore.searched && Object.keys($searchStore.statsResults).length > 0}
+              <div class="stats-results">
+                {#each Object.keys($searchStore.statsResults).sort((a, b) => parseFloat(b) - parseFloat(a)) as total (total)}
+                  <div class="match-group">
+                    <h4
+                      class="match-header"
+                      class:expanded={expandedGroups[parseFloat(total)]}
+                      on:click={() => {
+                        const t = parseFloat(total);
+                        expandedGroups[t] = !expandedGroups[t];
+                        expandedGroups = {...expandedGroups};
+                      }}
+                    >
+                      Poids {total} ({$searchStore.statsResults[total].length} results)
+                    </h4>
+                    {#if expandedGroups[parseFloat(total)]}
+                      {#each $searchStore.statsResults[total] as item (item.seed)}
+                        <div class="result-item" on:click={() => applySeedFromResults(item.seed)}>
+                          <span class="jewel-id">Seed: {item.seed}</span>
+                          <div class="stat-counts">
+                            {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
+                              {@const stat = $searchStore.selectedStats.find(s => s.statKey === parseInt(statKey))}
+                              {#if stat}
+                                <span>({count}) {stat.label}</span>
+                              {/if}
+                            {/each}
+                          </div>
+                          <div class="total-weight">Poids total: {item.totalWeight.toFixed(1)}</div>
+                        </div>
+                      {/each}
+                    {/if}
+                  </div>
+                {/each}
+              </div>
+            {/if}
           </div>
         {/if}
       {/if}
+    {/if}
+
+    <!-- Liste des timelessStats -->
+    {#if $searchStore.searched && Object.keys(timelessStats).length > 0}
+      <div class="timeless-stats">
+        {#each Object.entries(timelessStats) as [stat, count] (stat)}
+          <div
+            class="timeless-stat"
+            on:click={() => highlightNodesWithStat(stat)}
+          >
+            ({count}) {stat}
+          </div>
+        {/each}
+      </div>
     {/if}
 
     <!-- Bouton de recherche -->
@@ -533,6 +620,23 @@
     font-size: 0.8rem;
   }
 
+  .min-weight-wrapper {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .min-weight-wrapper label {
+    color: white;
+    font-weight: 500;
+  }
+  .min-weight-wrapper input {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+
   .empty {
     color: #6c757d;
     font-style: italic;
@@ -600,7 +704,77 @@
     color: white;
   }
 
-  .dropdown-item:last-child {
-    border-bottom: none;
+  .stats-results {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: #2a2a2a;
+    border-radius: 6px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .stats-results h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .match-group {
+    margin-bottom: 1rem;
+  }
+
+  .match-header {
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5rem;
+    background: #4a4a4a;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .match-header:hover {
+    background: #5a5a5a;
+  }
+
+  .match-header.expanded::before {
+    content: "▼ ";
+  }
+
+  .match-header:not(.expanded)::before {
+    content: "▶ ";
+  }
+
+  .result-item {
+    color: #e7f3ff;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: #3a3a3a;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .result-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .jewel-id {
+    font-weight: bold;
+  }
+
+  .stat-counts {
+    margin-top: 0.25rem;
+  }
+
+  .stat-counts span {
+    display: block;
+    margin-bottom: 0.1rem;
+  }
+
+  .total-weight {
+    margin-top: 0.25rem;
+    font-weight: bold;
+    color: #ffd700;
   }
 </style>

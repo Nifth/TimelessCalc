@@ -91,8 +91,8 @@ export interface Conqueror {
 export interface Stat {
   statKey: number;
   label: string;
-  weight: number | undefined;
-  minWeight: number | undefined;
+  weight: number;
+  minWeight: number;
 }
 
 export interface Translation {

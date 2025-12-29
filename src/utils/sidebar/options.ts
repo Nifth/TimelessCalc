@@ -14,12 +14,15 @@ export function getStatsOptions(
   const stats = jewelStats[selected.name];
   const options: Map<number, Stat> = new Map<number, Stat>();
   stats.forEach((statId) => {
-    options.set(statId, {
-      statKey: statId,
-      label: translation[statId][0].translation.replace("{0}", "#"),
-      weight: 0,
-      minWeight: 1,
-    });
+    const trans = translation[statId.toString()];
+    if (trans && trans[0]) {
+      options.set(statId, {
+        statKey: statId,
+        label: trans[0].translation.replace("{0}", "#"),
+        weight: 1,
+        minWeight: 0,
+      });
+    }
   });
   return Array.from(options.values());
 }
