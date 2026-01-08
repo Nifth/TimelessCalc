@@ -30,6 +30,7 @@
   // === État local ===
   let isOpen = true; // Sidebar ouverte par défaut
   let mode: "seed" | "stats" | null = null;
+  let showingResults = false; // Track if we're showing results instead of form
 
   let seedInput: number | null = null;
   let searchValue = "";
@@ -166,6 +167,15 @@
       $searchStore.jewelType,
       $searchStore.selectedStats,
     );
+    // Switch to results view after search completes
+    if ($searchStore.searched) {
+      showingResults = true;
+    }
+  }
+
+  // === Back to search form ===
+  function backToForm() {
+    showingResults = false;
   }
 
   // === Appliquer une seed depuis les résultats de stats ===
@@ -245,214 +255,238 @@
 <!-- Sidebar -->
 {#if isOpen}
   <aside class="sidebar">
-    <!-- Ligne 1 : 5 cards radio -->
-    <section class="line line1">
-      {#each jewelTypes as jewelType (jewelType.name)}
-        <label
-          class="card"
-          class:selected={$searchStore.jewelType === jewelType}
-        >
-          <input
-            type="radio"
-            bind:group={$searchStore.jewelType}
-            value={jewelType}
-          />
-          <div class="card-label">{jewelType.label}</div>
-        </label>
-      {/each}
-    </section>
-
-    {#if $searchStore.jewelType}
-      <!-- Ligne 2 : 4 cards radio (dépend de ligne 1) -->
-      <section class="line line2">
-        {#each conquerorOptions as conqueror (conqueror.label)}
-          <label
-            class="card"
-            class:selected={$searchStore.conqueror === conqueror}
-          >
-            <input
-              type="radio"
-              bind:group={$searchStore.conqueror}
-              value={conqueror}
-            />
-            <div class="card-label">{conqueror.label}</div>
-          </label>
-        {/each}
-      </section>
-      {#if $searchStore.conqueror}
-        <!-- Ligne 3 : Choix du mode -->
-        <section class="line line3">
-          <button
-            on:click={() => (mode = "seed")}
-            class:active={mode === "seed"}
-          >
-            Enter seed
-          </button>
-          <button
-            on:click={() => (mode = "stats")}
-            class:active={mode === "stats"}
-          >
-            Select stats
-          </button>
+    {#if showingResults}
+      <!-- Results View -->
+      <div class="results-view">
+        <!-- Back Button -->
+        <button class="back-btn" on:click={backToForm}>
+          ← Back to Search
+        </button>
+        
+        <!-- Results Content -->
+        {#if mode === "stats" && Object.keys($searchStore.statsResults).length > 0}
+          <div class="stats-results">
+            <h3>Search Results</h3>
+            {#each Object.keys($searchStore.statsResults).sort((a, b) => parseFloat(b) - parseFloat(a)) as total (total)}
+              <div class="match-group">
+                <h4
+                  class="match-header"
+                  class:expanded={expandedGroups[parseFloat(total)]}
+                  on:click={() => {
+                    const t = parseFloat(total);
+                    expandedGroups[t] = !expandedGroups[t];
+                    expandedGroups = {...expandedGroups};
+                  }}
+                >
+                  Poids {total} ({$searchStore.statsResults[total].length} results)
+                </h4>
+                {#if expandedGroups[parseFloat(total)]}
+                  {#each $searchStore.statsResults[total] as item (item.seed)}
+                    <div class="result-item" on:click={() => applySeedFromResults(item.seed)}>
+                      <span class="jewel-id">Seed: {item.seed}</span>
+                      <div class="stat-counts">
+                        {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
+                          {@const stat = $searchStore.selectedStats.find(s => s.statKey === parseInt(statKey))}
+                          {#if stat}
+                            <span>({count}) {stat.label}</span>
+                          {/if}
+                        {/each}
+                      </div>
+                      <div class="total-weight">Poids total: {item.totalWeight.toFixed(1)}</div>
+                    </div>
+                  {/each}
+                {/if}
+              </div>
+            {/each}
+          </div>
+        {:else if mode === "seed" && $searchStore.searched}
+          <div class="seed-result">
+            <h3>Seed Applied</h3>
+            <p>Seed {$searchStore.seed} has been applied successfully.</p>
+          </div>
+        {:else}
+          <div class="no-results">
+            <p>No results to display.</p>
+          </div>
+        {/if}
+        
+        <!-- Liste des timelessStats -->
+        {#if $searchStore.searched && Object.keys(timelessStats).length > 0}
+          <div class="timeless-stats">
+            <h4>Current Stats</h4>
+            {#each Object.entries(timelessStats) as [stat, count] (stat)}
+              <div
+                class="timeless-stat"
+                on:click={() => highlightNodesWithStat(stat)}
+              >
+                ({count}) {stat}
+              </div>
+            {/each}
+          </div>
+        {/if}
+      </div>
+    {:else}
+      <!-- Search Form View -->
+      <div class="form-view">
+        <!-- Ligne 1 : 5 cards radio -->
+        <section class="line line1">
+          {#each jewelTypes as jewelType (jewelType.name)}
+            <label
+              class="card"
+              class:selected={$searchStore.jewelType === jewelType}
+            >
+              <input
+                type="radio"
+                bind:group={$searchStore.jewelType}
+                value={jewelType}
+              />
+              <div class="card-label">{jewelType.label}</div>
+            </label>
+          {/each}
         </section>
 
-        <!-- Mode Seed -->
-        {#if mode === "seed"}
-          <div class="mode-content seed">
-            <input
-              type="number"
-              bind:value={seedInput}
-              placeholder="Entrez la seed"
-              min="0"
-              step="1"
-            />
-            <p>
-              From {$searchStore.jewelType.min} to {$searchStore.jewelType.max}
-            </p>
-          </div>
-        {/if}
+        {#if $searchStore.jewelType}
+          <!-- Ligne 2 : 4 cards radio (dépend de ligne 1) -->
+          <section class="line line2">
+            {#each conquerorOptions as conqueror (conqueror.label)}
+              <label
+                class="card"
+                class:selected={$searchStore.conqueror === conqueror}
+              >
+                <input
+                  type="radio"
+                  bind:group={$searchStore.conqueror}
+                  value={conqueror}
+                />
+                <div class="card-label">{conqueror.label}</div>
+              </label>
+            {/each}
+          </section>
+          {#if $searchStore.conqueror}
+            <!-- Ligne 3 : Choix du mode -->
+            <section class="line line3">
+              <button
+                on:click={() => (mode = "seed")}
+                class:active={mode === "seed"}
+              >
+                Enter seed
+              </button>
+              <button
+                on:click={() => (mode = "stats")}
+                class:active={mode === "stats"}
+              >
+                Select stats
+              </button>
+            </section>
 
-        <!-- Mode Stats -->
-        {#if mode === "stats"}
-          <div class="mode-content stats">
-            <!-- Input + Dropdown custom -->
-            <div class="autocomplete-wrapper">
-              <input
-                bind:this={inputElement}
-                type="text"
-                bind:value={searchValue}
-                placeholder="Rechercher une stat..."
-                on:input={updateFilteredStats}
-                on:focus={() => {
-                  showDropdown = true;
-                  updateFilteredStats();
-                }}
-                on:blur={handleBlur}
-              />
+            <!-- Mode Seed -->
+            {#if mode === "seed"}
+              <div class="mode-content seed">
+                <input
+                  type="number"
+                  bind:value={seedInput}
+                  placeholder="Entrez la seed"
+                  min="0"
+                  step="1"
+                />
+                <p>
+                  From {$searchStore.jewelType.min} to {$searchStore.jewelType.max}
+                </p>
+              </div>
+            {/if}
 
-              {#if showDropdown}
-                <div class="dropdown">
-                  {#if filteredStats.length > 0}
-                    {#each filteredStats as stat (stat.statKey)}
-                      <!-- svelte-ignore a11y_no_static_element_interactions -->
-                      <div
-                        class="dropdown-item"
-                        on:mousedown|preventDefault={() => selectStat(stat)}
-                      >
-                        {stat.label}
-                      </div>
-                    {/each}
-                  {:else if searchValue}
-                    <div class="dropdown-item">Aucune stat trouvée</div>
-                  {:else}
-                    <div class="dropdown-item">Tapez pour rechercher...</div>
+            <!-- Mode Stats -->
+            {#if mode === "stats"}
+              <div class="mode-content stats">
+                <!-- Input + Dropdown custom -->
+                <div class="autocomplete-wrapper">
+                  <input
+                    bind:this={inputElement}
+                    type="text"
+                    bind:value={searchValue}
+                    placeholder="Rechercher une stat..."
+                    on:input={updateFilteredStats}
+                    on:focus={() => {
+                      showDropdown = true;
+                      updateFilteredStats();
+                    }}
+                    on:blur={handleBlur}
+                  />
+
+                  {#if showDropdown}
+                    <div class="dropdown">
+                      {#if filteredStats.length > 0}
+                        {#each filteredStats as stat (stat.statKey)}
+                          <!-- svelte-ignore a11y_no_static_element_interactions -->
+                          <div
+                            class="dropdown-item"
+                            on:mousedown|preventDefault={() => selectStat(stat)}
+                          >
+                            {stat.label}
+                          </div>
+                        {/each}
+                      {:else if searchValue}
+                        <div class="dropdown-item">Aucune stat trouvée</div>
+                      {:else}
+                        <div class="dropdown-item">Tapez pour rechercher...</div>
+                      {/if}
+                    </div>
                   {/if}
                 </div>
-              {/if}
-            </div>
 
-            <!-- Liste des stats ajoutées -->
-            <div class="stats-list">
-              {#each $searchStore.selectedStats as stat, i (i)}
-                <div class="stat-row">
-                  <span class="stat-name">{stat.label}</span>
-                  <input
-                    type="number"
-                    bind:value={stat.weight}
-                    placeholder="Poids"
-                    min="0"
-                    step="0.1"
-                  />
-                  <input
-                    type="number"
-                    bind:value={stat.minWeight}
-                    placeholder="Min"
-                    min="0"
-                    step="0.1"
-                  />
-                  <button on:click={() => removeStat(i)} class="delete"
-                    >Supprimer</button
-                  >
+                <!-- Liste des stats ajoutées -->
+                <div class="stats-list">
+                  {#each $searchStore.selectedStats as stat, i (i)}
+                    <div class="stat-row">
+                      <span class="stat-name">{stat.label}</span>
+                      <input
+                        type="number"
+                        bind:value={stat.weight}
+                        placeholder="Poids"
+                        min="0"
+                        step="0.1"
+                      />
+                      <input
+                        type="number"
+                        bind:value={stat.minWeight}
+                        placeholder="Min"
+                        min="0"
+                        step="0.1"
+                      />
+                      <button on:click={() => removeStat(i)} class="delete"
+                        >Supprimer</button
+                      >
+                    </div>
+                  {/each}
+                  {#if $searchStore.selectedStats.length === 0}
+                    <p class="empty">Aucune stat sélectionnée</p>
+                  {/if}
                 </div>
-              {/each}
-              {#if $searchStore.selectedStats.length === 0}
-                <p class="empty">Aucune stat sélectionnée</p>
-              {/if}
-            </div>
 
-            <!-- Min total weight -->
-            {#if $searchStore.selectedStats.length > 0}
-              <div class="min-weight-wrapper">
-                <label for="minTotalWeight">Poids total minimum (0 = auto):</label>
-                <input
-                  id="minTotalWeight"
-                  type="number"
-                  bind:value={$searchStore.minTotalWeight}
-                  placeholder="0"
-                  min="0"
-                  step="0.1"
-                />
-              </div>
-            {/if}
-
-            <!-- Résultats de recherche par stats -->
-            {#if $searchStore.searched && Object.keys($searchStore.statsResults).length > 0}
-              <div class="stats-results">
-                {#each Object.keys($searchStore.statsResults).sort((a, b) => parseFloat(b) - parseFloat(a)) as total (total)}
-                  <div class="match-group">
-                    <h4
-                      class="match-header"
-                      class:expanded={expandedGroups[parseFloat(total)]}
-                      on:click={() => {
-                        const t = parseFloat(total);
-                        expandedGroups[t] = !expandedGroups[t];
-                        expandedGroups = {...expandedGroups};
-                      }}
-                    >
-                      Poids {total} ({$searchStore.statsResults[total].length} results)
-                    </h4>
-                    {#if expandedGroups[parseFloat(total)]}
-                      {#each $searchStore.statsResults[total] as item (item.seed)}
-                        <div class="result-item" on:click={() => applySeedFromResults(item.seed)}>
-                          <span class="jewel-id">Seed: {item.seed}</span>
-                          <div class="stat-counts">
-                            {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
-                              {@const stat = $searchStore.selectedStats.find(s => s.statKey === parseInt(statKey))}
-                              {#if stat}
-                                <span>({count}) {stat.label}</span>
-                              {/if}
-                            {/each}
-                          </div>
-                          <div class="total-weight">Poids total: {item.totalWeight.toFixed(1)}</div>
-                        </div>
-                      {/each}
-                    {/if}
+                <!-- Min total weight -->
+                {#if $searchStore.selectedStats.length > 0}
+                  <div class="min-weight-wrapper">
+                    <label for="minTotalWeight">Poids total minimum (0 = auto):</label>
+                    <input
+                      id="minTotalWeight"
+                      type="number"
+                      bind:value={$searchStore.minTotalWeight}
+                      placeholder="0"
+                      min="0"
+                      step="0.1"
+                    />
                   </div>
-                {/each}
+                {/if}
               </div>
             {/if}
-          </div>
+          {/if}
         {/if}
-      {/if}
-    {/if}
 
-    <!-- Liste des timelessStats -->
-    {#if $searchStore.searched && Object.keys(timelessStats).length > 0}
-      <div class="timeless-stats">
-        {#each Object.entries(timelessStats) as [stat, count] (stat)}
-          <div
-            class="timeless-stat"
-            on:click={() => highlightNodesWithStat(stat)}
-          >
-            ({count}) {stat}
-          </div>
-        {/each}
+        <!-- Bouton de recherche -->
+        {#if mode !== "seed"}
+          <button class="search-btn" on:click={handleSearch}>Search</button>
+        {/if}
       </div>
-    {/if}
-
-    <!-- Bouton de recherche -->
-    {#if mode !== "seed"}
-      <button class="search-btn" on:click={handleSearch}>Search</button>
     {/if}
   </aside>
 {/if}
@@ -777,4 +811,72 @@
     font-weight: bold;
     color: #ffd700;
   }
+
+  /* Results View Styles */
+  .results-view {
+    padding: 1rem 0;
+  }
+
+  .back-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back-btn:hover {
+    background: #5a6268;
+  }
+
+  .stats-results h3 {
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .seed-result {
+    padding: 1rem;
+    background: #2a2a2a;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .seed-result h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .seed-result p {
+    color: #e7f3ff;
+    font-size: 1.1rem;
+  }
+
+  .no-results {
+    padding: 2rem;
+    text-align: center;
+    background: #2a2a2a;
+    border-radius: 8px;
+  }
+
+  .no-results p {
+    color: #6c757d;
+    font-style: italic;
+  }
+
+  .timeless-stats h4 {
+    color: white;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  
 </style>
