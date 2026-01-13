@@ -287,7 +287,22 @@
                     expandedGroups = { ...expandedGroups };
                   }}
                 >
-                  Poids {total} ({$searchStore.statsResults[total].length} results)
+                  {#if $searchStore.statsResults[total].length > 0}
+                    {@const firstItem = $searchStore.statsResults[total][0]}
+                    {@const modifiedNodesCount = Object.values(
+                      firstItem.statCounts,
+                    ).reduce((sum, count) => sum + count, 0)}
+
+                    {#if $searchStore.minTotalWeight > 0}
+                      Weight {total} ({$searchStore.statsResults[total].length} results)
+                    {:else}
+                      {modifiedNodesCount} matches ({$searchStore.statsResults[
+                        total
+                      ].length} results)
+                    {/if}
+                  {:else}
+                    0 matches (0 results)
+                  {/if}
                 </h4>
                 {#if expandedGroups[parseFloat(total)]}
                   {#each $searchStore.statsResults[total] as item (item.seed)}
@@ -305,9 +320,6 @@
                             <span>({count}) {stat.label}</span>
                           {/if}
                         {/each}
-                      </div>
-                      <div class="total-weight">
-                        Poids total: {item.totalWeight.toFixed(1)}
                       </div>
                     </div>
                   {/each}
@@ -424,8 +436,12 @@
                     placeholder="Search for a stat..."
                     on:input={updateFilteredStats}
                     on:focus={() => {
-                      showDropdown = true;
                       updateFilteredStats();
+                    }}
+                    on:click={() => {
+                      if (!searchValue.trim()) {
+                        updateFilteredStats();
+                      }
                     }}
                     on:blur={handleBlur}
                   />
@@ -823,12 +839,6 @@
   .stat-counts span {
     display: block;
     margin-bottom: 0.1rem;
-  }
-
-  .total-weight {
-    margin-top: 0.25rem;
-    font-weight: bold;
-    color: #ffd700;
   }
 
   /* Results View Styles */

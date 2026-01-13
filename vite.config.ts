@@ -6,12 +6,12 @@ export default defineConfig({
   plugins: [
     svelte(),
     {
-      name: 'gzip-headers',
+      name: "gzip-headers",
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          if (req.url?.endsWith('.gz')) {
-            res.setHeader('Content-Encoding', 'gzip');
-            res.setHeader('Content-Type', 'application/json');
+          if (req.url?.endsWith(".gz")) {
+            res.setHeader("Content-Encoding", "gzip");
+            res.setHeader("Content-Type", "application/json");
           }
           next();
         });

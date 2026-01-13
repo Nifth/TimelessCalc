@@ -37,7 +37,20 @@ export function filterStats(
   selectedStats: Stat[],
 ): Stat[] {
   const lowerQuery = query.toLowerCase().trim();
-  return statOptions
-    .filter((stat) => stat.label.toLowerCase().includes(lowerQuery))
-    .filter((stat) => !selectedStats.some((s) => s.label === stat.label));
+
+  let filtered = statOptions;
+
+  // Filter by query if not empty
+  if (lowerQuery !== "") {
+    filtered = filtered.filter((stat) =>
+      stat.label.toLowerCase().includes(lowerQuery),
+    );
+  }
+
+  // Remove already selected stats
+  filtered = filtered.filter(
+    (stat) => !selectedStats.some((s) => s.label === stat.label),
+  );
+
+  return filtered;
 }
