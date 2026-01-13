@@ -22,7 +22,7 @@ export async function applySeed(
     return;
   }
 
-  // Appliquer les modifications aux nodes
+  // Apply modifications to nodes
   treeStore.update((state) => {
     const chosenSocket = state.chosenSocket?.skill;
     if (!chosenSocket) {
@@ -30,7 +30,7 @@ export async function applySeed(
       return state;
     }
     const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
-    // Traiter les remplacements (r)
+    // Process replacements (r)
     for (const [key, nodeIds] of Object.entries(entry.r)) {
       const stats = parseKey(key);
       for (const nodeId of nodeIds) {
@@ -43,7 +43,7 @@ export async function applySeed(
         }
       }
     }
-    // Traiter les ajouts (a)
+    // Process additions (a)
     for (const [key, nodeIds] of Object.entries(entry.a)) {
       const stats = parseKey(key);
       for (const nodeId of nodeIds) {
@@ -62,7 +62,7 @@ export async function applySeed(
         }
       }
     }
-    // Appliquer les effets de base selon le jewelType
+    // Apply base effects according to jewelType
     if (jewelType) {
       const label = jewelType.name;
       let baseStat = "";
@@ -110,7 +110,7 @@ export async function handleSearch(
       });
       return;
     }
-    // Assurer que les données sont chargées
+    // Ensure data is loaded
     await preloadJewels();
     const jewelData = getJewelData(jewelType!.name);
     if (!jewelData) {
@@ -125,7 +125,7 @@ export async function handleSearch(
       return;
     }
 
-    // Appliquer les modifications aux nodes
+    // Apply modifications to nodes
     treeStore.update((state) => {
       const chosenSocket = state.chosenSocket?.skill;
       if (!chosenSocket) {
@@ -133,7 +133,7 @@ export async function handleSearch(
         return state;
       }
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
-      // Traiter les remplacements (r)
+      // Process replacements (r)
       for (const [key, nodeIds] of Object.entries(entry.r)) {
         const stats = parseKey(key);
         for (const nodeId of nodeIds) {
@@ -146,7 +146,7 @@ export async function handleSearch(
           }
         }
       }
-      // Traiter les ajouts (a)
+      // Process additions (a)
       for (const [key, nodeIds] of Object.entries(entry.a)) {
         const stats = parseKey(key);
         for (const nodeId of nodeIds) {
@@ -165,7 +165,7 @@ export async function handleSearch(
           }
         }
       }
-      // Appliquer les effets de base selon le jewelType
+      // Apply base effects according to jewelType
       if (jewelType) {
         const label = jewelType.name;
         let baseStat = "";
@@ -197,8 +197,8 @@ export async function handleSearch(
       return state;
     });
     searchStore.update((state) => {
-        state.searched = true;
-        return state;
+      state.searched = true;
+      return state;
     });
   } else if (mode === "stats") {
     if (selectedStats.length === 0) {
@@ -208,13 +208,13 @@ export async function handleSearch(
       });
       return;
     }
-    // Assurer que les données sont chargées
+    // Ensure data is loaded
     await preloadJewels();
     const jewelData = getJewelData(jewelType!.name);
     if (!jewelData) {
       return;
     }
-    // Résultats : pour chaque seed, compter les occurrences de chaque stat sélectionnée sur les nodes alloués
+    // Results: for each seed, count occurrences of each selected stat on allocated nodes
     const results: Record<number, Record<number, number>> = {};
 
     for (const seedStr of Object.keys(jewelData)) {
@@ -224,13 +224,13 @@ export async function handleSearch(
 
       const statCounts: Record<number, number> = {};
 
-      // Traiter 'r' et 'a'
-      for (const type of ['r', 'a'] as const) {
+      // Process 'r' and 'a'
+      for (const type of ["r", "a"] as const) {
         for (const [key, nodeIds] of Object.entries(entry[type] || {})) {
           const stats = parseKey(key);
           for (const { statId } of stats) {
-            if (selectedStats.some(s => s.statKey === statId)) {
-              // Compter pour chaque nodeId alloué
+            if (selectedStats.some((s) => s.statKey === statId)) {
+              // Count for each allocated nodeId
               for (const nodeId of nodeIds) {
                 if (get(treeStore).allocated.has(nodeId.toString())) {
                   statCounts[statId] = (statCounts[statId] || 0) + 1;
@@ -241,14 +241,21 @@ export async function handleSearch(
         }
       }
 
-      // Si au moins une stat a un count > 0, ajouter au résultats
-      if (Object.values(statCounts).some(count => count > 0)) {
+      // If at least one stat has a count > 0, add to results
+      if (Object.values(statCounts).some((count) => count > 0)) {
         results[seed] = statCounts;
       }
     }
 
-    // Grouper par poids total
-    const grouped: Record<string, {seed: number, statCounts: Record<number, number>, totalWeight: number}[]> = {};
+    // Group by total weight
+    const grouped: Record<
+      string,
+      {
+        seed: number;
+        statCounts: Record<number, number>;
+        totalWeight: number;
+      }[]
+    > = {};
     for (const [seed, statCounts] of Object.entries(results)) {
       let totalWeight = 0;
       let minTotalWeight = get(searchStore).minTotalWeight;
@@ -266,14 +273,14 @@ export async function handleSearch(
       if (totalWeight >= minTotalWeight) {
         const key = totalWeight.toFixed(1);
         if (!grouped[key]) grouped[key] = [];
-        grouped[key].push({seed: parseInt(seed), statCounts, totalWeight});
+        grouped[key].push({ seed: parseInt(seed), statCounts, totalWeight });
       }
     }
 
-    // Pour l'instant, log les résultats
+    // For now, log the results
     console.log("Stats search results:", grouped);
 
-    // TODO: Mettre à jour un store ou afficher dans l'UI
+    // TODO: Update a store or display in the UI
     searchStore.update((state) => {
       state.searched = true;
       state.statsResults = grouped;

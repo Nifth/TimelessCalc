@@ -7,7 +7,7 @@ export function setupClick() {
   const stage = canvas.stage!,
     nodes = canvas.treeData.nodes,
     socketNodes = canvas.treeData.socketNodes;
-  // ---------- CLIC ----------
+  // ---------- CLICK ----------
   stage.on("click tap", (e) => {
     const treeState = get(treeStore);
     const shape = e.target;

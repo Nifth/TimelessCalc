@@ -57,7 +57,7 @@ export function updateJewelSockets() {
 
 export function changeRadius(chosenSocket: Node | null) {
   const jewelRadiusImages = canvas.jewelRadiusImages;
-  const radiusImages = jewelRadiusImages.get("default"); // utiliser un store
+  const radiusImages = jewelRadiusImages.get("default"); // use a store
   if (chosenSocket && radiusImages) {
     const jewelType = get(searchStore).jewelType?.name as JewelCode | undefined;
     const socketX = chosenSocket.x || 0;
@@ -77,7 +77,7 @@ export function changeRadius(chosenSocket: Node | null) {
       radiusImg.crop(sprit.crop());
     }
     if (jewelType) {
-      // utiliser un store
+      // use a store
       radiusImg2.visible(true);
       radiusImg2.x(socketX);
       radiusImg2.y(socketY);

@@ -7,7 +7,7 @@ export function drawBackground() {
   const layer = canvas.backgroundLayer!,
     data = canvas.treeData;
   Object.entries(data.groups).forEach(([_, group]: [string, Group]) => {
-    // background
+    // background layer
     if (group.background) {
       if (group.background.isHalfImage) {
         const up = createSprite(

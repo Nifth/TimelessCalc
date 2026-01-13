@@ -27,8 +27,8 @@
     JSON.stringify(translationsJson),
   );
 
-  // === État local ===
-  let isOpen = true; // Sidebar ouverte par défaut
+  // === Local state ===
+  let isOpen = true; // Sidebar open by default
   let mode: "seed" | "stats" | null = null;
   let showingResults = false; // Track if we're showing results instead of form
 
@@ -41,7 +41,7 @@
 
   let expandedGroups: Record<number, boolean> = {};
 
-  // === Options ligne 2 (4 cards) — dépend de ligne 1 ===
+  // === Line 2 options (4 cards) — depends on line 1 ===
   $: conquerorOptions = getConquerorOptions($searchStore.jewelType);
 
   $: statOptions = getStatsOptions(
@@ -53,7 +53,7 @@
   $: timelessStats =
     $treeStore.chosenSocket && $searchStore.searched ? getTimelessStats() : {};
 
-  // === Supprimer une stat ===
+  // === Remove a stat ===
   function removeStat(index: number) {
     searchStore.update((state) => {
       state.selectedStats = state.selectedStats.filter((_, i) => i !== index);
@@ -61,7 +61,7 @@
     });
   }
 
-  // === Récupérer les timelessStats du socket choisi ===
+  // === Get timelessStats from chosen socket ===
   function getTimelessStats(): Record<string, number> {
     const chosenSocket = $treeStore.chosenSocket;
     if (!chosenSocket) return {};
@@ -80,7 +80,7 @@
     return statsCount;
   }
 
-  // === Highlight les nodes avec une stat spécifique ===
+  // === Highlight nodes with a specific stat ===
   function highlightNodesWithStat(stat: string) {
     canvas.highlightLayer?.destroyChildren();
 
@@ -101,15 +101,15 @@
     canvas.highlightLayer?.batchDraw();
   }
 
-  // === Highlight les nodes avec les stats recherchées ===
+  // === Highlight nodes with searched stats ===
   function highlightSearchedStats() {
     canvas.highlightLayer?.destroyChildren();
 
-    const searchedLabels = $searchStore.selectedStats.map(s => s.label);
+    const searchedLabels = $searchStore.selectedStats.map((s) => s.label);
 
     // Create circles for nodes that have any searched stat
     for (const node of $treeStore.allocated.values()) {
-      if (node?.timelessStats?.some(stat => searchedLabels.includes(stat))) {
+      if (node?.timelessStats?.some((stat) => searchedLabels.includes(stat))) {
         const circle = new Konva.Circle({
           x: node.x,
           y: node.y,
@@ -124,7 +124,7 @@
     canvas.highlightLayer?.batchDraw();
   }
 
-  // Filtre les stats en temps réel
+  // Filter stats in real time
   function updateFilteredStats() {
     filteredStats = filterStats(
       searchValue,
@@ -134,7 +134,7 @@
     showDropdown = true;
   }
 
-  // Sélectionne une stat
+  // Select a stat
   function selectStat(stat: Stat) {
     if (!$searchStore.selectedStats.some((s) => s.label === stat.label)) {
       searchStore.update((state) => {
@@ -151,14 +151,14 @@
     showDropdown = false;
   }
 
-  // Ferme le dropdown si clic dehors (avec délai pour mousedown)
+  // Close dropdown if clicked outside (with delay for mousedown)
   function handleBlur() {
     setTimeout(() => {
       showDropdown = false;
     }, 150);
   }
 
-  // === Soumission finale ===
+  // === Final submission ===
   async function handleSearch() {
     await performSearch(
       mode,
@@ -178,14 +178,23 @@
     showingResults = false;
   }
 
-  // === Appliquer une seed depuis les résultats de stats ===
+  // === Apply a seed from the stats results ===
   async function applySeedFromResults(seed: number) {
-    await applySeed(seed, $searchStore.jewelType!, $searchStore.conqueror!, translation);
-    searchStore.update(s => { s.searched = true; s.seed = seed; return s; });
+    await applySeed(
+      seed,
+      $searchStore.jewelType!,
+      $searchStore.conqueror!,
+      translation,
+    );
+    searchStore.update((s) => {
+      s.searched = true;
+      s.seed = seed;
+      return s;
+    });
     highlightSearchedStats();
   }
 
-  // Réactivité : synchroniser seedInput avec mode
+  // Reactivity: synchronize seedInput with mode
   let searchTimeout: number | null = null;
   $: if (mode === "seed") {
     if (seedInput !== $searchStore.seed) {
@@ -194,7 +203,7 @@
         return state;
       });
     }
-    // Lancer la recherche automatiquement si seed valide, avec debounce
+    // Automatically launch search if seed is valid, with debounce
     if (
       seedInput &&
       seedInput >= ($searchStore.jewelType?.min || 0) &&
@@ -208,7 +217,7 @@
   }
 
   $: {
-    // Si la valeur actuelle de line2 n'existe plus dans les nouvelles options
+    // If the current value of line2 no longer exists in the new options
     if (
       !conquerorOptions.some(
         (conqueror) => conqueror === $searchStore.conqueror,
@@ -223,7 +232,7 @@
         state.minTotalWeight = 0;
         return state;
       });
-      // Optionnel : reset mode + stats
+      // Optional: reset mode + stats
       mode = null;
     }
   }
@@ -262,7 +271,7 @@
         <button class="back-btn" on:click={backToForm}>
           ← Back to Search
         </button>
-        
+
         <!-- Results Content -->
         {#if mode === "stats" && Object.keys($searchStore.statsResults).length > 0}
           <div class="stats-results">
@@ -275,24 +284,31 @@
                   on:click={() => {
                     const t = parseFloat(total);
                     expandedGroups[t] = !expandedGroups[t];
-                    expandedGroups = {...expandedGroups};
+                    expandedGroups = { ...expandedGroups };
                   }}
                 >
                   Poids {total} ({$searchStore.statsResults[total].length} results)
                 </h4>
                 {#if expandedGroups[parseFloat(total)]}
                   {#each $searchStore.statsResults[total] as item (item.seed)}
-                    <div class="result-item" on:click={() => applySeedFromResults(item.seed)}>
+                    <div
+                      class="result-item"
+                      on:click={() => applySeedFromResults(item.seed)}
+                    >
                       <span class="jewel-id">Seed: {item.seed}</span>
                       <div class="stat-counts">
                         {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
-                          {@const stat = $searchStore.selectedStats.find(s => s.statKey === parseInt(statKey))}
+                          {@const stat = $searchStore.selectedStats.find(
+                            (s) => s.statKey === parseInt(statKey),
+                          )}
                           {#if stat}
                             <span>({count}) {stat.label}</span>
                           {/if}
                         {/each}
                       </div>
-                      <div class="total-weight">Poids total: {item.totalWeight.toFixed(1)}</div>
+                      <div class="total-weight">
+                        Poids total: {item.totalWeight.toFixed(1)}
+                      </div>
                     </div>
                   {/each}
                 {/if}
@@ -309,7 +325,7 @@
             <p>No results to display.</p>
           </div>
         {/if}
-        
+
         <!-- Liste des timelessStats -->
         {#if $searchStore.searched && Object.keys(timelessStats).length > 0}
           <div class="timeless-stats">
@@ -385,12 +401,13 @@
                 <input
                   type="number"
                   bind:value={seedInput}
-                  placeholder="Entrez la seed"
+                  placeholder="Enter the seed"
                   min="0"
                   step="1"
                 />
                 <p>
-                  From {$searchStore.jewelType.min} to {$searchStore.jewelType.max}
+                  From {$searchStore.jewelType.min} to {$searchStore.jewelType
+                    .max}
                 </p>
               </div>
             {/if}
@@ -404,7 +421,7 @@
                     bind:this={inputElement}
                     type="text"
                     bind:value={searchValue}
-                    placeholder="Rechercher une stat..."
+                    placeholder="Search for a stat..."
                     on:input={updateFilteredStats}
                     on:focus={() => {
                       showDropdown = true;
@@ -426,9 +443,9 @@
                           </div>
                         {/each}
                       {:else if searchValue}
-                        <div class="dropdown-item">Aucune stat trouvée</div>
+                        <div class="dropdown-item">No stats found</div>
                       {:else}
-                        <div class="dropdown-item">Tapez pour rechercher...</div>
+                        <div class="dropdown-item">Type to search...</div>
                       {/if}
                     </div>
                   {/if}
@@ -442,7 +459,7 @@
                       <input
                         type="number"
                         bind:value={stat.weight}
-                        placeholder="Poids"
+                        placeholder="Weight"
                         min="0"
                         step="0.1"
                       />
@@ -454,19 +471,21 @@
                         step="0.1"
                       />
                       <button on:click={() => removeStat(i)} class="delete"
-                        >Supprimer</button
+                        >Delete</button
                       >
                     </div>
                   {/each}
                   {#if $searchStore.selectedStats.length === 0}
-                    <p class="empty">Aucune stat sélectionnée</p>
+                    <p class="empty">No stats selected</p>
                   {/if}
                 </div>
 
                 <!-- Min total weight -->
                 {#if $searchStore.selectedStats.length > 0}
                   <div class="min-weight-wrapper">
-                    <label for="minTotalWeight">Poids total minimum (0 = auto):</label>
+                    <label for="minTotalWeight"
+                      >Minimum total weight (0 = auto):</label
+                    >
                     <input
                       id="minTotalWeight"
                       type="number"
@@ -877,6 +896,4 @@
     margin-bottom: 0.5rem;
     font-size: 1rem;
   }
-
-  
 </style>

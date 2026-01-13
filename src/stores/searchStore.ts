@@ -7,6 +7,9 @@ export const searchStore = writable({
   seed: null as number | null,
   selectedStats: [] as Stat[],
   searched: false as boolean,
-  statsResults: {} as Record<string, {seed: number, statCounts: Record<number, number>, totalWeight: number}[]>,
+  statsResults: {} as Record<
+    string,
+    { seed: number; statCounts: Record<number, number>; totalWeight: number }[]
+  >,
   minTotalWeight: 0 as number,
 });

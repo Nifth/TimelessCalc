@@ -2,7 +2,7 @@ import type { Stat, Translation } from "$lib/types";
 
 export function parseKey(key: string): { statId: number; value: number }[] {
   const parts = key.split("-");
-  const statsStr = parts[1]; // enlever le }
+  const statsStr = parts[1]; // remove the }
   const stats = JSON.parse(statsStr);
   return Object.entries(stats).map(([statId, value]) => {
     return { statId: parseInt(statId), value: value as number };

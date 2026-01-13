@@ -10,40 +10,35 @@ export interface JewelEntry {
   a: Record<string, number[]>;
 }
 
-// Cache global
+// Global cache
 const cache = new Map<string, Record<number, JewelEntry>>();
 
-// Store Svelte pour réagir au chargement (optionnel mais pratique)
+// Svelte store to react to loading (optional but practical)
 export const loadingJewels: Writable<Set<string>> = writable(new Set());
 export const loadedJewels: Writable<Set<string>> = writable(new Set());
 
-// Une seule promesse globale pour éviter les doublons
+// Single global promise to avoid duplicates
 let globalPreloadPromise: Promise<void> | null = null;
 
-// Importer les fichiers comme URLs
-const jewelFiles = import.meta.glob("/src/data/jewels/*.jsonl.gz", {
-  as: "url",
-});
+// Data file configuration
+const jewelFileNames = [
+  "ElegantHubris.jsonl.gz",
+  "MilitantFaith.jsonl.gz",
+  "BrutalRestraint.jsonl.gz",
+  "LethalPride.jsonl.gz",
+  "GloriousVanity.jsonl.gz",
+];
 
-// Fonction pour charger un fichier compressé
-function fetchCompressed(url: string): Promise<Uint8Array> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.responseType = "arraybuffer";
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        resolve(new Uint8Array(xhr.response));
-      } else {
-        reject(new Error(`HTTP ${xhr.status}`));
-      }
-    };
-    xhr.onerror = () => reject(new Error("Network error"));
-    xhr.send();
-  });
+// Function to load a file (browser automatically decompresses .gz files)
+async function fetchText(url: string): Promise<string> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return response.text();
 }
 
-// todo: fix le militant faith, il récup tout le temps la meme merce
+// todo: fix the militant faith, it keeps getting the same merchandise
 export async function preloadJewels(): Promise<void> {
   if (globalPreloadPromise) return globalPreloadPromise;
 
@@ -53,21 +48,20 @@ export async function preloadJewels(): Promise<void> {
       if (cache.has(key)) return;
 
       const fileName = jewel.label.replace(/\s+/g, "") + ".jsonl.gz";
-      const filePath = `/src/data/jewels/${fileName}`;
-      const url = await jewelFiles[filePath]();
 
-      if (!url) {
-        console.error(`Fichier non trouvé: ${filePath}`);
+      if (!jewelFileNames.includes(fileName)) {
+        console.error(`File not found: ${fileName}`);
         return;
       }
+
+      const url = `/src/data/jewels/${fileName}`;
 
       loadingJewels.update((s) => new Set(s).add(key));
 
       try {
-        const compressed = await fetchCompressed(url);
-        const text = new TextDecoder().decode(compressed);
+        const text = await fetchText(url);
 
-        // JSONL → chaque ligne est un objet JSON
+        // JSONL → each line is a JSON object
         const lines = text.trim().split("\n").filter(Boolean);
         const data: Record<number, JewelEntry> = {};
         let i = jewel.min;
@@ -80,7 +74,7 @@ export async function preloadJewels(): Promise<void> {
         cache.set(key, data);
         loadedJewels.update((s) => new Set(s).add(key));
       } catch (err) {
-        console.error(`[JewelCache] Échec chargement ${fileName}:`, err);
+        console.error(`[JewelCache] Failed loading ${fileName}:`, err);
       } finally {
         loadingJewels.update((s) => {
           const next = new Set(s);
@@ -96,7 +90,7 @@ export async function preloadJewels(): Promise<void> {
   return globalPreloadPromise;
 }
 
-// Récupération synchrone (renvoie undefined si pas encore chargé)
+// Synchronous retrieval (returns undefined if not yet loaded)
 export function getJewelData(
   jewelId: string,
 ): Record<number, JewelEntry> | undefined {

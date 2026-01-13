@@ -41,7 +41,7 @@
         draggable: true,
       });
 
-      // init
+      // initialization
       canvas.stage.scale({ x: 0.2, y: 0.2 });
       canvas.stage.position({
         x: window.innerWidth / 2,
@@ -63,7 +63,7 @@
         canvas.highlightLayer,
       );
 
-      getHighlighteableNodes(); // initialise the highlighteable nodes cache
+      getHighlighteableNodes(); // initializationialise the highlighteable nodes cache
       drawBackground();
       drawNodes();
       drawLines();

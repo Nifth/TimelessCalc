@@ -13,7 +13,7 @@ export function setupZoom() {
 
     const oldScale = stage.scaleX();
 
-    // zoom
+    // zoom functionality
     const newScale = e.evt.deltaY > 0 ? oldScale * 0.9 : oldScale * 1.1;
     treeStore.update((state) => {
       state.scale = Math.max(0.1, Math.min(0.4, newScale));
@@ -21,7 +21,7 @@ export function setupZoom() {
     });
     const storeState = get(treeStore);
 
-    // KONVA GÈRE TOUT LUI-MÊME (magie noire qui marche)
+    // KONVA MANAGES EVERYTHING ITSELF (black magic that works)
     const mousePointTo = {
       x: (pointer.x - stage.x()) / oldScale,
       y: (pointer.y - stage.y()) / oldScale,

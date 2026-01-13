@@ -7,5 +7,5 @@ export const treeStore = writable({
   search: "" as string,
   scale: 0.1,
   hovered: null as Node | null,
-  // tu pourras ajouter masteredNotables, ascendancy, etc.
+  // you can add masteredNotables, ascendancy, etc.
 });
