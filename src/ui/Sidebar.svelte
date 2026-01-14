@@ -2,6 +2,7 @@
   import { jewelTypes } from "$lib/constants/timeless";
   import type { Conqueror, JewelType, Stat, Translation } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
+  import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
   import { treeStore } from "$lib/stores/treeStore";
   import jewelStatsJson from "$lib/data/jewelstats.json" with { type: "json" };
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
@@ -278,9 +279,12 @@
 </button>
 
 {#if isOpen}
-  <aside class="fixed left-0 top-0 h-screen w-[500px] bg-slate-900/95 backdrop-blur-sm p-6 pt-16 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700">
+  <aside class="fixed left-0 top-0 h-screen w-[500px] bg-slate-900/95 backdrop-blur-sm p-6 pt-16 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700 custom-scrollbar">
     {#if showingResults}
       <div class="space-y-4">
+        {#if mode === "stats"}
+          <LeagueSelector />
+        {/if}
         <button
           on:click={backToForm}
           class="w-full py-3 px-4 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium cursor-pointer transition-all duration-200 flex items-center justify-center gap-2"

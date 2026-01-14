@@ -107,3 +107,9 @@ export interface JewelEntry {
 }
 
 export type JewelData = Record<string, JewelEntry>;
+
+export interface League {
+  name: string;
+  start_date?: string;
+  end_date?: string;
+}

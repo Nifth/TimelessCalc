@@ -1,5 +1,7 @@
-import type { Conqueror, JewelType, Stat } from "$lib/types";
+import type { Conqueror, JewelType, League, Stat } from "$lib/types";
 import { writable } from "svelte/store";
+
+export const defaultLeague = "Keepers";
 
 export const searchStore = writable({
   jewelType: null as JewelType | null,
@@ -12,4 +14,5 @@ export const searchStore = writable({
     { seed: number; statCounts: Record<number, number>; totalWeight: number }[]
   >,
   minTotalWeight: 0 as number,
+  league: defaultLeague as League["name"],
 });
