@@ -27,10 +27,11 @@
     JSON.stringify(translationsJson),
   );
 
-  // === Local state ===
-  let isOpen = true; // Sidebar open by default
+  let isOpen = true;
   let mode: "seed" | "stats" | null = null;
-  let showingResults = false; // Track if we're showing results instead of form
+  let showingResults = false;
+  let seedSearched = false;
+  let statsSearched = false;
 
   let seedInput: number | null = null;
   let searchValue = "";
@@ -41,7 +42,6 @@
 
   let expandedGroups: Record<number, boolean> = {};
 
-  // === Line 2 options (4 cards) — depends on line 1 ===
   $: conquerorOptions = getConquerorOptions($searchStore.jewelType);
 
   $: statOptions = getStatsOptions(
@@ -53,7 +53,6 @@
   $: timelessStats =
     $treeStore.chosenSocket && $searchStore.searched ? getTimelessStats() : {};
 
-  // === Remove a stat ===
   function removeStat(index: number) {
     searchStore.update((state) => {
       state.selectedStats = state.selectedStats.filter((_, i) => i !== index);
@@ -61,7 +60,6 @@
     });
   }
 
-  // === Get timelessStats from chosen socket ===
   function getTimelessStats(): Record<string, number> {
     const chosenSocket = $treeStore.chosenSocket;
     if (!chosenSocket) return {};
@@ -80,11 +78,9 @@
     return statsCount;
   }
 
-  // === Highlight nodes with a specific stat ===
   function highlightNodesWithStat(stat: string) {
     canvas.highlightLayer?.destroyChildren();
 
-    // Create circles for nodes that have this stat
     for (const node of $treeStore.allocated.values()) {
       if (node?.timelessStats?.includes(stat)) {
         const circle = new Konva.Circle({
@@ -101,13 +97,11 @@
     canvas.highlightLayer?.batchDraw();
   }
 
-  // === Highlight nodes with searched stats ===
   function highlightSearchedStats() {
     canvas.highlightLayer?.destroyChildren();
 
     const searchedLabels = $searchStore.selectedStats.map((s) => s.label);
 
-    // Create circles for nodes that have any searched stat
     for (const node of $treeStore.allocated.values()) {
       if (node?.timelessStats?.some((stat) => searchedLabels.includes(stat))) {
         const circle = new Konva.Circle({
@@ -124,7 +118,6 @@
     canvas.highlightLayer?.batchDraw();
   }
 
-  // Filter stats in real time
   function updateFilteredStats() {
     filteredStats = filterStats(
       searchValue,
@@ -134,7 +127,6 @@
     showDropdown = true;
   }
 
-  // Select a stat
   function selectStat(stat: Stat) {
     if (!$searchStore.selectedStats.some((s) => s.label === stat.label)) {
       searchStore.update((state) => {
@@ -151,14 +143,12 @@
     showDropdown = false;
   }
 
-  // Close dropdown if clicked outside (with delay for mousedown)
   function handleBlur() {
     setTimeout(() => {
       showDropdown = false;
     }, 150);
   }
 
-  // === Final submission ===
   async function handleSearch() {
     await performSearch(
       mode,
@@ -167,18 +157,47 @@
       $searchStore.jewelType,
       $searchStore.selectedStats,
     );
-    // Switch to results view after search completes
     if ($searchStore.searched) {
-      showingResults = true;
+      if (mode === "stats") {
+        statsSearched = true;
+        showingResults = true;
+      } else if (mode === "seed") {
+        seedSearched = true;
+      }
     }
   }
 
-  // === Back to search form ===
   function backToForm() {
+    showingResults = false;
+    seedInput = null;
+    seedSearched = false;
+    statsSearched = false;
+    searchStore.update((s) => {
+      s.searched = false;
+      s.statsResults = {};
+      return s;
+    });
+  }
+  let searchTimeout: number | null = null;
+
+  function setMode(newMode: "seed" | "stats" | null) {
+    if (searchTimeout) clearTimeout(searchTimeout);
+    mode = newMode;
+    seedInput = null;
+    if (mode === "stats") {
+      seedSearched = false;
+      statsSearched = false;
+      searchStore.update((s) => {
+        s.searched = false;
+        s.statsResults = {};
+        return s;
+      });
+    } else if (mode === "seed") {
+      seedSearched = false;
+    }
     showingResults = false;
   }
 
-  // === Apply a seed from the stats results ===
   async function applySeedFromResults(seed: number) {
     await applySeed(
       seed,
@@ -194,30 +213,27 @@
     highlightSearchedStats();
   }
 
-  // Reactivity: synchronize seedInput with mode
-  let searchTimeout: number | null = null;
   $: if (mode === "seed") {
     if (seedInput !== $searchStore.seed) {
       searchStore.update((state) => {
         state.seed = seedInput;
         return state;
       });
-    }
-    // Automatically launch search if seed is valid, with debounce
-    if (
-      seedInput &&
-      seedInput >= ($searchStore.jewelType?.min || 0) &&
-      seedInput <= ($searchStore.jewelType?.max || 0)
-    ) {
-      if (searchTimeout) window.clearTimeout(searchTimeout);
-      searchTimeout = window.setTimeout(() => {
-        handleSearch();
-      }, 250);
+      if (
+        seedInput &&
+        seedInput >= ($searchStore.jewelType?.min || 0) &&
+        seedInput <= ($searchStore.jewelType?.max || 0)
+      ) {
+        if (searchTimeout) window.clearTimeout(searchTimeout);
+        searchTimeout = window.setTimeout(() => {
+          console.log('e');
+          handleSearch();
+        }, 100);
+      }
     }
   }
 
   $: {
-    // If the current value of line2 no longer exists in the new options
     if (
       !conquerorOptions.some(
         (conqueror) => conqueror === $searchStore.conqueror,
@@ -232,7 +248,6 @@
         state.minTotalWeight = 0;
         return state;
       });
-      // Optional: reset mode + stats
       mode = null;
     }
   }
@@ -252,35 +267,37 @@
   }
 </script>
 
-<!-- Burger Button -->
 <button
   on:click={() => (isOpen = !isOpen)}
-  class="burger"
+  class="fixed top-4 left-4 z-50 bg-slate-800 hover:bg-slate-700 text-white w-10 h-10 rounded-lg flex flex-col justify-center items-center gap-1 cursor-pointer transition-all duration-200 shadow-lg border border-slate-600"
   aria-label="Toggle menu"
 >
-  <span></span><span></span><span></span>
+  <span class="w-5 h-0.5 bg-white rounded transition-all duration-300 {isOpen ? 'rotate-45 translate-y-1.5' : ''}"></span>
+  <span class="w-5 h-0.5 bg-white rounded transition-all duration-300 {isOpen ? 'opacity-0' : ''}"></span>
+  <span class="w-5 h-0.5 bg-white rounded transition-all duration-300 {isOpen ? '-rotate-45 -translate-y-1.5' : ''}"></span>
 </button>
 
-<!-- Sidebar -->
 {#if isOpen}
-  <aside class="sidebar">
+  <aside class="fixed left-0 top-0 h-screen w-[500px] bg-slate-900/95 backdrop-blur-sm p-6 pt-16 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700">
     {#if showingResults}
-      <!-- Results View -->
-      <div class="results-view">
-        <!-- Back Button -->
-        <button class="back-btn" on:click={backToForm}>
-          ← Back to Search
+      <div class="space-y-4">
+        <button
+          on:click={backToForm}
+          class="w-full py-3 px-4 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium cursor-pointer transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Search
         </button>
 
-        <!-- Results Content -->
-        {#if mode === "stats" && Object.keys($searchStore.statsResults).length > 0}
-          <div class="stats-results">
-            <h3>Search Results</h3>
+        {#if mode === "stats" && statsSearched && Object.keys($searchStore.statsResults).length > 0}
+          <div class="space-y-3">
+            <h3 class="text-lg font-semibold text-white">Search Results</h3>
             {#each Object.keys($searchStore.statsResults).sort((a, b) => parseFloat(b) - parseFloat(a)) as total (total)}
-              <div class="match-group">
-                <h4
-                  class="match-header"
-                  class:expanded={expandedGroups[parseFloat(total)]}
+              <div class="bg-slate-800 rounded-lg overflow-hidden">
+                <button
+                  class="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white text-left font-medium cursor-pointer transition-all duration-200 flex items-center justify-between"
                   on:click={() => {
                     const t = parseFloat(total);
                     expandedGroups[t] = !expandedGroups[t];
@@ -303,132 +320,178 @@
                   {:else}
                     0 matches (0 results)
                   {/if}
-                </h4>
+                  <svg class="w-4 h-4 transition-transform duration-200 {expandedGroups[parseFloat(total)] ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
                 {#if expandedGroups[parseFloat(total)]}
-                  {#each $searchStore.statsResults[total] as item (item.seed)}
-                    <div
-                      class="result-item"
-                      on:click={() => applySeedFromResults(item.seed)}
-                    >
-                      <span class="jewel-id">Seed: {item.seed}</span>
-                      <div class="stat-counts">
-                        {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
-                          {@const stat = $searchStore.selectedStats.find(
-                            (s) => s.statKey === parseInt(statKey),
-                          )}
-                          {#if stat}
-                            <span>({count}) {stat.label}</span>
-                          {/if}
-                        {/each}
-                      </div>
-                    </div>
-                  {/each}
+                  <div class="divide-y divide-slate-700">
+                    {#each $searchStore.statsResults[total] as item (item.seed)}
+                      <button
+                        class="w-full px-4 py-3 text-left hover:bg-slate-700/50 cursor-pointer transition-all duration-200"
+                        on:click={() => applySeedFromResults(item.seed)}
+                      >
+                        <div class="flex items-center justify-between">
+                          <span class="font-semibold text-blue-300">Seed: {item.seed}</span>
+                        </div>
+                        <div class="mt-2 space-y-1">
+                          {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
+                            {@const stat = $searchStore.selectedStats.find(
+                              (s) => s.statKey === parseInt(statKey),
+                            )}
+                            {#if stat}
+                              <div class="text-sm text-slate-300">
+                                <span class="text-blue-400">({count})</span> {stat.label}
+                              </div>
+                            {/if}
+                          {/each}
+                        </div>
+                      </button>
+                    {/each}
+                  </div>
                 {/if}
               </div>
             {/each}
           </div>
-        {:else if mode === "seed" && $searchStore.searched}
-          <div class="seed-result">
-            <h3>Seed Applied</h3>
-            <p>Seed {$searchStore.seed} has been applied successfully.</p>
+        {:else if mode === "seed" && seedSearched}
+          <div class="bg-slate-800 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-white mb-2">Seed Applied</h3>
+            <p class="text-slate-300">Seed {$searchStore.seed} has been applied successfully.</p>
           </div>
         {:else}
-          <div class="no-results">
-            <p>No results to display.</p>
+          <div class="bg-slate-800 rounded-lg p-8 text-center">
+            <p class="text-slate-400 italic">No results to display.</p>
           </div>
         {/if}
 
-        <!-- Liste des timelessStats -->
-        {#if $searchStore.searched && Object.keys(timelessStats).length > 0}
-          <div class="timeless-stats">
-            <h4>Current Stats</h4>
-            {#each Object.entries(timelessStats) as [stat, count] (stat)}
-              <div
-                class="timeless-stat"
-                on:click={() => highlightNodesWithStat(stat)}
-              >
-                ({count}) {stat}
-              </div>
-            {/each}
+        {#if mode === "seed" && seedSearched && Object.keys(timelessStats).length > 0}
+          <div class="bg-slate-800 rounded-lg p-4">
+            <h4 class="text-sm font-semibold text-white mb-3">Current Stats</h4>
+            <div class="space-y-2">
+              {#each Object.entries(timelessStats) as [stat, count] (stat)}
+                <button
+                  class="w-full px-3 py-2 text-left text-slate-300 hover:bg-slate-700 rounded cursor-pointer transition-all duration-200 text-sm"
+                  on:click={() => highlightNodesWithStat(stat)}
+                >
+                  <span class="text-blue-400">({count})</span> {stat}
+                </button>
+              {/each}
+            </div>
           </div>
         {/if}
       </div>
     {:else}
-      <!-- Search Form View -->
-      <div class="form-view">
-        <!-- Ligne 1 : 5 cards radio -->
-        <section class="line line1">
-          {#each jewelTypes as jewelType (jewelType.name)}
-            <label
-              class="card"
-              class:selected={$searchStore.jewelType === jewelType}
-            >
-              <input
-                type="radio"
-                bind:group={$searchStore.jewelType}
-                value={jewelType}
-              />
-              <div class="card-label">{jewelType.label}</div>
-            </label>
-          {/each}
-        </section>
-
-        {#if $searchStore.jewelType}
-          <!-- Ligne 2 : 4 cards radio (dépend de ligne 1) -->
-          <section class="line line2">
-            {#each conquerorOptions as conqueror (conqueror.label)}
+      <div class="space-y-6">
+        <section>
+          <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Jewel Type</h2>
+          <div class="grid grid-cols-3 gap-3 items-stretch">
+            {#each jewelTypes as jewelType (jewelType.name)}
               <label
-                class="card"
-                class:selected={$searchStore.conqueror === conqueror}
+                class="relative cursor-pointer h-full"
               >
                 <input
                   type="radio"
-                  bind:group={$searchStore.conqueror}
-                  value={conqueror}
+                  bind:group={$searchStore.jewelType}
+                  value={jewelType}
+                  class="sr-only"
                 />
-                <div class="card-label">{conqueror.label}</div>
+                <div
+                  class="flex items-center justify-center px-4 py-3 rounded-lg border-2 text-center transition-all duration-200 h-full {$searchStore.jewelType === jewelType
+                    ? 'border-blue-400 bg-slate-700/50 text-white shadow-lg shadow-blue-500/10'
+                    : 'border-slate-600 bg-slate-800 text-slate-300 hover:border-slate-500 hover:bg-slate-700'}"
+                >
+                  <span class="font-medium">{jewelType.label}</span>
+                </div>
               </label>
             {/each}
+          </div>
+        </section>
+
+        {#if $searchStore.jewelType}
+          <section>
+            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Conqueror</h2>
+            <div class="grid grid-cols-4 gap-2">
+              {#each conquerorOptions as conqueror (conqueror.label)}
+                <label
+                  class="relative cursor-pointer"
+                >
+                  <input
+                    type="radio"
+                    bind:group={$searchStore.conqueror}
+                    value={conqueror}
+                    class="sr-only"
+                  />
+                  <div
+                    class="px-2 py-2 rounded-lg border-2 text-center text-sm transition-all duration-200 {$searchStore.conqueror === conqueror
+                      ? 'border-blue-400 bg-slate-700/50 text-white shadow-lg shadow-blue-500/10'
+                      : 'border-slate-600 bg-slate-800 text-slate-300 hover:border-slate-500 hover:bg-slate-700'}"
+                  >
+                    <span class="font-medium">{conqueror.label}</span>
+                  </div>
+                </label>
+              {/each}
+            </div>
           </section>
+
           {#if $searchStore.conqueror}
-            <!-- Ligne 3 : Choix du mode -->
-            <section class="line line3">
-              <button
-                on:click={() => (mode = "seed")}
-                class:active={mode === "seed"}
-              >
-                Enter seed
-              </button>
-              <button
-                on:click={() => (mode = "stats")}
-                class:active={mode === "stats"}
-              >
-                Select stats
-              </button>
+            <section>
+              <div class="flex gap-2">
+                <button
+                  on:click={() => setMode("seed")}
+                  class="flex-1 py-2.5 px-4 rounded-lg font-medium transition-all duration-200 {$searchStore.jewelType ? 'cursor-pointer' : 'cursor-not-allowed'} {mode === "seed"
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}"
+                  disabled={!$searchStore.jewelType}
+                >
+                  Enter Seed
+                </button>
+                <button
+                  on:click={() => setMode("stats")}
+                  class="flex-1 py-2.5 px-4 rounded-lg font-medium transition-all duration-200 {$searchStore.jewelType ? 'cursor-pointer' : 'cursor-not-allowed'} {mode === "stats"
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}"
+                  disabled={!$searchStore.jewelType}
+                >
+                  Select Stats
+                </button>
+              </div>
             </section>
 
-            <!-- Mode Seed -->
             {#if mode === "seed"}
-              <div class="mode-content seed">
+              <div class="space-y-3">
                 <input
                   type="number"
                   bind:value={seedInput}
                   placeholder="Enter the seed"
                   min="0"
                   step="1"
+                  class="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200"
                 />
-                <p>
-                  From {$searchStore.jewelType.min} to {$searchStore.jewelType
-                    .max}
+                <p class="text-sm text-slate-400">
+                  From {$searchStore.jewelType.min} to {$searchStore.jewelType.max}
                 </p>
+
+        {#if mode === "seed" && $searchStore.searched && Object.keys(timelessStats).length > 0}
+                  <div class="bg-slate-800 rounded-lg p-4">
+                    <h4 class="text-sm font-semibold text-white mb-3">Current Stats</h4>
+                    <div class="space-y-2">
+                      {#each Object.entries(timelessStats) as [stat, count] (stat)}
+                        <button
+                          class="w-full px-3 py-2 text-left text-slate-300 hover:bg-slate-700 rounded cursor-pointer transition-all duration-200 text-sm"
+                          on:click={() => highlightNodesWithStat(stat)}
+                        >
+                          <span class="text-blue-400">({count})</span> {stat}
+                        </button>
+                      {/each}
+                    </div>
+                  </div>
+                {/if}
               </div>
             {/if}
 
-            <!-- Mode Stats -->
             {#if mode === "stats"}
-              <div class="mode-content stats">
-                <!-- Input + Dropdown custom -->
-                <div class="autocomplete-wrapper">
+              <div class="space-y-4">
+                <div class="relative">
                   <input
                     bind:this={inputElement}
                     type="text"
@@ -444,40 +507,40 @@
                       }
                     }}
                     on:blur={handleBlur}
+                    class="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200"
                   />
 
                   {#if showDropdown}
-                    <div class="dropdown">
+                    <div class="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl z-10 max-h-48 overflow-y-auto">
                       {#if filteredStats.length > 0}
                         {#each filteredStats as stat (stat.statKey)}
-                          <!-- svelte-ignore a11y_no_static_element_interactions -->
-                          <div
-                            class="dropdown-item"
+                          <button
+                            class="w-full px-4 py-3 text-left text-slate-200 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-150 border-b border-slate-700 last:border-b-0"
                             on:mousedown|preventDefault={() => selectStat(stat)}
                           >
                             {stat.label}
-                          </div>
+                          </button>
                         {/each}
                       {:else if searchValue}
-                        <div class="dropdown-item">No stats found</div>
+                        <div class="px-4 py-3 text-slate-400 italic">No stats found</div>
                       {:else}
-                        <div class="dropdown-item">Type to search...</div>
+                        <div class="px-4 py-3 text-slate-400 italic">Type to search...</div>
                       {/if}
                     </div>
                   {/if}
                 </div>
 
-                <!-- Liste des stats ajoutées -->
-                <div class="stats-list">
+                <div class="space-y-2">
                   {#each $searchStore.selectedStats as stat, i (i)}
-                    <div class="stat-row">
-                      <span class="stat-name">{stat.label}</span>
+                    <div class="flex items-center gap-2 px-3 py-2 bg-slate-800 rounded-lg">
+                      <span class="flex-1 text-sm text-slate-200 truncate">{stat.label}</span>
                       <input
                         type="number"
                         bind:value={stat.weight}
                         placeholder="Weight"
                         min="0"
                         step="0.1"
+                        class="w-16 px-2 py-1.5 text-sm bg-slate-700 border border-slate-600 rounded text-white focus:outline-none focus:border-blue-400"
                       />
                       <input
                         type="number"
@@ -485,23 +548,29 @@
                         placeholder="Min"
                         min="0"
                         step="0.1"
+                        class="w-16 px-2 py-1.5 text-sm bg-slate-700 border border-slate-600 rounded text-white focus:outline-none focus:border-blue-400"
                       />
-                      <button on:click={() => removeStat(i)} class="delete"
-                        >Delete</button
+                      <button
+                        on:click={() => removeStat(i)}
+                        aria-label="Remove stat"
+                        class="px-2 py-1.5 text-sm bg-red-600/80 hover:bg-red-600 text-white rounded cursor-pointer transition-all duration-200"
                       >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
                     </div>
                   {/each}
                   {#if $searchStore.selectedStats.length === 0}
-                    <p class="empty">No stats selected</p>
+                    <p class="text-sm text-slate-400 italic text-center py-4">No stats selected</p>
                   {/if}
                 </div>
 
-                <!-- Min total weight -->
                 {#if $searchStore.selectedStats.length > 0}
-                  <div class="min-weight-wrapper">
-                    <label for="minTotalWeight"
-                      >Minimum total weight (0 = auto):</label
-                    >
+                  <div class="flex items-center gap-3">
+                    <label for="minTotalWeight" class="text-sm text-slate-300 whitespace-nowrap">
+                      Min total weight (0 = auto):
+                    </label>
                     <input
                       id="minTotalWeight"
                       type="number"
@@ -509,401 +578,24 @@
                       placeholder="0"
                       min="0"
                       step="0.1"
+                      class="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
                     />
                   </div>
                 {/if}
               </div>
             {/if}
-          {/if}
-        {/if}
 
-        <!-- Bouton de recherche -->
-        {#if mode !== "seed"}
-          <button class="search-btn" on:click={handleSearch}>Search</button>
+            {#if mode === "stats"}
+              <button
+                on:click={handleSearch}
+                class="w-full py-3 px-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-green-500/20"
+              >
+                Search
+              </button>
+            {/if}
+          {/if}
         {/if}
       </div>
     {/if}
   </aside>
 {/if}
-
-<style>
-  :global(body) {
-    font-family: system-ui, sans-serif;
-  }
-
-  .burger {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 1000;
-    background: #333;
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-  }
-  .burger span {
-    width: 20px;
-    height: 2px;
-    background: white;
-    border-radius: 1px;
-  }
-
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 700px;
-    background: #1a1a1ad3;
-    padding: 5rem 1.5rem 1.5rem;
-    overflow-y: auto;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-  }
-
-  .line {
-    margin-bottom: 1.5rem;
-  }
-
-  .line1,
-  .line2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 0.75rem;
-  }
-
-  .card {
-    position: relative;
-    border: 2px solid #1f1f1f;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: rgb(48, 48, 48);
-    color: white;
-  }
-  .card input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-  }
-  .card-label {
-    padding: 0.75rem 0.5rem;
-    text-align: center;
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-  .card.selected {
-    border-color: #e7f3ff;
-  }
-
-  .line3 {
-    display: flex;
-    gap: 0.75rem;
-  }
-  .line3 button {
-    flex: 1;
-    padding: 0.75rem;
-    background: #1b1b1b;
-    color: white;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .line3 button.active {
-    background: #3b3b3b;
-  }
-
-  .mode-content {
-    margin: 1.5rem 0;
-    padding: 1rem;
-  }
-
-  .seed input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-
-  .timeless-stats {
-    margin-top: 1rem;
-    padding: 0.5rem;
-    background: #2a2a2a;
-    border-radius: 6px;
-  }
-
-  .timeless-stat {
-    color: #e7f3ff;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-    cursor: pointer;
-  }
-
-  .timeless-stat:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .timeless-stat:last-child {
-    margin-bottom: 0;
-  }
-
-  .stats-list {
-    margin-top: 1rem;
-  }
-  .stat-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background: #f1f3f5;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
-  }
-  .stat-name {
-    flex: 1;
-    font-weight: 500;
-  }
-  .stat-row input {
-    width: 60px;
-    padding: 0.5rem;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-  }
-  .delete {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-  }
-
-  .min-weight-wrapper {
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .min-weight-wrapper label {
-    color: white;
-    font-weight: 500;
-  }
-  .min-weight-wrapper input {
-    width: 80px;
-    padding: 0.5rem;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-  }
-
-  .empty {
-    color: #6c757d;
-    font-style: italic;
-    text-align: center;
-    margin: 1rem 0;
-  }
-
-  .search-btn {
-    width: 100%;
-    padding: 1rem;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 1.5rem;
-    transition: background 0.2s;
-  }
-  .search-btn:hover {
-    background: #218838;
-  }
-
-  .autocomplete-wrapper {
-    position: relative;
-    width: 100%;
-  }
-
-  .autocomplete-wrapper input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-
-  .dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    max-height: 200px;
-    overflow-y: auto;
-    background: white;
-    border: 1px solid #ced4da;
-    border-top: none;
-    border-radius: 0 0 6px 6px;
-    z-index: 10;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .dropdown-item {
-    padding: 0.75rem;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-  }
-
-  p {
-    color: white;
-  }
-
-  .dropdown-item:hover {
-    background: #007bff;
-    color: white;
-  }
-
-  .stats-results {
-    margin-top: 1rem;
-    padding: 0.5rem;
-    background: #2a2a2a;
-    border-radius: 6px;
-    max-height: 300px;
-    overflow-y: auto;
-  }
-
-  .stats-results h3 {
-    color: white;
-    margin-bottom: 0.5rem;
-  }
-
-  .match-group {
-    margin-bottom: 1rem;
-  }
-
-  .match-header {
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0.5rem;
-    background: #4a4a4a;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-  }
-
-  .match-header:hover {
-    background: #5a5a5a;
-  }
-
-  .match-header.expanded::before {
-    content: "▼ ";
-  }
-
-  .match-header:not(.expanded)::before {
-    content: "▶ ";
-  }
-
-  .result-item {
-    color: #e7f3ff;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-    background: #3a3a3a;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .result-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .jewel-id {
-    font-weight: bold;
-  }
-
-  .stat-counts {
-    margin-top: 0.25rem;
-  }
-
-  .stat-counts span {
-    display: block;
-    margin-bottom: 0.1rem;
-  }
-
-  /* Results View Styles */
-  .results-view {
-    padding: 1rem 0;
-  }
-
-  .back-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .back-btn:hover {
-    background: #5a6268;
-  }
-
-  .stats-results h3 {
-    color: white;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-  }
-
-  .seed-result {
-    padding: 1rem;
-    background: #2a2a2a;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-  }
-
-  .seed-result h3 {
-    color: white;
-    margin-bottom: 0.5rem;
-  }
-
-  .seed-result p {
-    color: #e7f3ff;
-    font-size: 1.1rem;
-  }
-
-  .no-results {
-    padding: 2rem;
-    text-align: center;
-    background: #2a2a2a;
-    border-radius: 8px;
-  }
-
-  .no-results p {
-    color: #6c757d;
-    font-style: italic;
-  }
-
-  .timeless-stats h4 {
-    color: white;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-  }
-</style>
