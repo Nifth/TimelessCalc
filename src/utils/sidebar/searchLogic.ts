@@ -277,13 +277,25 @@ export async function handleSearch(
       }
     }
 
-    // For now, log the results
+    const sortedWeights = Object.keys(grouped).sort(
+      (a, b) => parseFloat(b) - parseFloat(a),
+    );
+    const orderedSeeds: number[] = [];
+    for (const weight of sortedWeights) {
+      const seedsInGroup = grouped[weight]
+        .sort((a, b) => a.seed - b.seed)
+        .map((g) => g.seed);
+      orderedSeeds.push(...seedsInGroup);
+    }
+
     console.log("Stats search results:", grouped);
 
-    // TODO: Update a store or display in the UI
     searchStore.update((state) => {
       state.searched = true;
       state.statsResults = grouped;
+      state.orderedSeeds = orderedSeeds;
+      state.totalResults = orderedSeeds.length;
+      state.currentPage = 0;
       return state;
     });
   }

@@ -113,3 +113,23 @@ export interface League {
   start_date?: string;
   end_date?: string;
 }
+
+export type Platform = "PC" | "Xbox" | "Playstation";
+
+export interface SearchStore {
+  jewelType: JewelType | null;
+  conqueror: Conqueror | null;
+  seed: number | null;
+  selectedStats: Stat[];
+  searched: boolean;
+  statsResults: Record<
+    string,
+    { seed: number; statCounts: Record<number, number>; totalWeight: number }[]
+  >;
+  minTotalWeight: number;
+  league: string;
+  platform: Platform;
+  currentPage: number;
+  totalResults: number;
+  orderedSeeds: number[];
+}
