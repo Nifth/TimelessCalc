@@ -1,7 +1,7 @@
 import type { Conqueror, JewelType } from "$lib/types";
 import { conquerors } from "$lib/constants/timeless";
 
-const MAX_FILTERS = 10;
+export const MAX_FILTERS = 150;
 
 function getConquerorName(conqueror: Conqueror): string {
   return conqueror.label.toLowerCase();
@@ -62,15 +62,9 @@ export function buildTradeQuery(
   const endRangeIdx = startRangeIdx + filtersPerConqueror;
   const pageRanges = allRanges.slice(startRangeIdx, endRangeIdx);
 
-  const filters = actualConquerors.flatMap((c, i) => {
+  const filters = actualConquerors.flatMap((c) => {
     const conquerorName = getConquerorName(c);
-    const rangesForConqueror: SeedRange[] = [];
-    pageRanges.forEach((range, j) => {
-      if (j % numConquerors === i) {
-        rangesForConqueror.push(range);
-      }
-    });
-    return rangesForConqueror.map((range) => ({
+    return pageRanges.map((range) => ({
       id: `explicit.pseudo_timeless_jewel_${conquerorName}`,
       value: { min: range.min, max: range.max },
     }));
@@ -78,7 +72,7 @@ export function buildTradeQuery(
 
   return {
     query: {
-      status: { option: "online" },
+      status: { option: "securable" },
       stats: [
         {
           type: "count",
