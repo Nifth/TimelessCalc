@@ -30,6 +30,7 @@
   import BackButton from "./BackButton.svelte";
   import SeedResultDisplay from "./SeedResultDisplay.svelte";
   import NodeToggles from "./NodeToggles.svelte";
+  import Modal from "./Modal.svelte";
 
   const translation: Record<string, Translation[]> = JSON.parse(
     JSON.stringify(translationsJson),
@@ -47,6 +48,20 @@
   let hasGroupTraded: Record<string, boolean> = $state({});
   let _hasTraded = $state(false);
   let tooltipPosition: { top: number; left: number } | null = $state(null);
+  let showSocketWarning = $state(false);
+
+  function checkSocketAndSearch(action: () => void) {
+    if (!$treeStore.chosenSocket) {
+      showSocketWarning = true;
+      return;
+    }
+    action();
+  }
+
+  function confirmSearch() {
+    showSocketWarning = false;
+    handleSearch();
+  }
 
   let conquerorOptions = $derived(getConquerorOptions($searchStore.jewelType));
 
@@ -272,7 +287,7 @@
       newSeed >= ($searchStore.jewelType?.min || 0) &&
       newSeed <= ($searchStore.jewelType?.max || 0)
     ) {
-      handleSearch();
+      checkSocketAndSearch(handleSearch);
     }
   }
 
@@ -379,7 +394,7 @@
                   jewelType={$searchStore.jewelType}
                 />
                 <button
-                  onclick={handleSearch}
+                  onclick={() => checkSocketAndSearch(handleSearch)}
                   class="w-full py-3 px-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-green-500/20"
                 >
                   Search
@@ -436,6 +451,14 @@
       groupName={$searchStore.lastTradeInfo.groupName}
       onDismiss={() =>
         searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
+    />
+  {/if}
+
+  {#if showSocketWarning}
+    <Modal
+      message="No jewel socket selected. Please select a socket on the passive tree before searching."
+      onConfirm={confirmSearch}
+      onCancel={() => (showSocketWarning = false)}
     />
   {/if}
 {/if}
