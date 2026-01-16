@@ -4,6 +4,7 @@
   import { searchStore } from "$lib/stores/searchStore";
   import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
   import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
+  import TradeNotification from "$lib/ui/TradeNotification.svelte";
   import { treeStore } from "$lib/stores/treeStore";
   import jewelStatsJson from "$lib/data/jewelstats.json" with { type: "json" };
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
@@ -146,13 +147,37 @@
     });
   }
 
+  function storeTradeInfo(seeds: number[], page: number, groupName?: string) {
+    const filtersPerPage = getSeedsPerPage(
+      $searchStore.jewelType!,
+      $searchStore.conqueror,
+    );
+    if (seeds.length < filtersPerPage) return;
+
+    const conquerorLabel = $searchStore.conqueror?.label || "Any";
+    searchStore.update((s) => ({
+      ...s,
+      lastTradeInfo: { seeds, conquerorLabel, page, groupName },
+    }));
+  }
+
   function logNextPage() {
     const platform =
       $searchStore.platform === "PC"
         ? ""
         : $searchStore.platform.toLowerCase() + "/";
     const league = encodeURIComponent($searchStore.league);
-    const nextPageNum = $searchStore.currentPage + 1;
+    const nextPageNum = $searchStore.currentPage;
+    const seedsPerPage = getSeedsPerPage(
+      $searchStore.jewelType!,
+      $searchStore.conqueror,
+    );
+    const startIdx = nextPageNum * seedsPerPage;
+    const endIdx = Math.min(
+      startIdx + seedsPerPage,
+      $searchStore.orderedSeeds.length,
+    );
+    const pageSeeds = $searchStore.orderedSeeds.slice(startIdx, endIdx);
     const query = buildTradeQuery(
       $searchStore.orderedSeeds,
       $searchStore.jewelType!,
@@ -163,6 +188,7 @@
     const url = `https://www.pathofexile.com/trade/search/${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
     console.log(url);
     window.open(url, "_blank");
+    storeTradeInfo(pageSeeds, nextPageNum);
   }
 
   function handleTrade() {
@@ -177,6 +203,11 @@
         ? ""
         : $searchStore.platform.toLowerCase() + "/";
     const league = encodeURIComponent($searchStore.league);
+    const seedsPerPage = getSeedsPerPage(
+      $searchStore.jewelType!,
+      $searchStore.conqueror,
+    );
+    const pageSeeds = $searchStore.orderedSeeds.slice(0, seedsPerPage);
     const query = buildTradeQuery(
       $searchStore.orderedSeeds,
       $searchStore.jewelType!,
@@ -187,10 +218,16 @@
     const url = `https://www.pathofexile.com/trade/search/${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
     console.log(url);
     window.open(url, "_blank");
+    storeTradeInfo(pageSeeds, 0);
   }
 
   function handleGroupTrade(total: string) {
     const groupSeeds = $searchStore.statsResults[total].map((g) => g.seed);
+    const seedsPerPage = getSeedsPerPage(
+      $searchStore.jewelType!,
+      $searchStore.conqueror,
+    );
+    const pageSeeds = groupSeeds.slice(0, seedsPerPage);
     groupPages = { ...groupPages, [total]: 0 };
     hasGroupTraded = { ...hasGroupTraded, [total]: true };
     const platform =
@@ -208,6 +245,7 @@
     const url = `https://www.pathofexile.com/trade/search/${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
     console.log(url);
     window.open(url, "_blank");
+    storeTradeInfo(pageSeeds, 0, total);
   }
 
   function handleGroupNext(total: string) {
@@ -219,7 +257,11 @@
     );
     const maxPage = Math.floor((groupSeeds.length - 1) / seedsPerPage);
     if (currentPage < maxPage) {
-      groupPages = { ...groupPages, [total]: currentPage + 1 };
+      const nextPage = currentPage + 1;
+      const startIdx = nextPage * seedsPerPage;
+      const endIdx = Math.min(startIdx + seedsPerPage, groupSeeds.length);
+      const pageSeeds = groupSeeds.slice(startIdx, endIdx);
+      groupPages = { ...groupPages, [total]: nextPage };
       const platform =
         $searchStore.platform === "PC"
           ? ""
@@ -229,12 +271,13 @@
         groupSeeds,
         $searchStore.jewelType!,
         $searchStore.conqueror,
-        currentPage + 1,
+        nextPage,
       );
       console.log(query);
       const url = `https://www.pathofexile.com/trade/search/${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
       console.log(url);
       window.open(url, "_blank");
+      storeTradeInfo(pageSeeds, nextPage, total);
     }
   }
 
@@ -1002,5 +1045,15 @@
         {/if}
       </p>
     </div>
+  {/if}
+  {#if $searchStore.lastTradeInfo}
+    <TradeNotification
+      seeds={$searchStore.lastTradeInfo.seeds}
+      conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
+      page={$searchStore.lastTradeInfo.page}
+      groupName={$searchStore.lastTradeInfo.groupName}
+      onDismiss={() =>
+        searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
+    />
   {/if}
 {/if}

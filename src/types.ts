@@ -132,4 +132,10 @@ export interface SearchStore {
   currentPage: number;
   totalResults: number;
   orderedSeeds: number[];
+  lastTradeInfo: {
+    seeds: number[];
+    conquerorLabel: string;
+    page: number;
+    groupName?: string;
+  } | null;
 }

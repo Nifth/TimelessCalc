@@ -17,4 +17,5 @@ export const searchStore = writable<SearchStore>({
   currentPage: 0,
   totalResults: 0,
   orderedSeeds: [],
+  lastTradeInfo: null,
 });
