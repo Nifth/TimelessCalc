@@ -1,6 +1,8 @@
 <script lang="ts">
-  import type { Translation } from "$lib/types";
+  import type { Translation, Node } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
+  import { treeStore } from "$lib/stores/treeStore";
+  import { canvas } from "$lib/konva/canvasContext";
   import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
   import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
   import TradeNotification from "$lib/ui/TradeNotification.svelte";
@@ -27,6 +29,7 @@
   import TradeControls from "./TradeControls.svelte";
   import BackButton from "./BackButton.svelte";
   import SeedResultDisplay from "./SeedResultDisplay.svelte";
+  import NodeToggles from "./NodeToggles.svelte";
 
   const translation: Record<string, Translation[]> = JSON.parse(
     JSON.stringify(translationsJson),
@@ -285,7 +288,7 @@
     class="fixed left-0 top-0 h-screen w-[650px] bg-slate-900/95 backdrop-blur-sm p-6 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700 custom-scrollbar"
   >
     <header
-      class="flex items-center gap-3 pl-12 pb-4 border-b border-slate-700 relative "
+      class="flex items-center gap-3 pl-12 pb-4 border-b border-slate-700 relative"
     >
       {#if showingResults && mode === "stats"}
         <TradeControls
@@ -384,6 +387,8 @@
               {/if}
             {/if}
           {/if}
+
+          <NodeToggles />
         </div>
       {/if}
     </div>
