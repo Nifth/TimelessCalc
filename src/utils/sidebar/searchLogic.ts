@@ -40,6 +40,8 @@ export async function applySeed(
           node.timelessStats = stats.map(({ statId, value }) =>
             getTranslation(statId, value, translation),
           );
+          node.timelessStatKeys = stats.map(({ statId }) => statId);
+          node.timelessStatValues = stats.map(({ value }) => value);
         }
       }
     }
@@ -51,6 +53,8 @@ export async function applySeed(
         const node = canvas.treeData.nodes[nodeId.toString()];
         if (node) {
           node.timelessStats = [];
+          node.timelessStatKeys = [];
+          node.timelessStatValues = [];
           node.stats?.forEach((stat) => {
             node.timelessStats!.push(stat);
           });
@@ -58,6 +62,8 @@ export async function applySeed(
             node.timelessStats!.push(
               getTranslation(statId, value, translation),
             );
+            node.timelessStatKeys!.push(statId);
+            node.timelessStatValues!.push(value);
           });
         }
       }
@@ -65,15 +71,20 @@ export async function applySeed(
     // Apply base effects according to jewelType
     if (jewelType) {
       const label = jewelType.name;
-      let baseStat = "";
+      let travelStat = "",
+        baseStat = "";
       if (label === "karui") {
-        baseStat = "+2 to Strength";
+        travelStat = "+2 to Strength";
+        baseStat = '+4 to Strength';
       } else if (label === "maraketh") {
-        baseStat = "+2 to Dexterity";
+        travelStat = "+2 to Dexterity";
+        baseStat = '+4 to Strength';
       } else if (label === "templar") {
         baseStat = "+5 to Devotion";
+        travelStat = "+10 to Devotion";
       } else if (label === "eternal") {
         baseStat = "void";
+        travelStat = "void";
       }
       if (baseStat) {
         for (const nodeId of socketNodeIds) {
@@ -81,11 +92,17 @@ export async function applySeed(
           if (!node) continue;
           if (!node.isNotable && !node.isKeystone && !node.isJewelSocket) {
             node.timelessStats = [];
+            node.timelessStatKeys = [];
+            node.timelessStatValues = [];
             if (baseStat !== "void") {
               node.stats?.forEach((stat) => {
                 node.timelessStats!.push(stat);
               });
-              node.timelessStats.push(baseStat);
+              if (['Strength', 'Dexterity', 'Intelligence'].includes(node.name)) {
+                node.timelessStats.push(travelStat);
+              } else {
+                node.timelessStats.push(baseStat);
+              }
             }
           }
         }
@@ -168,15 +185,20 @@ export async function handleSearch(
       // Apply base effects according to jewelType
       if (jewelType) {
         const label = jewelType.name;
-        let baseStat = "";
+        let travelStat = "",
+          baseStat = "";
         if (label === "karui") {
-          baseStat = "+2 to Strength";
+          travelStat = "+2 to Strength";
+          baseStat = '+4 to Strength';
         } else if (label === "maraketh") {
-          baseStat = "+2 to Dexterity";
+          travelStat = "+2 to Dexterity";
+          baseStat = '+4 to Strength';
         } else if (label === "templar") {
           baseStat = "+5 to Devotion";
+          travelStat = "+10 to Devotion";
         } else if (label === "eternal") {
           baseStat = "void";
+          travelStat = "void";
         }
         if (baseStat) {
           for (const nodeId of socketNodeIds) {
@@ -188,7 +210,12 @@ export async function handleSearch(
                 node.stats?.forEach((stat) => {
                   node.timelessStats!.push(stat);
                 });
-                node.timelessStats.push(baseStat);
+
+                if (['Strength', 'Dexterity', 'Intelligence'].includes(node.name)) {
+                  node.timelessStats.push(travelStat);
+                } else {
+                  node.timelessStats.push(baseStat);
+                }             
               }
             }
           }
@@ -215,7 +242,13 @@ export async function handleSearch(
       return;
     }
     // Results: for each seed, count occurrences of each selected stat on allocated nodes
-    const results: Record<number, Record<number, number>> = {};
+    const results: Record<
+      number,
+      {
+        statCounts: Record<number, number>;
+        statTotals: Record<number, number>;
+      }
+    > = {};
 
     for (const seedStr of Object.keys(jewelData)) {
       const seed = parseInt(seedStr);
@@ -223,17 +256,19 @@ export async function handleSearch(
       if (!entry) continue;
 
       const statCounts: Record<number, number> = {};
+      const statTotals: Record<number, number> = {};
 
       // Process 'r' and 'a'
       for (const type of ["r", "a"] as const) {
         for (const [key, nodeIds] of Object.entries(entry[type] || {})) {
           const stats = parseKey(key);
-          for (const { statId } of stats) {
+          for (const { statId, value } of stats) {
             if (selectedStats.some((s) => s.statKey === statId)) {
               // Count for each allocated nodeId
               for (const nodeId of nodeIds) {
                 if (get(treeStore).allocated.has(nodeId.toString())) {
                   statCounts[statId] = (statCounts[statId] || 0) + 1;
+                  statTotals[statId] = (statTotals[statId] || 0) + value;
                 }
               }
             }
@@ -243,7 +278,7 @@ export async function handleSearch(
 
       // If at least one stat has a count > 0, add to results
       if (Object.values(statCounts).some((count) => count > 0)) {
-        results[seed] = statCounts;
+        results[seed] = { statCounts, statTotals };
       }
     }
 
@@ -253,10 +288,11 @@ export async function handleSearch(
       {
         seed: number;
         statCounts: Record<number, number>;
+        statTotals: Record<number, number>;
         totalWeight: number;
       }[]
     > = {};
-    for (const [seed, statCounts] of Object.entries(results)) {
+    for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
       let totalWeight = 0;
       let minTotalWeight = get(searchStore).minTotalWeight;
       let statsMinWeight = 0;
@@ -273,7 +309,12 @@ export async function handleSearch(
       if (totalWeight >= minTotalWeight) {
         const key = totalWeight.toFixed(1);
         if (!grouped[key]) grouped[key] = [];
-        grouped[key].push({ seed: parseInt(seed), statCounts, totalWeight });
+        grouped[key].push({
+          seed: parseInt(seed),
+          statCounts,
+          statTotals,
+          totalWeight,
+        });
       }
     }
 

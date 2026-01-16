@@ -44,7 +44,7 @@
     <div class="w-4 h-4 border-2 border-slate-500 border-t-blue-400 rounded-full animate-spin"></div>
   </div>
 {:else}
-  <div class="relative mb-3">
+  <div class="relative">
     <button
       type="button"
       on:click={() => (isOpen = !isOpen)}

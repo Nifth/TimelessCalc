@@ -37,6 +37,8 @@ export interface Node {
   inactiveIcon?: string;
   conqueredName?: string | null;
   timelessStats?: string[];
+  timelessStatKeys?: number[];
+  timelessStatValues?: number[];
   x: number;
   y: number;
 }
@@ -124,7 +126,12 @@ export interface SearchStore {
   searched: boolean;
   statsResults: Record<
     string,
-    { seed: number; statCounts: Record<number, number>; totalWeight: number }[]
+    {
+      seed: number;
+      statCounts: Record<number, number>;
+      statTotals: Record<number, number>;
+      totalWeight: number;
+    }[]
   >;
   minTotalWeight: number;
   league: string;

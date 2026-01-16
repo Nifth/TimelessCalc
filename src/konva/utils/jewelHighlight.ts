@@ -236,9 +236,13 @@ export function changeKeystone(chosenSocket: Node | null) {
     if (conqueror && conqueror.label !== "Any") {
       keystoneNode!.node.conqueredName = conqueror!.keystone;
       keystoneNode!.node.timelessStats = [];
+      keystoneNode!.node.timelessStatKeys = [];
+      keystoneNode!.node.timelessStatValues = [];
     } else {
       keystoneNode!.node.conqueredName = null;
       keystoneNode!.node.timelessStats = undefined;
+      keystoneNode!.node.timelessStatKeys = undefined;
+      keystoneNode!.node.timelessStatValues = undefined;
     }
   });
 }
@@ -252,6 +256,8 @@ export function resetHighlights() {
     for (const nodeId of socketNodeIds) {
       const node = canvas.treeData.nodes[nodeId];
       node.timelessStats = undefined;
+      node.timelessStatKeys = undefined;
+      node.timelessStatValues = undefined;
     }
   }
 }
