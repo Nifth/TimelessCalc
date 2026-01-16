@@ -14,6 +14,7 @@
     buildTradeQuery,
     getSeedsPerPage,
     getPageRangeFromOrdered,
+    MAX_FILTERS,
   } from "$lib/utils/sidebar/tradeQuery";
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import SidebarToggle from "./SidebarToggle.svelte";
@@ -400,8 +401,8 @@
     >
       <p class="font-semibold mb-2">Trade Link Pagination</p>
       <p class="mb-2">
-        Maximum 10 filters per query. Seeds are grouped into ranges (e.g.,
-        10020-10022) to maximize filter usage. Results are ordered by weight
+        Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when possible (e.g.,
+        10020-10022) to maximize filter usage, allowing to have a bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
         (best matches first).
       </p>
       <p>
