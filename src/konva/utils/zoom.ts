@@ -2,9 +2,17 @@ import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { canvas } from "$lib/konva/canvasContext";
 
+function debounce<T extends (...args: any[]) => any>(func: T, wait: number): T {
+  let timeout: number;
+  return ((...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  }) as T;
+}
+
 export function setupZoom() {
   const stage = canvas.stage!;
-  stage.on("wheel", (e) => {
+  const debouncedZoom = debounce((e: any) => {
     e.evt.preventDefault();
     e.evt.stopPropagation();
 
@@ -35,5 +43,7 @@ export function setupZoom() {
     stage.scale({ x: storeState.scale, y: storeState.scale });
     stage.position(newPos);
     stage.batchDraw();
-  });
+  }, 16); // ~60fps debounce
+
+  stage.on("wheel", debouncedZoom);
 }

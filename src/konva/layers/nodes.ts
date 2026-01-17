@@ -1,3 +1,4 @@
+import Konva from "konva";
 import type { Node } from "$lib/types";
 import { createSprite } from "../utils/sprites";
 import { TREE_CONSTANTS } from "$lib/constants/tree";
@@ -55,7 +56,6 @@ export function drawNodes() {
           nodeX,
           nodeY,
         );
-        layer.add(icon);
 
         if (!node.isMastery && !node.isJewelSocket) {
           const frame = createSprite(
@@ -68,12 +68,37 @@ export function drawNodes() {
             nodeX,
             nodeY,
           );
-          layer.add(frame);
+          const group = new Konva.Group({ x: nodeX, y: nodeY });
+          // Create relative sprites for the group
+          const relativeIcon = createSprite(
+            key,
+            node.inactiveIcon || node.icon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
+            0,
+            0,
+            undefined,
+            true,
+          );
+          const relativeFrame = createSprite(
+            TREE_CONSTANTS.SPRITES.FRAME,
+            node.isKeystone
+              ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_UNALLOCATED
+              : node.isNotable
+                ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_UNALLOCATED
+                : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME,
+            0,
+            0,
+            undefined,
+            true,
+          );
+          group.add(relativeIcon, relativeFrame);
+          layer.add(group);
           canvas.nodes.set(node.skill, {
             node: node,
-            icon: icon,
-            frame: frame,
+            icon: relativeIcon,
+            frame: relativeFrame,
           });
+        } else {
+          layer.add(icon);
         }
       }
     }

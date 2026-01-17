@@ -51,12 +51,12 @@
       await preloadSprites(data.sprites);
       await preloadJewels();
 
-      canvas.stage = new Konva.Stage({
-        container: document.getElementById("tree")! as HTMLDivElement,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        draggable: true,
-      });
+       canvas.stage = new Konva.Stage({
+         container: document.getElementById("tree")! as HTMLDivElement,
+         width: window.innerWidth,
+         height: window.innerHeight,
+         draggable: true,
+       });
 
       // initialization
       canvas.stage.scale({ x: 0.2, y: 0.2 });
@@ -80,12 +80,12 @@
         canvas.highlightLayer,
       );
 
-      getHighlighteableNodes(); // initializationialise the highlighteable nodes cache
-      drawBackground();
-      drawNodes();
-      drawLines();
-      drawBaseRadius();
-      createHitLayer();
+       getHighlighteableNodes(); // initializationialise the highlighteable nodes cache
+       drawBackground();
+       drawNodes();
+       drawLines();
+       drawBaseRadius();
+       createHitLayer();
 
       // interactions
       setupZoom();

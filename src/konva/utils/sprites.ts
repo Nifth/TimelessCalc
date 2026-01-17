@@ -12,8 +12,9 @@ function createSprite(
   nodeX: number,
   nodeY: number,
   move?: HalfDirectionValue,
+  relative?: boolean,
 ): Konva.Image {
-  const spriteConfig = getSpriteConfig(spriteKey, part, nodeX, nodeY);
+  const spriteConfig = getSpriteConfig(spriteKey, part, nodeX, nodeY, relative);
   if (move === TREE_CONSTANTS.SPRITES.HALF_UP && spriteConfig.y) {
     spriteConfig.y -= spriteConfig.height!;
   } else if (
@@ -39,6 +40,7 @@ function getSpriteConfig(
   part: string,
   nodeX: number,
   nodeY: number,
+  relative?: boolean,
 ): Konva.ImageConfig {
   const sprite = spriteConfig[spriteKey];
   if (!sprite) {
@@ -63,8 +65,8 @@ function getSpriteConfig(
     height: crop.h,
     offsetX: crop.w / 2,
     offsetY: crop.h / 2,
-    x: nodeX,
-    y: nodeY,
+    x: relative ? 0 : nodeX,
+    y: relative ? 0 : nodeY,
   };
 }
 

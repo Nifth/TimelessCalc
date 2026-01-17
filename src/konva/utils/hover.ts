@@ -4,13 +4,24 @@ import { treeStore } from "$lib/stores/treeStore";
 import { canvas } from "$lib/konva/canvasContext";
 import { get } from "svelte/store";
 
+function throttle<T extends (...args: any[]) => any>(func: T, limit: number): T {
+  let inThrottle: boolean;
+  return ((...args: any[]) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  }) as T;
+}
+
 export function setupHover() {
   const stage = canvas.stage!,
     hitLayer = canvas.hitLayer!,
     nodes = canvas.nodes,
     treeNodes = canvas.treeData.nodes;
   // ---------- HOVER ----------
-  stage.on("mousemove", () => {
+  const throttledHover = throttle(() => {
     const p = stage.getPointerPosition()!;
     const shape = hitLayer.getIntersection(p);
     mouseStore.set({ x: p.x, y: p.y });
@@ -40,5 +51,7 @@ export function setupHover() {
       });
       document.body.style.cursor = "default";
     }
-  });
+  }, 16); // throttle to ~60fps
+
+  stage.on("mousemove", throttledHover);
 }
