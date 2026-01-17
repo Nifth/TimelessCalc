@@ -18,8 +18,10 @@
   import {
     updateAllocatedDisplay,
     updateJewelSockets,
+    changeRadius,
   } from "$lib/konva/utils/jewelHighlight";
   import { treeStore } from "./stores/treeStore";
+  import { searchStore } from "./stores/searchStore";
   import { mouseStore } from "./stores/mouseStore";
   import { getHighlighteableNodes } from "./konva/utils/nodes";
   import { preloadJewels } from "./providers/jewels";
@@ -31,7 +33,7 @@
   onMount(() => {
     let cleanup: () => void = () => {};
     (async () => {
-      preloadSprites(data.sprites);
+      await preloadSprites(data.sprites);
       await preloadJewels();
 
       canvas.stage = new Konva.Stage({
@@ -90,6 +92,10 @@
   $: if (canvas.mainLayer && currentSkill !== previousSkill) {
     updateJewelSockets();
     previousSkill = currentSkill;
+  }
+
+  $: if (canvas.mainLayer && $searchStore.jewelType) {
+    changeRadius($treeStore.chosenSocket);
   }
 
   $: if (canvas.mainLayer && $treeStore.allocated) {

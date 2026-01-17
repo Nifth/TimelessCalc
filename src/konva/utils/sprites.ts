@@ -69,18 +69,19 @@ function getSpriteConfig(
 }
 
 function preloadSprites(sprites: Record<string, Record<string, Sprite>>) {
-  Object.entries(sprites).forEach(([type, config]) => {
+  const promises = Object.entries(sprites).map(([type, config]) => {
     const neededSprite =
       config[Object.keys(config)[Object.keys(config).length - 1]];
     if (!neededSprite) {
       throw new Error(`No sprites found for type: ${type}`);
     }
     spriteConfig[type] = neededSprite;
-    preloadSprite(neededSprite.filename, type);
+    return preloadSprite(neededSprite.filename, type);
   });
+  return Promise.all(promises);
 }
 
-function preloadSprite(spriteUrl: string, spriteKey: string): HTMLImageElement {
+function preloadSprite(spriteUrl: string, spriteKey: string): Promise<HTMLImageElement> {
   if (!spriteCache[spriteKey]) {
     const img = new Image();
     const url = spriteUrl.replace(
@@ -92,7 +93,15 @@ function preloadSprite(spriteUrl: string, spriteKey: string): HTMLImageElement {
     spriteCache[spriteKey] = img;
   }
 
-  return spriteCache[spriteKey];
+  return new Promise((resolve, reject) => {
+    const img = spriteCache[spriteKey];
+    if (img.complete) {
+      resolve(img);
+    } else {
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+    }
+  });
 }
 
 export { createSprite, preloadSprites };

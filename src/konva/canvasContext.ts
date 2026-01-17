@@ -9,7 +9,7 @@ export const canvas = {
   hitLayer: null as Konva.Layer | null,
   highlightLayer: null as Konva.Layer | null,
 
-  treeData: {} as TreeData,
+  treeData: null! as TreeData,
   jewelImages: new Map<number, Konva.Image>(),
   jewelRadiusImages: new Map<string, { a: Konva.Image; b: Konva.Image }>(),
   nodes: new Map<

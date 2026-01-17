@@ -130,13 +130,14 @@
               >
                 Next
               </button>
-            {/if}
+             {/if}
             <button
               type="button"
               onclick={() => {
                 const t = parseFloat(total);
                 onexpand(t);
               }}
+              aria-label="Expand group"
               class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
             >
               <svg
@@ -162,6 +163,7 @@
           <button
             type="button"
             class="flex-1 text-left"
+            aria-label="Expand group"
             onclick={() => {
               const t = parseFloat(total);
               onexpand(t);
@@ -183,6 +185,7 @@
                 const t = parseFloat(total);
                 onexpand(t);
               }}
+              aria-label="Expand group"
               class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
             >
               <svg
@@ -210,8 +213,16 @@
         <div class="divide-y divide-slate-700">
           {#each $searchStore.statsResults[total] as item (item.seed)}
             <div
+              role="button"
+              tabindex="0"
               class="w-full px-4 py-3 text-left hover:bg-slate-700/50 cursor-pointer transition-all duration-200"
               onclick={() => handleSeedClick(item)}
+              onkeydown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleSeedClick(item);
+                }
+              }}
             >
                 <div class="flex items-center justify-between">
                   <span class="font-semibold text-blue-300">Seed: {item.seed}</span>
