@@ -30,6 +30,21 @@
 
   let previousSkill: number | null = null;
 
+  let fps = 0;
+  let lastTime = performance.now();
+  let frameCount = 0;
+
+  function updateFPS() {
+    frameCount++;
+    const now = performance.now();
+    if (now - lastTime >= 1000) {
+      fps = frameCount;
+      frameCount = 0;
+      lastTime = now;
+    }
+    requestAnimationFrame(updateFPS);
+  }
+
   onMount(() => {
     let cleanup: () => void = () => {};
     (async () => {
@@ -77,12 +92,14 @@
       setupHover();
       setupClick();
 
-      canvas.mainLayer.batchDraw();
-      canvas.lineLayer.batchDraw();
+       canvas.mainLayer.batchDraw();
+       canvas.lineLayer.batchDraw();
 
-      cleanup = () => {
-        canvas.stage?.destroy();
-      };
+       updateFPS();
+
+       cleanup = () => {
+         canvas.stage?.destroy();
+       };
     })();
 
     return () => cleanup();
@@ -106,11 +123,24 @@
 <div id="tree" style="position:fixed;inset:0;background:#070c11"></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />
+<div class="fps-counter">{fps} FPS</div>
 
 <style>
   :global(body) {
     margin: 0;
     overflow: hidden;
     font-family: Fontin, sans-serif;
+  }
+
+  .fps-counter {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    font-size: 14px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 3px;
   }
 </style>
