@@ -12,42 +12,17 @@
 </script>
 
 {#if node}
-  <div class="tooltip" style="left: {x + 20}px; top: {y - 20}px;">
-    <div class="header">{header}</div>
-    <div class="stats">
+  <div
+    class="fixed z-50 pointer-events-none bg-black/90 text-amber-100 p-3 rounded-lg font-fontin text-lg max-w-sm whitespace-pre-wrap shadow-lg"
+    style="left: {x + 20}px; top: {y - 20}px;"
+  >
+    <div class="font-bold mb-2">{header}</div>
+    <div class="space-y-1">
       {#each statsToDisplay as stat (stat)}
-        <div class="stat" class:red={!baseStats.includes(stat)}>{stat}</div>
+        <div class="text-sm" class:text-red-400={!baseStats.includes(stat)}>{stat}</div>
       {/each}
     </div>
   </div>
 {/if}
 
-<style>
-  .tooltip {
-    position: fixed;
-    background: rgba(0, 0, 0, 0.92);
-    color: #e8e1d2;
-    padding: 12px 18px;
-    border-radius: 8px;
-    font:
-      20px Fontin,
-      sans-serif;
-    pointer-events: none;
-    z-index: 9999;
-    max-width: 400px;
-    white-space: pre-wrap;
-  }
 
-  .header {
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  .stat {
-    margin-bottom: 4px;
-  }
-
-  .stat.red {
-    color: #ff6b6b;
-  }
-</style>

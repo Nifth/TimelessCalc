@@ -131,7 +131,7 @@
   }
 </script>
 
-<div id="tree" style="position:fixed;inset:0;background:#070c11"></div>
+<div id="tree" style="position:fixed;inset:0;background:#070c11" on:mouseleave={() => treeStore.update(s => ({ ...s, hovered: null }))}></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />
 <div class="fps-counter">{fps} FPS</div>
