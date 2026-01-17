@@ -97,7 +97,18 @@
 
        updateFPS();
 
+       const handleResize = () => {
+         if (canvas.stage) {
+           canvas.stage.width(window.innerWidth);
+           canvas.stage.height(window.innerHeight);
+           canvas.stage.batchDraw();
+         }
+       };
+
+       window.addEventListener('resize', handleResize);
+
        cleanup = () => {
+         window.removeEventListener('resize', handleResize);
          canvas.stage?.destroy();
        };
     })();
