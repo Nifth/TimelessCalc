@@ -1,6 +1,25 @@
 <script lang="ts">
-  // Preloader component for displaying loading state
-  export let loadingComplete = false;
+  import { onMount } from "svelte";
+
+  export let loadingComplete: boolean = false;
+  export let progress: number = 0;
+  export let currentStep: string = "Initializing...";
+
+  let displayProgress: number = 0;
+
+  function updateDisplayProgress() {
+    if (displayProgress < progress) {
+      displayProgress += Math.max(1, (progress - displayProgress) * 0.1);
+      if (displayProgress >= progress) {
+        displayProgress = progress;
+      }
+      requestAnimationFrame(updateDisplayProgress);
+    }
+  }
+
+  $: if (progress !== displayProgress) {
+    updateDisplayProgress();
+  }
 </script>
 
 <div class="preloader-overlay" role="status" aria-live="polite">

@@ -1,13 +1,29 @@
 export interface Group {
   x: number;
   y: number;
-  isProxy: boolean;
   orbits: number[];
   background?: {
     image: string;
     isHalfImage?: boolean;
   };
   nodes: string[];
+}
+
+export interface PerformanceMetrics {
+  timing: Record<string, PerformanceMeasure>;
+  memory: {
+    initial: number;
+    current: number;
+    total: number;
+    limit: number;
+    delta: number;
+  };
+  network: {
+    totalTransferred: number;
+    totalDuration: number;
+    requestCount: number;
+  };
+  canvas: Record<string, any>;
 }
 
 export interface ExpansionJewel {

@@ -127,10 +127,14 @@ export async function handleSearch(
   jewelType: JewelType | null,
   selectedStats: Stat[],
 ) {
+  // Set loading state
+  searchStore.update((state) => ({ ...state, loading: true }));
+
   if (mode === "seed") {
     if (!seedInput) {
       searchStore.update((state) => {
         state.searched = false;
+        state.loading = false;
         return state;
       });
       return;
@@ -139,12 +143,14 @@ export async function handleSearch(
     await preloadJewels();
     const jewelData = getJewelData(jewelType!.name);
     if (!jewelData) {
+      searchStore.update((state) => ({ ...state, loading: false }));
       return;
     }
     const entry = jewelData[seedInput];
     if (!entry) {
       searchStore.update((state) => {
         state.searched = false;
+        state.loading = false;
         return state;
       });
       return;
@@ -163,12 +169,14 @@ export async function handleSearch(
     });
     searchStore.update((state) => {
       state.searched = true;
+      state.loading = false;
       return state;
     });
   } else if (mode === "stats") {
     if (selectedStats.length === 0) {
       searchStore.update((state) => {
         state.searched = false;
+        state.loading = false;
         return state;
       });
       return;
@@ -177,6 +185,7 @@ export async function handleSearch(
     await preloadJewels();
     const jewelData = getJewelData(jewelType!.name);
     if (!jewelData) {
+      searchStore.update((state) => ({ ...state, loading: false }));
       return;
     }
     // Results: for each seed, count occurrences of each selected stat on allocated nodes
@@ -267,10 +276,9 @@ export async function handleSearch(
       orderedSeeds.push(...seedsInGroup);
     }
 
-    console.log("Stats search results:", grouped);
-
     searchStore.update((state) => {
       state.searched = true;
+      state.loading = false;
       state.statsResults = grouped;
       state.orderedSeeds = orderedSeeds;
       state.totalResults = orderedSeeds.length;

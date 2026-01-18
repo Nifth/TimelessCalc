@@ -28,9 +28,6 @@ Add filters to show/hide nodes by type (keystone, notable, mastery) or stats. In
 ### Allocation Animations
 Add smooth animations when allocating/deallocating nodes. Use CSS transitions or Konva animations for visual feedback.
 
-### Search Sharing
-Enable sharing searches via URL parameters. Encode the current allocation & search state in the URL for easy sharing and bookmarking.
-
 ### Performance Profiling
 Add built-in performance profiling tools to measure FPS, render times, and lag sources. Include debug overlays for development and troubleshooting.
 

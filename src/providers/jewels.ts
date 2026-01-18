@@ -1,16 +1,16 @@
-// src/lib/jewelCache.ts
+// src/providers/jewels.ts
 
 import { jewelTypes } from "$lib/constants/timeless";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
-// Typage clair de ce qu’on trouve dans chaque fichier
+// Typage clair de ce qu'on trouve dans chaque fichier
 export interface JewelEntry {
   r: Record<string, number[]>;
   a: Record<string, number[]>;
 }
 
-// Global cache
+// In-memory cache for jewel data
 const cache = new Map<string, Record<number, JewelEntry>>();
 
 // Svelte store to react to loading (optional but practical)
@@ -45,6 +45,8 @@ export async function preloadJewels(): Promise<void> {
   globalPreloadPromise = (async () => {
     const loadPromises = jewelTypes.map(async (jewel) => {
       const key = jewel.name;
+
+      // Check if already loaded
       if (cache.has(key)) return;
 
       const fileName = jewel.label.replace(/\s+/g, "") + ".jsonl.gz";
@@ -71,6 +73,7 @@ export async function preloadJewels(): Promise<void> {
           data[i] = entry;
           i += step;
         }
+
         cache.set(key, data);
         loadedJewels.update((s) => new Set(s).add(key));
       } catch (err) {

@@ -133,6 +133,7 @@ function setAllocatedNodes(socket: Node | null) {
 }
 
 function showActive(node: Node) {
+  if (!canvas.nodes.has(node.skill)) return;
   const { icon, frame } = canvas.nodes.get(node.skill)!;
   const spriteKey = node.isKeystone
     ? TREE_CONSTANTS.SPRITES.KEYSTONE_ACTIVE
@@ -170,6 +171,7 @@ function showActive(node: Node) {
 }
 
 function showInactive(node: Node) {
+  if (!canvas.nodes.has(node.skill)) return;
   const { icon, frame } = canvas.nodes.get(node.skill)!;
   const spriteKey = node.isKeystone
     ? TREE_CONSTANTS.SPRITES.KEYSTONE_INACTIVE

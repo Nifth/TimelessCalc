@@ -35,9 +35,6 @@ export function parseUrlAndInitialize(
     return false;
   }
 
-  // Set loading state
-  searchStore.update(s => ({ ...s, loading: true }));
-
   // Parse jewel type
   const jewelType = jewelTypes.find(jt => jt.name === jewelTypeName) || null;
   if (!jewelType) {
@@ -74,6 +71,7 @@ export function parseUrlAndInitialize(
   }
 
   // Parse league
+  // Todo: change default value to retrieve from API
   const league = urlParams.get('l') || 'Keepers';
 
   // Parse platform
@@ -182,9 +180,7 @@ export function parseUrlAndInitialize(
 
   // Trigger search if we have search parameters
   if (jewelType && conqueror && selectedStats.length > 0) {
-    performSearch("stats", null, translation, jewelType, selectedStats).then(() => {
-      searchStore.update(s => ({ ...s, loading: false }));
-    });
+    performSearch("stats", null, translation, jewelType, selectedStats);
   } else if (jewelType && conqueror && seed) {
     // For seed mode, just set the stores without calling applySeed to preserve allocated from URL
     searchStore.update(s => ({
@@ -192,10 +188,7 @@ export function parseUrlAndInitialize(
       searched: true,
       seed,
       seedSearched: true,
-      loading: false
     }));
-  } else {
-    searchStore.update(s => ({ ...s, loading: false }));
   }
 
   // Clear URL parameters after successful parsing to prevent re-initialization on reload

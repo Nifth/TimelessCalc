@@ -325,14 +325,6 @@
     </header>
 
     <div class="pt-4">
-      {#if $searchStore.loading}
-        <div class="flex items-center justify-center py-12">
-          <div class="text-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p class="text-slate-400">Loading configuration...</p>
-          </div>
-        </div>
-      {:else}
       {#if $searchStore.searched && $searchStore.mode === "stats"}
         <div class="space-y-4">
           <BackButton onclick={backToForm} />
@@ -411,11 +403,10 @@
             {/if}
           {/if}
 
-           <NodeToggles />
-         </div>
-       {/if}
+            <NodeToggles />
+          </div>
       {/if}
-     </div>
+      </div>
   </aside>
   {#if tooltipPosition}
     {@const pageInfo = getPageRangeFromOrdered(

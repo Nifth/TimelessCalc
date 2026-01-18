@@ -10,7 +10,7 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number): T {
   }) as T;
 }
 
-export function setupZoom() {
+export function setupZoom(onZoom?: () => void) {
   const stage = canvas.stage!;
   const debouncedZoom = debounce((e: any) => {
     e.evt.preventDefault();
