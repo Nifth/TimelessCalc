@@ -328,23 +328,25 @@
 
     <div class="pt-4">
       {#if activeTab === 'search'}
-      {#if $searchStore.searched && $searchStore.mode === "stats"}
-        <div class="flex items-center gap-3 mb-4">
-          <TradeControls
-            jewelType={$searchStore.jewelType}
-            conqueror={$searchStore.conqueror}
-            hasTraded={_hasTraded}
-            ontrade={handleTrade}
-            onnext={() => {
-              nextPage();
-              logNextPage();
-            }}
-            ontargetposition={(pos) => (tooltipPosition = pos)}
-          >
-            <LeagueSelector slot="league" />
-            <PlatformSelector slot="platform" />
-          </TradeControls>
-        </div>
+      {#if $searchStore.searched}
+        {#if $searchStore.mode === "stats"}
+          <div class="flex items-center gap-3 mb-4">
+            <TradeControls
+              jewelType={$searchStore.jewelType}
+              conqueror={$searchStore.conqueror}
+              hasTraded={_hasTraded}
+              ontrade={handleTrade}
+              onnext={() => {
+                nextPage();
+                logNextPage();
+              }}
+              ontargetposition={(pos) => (tooltipPosition = pos)}
+            >
+              <LeagueSelector slot="league" />
+              <PlatformSelector slot="platform" />
+            </TradeControls>
+          </div>
+        {/if}
         <div class="space-y-4">
           <BackButton onclick={backToForm} />
 
@@ -430,41 +432,7 @@
              <NodeToggles />
            </div>
        {/if}
-       {#if tooltipPosition}
-         {@const pageInfo = getPageRangeFromOrdered(
-           $searchStore.orderedSeeds,
-           $searchStore.currentPage,
-           $searchStore.jewelType!,
-           $searchStore.conqueror,
-         )}
-         <div
-           class="fixed z-[100] w-64 p-3 bg-slate-800 border border-slate-600 rounded-lg shadow-xl text-sm text-slate-200"
-           style="top: {tooltipPosition.top}px; left: {tooltipPosition.left}px"
-         >
-           <p class="font-semibold mb-2">Trade Link Pagination</p>
-           <p class="mb-2">
-             Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when possible (e.g.,
-             10020-10022) to maximize filter usage, allowing to have a bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
-             (best matches first).
-           </p>
-           <p>
-             {#if pageInfo.count > 0}
-               {@const seedsPerPage = getSeedsPerPage(
-                 $searchStore.jewelType!,
-                 $searchStore.conqueror,
-               )}
-               {@const startNum = $searchStore.currentPage * seedsPerPage + 1}
-               {@const endNum = Math.min(
-                 startNum + seedsPerPage - 1,
-                 $searchStore.totalResults,
-               )}
-               Showing seeds {startNum}-{endNum} of {$searchStore.totalResults}
-             {:else}
-               No results to display
-             {/if}
-           </p>
-         </div>
-       {/if}
+
        {#if $searchStore.lastTradeInfo}
          <TradeNotification
            seeds={$searchStore.lastTradeInfo.seeds}
@@ -491,5 +459,41 @@
          <SearchHistory onswitchtotab={(tab) => activeTab = tab} />
       {/if}
     </div>
-    </aside>
+     </aside>
+
+    {#if tooltipPosition}
+      {@const pageInfo = getPageRangeFromOrdered(
+        $searchStore.orderedSeeds,
+        $searchStore.currentPage,
+        $searchStore.jewelType!,
+        $searchStore.conqueror,
+      )}
+      <div
+        class="fixed z-[100] w-64 p-3 bg-slate-800 border border-slate-600 rounded-lg shadow-xl text-sm text-slate-200"
+        style="top: {tooltipPosition.top}px; left: {tooltipPosition.left}px"
+      >
+        <p class="font-semibold mb-2">Trade Link Pagination</p>
+        <p class="mb-2">
+          Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when possible (e.g.,
+          10020-10022) to maximize filter usage, allowing to have a bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
+          (best matches first).
+        </p>
+        <p>
+          {#if pageInfo.count > 0}
+            {@const seedsPerPage = getSeedsPerPage(
+              $searchStore.jewelType!,
+              $searchStore.conqueror,
+            )}
+            {@const startNum = $searchStore.currentPage * seedsPerPage + 1}
+            {@const endNum = Math.min(
+              startNum + seedsPerPage - 1,
+              $searchStore.totalResults,
+            )}
+            Showing seeds {startNum}-{endNum} of {$searchStore.totalResults}
+          {:else}
+            No results to display
+          {/if}
+        </p>
+      </div>
+    {/if}
 {/if}
