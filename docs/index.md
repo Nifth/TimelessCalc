@@ -43,6 +43,11 @@ The application provides an interactive interface for calculating and visualizin
 
 ## Features
 
+### Loading Experience
+- Modern animated preloader with wave effects and gem icon
+- Smooth loading transition before passive tree visualization
+- Path of Exile themed visual feedback during initialization
+
 ### Passive Tree Visualization
 - Interactive canvas rendering of the Path of Exile passive skill tree
 - Support for timeless jewel configurations with conqueror modifiers

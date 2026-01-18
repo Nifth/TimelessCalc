@@ -3,7 +3,7 @@
   export let loadingComplete = false;
 </script>
 
-<div class="preloader-overlay">
+<div class="preloader-overlay" role="status" aria-live="polite">
   <div class="preloader-content">
     <div class="logo-container">
       <div class="gem-icon"></div>
@@ -14,7 +14,7 @@
     <div class="progress-bar">
       <div class="wave-indicator" class:loading-complete={loadingComplete}></div>
     </div>
-    <p class="loading-text">Loading Path of Exile Passive Tree...</p>
+    <p class="loading-text" aria-label="Loading Path of Exile Passive Tree">Loading Path of Exile Passive Tree...</p>
     <p class="loading-subtext">Preparing your destiny</p>
   </div>
 </div>
