@@ -1,55 +1,55 @@
 <script lang="ts">
   import type { Translation, TreeData } from "$lib/types";
-   import { searchStore } from "$lib/stores/searchStore";
-   import { treeStore } from "$lib/stores/treeStore";
-   import { historyActions } from "$lib/stores/historyStore";
-  import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
-  import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
-  import TradeNotification from "$lib/ui/TradeNotification.svelte";
-  import {
-    getConquerorOptions,
-  } from "$lib/utils/sidebar/options";
-  import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
-  import { applySeed } from "$lib/utils/sidebar/searchLogic";
+  import { searchStore } from "$lib/stores/searchStore";
+    import { treeStore } from "$lib/stores/treeStore";
+    import { historyActions } from "$lib/stores/historyStore";
+   import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
+   import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
+   import TradeNotification from "$lib/ui/TradeNotification.svelte";
+   import {
+     getConquerorOptions,
+   } from "$lib/utils/sidebar/options";
+   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
+   import { applySeed } from "$lib/utils/sidebar/searchLogic";
 
-  import {
-    buildTradeQuery,
-    getSeedsPerPage,
-    getPageRangeFromOrdered,
-    MAX_FILTERS,
-  } from "$lib/utils/sidebar/tradeQuery";
-  import { generateShareUrl, copyToClipboard } from "$lib/utils/sharing/shareUtils";
-  import translationsJson from "$lib/data/translation.json" with { type: "json" };
-  import treeData from "$lib/data/tree.json" with { type: "json" };
-  import SidebarToggle from "./SidebarToggle.svelte";
-  import JewelTypeSelector from "./JewelTypeSelector.svelte";
-  import ConquerorSelector from "./ConquerorSelector.svelte";
-  import ModeSelector from "./ModeSelector.svelte";
-  import SeedSearch from "./SeedSearch.svelte";
-  import StatsSearch from "./StatsSearch.svelte";
-  import StatsResults from "./StatsResults.svelte";
-  import TradeControls from "./TradeControls.svelte";
-  import BackButton from "./BackButton.svelte";
-   import SeedResultDisplay from "./SeedResultDisplay.svelte";
-   import NodeToggles from "./NodeToggles.svelte";
-   import Modal from "./Modal.svelte";
-   import SearchHistory from "./SearchHistory.svelte";
+   import {
+     buildTradeQuery,
+     getSeedsPerPage,
+     getPageRangeFromOrdered,
+     MAX_FILTERS,
+   } from "$lib/utils/sidebar/tradeQuery";
+   import { generateShareUrl, copyToClipboard } from "$lib/utils/sharing/shareUtils";
+   import translationsJson from "$lib/data/translation.json" with { type: "json" };
+   import treeData from "$lib/data/tree.json" with { type: "json" };
+   import SidebarToggle from "./SidebarToggle.svelte";
+   import JewelTypeSelector from "./JewelTypeSelector.svelte";
+   import ConquerorSelector from "./ConquerorSelector.svelte";
+   import ModeSelector from "./ModeSelector.svelte";
+   import SeedSearch from "./SeedSearch.svelte";
+   import StatsSearch from "./StatsSearch.svelte";
+   import StatsResults from "./StatsResults.svelte";
+   import TradeControls from "./TradeControls.svelte";
+   import BackButton from "./BackButton.svelte";
+    import SeedResultDisplay from "./SeedResultDisplay.svelte";
+    import NodeToggles from "./NodeToggles.svelte";
+    import Modal from "./Modal.svelte";
+    import SearchHistory from "./SearchHistory.svelte";
 
-  const translation: Record<string, Translation[]> = JSON.parse(
-    JSON.stringify(translationsJson),
-  );
+   const translation: Record<string, any[]> = JSON.parse(
+     JSON.stringify(translationsJson),
+   );
 
-  let isOpen = $state(true);
-  let seedInput: number | null = $state(null);
+   let isOpen = $state(true);
+   let seedInput: number | null = $state(null);
 
-  let expandedGroups: Record<number, boolean> = $state({});
-  let groupPages: Record<string, number> = $state({});
-  let hasGroupTraded: Record<string, boolean> = $state({});
-  let _hasTraded = $state(false);
-  let tooltipPosition: { top: number; left: number } | null = $state(null);
-  let showSocketWarning = $state(false);
-   let shareButtonText = $state('Share Configuration');
-   let activeTab = $state<'search' | 'favorites' | 'history'>('search');
+   let expandedGroups: Record<number, boolean> = $state({});
+   let groupPages: Record<string, number> = $state({});
+   let hasGroupTraded: Record<string, boolean> = $state({});
+   let _hasTraded = $state(false);
+   let tooltipPosition: { top: number; left: number } | null = $state(null);
+   let showSocketWarning = $state(false);
+    let shareButtonText = $state('Share Configuration');
+    let activeTab = $state<'search' | 'favorites' | 'history'>('search');
 
   function checkSocketAndSearch(action: () => void) {
     if (!$treeStore.chosenSocket) {
@@ -433,23 +433,7 @@
            </div>
        {/if}
 
-       {#if $searchStore.lastTradeInfo}
-         <TradeNotification
-           seeds={$searchStore.lastTradeInfo.seeds}
-           conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
-           page={$searchStore.lastTradeInfo.page}
-           groupName={$searchStore.lastTradeInfo.groupName}
-           onDismiss={() =>
-             searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
-         />
-       {/if}
-       {#if showSocketWarning}
-         <Modal
-           message="No jewel socket selected. Please select a socket on the passive tree before searching."
-           onConfirm={confirmSearch}
-           onCancel={() => (showSocketWarning = false)}
-         />
-       {/if}
+
       {:else if activeTab === 'favorites'}
         <div class="p-4 text-slate-300">
           <h2 class="text-lg font-semibold mb-2">Favorites</h2>
@@ -496,4 +480,22 @@
         </p>
       </div>
     {/if}
+{/if}
+
+{#if $searchStore.lastTradeInfo}
+  <TradeNotification
+    seeds={$searchStore.lastTradeInfo.seeds}
+    conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
+    page={$searchStore.lastTradeInfo.page}
+    groupName={$searchStore.lastTradeInfo.groupName}
+    onDismiss={() =>
+      searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
+  />
+{/if}
+{#if showSocketWarning}
+  <Modal
+    message="No jewel socket selected. Please select a socket on the passive tree before searching."
+    onConfirm={confirmSearch}
+    onCancel={() => (showSocketWarning = false)}
+  />
 {/if}

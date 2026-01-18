@@ -5,6 +5,7 @@ import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { updateAllocatedDisplay, updateSocketVisualSelection } from "$lib/konva/utils/jewelHighlight";
 import treeData from "$lib/data/tree.json" with { type: "json" };
+import { jewelTypes, conquerors } from "$lib/constants/timeless";
 
 const HISTORY_KEY = "timelessCalc_searchHistory";
 const MAX_HISTORY_ENTRIES = 10;
@@ -71,11 +72,16 @@ export const historyActions = {
 
   // Load a search configuration from history
   loadSearch(entry: SearchHistoryEntry): void {
+    // Find the correct object references from constants to ensure proper binding
+    const jewelType = jewelTypes.find(jt => jt.name === entry.jewelType.name) || entry.jewelType;
+    const conquerorOptions = jewelType ? conquerors[jewelType.name] || [] : [];
+    const conqueror = conquerorOptions.find(c => c.id === entry.conqueror?.id) || entry.conqueror;
+
     // Update search store
     searchStore.update(store => ({
       ...store,
-      jewelType: entry.jewelType,
-      conqueror: entry.conqueror,
+      jewelType,
+      conqueror,
       selectedStats: [...entry.stats],
       minTotalWeight: entry.minTotalWeight,
       mode: "stats",
