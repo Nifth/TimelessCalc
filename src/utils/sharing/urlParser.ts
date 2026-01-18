@@ -4,7 +4,6 @@ import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import { changeRadius, changeKeystone } from "$lib/konva/utils/jewelHighlight";
 import type Konva from "konva";
-import { get } from "svelte/store";
 
 /**
  * Parses URL parameters and initializes the application state
@@ -24,39 +23,54 @@ export function parseUrlAndInitialize(
 
   console.log('Initializing from URL parameters:', Object.fromEntries(urlParams.entries()));
 
+  // Check for required parameters
+  const jewelTypeName = urlParams.get('jt');
+  const conquerorLabel = urlParams.get('c');
+  const selectedStatsJson = urlParams.get('s');
+  const seedStr = urlParams.get('seed');
+  const socketSkillStr = urlParams.get('so');
+
+  if (!jewelTypeName || !conquerorLabel || !socketSkillStr || (!selectedStatsJson && !seedStr)) {
+    console.log('Missing required URL parameters (jt, c, so, and s or seed), skipping initialization');
+    return false;
+  }
+
   // Set loading state
   searchStore.update(s => ({ ...s, loading: true }));
 
   // Parse jewel type
-  const jewelTypeName = urlParams.get('jt');
-  let jewelType = null;
-  if (jewelTypeName) {
-    jewelType = jewelTypes.find(jt => jt.name === jewelTypeName) || null;
+  let jewelType = jewelTypes.find(jt => jt.name === jewelTypeName) || null;
+  if (!jewelType) {
+    console.log('Invalid jewel type:', jewelTypeName);
+    return false;
   }
 
   // Parse conqueror
-  const conquerorLabel = urlParams.get('c');
-  let conqueror = null;
-  if (conquerorLabel && jewelType) {
-    conqueror = conquerors[jewelType.name]?.find(c => c.label === conquerorLabel) || null;
+  let conqueror = conquerors[jewelType.name]?.find(c => c.label === conquerorLabel) || null;
+  if (!conqueror) {
+    console.log('Invalid conqueror:', conquerorLabel);
+    return false;
   }
 
   // Parse selected stats
-  const selectedStatsJson = urlParams.get('s');
   let selectedStats: Stat[] = [];
   if (selectedStatsJson) {
     try {
       selectedStats = JSON.parse(selectedStatsJson);
     } catch (e) {
       console.error('Failed to parse selected stats from URL:', e);
+      return false;
     }
   }
 
   // Parse seed
-  const seedStr = urlParams.get('seed');
   let seed: number | null = null;
   if (seedStr) {
     seed = parseInt(seedStr, 10) || null;
+    if (seed === null || isNaN(seed)) {
+      console.log('Invalid seed:', seedStr);
+      return false;
+    }
   }
 
   // Parse league
@@ -70,14 +84,22 @@ export function parseUrlAndInitialize(
   let mode: "seed" | "stats" | null = null;
   if (modeStr === 'seed' || modeStr === 'stats') {
     mode = modeStr;
+  } else if (selectedStats.length > 0) {
+    mode = 'stats';
+  } else if (seed) {
+    mode = 'seed';
   }
 
   // Parse chosen socket
-  const socketSkillStr = urlParams.get('so');
-  let chosenSocket: Node | null = null;
-  if (socketSkillStr) {
-    const socketSkill = parseInt(socketSkillStr, 10);
-    chosenSocket = Object.values(treeData.nodes).find(node => node.skill === socketSkill) || null;
+  const socketSkill = parseInt(socketSkillStr, 10);
+  if (isNaN(socketSkill)) {
+    console.log('Invalid socket skill:', socketSkillStr);
+    return false;
+  }
+  let chosenSocket: Node | null = Object.values(treeData.nodes).find(node => node.skill === socketSkill) || null;
+  if (!chosenSocket) {
+    console.log('Socket not found:', socketSkill);
+    return false;
   }
 
   // Parse allocated/unallocated nodes
