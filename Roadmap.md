@@ -28,11 +28,12 @@ Add filters to show/hide nodes by type (keystone, notable, mastery) or stats. In
 ### Allocation Animations
 Add smooth animations when allocating/deallocating nodes. Use CSS transitions or Konva animations for visual feedback.
 
-### Performance Profiling
-Add built-in performance profiling tools to measure FPS, render times, and lag sources. Include debug overlays for development and troubleshooting.
-
 ### Virtual Scrolling Optimization
 Optimize Konva rendering for large passive trees using virtual scrolling techniques. Only render visible nodes and layers to improve performance on lower-end devices.
 
 ### Help button
 Add a "?" floating icon to help users, with list of shortcuts, how it works, what it is, how it's done.
+
+### Debug Panel
+1. Considérer rendre le Debug Panel conditionnel pour la production (param ?debug pour trigger le debug panel, si absent, complètement ignoré)
+2. Ajouter des guards pour les APIs non-standards (performance.memory)

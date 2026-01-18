@@ -25,6 +25,7 @@
 - [Development Guide](./development-guide-main.md)
 - [API Contracts](./api-contracts-main.md)
 - [Data Models](./data-models-main.md)
+- [Performance Monitoring](./performance-monitoring.md)
 
 ## Existing Documentation
 

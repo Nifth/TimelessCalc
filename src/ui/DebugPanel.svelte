@@ -93,7 +93,7 @@
         <div class="section">
           <h4>Timing</h4>
           {#each Object.entries(metrics.timing || {}) as [key, measure] (key)}
-            <p>{key}: {formatDuration(measure.duration)}</p>
+            <p>{key}: {formatDuration((measure as PerformanceMeasure).duration)}</p>
           {/each}
         </div>
 
