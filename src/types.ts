@@ -146,3 +146,11 @@ export interface SearchStore {
     groupName?: string;
   } | null;
 }
+
+export interface TreeStore {
+  chosenSocket: Node | null;
+  allocated: Map<string, Node>;
+  search: string;
+  scale: number;
+  hovered: Node | null;
+}

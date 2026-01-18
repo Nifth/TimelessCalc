@@ -40,3 +40,30 @@
 5. **Type Check**: Run `npm run check` to verify TypeScript types
 
 The application provides an interactive interface for calculating and visualizing Path of Exile timeless jewel configurations using a canvas-based passive skill tree renderer.
+
+## Features
+
+### Passive Tree Visualization
+- Interactive canvas rendering of the Path of Exile passive skill tree
+- Support for timeless jewel configurations with conqueror modifiers
+- Node allocation and deallocation with visual feedback
+- Zoom and pan controls for navigation
+
+### Search and Filtering
+- Search for optimal jewel configurations based on desired stats
+- Filter by jewel type (Glorious Vanity, Lethal Pride, etc.)
+- Select conqueror modifiers and specific stat requirements
+- Real-time results with pagination and trade integration
+
+### Sharing Configurations
+- Generate shareable URLs that encode current search filters and tree state
+- Copy URL to clipboard for sharing configurations with others
+- URL parameters include:
+  - `jt`: Jewel type name
+  - `c`: Conqueror label
+  - `s`: Selected stats (JSON array)
+  - `seed`: Seed number
+  - `l`: League name
+  - `p`: Platform (PC/Xbox/Playstation)
+  - `so`: Socket skill ID
+  - `a`/`un`: Allocated or unallocated node skills (JSON array)

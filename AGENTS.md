@@ -30,7 +30,7 @@ TimelessCalc is a Svelte + TypeScript application for calculating and visualizin
 
 ### Testing
 
-No test framework is currently configured. To add testing, consider installing Vitest and updating package.json with test scripts.
+No test framework is currently configured. Tests are not required for this project. To add testing in the future, consider installing Vitest and updating package.json with test scripts.
 
 ## Project Structure
 

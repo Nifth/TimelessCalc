@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Translation } from "$lib/types";
+  import type { Translation, TreeData } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
@@ -17,7 +17,9 @@
     getPageRangeFromOrdered,
     MAX_FILTERS,
   } from "$lib/utils/sidebar/tradeQuery";
+  import { generateShareUrl, copyToClipboard } from "$lib/utils/sharing/shareUtils";
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
+  import treeData from "$lib/data/tree.json" with { type: "json" };
   import SidebarToggle from "./SidebarToggle.svelte";
   import JewelTypeSelector from "./JewelTypeSelector.svelte";
   import ConquerorSelector from "./ConquerorSelector.svelte";
@@ -48,6 +50,7 @@
   let _hasTraded = $state(false);
   let tooltipPosition: { top: number; left: number } | null = $state(null);
   let showSocketWarning = $state(false);
+  let shareButtonText = $state('Share Configuration');
 
   function checkSocketAndSearch(action: () => void) {
     if (!$treeStore.chosenSocket) {
@@ -282,6 +285,17 @@
   function expandGroup(total: number) {
     expandedGroups = { ...expandedGroups, [total]: !expandedGroups[total] };
   }
+
+  async function handleShare() {
+    const shareUrl = generateShareUrl($searchStore, $treeStore, treeData as unknown as TreeData);
+    if (await copyToClipboard(shareUrl)) {
+      shareButtonText = 'Copied';
+      setTimeout(() => shareButtonText = 'Share Configuration', 2000);
+    } else {
+      shareButtonText = 'Failed to copy';
+      setTimeout(() => shareButtonText = 'Share Configuration', 2000);
+    }
+  }
 </script>
 
 <SidebarToggle bind:isOpen />
@@ -320,6 +334,10 @@
       {#if showingResults}
         <div class="space-y-4">
           <BackButton onclick={backToForm} />
+
+          <button onclick={handleShare} class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-blue-500/20">
+            {shareButtonText}
+          </button>
 
           {#if mode === "stats" && statsSearched && Object.keys($searchStore.statsResults).length > 0}
             <StatsResults
