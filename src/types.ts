@@ -23,7 +23,7 @@ export interface PerformanceMetrics {
     totalDuration: number;
     requestCount: number;
   };
-  canvas: Record<string, any>;
+  canvas: Record<string, unknown>;
 }
 
 export interface ExpansionJewel {

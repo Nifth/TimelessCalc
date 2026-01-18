@@ -36,13 +36,10 @@ export function setupClick() {
       ) {
         treeStore.update((state) => {
           if (state.allocated.has(nodeId)) {
-            console.log('Removing allocated node:', nodeId);
             state.allocated.delete(nodeId);
           } else {
-            console.log('Adding allocated node:', nodeId);
             state.allocated.set(nodeId, node);
           }
-          console.log('Allocated nodes count:', state.allocated.size);
           return state;
         });
       }

@@ -31,17 +31,17 @@ export class PerformanceMonitor {
   }
 
   getMemoryUsage(): number {
-    // @ts-ignore - Chrome-specific
+    // @ts-expect-error - Chrome-specific
     return performance.memory?.usedJSHeapSize || 0;
   }
 
   getTotalMemory(): number {
-    // @ts-ignore
+    // @ts-expect-error
     return performance.memory?.totalJSHeapSize || 0;
   }
 
   getMemoryLimit(): number {
-    // @ts-ignore
+    // @ts-expect-error
     return performance.memory?.jsHeapSizeLimit || 0;
   }
 

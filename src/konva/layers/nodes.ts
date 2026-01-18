@@ -74,18 +74,8 @@ export function drawNodesProgressive(
                 nodeY,
               );
 
-              if (!node.isMastery && !node.isJewelSocket) {
-                const frame = createSprite(
-                  TREE_CONSTANTS.SPRITES.FRAME,
-                  node.isKeystone
-                    ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_UNALLOCATED
-                    : node.isNotable
-                      ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_UNALLOCATED
-                      : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME,
-                  nodeX,
-                  nodeY,
-                );
-                const group = new Konva.Group({ x: nodeX, y: nodeY });
+               if (!node.isMastery && !node.isJewelSocket) {
+                 const group = new Konva.Group({ x: nodeX, y: nodeY });
                 // Create relative sprites for the group
                 const relativeIcon = createSprite(
                   key,

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
   export let loadingComplete: boolean = false;
   export let progress: number = 0;
   export let currentStep: string = "Initializing...";

@@ -11,7 +11,7 @@
   } from "$lib/utils/sidebar/options";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import { applySeed } from "$lib/utils/sidebar/searchLogic";
-  import { fetchLeagues } from "$lib/providers/leagues";
+
   import {
     buildTradeQuery,
     getSeedsPerPage,

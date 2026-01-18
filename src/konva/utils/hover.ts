@@ -4,9 +4,9 @@ import { treeStore } from "$lib/stores/treeStore";
 import { canvas } from "$lib/konva/canvasContext";
 import { get } from "svelte/store";
 
-function throttle<T extends (...args: any[]) => any>(func: T, limit: number): T {
+function throttle<T extends (...args: never[]) => void>(func: T, limit: number): T {
   let inThrottle: boolean;
-  return ((...args: any[]) => {
+  return ((...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;

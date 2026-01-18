@@ -1,18 +1,19 @@
+import Konva from "konva";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { canvas } from "$lib/konva/canvasContext";
 
-function debounce<T extends (...args: any[]) => any>(func: T, wait: number): T {
+function debounce<T extends (e: Konva.KonvaEventObject<WheelEvent>) => void>(func: T, wait: number): T {
   let timeout: number;
-  return ((...args: any[]) => {
+  return ((e: Konva.KonvaEventObject<WheelEvent>) => {
     clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
+    timeout = setTimeout(() => func(e), wait);
   }) as T;
 }
 
-export function setupZoom(onZoom?: () => void) {
+export function setupZoom() {
   const stage = canvas.stage!;
-  const debouncedZoom = debounce((e: any) => {
+  const debouncedZoom = debounce((e: Konva.KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
     e.evt.stopPropagation();
 

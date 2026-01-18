@@ -52,7 +52,7 @@ export class ViewportCuller {
     this.visibleNodes = newVisible;
   }
 
-  private isNodeVisible(node: Node, viewport: any): boolean {
+  private isNodeVisible(node: Node, viewport: { left: number; top: number; right: number; bottom: number }): boolean {
     const buffer = this.bufferSize;
     return !(
       node.x + 50 < viewport.left - buffer ||
