@@ -28,6 +28,7 @@
   import { mouseStore } from "./stores/mouseStore";
   import { getHighlighteableNodes } from "./konva/utils/nodes";
   import { preloadJewels } from "./providers/jewels";
+    import { get } from "svelte/store";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(JSON.stringify(translationsJson));
@@ -37,6 +38,7 @@
   let fps = 0;
   let lastTime = performance.now();
   let frameCount = 0;
+  let parsedFromUrl = false;
 
   function updateFPS() {
     frameCount++;
@@ -69,38 +71,42 @@
          y: window.innerHeight / 2,
        });
 
-       // Parse URL and initialize if parameters present
-       parseUrlAndInitialize(data, canvas, performSearch, translation);
+       canvas.backgroundLayer = new Konva.Layer({ listening: false });
+       canvas.mainLayer = new Konva.Layer({ listening: false });
+       canvas.lineLayer = new Konva.Layer({ listening: false });
+       canvas.hitLayer = new Konva.Layer({ listening: true });
+       canvas.highlightLayer = new Konva.Layer({ listening: false });
+       canvas.treeData = data;
 
-      canvas.backgroundLayer = new Konva.Layer({ listening: false });
-      canvas.mainLayer = new Konva.Layer({ listening: false });
-      canvas.lineLayer = new Konva.Layer({ listening: false });
-      canvas.hitLayer = new Konva.Layer({ listening: true });
-      canvas.highlightLayer = new Konva.Layer({ listening: false });
-      canvas.treeData = data;
+       canvas.stage.add(
+         canvas.backgroundLayer,
+         canvas.lineLayer,
+         canvas.mainLayer,
+         canvas.hitLayer,
+         canvas.highlightLayer,
+       );
 
-      canvas.stage.add(
-        canvas.backgroundLayer,
-        canvas.lineLayer,
-        canvas.mainLayer,
-        canvas.hitLayer,
-        canvas.highlightLayer,
-      );
+        getHighlighteableNodes(); // initializationialise the highlighteable nodes cache
+        drawBackground();
+        drawNodes();
+        drawLines();
+        drawBaseRadius();
+        createHitLayer();
 
-       getHighlighteableNodes(); // initializationialise the highlighteable nodes cache
-       drawBackground();
-       drawNodes();
-       drawLines();
-       drawBaseRadius();
-       createHitLayer();
+        setupZoom();
+        setupHover();
+        setupClick();
 
-      // interactions
-      setupZoom();
-      setupHover();
-      setupClick();
+        canvas.mainLayer.batchDraw();
+        canvas.lineLayer.batchDraw();
 
-       canvas.mainLayer.batchDraw();
-       canvas.lineLayer.batchDraw();
+        // Parse URL and initialize if parameters present
+        parsedFromUrl = parseUrlAndInitialize(
+          data,
+          canvas,
+          performSearch,
+          translation,
+        );
 
        updateFPS();
 
@@ -125,7 +131,11 @@
 
   $: currentSkill = $treeStore.chosenSocket?.skill ?? null;
   $: if (canvas.mainLayer && currentSkill !== previousSkill) {
-    updateJewelSockets();
+    if (!parsedFromUrl) {
+      updateJewelSockets();
+    }
+    parsedFromUrl = false;
+
     previousSkill = currentSkill;
   }
 

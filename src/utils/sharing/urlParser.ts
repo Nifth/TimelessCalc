@@ -1,8 +1,10 @@
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
-import type { SearchStore, TreeStore, TreeData, Node, Stat } from "$lib/types";
+import type { TreeData, Node, Stat } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
+import { changeRadius, changeKeystone } from "$lib/konva/utils/jewelHighlight";
 import type Konva from "konva";
+import { get } from "svelte/store";
 
 /**
  * Parses URL parameters and initializes the application state
@@ -12,14 +14,12 @@ export function parseUrlAndInitialize(
   canvas: { stage: Konva.Stage | null },
   performSearch: (mode: "seed" | "stats" | null, seedInput: number | null, translation: Record<string, any[]>, jewelType: any, selectedStats: Stat[]) => Promise<void>,
   translation: Record<string, any[]>,
-  onComplete?: () => void
-) {
+): boolean {
   const urlParams = new URLSearchParams(window.location.search);
-  
+
   // If no URL parameters, nothing to do
   if (urlParams.toString() === '') {
-    onComplete?.();
-    return;
+    return false;
   }
 
   console.log('Initializing from URL parameters:', Object.fromEntries(urlParams.entries()));
@@ -81,16 +81,15 @@ export function parseUrlAndInitialize(
   }
 
   // Parse allocated/unallocated nodes
-  let allocated = new Map<string, Node>();
+  const allocated = new Map<string, Node>();
   if (chosenSocket && socketSkillStr) {
     const socketNodeIds = treeData.socketNodes[socketSkillStr] || [];
     const radiusNodes: number[] = socketNodeIds.map((id: string) => parseInt(id, 10));
-    
     const allocatedJson = urlParams.get('a');
     const unallocatedJson = urlParams.get('un');
-    
+
     let allocatedSkills: number[] = [];
-    
+
     if (allocatedJson) {
       try {
         allocatedSkills = JSON.parse(allocatedJson);
@@ -105,7 +104,7 @@ export function parseUrlAndInitialize(
         console.error('Failed to parse unallocated nodes from URL:', e);
       }
     }
-    
+
     // Convert skills to nodes
     allocatedSkills.forEach(skill => {
       const node = Object.values(treeData.nodes).find(n => n.skill === skill);
@@ -142,6 +141,7 @@ export function parseUrlAndInitialize(
     search: "",
     scale: 0.1,
     hovered: null,
+    loading: true,
   }));
 
   // Center canvas on chosen socket if available
@@ -149,16 +149,33 @@ export function parseUrlAndInitialize(
     centerCanvasOnSocket(canvas.stage, chosenSocket, 0.2);
   }
 
+  // Mark loading complete
+  treeStore.update(t => ({ ...t, loading: false }));
+
+  // Update radius and keystone display without overwriting allocated nodes
+  if (chosenSocket) {
+    changeRadius(chosenSocket);
+    changeKeystone(chosenSocket);
+  }
+
   // Trigger search if we have search parameters
   if (jewelType && conqueror && selectedStats.length > 0) {
     performSearch("stats", null, translation, jewelType, selectedStats).then(() => {
       searchStore.update(s => ({ ...s, loading: false }));
-      onComplete?.();
     });
+  } else if (jewelType && conqueror && seed) {
+    // For seed mode, just set the stores without calling applySeed to preserve allocated from URL
+    searchStore.update(s => ({
+      ...s,
+      searched: true,
+      seed,
+      seedSearched: true,
+      loading: false
+    }));
   } else {
     searchStore.update(s => ({ ...s, loading: false }));
-    onComplete?.();
   }
+  return true;
 }
 
 /**

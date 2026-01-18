@@ -157,4 +157,5 @@ export interface TreeStore {
   search: string;
   scale: number;
   hovered: Node | null;
+  loading: boolean;
 }
