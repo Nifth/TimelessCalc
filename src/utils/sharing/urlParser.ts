@@ -1,5 +1,5 @@
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
-import type { TreeData, Node, Stat } from "$lib/types";
+import type { TreeData, Node, Stat, Translation, JewelType } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import { changeRadius, changeKeystone } from "$lib/konva/utils/jewelHighlight";
@@ -11,8 +11,8 @@ import type Konva from "konva";
 export function parseUrlAndInitialize(
   treeData: TreeData,
   canvas: { stage: Konva.Stage | null },
-  performSearch: (mode: "seed" | "stats" | null, seedInput: number | null, translation: Record<string, any[]>, jewelType: any, selectedStats: Stat[]) => Promise<void>,
-  translation: Record<string, any[]>,
+  performSearch: (mode: "seed" | "stats" | null, seedInput: number | null, translation: Record<string, Translation[]>, jewelType: JewelType | null, selectedStats: Stat[]) => Promise<void>,
+  translation: Record<string, Translation[]>,
 ): boolean {
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -39,14 +39,14 @@ export function parseUrlAndInitialize(
   searchStore.update(s => ({ ...s, loading: true }));
 
   // Parse jewel type
-  let jewelType = jewelTypes.find(jt => jt.name === jewelTypeName) || null;
+  const jewelType = jewelTypes.find(jt => jt.name === jewelTypeName) || null;
   if (!jewelType) {
     console.log('Invalid jewel type:', jewelTypeName);
     return false;
   }
 
   // Parse conqueror
-  let conqueror = conquerors[jewelType.name]?.find(c => c.label === conquerorLabel) || null;
+  const conqueror = conquerors[jewelType.name]?.find(c => c.label === conquerorLabel) || null;
   if (!conqueror) {
     console.log('Invalid conqueror:', conquerorLabel);
     return false;
@@ -96,7 +96,7 @@ export function parseUrlAndInitialize(
     console.log('Invalid socket skill:', socketSkillStr);
     return false;
   }
-  let chosenSocket: Node | null = Object.values(treeData.nodes).find(node => node.skill === socketSkill) || null;
+  const chosenSocket: Node | null = Object.values(treeData.nodes).find(node => node.skill === socketSkill) || null;
   if (!chosenSocket) {
     console.log('Socket not found:', socketSkill);
     return false;
@@ -197,6 +197,10 @@ export function parseUrlAndInitialize(
   } else {
     searchStore.update(s => ({ ...s, loading: false }));
   }
+
+  // Clear URL parameters after successful parsing to prevent re-initialization on reload
+  window.history.replaceState(null, '', window.location.pathname);
+
   return true;
 }
 
