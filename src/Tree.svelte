@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import Sidebar from "./ui/Sidebar.svelte";
   import Tooltip from "./ui/Tooltip.svelte";
+  import Preloader from "./ui/Preloader.svelte";
   import Konva from "konva";
   import treeData from "$lib/data/tree.json" with { type: "json" };
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
@@ -28,7 +29,6 @@
   import { mouseStore } from "./stores/mouseStore";
   import { getHighlighteableNodes } from "./konva/utils/nodes";
   import { preloadJewels } from "./providers/jewels";
-    import { get } from "svelte/store";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(JSON.stringify(translationsJson));
@@ -39,6 +39,8 @@
   let lastTime = performance.now();
   let frameCount = 0;
   let parsedFromUrl = false;
+  let isLoading = true;
+  let loadingComplete = false;
 
   function updateFPS() {
     frameCount++;
@@ -100,7 +102,10 @@
         canvas.mainLayer.batchDraw();
         canvas.lineLayer.batchDraw();
 
-        // Parse URL and initialize if parameters present
+        // Mark loading as complete, progress bar will finish and then hide preloader
+        loadingComplete = true;
+
+         // Parse URL and initialize if parameters present
         parsedFromUrl = parseUrlAndInitialize(
           data,
           canvas,
@@ -146,7 +151,18 @@
   $: if (canvas.mainLayer && $treeStore.allocated) {
     updateAllocatedDisplay();
   }
+
+  $: if (loadingComplete) {
+    // Allow progress bar to complete its animation before hiding preloader
+    setTimeout(() => {
+      isLoading = false;
+    }, 200);
+  }
 </script>
+
+{#if isLoading}
+  <Preloader {loadingComplete} />
+{/if}
 
 <div id="tree" style="position:fixed;inset:0;background:#070c11" on:mouseleave={() => treeStore.update(s => ({ ...s, hovered: null }))}></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
