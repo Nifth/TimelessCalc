@@ -46,7 +46,8 @@
   let _hasTraded = $state(false);
   let tooltipPosition: { top: number; left: number } | null = $state(null);
   let showSocketWarning = $state(false);
-  let shareButtonText = $state('Share Configuration');
+   let shareButtonText = $state('Share Configuration');
+   let activeTab = $state<'search' | 'favorites' | 'history'>('search');
 
   function checkSocketAndSearch(action: () => void) {
     if (!$treeStore.chosenSocket) {
@@ -296,36 +297,50 @@
 
 {#if isOpen}
   <aside
-    class="fixed left-0 top-0 h-screen w-[650px] bg-slate-900/95 backdrop-blur-sm p-6 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700 custom-scrollbar"
+    class="fixed left-0 top-0 h-screen w-[650px] bg-slate-900/80 backdrop-blur-sm p-6 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700 custom-scrollbar"
   >
     <header
-      class="flex items-center gap-3 pl-12 pb-4 border-b border-slate-700 relative"
+      class="pl-12 pr-6 relative flex"
     >
-      {#if $searchStore.searched && $searchStore.mode === "stats"}
-        <TradeControls
-          jewelType={$searchStore.jewelType}
-          conqueror={$searchStore.conqueror}
-          hasTraded={_hasTraded}
-          ontrade={handleTrade}
-          onnext={() => {
-            nextPage();
-            logNextPage();
-          }}
-          ontargetposition={(pos) => (tooltipPosition = pos)}
-        >
-          <LeagueSelector slot="league" />
-          <PlatformSelector slot="platform" />
-        </TradeControls>
-      {:else if !$searchStore.searched || $searchStore.mode !== "stats"}
-        <span
-          class="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap"
-          >Jewel Type</span
-        >
-      {/if}
+      <button
+        class="flex-1 py-2 transition-colors cursor-pointer {activeTab === 'search' ? 'text-white border-b-2 border-blue-400' : 'text-slate-300 hover:text-slate-100'}"
+        onclick={() => activeTab = 'search'}
+      >
+        Search
+      </button>
+      <button
+        class="flex-1 py-2 transition-colors cursor-pointer {activeTab === 'favorites' ? 'text-white border-b-2 border-green-400' : 'text-slate-300 hover:text-slate-100'}"
+        onclick={() => activeTab = 'favorites'}
+      >
+        Favorites
+      </button>
+      <button
+        class="flex-1 py-2 transition-colors cursor-pointer {activeTab === 'history' ? 'text-white border-b-2 border-purple-400' : 'text-slate-300 hover:text-slate-100'}"
+        onclick={() => activeTab = 'history'}
+      >
+        History
+      </button>
     </header>
 
     <div class="pt-4">
+      {#if activeTab === 'search'}
       {#if $searchStore.searched && $searchStore.mode === "stats"}
+        <div class="flex items-center gap-3 mb-4">
+          <TradeControls
+            jewelType={$searchStore.jewelType}
+            conqueror={$searchStore.conqueror}
+            hasTraded={_hasTraded}
+            ontrade={handleTrade}
+            onnext={() => {
+              nextPage();
+              logNextPage();
+            }}
+            ontargetposition={(pos) => (tooltipPosition = pos)}
+          >
+            <LeagueSelector slot="league" />
+            <PlatformSelector slot="platform" />
+          </TradeControls>
+        </div>
         <div class="space-y-4">
           <BackButton onclick={backToForm} />
 
@@ -354,6 +369,11 @@
           {/if}
         </div>
       {:else}
+        <div class="mb-4">
+          <span
+            class="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap"
+          >Jewel Type</span>
+        </div>
         <div class="space-y-6">
           <section>
             <JewelTypeSelector bind:jewelType={$searchStore.jewelType} />
@@ -403,62 +423,72 @@
             {/if}
           {/if}
 
-            <NodeToggles />
-          </div>
+             <NodeToggles />
+           </div>
+       {/if}
+       {#if tooltipPosition}
+         {@const pageInfo = getPageRangeFromOrdered(
+           $searchStore.orderedSeeds,
+           $searchStore.currentPage,
+           $searchStore.jewelType!,
+           $searchStore.conqueror,
+         )}
+         <div
+           class="fixed z-[100] w-64 p-3 bg-slate-800 border border-slate-600 rounded-lg shadow-xl text-sm text-slate-200"
+           style="top: {tooltipPosition.top}px; left: {tooltipPosition.left}px"
+         >
+           <p class="font-semibold mb-2">Trade Link Pagination</p>
+           <p class="mb-2">
+             Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when possible (e.g.,
+             10020-10022) to maximize filter usage, allowing to have a bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
+             (best matches first).
+           </p>
+           <p>
+             {#if pageInfo.count > 0}
+               {@const seedsPerPage = getSeedsPerPage(
+                 $searchStore.jewelType!,
+                 $searchStore.conqueror,
+               )}
+               {@const startNum = $searchStore.currentPage * seedsPerPage + 1}
+               {@const endNum = Math.min(
+                 startNum + seedsPerPage - 1,
+                 $searchStore.totalResults,
+               )}
+               Showing seeds {startNum}-{endNum} of {$searchStore.totalResults}
+             {:else}
+               No results to display
+             {/if}
+           </p>
+         </div>
+       {/if}
+       {#if $searchStore.lastTradeInfo}
+         <TradeNotification
+           seeds={$searchStore.lastTradeInfo.seeds}
+           conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
+           page={$searchStore.lastTradeInfo.page}
+           groupName={$searchStore.lastTradeInfo.groupName}
+           onDismiss={() =>
+             searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
+         />
+       {/if}
+       {#if showSocketWarning}
+         <Modal
+           message="No jewel socket selected. Please select a socket on the passive tree before searching."
+           onConfirm={confirmSearch}
+           onCancel={() => (showSocketWarning = false)}
+         />
+       {/if}
+      {:else if activeTab === 'favorites'}
+        <div class="p-4 text-slate-300">
+          <h2 class="text-lg font-semibold mb-2">Favorites</h2>
+          <p>Placeholder content for Favorites tab. This will show saved jewel configurations.</p>
+        </div>
+      {:else if activeTab === 'history'}
+        <div class="p-4 text-slate-300">
+          <h2 class="text-lg font-semibold mb-2">History</h2>
+          <p>Placeholder content for History tab. This will show recent searches and allocations.</p>
+        </div>
       {/if}
-      </div>
-  </aside>
-  {#if tooltipPosition}
-    {@const pageInfo = getPageRangeFromOrdered(
-      $searchStore.orderedSeeds,
-      $searchStore.currentPage,
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-    )}
-    <div
-      class="fixed z-[100] w-64 p-3 bg-slate-800 border border-slate-600 rounded-lg shadow-xl text-sm text-slate-200"
-      style="top: {tooltipPosition.top}px; left: {tooltipPosition.left}px"
-    >
-      <p class="font-semibold mb-2">Trade Link Pagination</p>
-      <p class="mb-2">
-        Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when possible (e.g.,
-        10020-10022) to maximize filter usage, allowing to have a bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
-        (best matches first).
-      </p>
-      <p>
-        {#if pageInfo.count > 0}
-          {@const seedsPerPage = getSeedsPerPage(
-            $searchStore.jewelType!,
-            $searchStore.conqueror,
-          )}
-          {@const startNum = $searchStore.currentPage * seedsPerPage + 1}
-          {@const endNum = Math.min(
-            startNum + seedsPerPage - 1,
-            $searchStore.totalResults,
-          )}
-          Showing seeds {startNum}-{endNum} of {$searchStore.totalResults}
-        {:else}
-          No results to display
-        {/if}
-      </p>
     </div>
-  {/if}
-  {#if $searchStore.lastTradeInfo}
-    <TradeNotification
-      seeds={$searchStore.lastTradeInfo.seeds}
-      conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
-      page={$searchStore.lastTradeInfo.page}
-      groupName={$searchStore.lastTradeInfo.groupName}
-      onDismiss={() =>
-        searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
-    />
-  {/if}
-
-    {#if showSocketWarning}
-      <Modal
-        message="No jewel socket selected. Please select a socket on the passive tree before searching."
-        onConfirm={confirmSearch}
-        onCancel={() => (showSocketWarning = false)}
-      />
-    {/if}
-    {/if}
+    </aside>
+{/if}
