@@ -38,10 +38,6 @@
   );
 
   let isOpen = $state(true);
-  let mode: "seed" | "stats" | null = $state(null);
-  let showingResults = $state(false);
-  let seedSearched = $state(false);
-  let statsSearched = $state(false);
   let seedInput: number | null = $state(null);
 
   let expandedGroups: Record<number, boolean> = $state({});
@@ -205,53 +201,51 @@
 
   async function handleSearch() {
     await performSearch(
-      mode,
+      $searchStore.mode,
       seedInput,
       translation,
       $searchStore.jewelType,
       $searchStore.selectedStats,
     );
     if ($searchStore.searched) {
-      if (mode === "stats") {
-        statsSearched = true;
-        showingResults = true;
-      } else if (mode === "seed") {
-        seedSearched = true;
-      }
+      searchStore.update(s => {
+        if (s.mode === "stats") {
+          s.statsSearched = true;
+        } else if (s.mode === "seed") {
+          s.seedSearched = true;
+        }
+        return s;
+      });
     }
   }
 
   function backToForm() {
-    showingResults = false;
     seedInput = null;
-    seedSearched = false;
-    statsSearched = false;
     searchStore.update((s) => {
       s.searched = false;
       s.statsResults = {};
       s.currentPage = 0;
       s.totalResults = 0;
       s.orderedSeeds = [];
+      s.statsSearched = false;
+      s.seedSearched = false;
       return s;
     });
   }
 
   function setMode(newMode: "seed" | "stats" | null) {
-    mode = newMode;
+    searchStore.update(s => ({
+      ...s,
+      mode: newMode,
+      searched: newMode === "stats" ? false : s.searched,
+      statsResults: newMode === "stats" ? {} : s.statsResults,
+      statsSearched: false,
+      seedSearched: newMode === "seed" ? false : s.seedSearched,
+    }));
     seedInput = null;
-    if (mode === "stats") {
+    if (newMode === "stats") {
       fetchLeagues();
-      seedSearched = false;
-      statsSearched = false;
-      searchStore.update((s) => {
-        s.searched = false;
-        s.statsResults = {};
-        return s;
-      });
-    } else if (mode === "seed") {
-      seedSearched = false;
     }
-    showingResults = false;
   }
 
   async function applySeedFromResults(seed: number) {
@@ -307,7 +301,7 @@
     <header
       class="flex items-center gap-3 pl-12 pb-4 border-b border-slate-700 relative"
     >
-      {#if showingResults && mode === "stats"}
+      {#if $searchStore.searched && $searchStore.mode === "stats"}
         <TradeControls
           jewelType={$searchStore.jewelType}
           conqueror={$searchStore.conqueror}
@@ -322,7 +316,7 @@
           <LeagueSelector slot="league" />
           <PlatformSelector slot="platform" />
         </TradeControls>
-      {:else if !showingResults}
+      {:else if !$searchStore.searched || $searchStore.mode !== "stats"}
         <span
           class="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap"
           >Jewel Type</span
@@ -331,7 +325,15 @@
     </header>
 
     <div class="pt-4">
-      {#if showingResults}
+      {#if $searchStore.loading}
+        <div class="flex items-center justify-center py-12">
+          <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p class="text-slate-400">Loading configuration...</p>
+          </div>
+        </div>
+      {:else}
+      {#if $searchStore.searched && $searchStore.mode === "stats"}
         <div class="space-y-4">
           <BackButton onclick={backToForm} />
 
@@ -339,7 +341,7 @@
             {shareButtonText}
           </button>
 
-          {#if mode === "stats" && statsSearched && Object.keys($searchStore.statsResults).length > 0}
+           {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
             <StatsResults
               jewelType={$searchStore.jewelType}
               conqueror={$searchStore.conqueror}
@@ -351,7 +353,7 @@
               ongroupnext={handleGroupNext}
               onexpand={expandGroup}
             />
-          {:else if mode === "seed" && seedSearched}
+          {:else if $searchStore.mode === "seed" && $searchStore.seedSearched}
             <SeedResultDisplay seed={$searchStore.seed} />
           {:else}
             <div class="bg-slate-800 rounded-lg p-8 text-center">
@@ -381,13 +383,13 @@
             {#if $searchStore.conqueror}
               <section>
                 <ModeSelector
-                  {mode}
+                  mode={$searchStore.mode}
                   disabled={!$searchStore.jewelType}
                   onselectmode={setMode}
                 />
               </section>
 
-              {#if mode === "seed"}
+              {#if $searchStore.mode === "seed"}
                 <SeedSearch
                   jewelType={$searchStore.jewelType}
                   bind:seed={seedInput}
@@ -395,7 +397,7 @@
                 />
               {/if}
 
-              {#if mode === "stats"}
+              {#if $searchStore.mode === "stats"}
                 <StatsSearch
                   jewelType={$searchStore.jewelType}
                 />
@@ -409,10 +411,11 @@
             {/if}
           {/if}
 
-          <NodeToggles />
-        </div>
+           <NodeToggles />
+         </div>
+       {/if}
       {/if}
-    </div>
+     </div>
   </aside>
   {#if tooltipPosition}
     {@const pageInfo = getPageRangeFromOrdered(
@@ -460,11 +463,11 @@
     />
   {/if}
 
-  {#if showSocketWarning}
-    <Modal
-      message="No jewel socket selected. Please select a socket on the passive tree before searching."
-      onConfirm={confirmSearch}
-      onCancel={() => (showSocketWarning = false)}
-    />
-  {/if}
-{/if}
+    {#if showSocketWarning}
+      <Modal
+        message="No jewel socket selected. Please select a socket on the passive tree before searching."
+        onConfirm={confirmSearch}
+        onCancel={() => (showSocketWarning = false)}
+      />
+    {/if}
+    {/if}

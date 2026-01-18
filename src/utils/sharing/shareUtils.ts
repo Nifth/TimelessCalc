@@ -43,6 +43,10 @@ export function generateShareUrl(searchState: SearchStore, treeState: TreeStore,
     params.set('p', searchState.platform);
   }
 
+  if (searchState.mode) {
+    params.set('m', searchState.mode);
+  }
+
   // Encode tree state
   if (treeState.chosenSocket) {
     params.set('so', treeState.chosenSocket.skill.toString());

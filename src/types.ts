@@ -145,6 +145,10 @@ export interface SearchStore {
     page: number;
     groupName?: string;
   } | null;
+  loading: boolean;
+  mode: "seed" | "stats" | null;
+  statsSearched: boolean;
+  seedSearched: boolean;
 }
 
 export interface TreeStore {

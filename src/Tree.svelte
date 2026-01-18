@@ -4,8 +4,11 @@
   import Tooltip from "./ui/Tooltip.svelte";
   import Konva from "konva";
   import treeData from "$lib/data/tree.json" with { type: "json" };
+  import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import { preloadSprites } from "$lib/konva/utils/sprites";
   import type { TreeData } from "$lib/types";
+  import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
+  import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
 
   import { canvas } from "$lib/konva/canvasContext";
   import { drawBackground } from "$lib/konva/layers/background";
@@ -27,6 +30,7 @@
   import { preloadJewels } from "./providers/jewels";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
+  const translation: Record<string, any[]> = JSON.parse(JSON.stringify(translationsJson));
 
   let previousSkill: number | null = null;
 
@@ -52,18 +56,21 @@
       await preloadJewels();
 
        canvas.stage = new Konva.Stage({
-         container: document.getElementById("tree")! as HTMLDivElement,
-         width: window.innerWidth,
-         height: window.innerHeight,
-         draggable: true,
+          container: document.getElementById("tree")! as HTMLDivElement,
+          width: window.innerWidth,
+          height: window.innerHeight,
+          draggable: true,
+        });
+
+       // initialization
+       canvas.stage.scale({ x: 0.2, y: 0.2 });
+       canvas.stage.position({
+         x: window.innerWidth / 2,
+         y: window.innerHeight / 2,
        });
 
-      // initialization
-      canvas.stage.scale({ x: 0.2, y: 0.2 });
-      canvas.stage.position({
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-      });
+       // Parse URL and initialize if parameters present
+       parseUrlAndInitialize(data, canvas, performSearch, translation);
 
       canvas.backgroundLayer = new Konva.Layer({ listening: false });
       canvas.mainLayer = new Konva.Layer({ listening: false });
