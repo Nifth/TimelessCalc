@@ -165,6 +165,18 @@ export interface SearchStore {
   mode: "seed" | "stats" | null;
   statsSearched: boolean;
   seedSearched: boolean;
+  automated: boolean
+}
+
+export interface SearchHistoryEntry {
+  id: string;
+  timestamp: number;
+  socket: Node;
+  jewelType: JewelType;
+  conqueror: Conqueror | null;
+  stats: Stat[];
+  minTotalWeight: number;
+  allocatedSkillIds: string[];
 }
 
 export interface TreeStore {

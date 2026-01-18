@@ -22,4 +22,5 @@ export const searchStore = writable<SearchStore>({
   mode: null,
   statsSearched: false,
   seedSearched: false,
+  automated: false,
 });

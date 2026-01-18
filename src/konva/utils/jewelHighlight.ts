@@ -10,6 +10,19 @@ import { canvas } from "$lib/konva/canvasContext";
 import { searchStore } from "$lib/stores/searchStore";
 
 export function updateJewelSockets() {
+  const chosenSocket = get(treeStore).chosenSocket;
+
+  // Update visual appearance first
+  updateSocketVisualSelection();
+
+  // Then apply socket-specific effects
+  changeRadius(chosenSocket);
+  changeKeystone(chosenSocket);
+  setAllocatedNodes(chosenSocket);
+}
+
+// Only updates the visual selection state of sockets without allocating nodes
+export function updateSocketVisualSelection() {
   const jewelImages = canvas.jewelImages,
     layer = canvas.mainLayer!,
     data = canvas.treeData;
@@ -46,11 +59,7 @@ export function updateJewelSockets() {
     img.offsetY(sprite.offsetY());
     img.width(sprite.width());
     img.height(sprite.height());
-
-    changeRadius(chosenSocket);
   });
-  changeKeystone(chosenSocket);
-  setAllocatedNodes(chosenSocket);
 
   layer.batchDraw();
 }

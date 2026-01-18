@@ -17,7 +17,7 @@
   import { canvas } from "$lib/konva/canvasContext";
   import { drawBackground } from "$lib/konva/layers/background";
   import { drawLines } from "$lib/konva/layers/lines";
-   import { drawBaseRadius, drawNodesProgressive } from "$lib/konva/layers/nodes";
+  import { drawBaseRadius, drawNodesProgressive } from "$lib/konva/layers/nodes";
   import { createHitLayer } from "$lib/konva/layers/hit";
   import { setupZoom } from "$lib/konva/utils/zoom";
   import { setupHover } from "$lib/konva/utils/hover";
@@ -32,6 +32,8 @@
   import { mouseStore } from "./stores/mouseStore";
   import { getHighlighteableNodes } from "./konva/utils/nodes";
   import { preloadJewels } from "./providers/jewels";
+  import { fetchLeagues } from "./providers/leagues";
+  import { get } from "svelte/store";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(JSON.stringify(translationsJson));
@@ -188,6 +190,7 @@
           loadingComplete = true;
         });
 
+        fetchLeagues();
          // Parse URL and initialize if parameters present
         parsedFromUrl = parseUrlAndInitialize(
           data,
@@ -221,11 +224,10 @@
 
   $: currentSkill = $treeStore.chosenSocket?.skill ?? null;
   $: if (canvas.mainLayer && currentSkill !== previousSkill) {
-    if (!parsedFromUrl) {
+    if (!get(searchStore).automated && !parsedFromUrl) {
       updateJewelSockets();
+      parsedFromUrl = false;
     }
-    parsedFromUrl = false;
-
     previousSkill = currentSkill;
   }
 

@@ -2,7 +2,7 @@ import { jewelTypes, conquerors } from "$lib/constants/timeless";
 import type { TreeData, Node, Stat, Translation, JewelType } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
-import { changeRadius, changeKeystone } from "$lib/konva/utils/jewelHighlight";
+import { changeRadius, changeKeystone, updateSocketVisualSelection } from "$lib/konva/utils/jewelHighlight";
 import type Konva from "konva";
 
 /**
@@ -152,6 +152,7 @@ export function parseUrlAndInitialize(
     mode,
     statsSearched: mode === "stats",
     seedSearched: mode === "seed",
+    automated: true,
   }));
 
   treeStore.update(t => ({
@@ -164,13 +165,16 @@ export function parseUrlAndInitialize(
     loading: true,
   }));
 
-  // Center canvas on chosen socket if available
-  if (chosenSocket && canvas.stage) {
-    centerCanvasOnSocket(canvas.stage, chosenSocket, 0.2);
-  }
+   // Update visual display of jewel sockets (selected state)
+   updateSocketVisualSelection();
 
-  // Mark loading complete
-  treeStore.update(t => ({ ...t, loading: false }));
+   // Center canvas on chosen socket if available
+   if (chosenSocket && canvas.stage) {
+     centerCanvasOnSocket(canvas.stage, chosenSocket, 0.2);
+   }
+
+   // Mark loading complete
+   treeStore.update(t => ({ ...t, loading: false }));
 
   // Update radius and keystone display without overwriting allocated nodes
   if (chosenSocket) {
@@ -193,14 +197,17 @@ export function parseUrlAndInitialize(
 
   // Clear URL parameters after successful parsing to prevent re-initialization on reload
   window.history.replaceState(null, '', window.location.pathname);
-
+  searchStore.update(s => ({
+    ...s,
+    automated: false,
+  }));
   return true;
 }
 
 /**
  * Centers the canvas on a specific socket
  */
-function centerCanvasOnSocket(stage: Konva.Stage, socket: Node, scale: number) {
+export function centerCanvasOnSocket(stage: Konva.Stage, socket: Node, scale: number) {
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
   

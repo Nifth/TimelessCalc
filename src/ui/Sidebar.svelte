@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Translation, TreeData } from "$lib/types";
-  import { searchStore } from "$lib/stores/searchStore";
-  import { treeStore } from "$lib/stores/treeStore";
+   import { searchStore } from "$lib/stores/searchStore";
+   import { treeStore } from "$lib/stores/treeStore";
+   import { historyActions } from "$lib/stores/historyStore";
   import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
   import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
   import TradeNotification from "$lib/ui/TradeNotification.svelte";
@@ -29,9 +30,10 @@
   import StatsResults from "./StatsResults.svelte";
   import TradeControls from "./TradeControls.svelte";
   import BackButton from "./BackButton.svelte";
-  import SeedResultDisplay from "./SeedResultDisplay.svelte";
-  import NodeToggles from "./NodeToggles.svelte";
-  import Modal from "./Modal.svelte";
+   import SeedResultDisplay from "./SeedResultDisplay.svelte";
+   import NodeToggles from "./NodeToggles.svelte";
+   import Modal from "./Modal.svelte";
+   import SearchHistory from "./SearchHistory.svelte";
 
   const translation: Record<string, Translation[]> = JSON.parse(
     JSON.stringify(translationsJson),
@@ -212,6 +214,8 @@
       searchStore.update(s => {
         if (s.mode === "stats") {
           s.statsSearched = true;
+          // Save successful stats search to history
+          historyActions.saveCurrentSearch();
         } else if (s.mode === "seed") {
           s.seedSearched = true;
         }
@@ -245,7 +249,7 @@
     }));
     seedInput = null;
     if (newMode === "stats") {
-      fetchLeagues();
+      ;
     }
   }
 
@@ -484,10 +488,7 @@
           <p>Placeholder content for Favorites tab. This will show saved jewel configurations.</p>
         </div>
       {:else if activeTab === 'history'}
-        <div class="p-4 text-slate-300">
-          <h2 class="text-lg font-semibold mb-2">History</h2>
-          <p>Placeholder content for History tab. This will show recent searches and allocations.</p>
-        </div>
+         <SearchHistory onswitchtotab={(tab) => activeTab = tab} />
       {/if}
     </div>
     </aside>
