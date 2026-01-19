@@ -35,6 +35,10 @@ import { conquerors } from "$lib/constants/timeless";
     import NodeToggles from "./NodeToggles.svelte";
     import Modal from "./Modal.svelte";
     import SearchHistory from "./SearchHistory.svelte";
+    import Favorites from "./Favorites.svelte";
+    import SaveFavoriteModal from "./SaveFavoriteModal.svelte";
+    import FavoriteNotification from "./FavoriteNotification.svelte";
+    import { favoritesActions } from "$lib/stores/favoritesStore";
 
    const translation: Record<string, any[]> = JSON.parse(
      JSON.stringify(translationsJson),
@@ -46,9 +50,13 @@ import { conquerors } from "$lib/constants/timeless";
    let expandedGroups: Record<number, boolean> = $state({});
    let groupPages: Record<string, number> = $state({});
    let hasGroupTraded: Record<string, boolean> = $state({});
-   let _hasTraded = $state(false);
-    let tooltipPosition: { top: number; left: number } | null = $state(null);
-     let shareButtonText = $state('Share Configuration');
+    let _hasTraded = $state(false);
+     let tooltipPosition: { top: number; left: number } | null = $state(null);
+      let shareButtonText = $state('Share Configuration');
+    let showSaveFavoriteModal = $state(false);
+    let favoriteSuggestion = $state("");
+    let showFavoriteNotification = $state(false);
+    let favoriteNotificationName = $state("");
      let socketWarningMessage = $state("");
     let activeTab = $state<'search' | 'favorites' | 'history'>('search');
 
@@ -317,6 +325,57 @@ import { conquerors } from "$lib/constants/timeless";
       setTimeout(() => shareButtonText = 'Share Configuration', 2000);
     }
   }
+
+  function findNearbyKeystone(socket: any): string {
+    const treeNodes = (treeData as unknown as TreeData).nodes;
+    const socketNodes = (treeData as unknown as TreeData).socketNodes[socket.skill.toString()];
+
+    if (!socketNodes) {
+      return socket.name;
+    }
+
+    for (const nodeId of socketNodes) {
+      const node = treeNodes[nodeId];
+      if (node && node.isKeystone) {
+        return node.name;
+      }
+    }
+
+    for (const nodeId of socketNodes) {
+      const node = treeNodes[nodeId];
+      if (node && node.isNotable) {
+        return node.name;
+      }
+    }
+
+    for (const nodeId of socketNodes) {
+      const node = treeNodes[nodeId];
+      if (node && node.name && node.name !== "Basic Jewel Socket" && !node.name.includes("Jewel Socket")) {
+        return node.name;
+      }
+    }
+
+    return socket.name;
+  }
+
+  function generateFavoriteSuggestion(): string {
+    const conquerorLabel = $searchStore.conqueror?.label || "Any";
+    const jewelTypeLabel = $searchStore.jewelType?.label || "";
+    const keystone = findNearbyKeystone($treeStore.chosenSocket!);
+    return `${conquerorLabel} (${jewelTypeLabel}) - ${keystone}`;
+  }
+
+  function handleSaveFavorite(name: string) {
+    const finalName = name.trim() === "" ? favoriteSuggestion : name;
+    favoritesActions.saveFavorite(finalName);
+    showSaveFavoriteModal = false;
+    favoriteNotificationName = finalName;
+    showFavoriteNotification = true;
+  }
+
+  function dismissFavoriteNotification() {
+    showFavoriteNotification = false;
+  }
 </script>
 
 <SidebarToggle bind:isOpen />
@@ -372,15 +431,27 @@ import { conquerors } from "$lib/constants/timeless";
         <div class="space-y-4">
           <BackButton onclick={backToForm} />
 
-          <button
-            onclick={handleShare}
-            disabled={!canShare}
-            class="w-full py-3 px-4 rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg {canShare
-              ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
-              : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
-          >
-            {shareButtonText}
-          </button>
+           <button
+             onclick={handleShare}
+             disabled={!canShare}
+             class="w-full py-3 px-4 rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg {canShare
+               ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
+               : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
+           >
+             {shareButtonText}
+           </button>
+
+           {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+             <button
+               onclick={() => {
+                 favoriteSuggestion = generateFavoriteSuggestion();
+                 showSaveFavoriteModal = true;
+               }}
+               class="w-full py-3 px-4 rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg bg-green-600 hover:bg-green-500 text-white shadow-green-500/20"
+             >
+               Save to Favorites
+             </button>
+           {/if}
 
            {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
             <StatsResults
@@ -463,10 +534,7 @@ import { conquerors } from "$lib/constants/timeless";
 
 
       {:else if activeTab === 'favorites'}
-        <div class="p-4 text-slate-300">
-          <h2 class="text-lg font-semibold mb-2">Favorites</h2>
-          <p>Placeholder content for Favorites tab. This will show saved jewel configurations.</p>
-        </div>
+        <Favorites onswitchtotab={(tab) => activeTab = tab} />
       {:else if activeTab === 'history'}
          <SearchHistory onswitchtotab={(tab) => activeTab = tab} />
       {/if}
@@ -524,5 +592,20 @@ import { conquerors } from "$lib/constants/timeless";
   <Modal
     message={socketWarningMessage}
     onCancel={() => (socketWarningMessage = "")}
+  />
+{/if}
+
+{#if showSaveFavoriteModal}
+  <SaveFavoriteModal
+    suggestedName={favoriteSuggestion}
+    onSave={handleSaveFavorite}
+    onCancel={() => showSaveFavoriteModal = false}
+  />
+{/if}
+
+{#if showFavoriteNotification}
+  <FavoriteNotification
+    name={favoriteNotificationName}
+    onDismiss={dismissFavoriteNotification}
   />
 {/if}

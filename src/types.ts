@@ -179,6 +179,10 @@ export interface SearchHistoryEntry {
   allocatedSkillIds: string[];
 }
 
+export interface FavoriteEntry extends SearchHistoryEntry {
+  name: string;
+}
+
 export interface TreeStore {
   chosenSocket: Node | null;
   allocated: Map<string, Node>;
