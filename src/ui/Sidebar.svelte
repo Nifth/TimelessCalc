@@ -428,7 +428,7 @@ import { conquerors } from "$lib/constants/timeless";
             </TradeControls>
           </div>
         {/if}
-        <div class="flex gap-3">
+        <div class="flex gap-3 sticky bottom-0 bg-slate-900 pb-4 -mb-4">
           <BackButton onclick={backToForm} />
 
            <button
@@ -452,12 +452,13 @@ import { conquerors } from "$lib/constants/timeless";
                Save to Favorites
              </button>
            {/if}
+        </div>
 
-           {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
-            <StatsResults
-              jewelType={$searchStore.jewelType}
-              conqueror={$searchStore.conqueror}
-              bind:expandedGroups
+        {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+          <StatsResults
+            jewelType={$searchStore.jewelType}
+            conqueror={$searchStore.conqueror}
+            bind:expandedGroups
               bind:groupPages
               bind:hasGroupTraded
               onapplyseed={applySeedFromResults}
@@ -472,7 +473,6 @@ import { conquerors } from "$lib/constants/timeless";
               <p class="text-slate-400 italic">No results to display.</p>
             </div>
           {/if}
-        </div>
       {:else}
         <div class="mb-4">
           <span
