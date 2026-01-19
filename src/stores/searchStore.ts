@@ -24,3 +24,23 @@ export const searchStore = writable<SearchStore>({
   seedSearched: false,
   automated: false,
 });
+
+/**
+ * Resets fields that depend on jewelType selection.
+ * Called when jewelType changes since conqueror/stats differ per jewel type.
+ */
+export function resetDependentFields() {
+  searchStore.update((s) => ({
+    ...s,
+    conqueror: null,
+    selectedStats: [],
+    minTotalWeight: 0,
+    searched: false,
+    statsResults: {},
+    orderedSeeds: [],
+    currentPage: 0,
+    totalResults: 0,
+    statsSearched: false,
+    seedSearched: false,
+  }));
+}

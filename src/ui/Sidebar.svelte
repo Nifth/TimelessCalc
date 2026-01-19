@@ -1,14 +1,15 @@
 <script lang="ts">
-  import type { Translation, TreeData } from "$lib/types";
-  import { searchStore } from "$lib/stores/searchStore";
+  import type { Conqueror, Translation, TreeData } from "$lib/types";
+  import { searchStore, resetDependentFields } from "$lib/stores/searchStore";
     import { treeStore } from "$lib/stores/treeStore";
     import { historyActions } from "$lib/stores/historyStore";
    import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
    import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
    import TradeNotification from "$lib/ui/TradeNotification.svelte";
-   import {
-     getConquerorOptions,
-   } from "$lib/utils/sidebar/options";
+import { conquerors } from "$lib/constants/timeless";
+    import {
+      getConquerorOptions,
+    } from "$lib/utils/sidebar/options";
    import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
    import { applySeed } from "$lib/utils/sidebar/searchLogic";
 
@@ -51,7 +52,33 @@
     let shareButtonText = $state('Share Configuration');
     let activeTab = $state<'search' | 'favorites' | 'history'>('search');
 
-  function checkSocketAndSearch(action: () => void) {
+    let previousJewelType: typeof $searchStore.jewelType = null;
+
+    let canShare = $derived(
+      !!$searchStore.jewelType &&
+      !!$searchStore.conqueror &&
+      ($searchStore.selectedStats.length > 0 || $searchStore.seed !== null)
+    );
+
+    $effect(() => {
+      const current = $searchStore.jewelType;
+      if (current !== previousJewelType) {
+        // Only reset if changing jewelType AND conqueror doesn't match the new type
+        // This allows history/URL loading to work (they set all fields correctly)
+        // while resetting on user interaction
+        if (previousJewelType !== null) {
+          const currentConqueror = $searchStore.conqueror;
+          const validConquerors = current ? conquerors[current.name] || [] : [];
+          const isValidConqueror = validConquerors.some((c: Conqueror) => c.label === currentConqueror?.label);
+          if (!isValidConqueror) {
+            resetDependentFields();
+          }
+        }
+        previousJewelType = current;
+      }
+    });
+
+   function checkSocketAndSearch(action: () => void) {
     if (!$treeStore.chosenSocket) {
       showSocketWarning = true;
       return;
@@ -350,7 +377,13 @@
         <div class="space-y-4">
           <BackButton onclick={backToForm} />
 
-          <button onclick={handleShare} class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-blue-500/20">
+          <button
+            onclick={handleShare}
+            disabled={!canShare}
+            class="w-full py-3 px-4 rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg {canShare
+              ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
+              : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
+          >
             {shareButtonText}
           </button>
 
