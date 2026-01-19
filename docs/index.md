@@ -26,6 +26,7 @@
 - [API Contracts](./api-contracts-main.md)
 - [Data Models](./data-models-main.md)
 - [Performance Monitoring](./performance-monitoring.md)
+- [Search History](./search-history.md)
 
 ## Existing Documentation
 
@@ -60,6 +61,13 @@ The application provides an interactive interface for calculating and visualizin
 - Filter by jewel type (Glorious Vanity, Lethal Pride, etc.)
 - Select conqueror modifiers and specific stat requirements
 - Real-time results with pagination and trade integration
+
+### Search History
+- Automatically saves previous search configurations
+- Stores up to 10 entries in localStorage
+- Each entry preserves jewel type, conqueror, stats, and allocated nodes
+- Load previous searches with one click
+- Confirmation dialog prevents accidental configuration loss
 
 ### Sharing Configurations
 - Generate shareable URLs that encode current search filters and tree state
