@@ -1,12 +1,22 @@
 <script lang="ts">
 
   import { favoritesStore, favoritesActions } from "$lib/stores/favoritesStore";
+  import { searchStore } from "$lib/stores/searchStore";
+  import { treeStore } from "$lib/stores/treeStore";
+  import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
+  import translationsJson from "$lib/data/translation.json" with { type: "json" };
+  import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
+  import { canvas } from "$lib/konva/canvasContext";
   import Modal from "./Modal.svelte";
   import type { FavoriteEntry, Stat } from "$lib/types";
 
   let { onswitchtotab } = $props<{
     onswitchtotab: (tab: "search" | "favorites" | "history") => void;
   }>();
+
+  const translation: Record<string, any[]> = JSON.parse(
+    JSON.stringify(translationsJson),
+  );
 
   let showConfirmModal = $state(false);
   let pendingLoadEntry: FavoriteEntry | null = $state(null);
@@ -45,9 +55,44 @@
     }
   }
 
-  function loadEntry(entry: FavoriteEntry) {
+  async function loadEntry(entry: FavoriteEntry) {
+    // Load the configuration
+    searchStore.update(s => ({
+      ...s,
+      automated: true,
+    }));
     favoritesActions.loadFavorite(entry);
+
+    // Center canvas on the socket
+    if (canvas.stage && entry.socket) {
+      centerCanvasOnSocket(canvas.stage, entry.socket, 0.2);
+      // Update tree store scale to match
+      treeStore.update(s => ({ ...s, scale: 0.2 }));
+    }
+
+    // Automatically trigger the search
+    await performSearch(
+      "stats", // Force stats mode
+      null, // No seed input for stats mode
+      translation,
+      entry.jewelType,
+      entry.stats,
+    );
+
+    // Switch to search tab to show results
     onswitchtotab('search');
+
+    // Update search state after successful search
+    if ($searchStore.searched) {
+      searchStore.update(s => ({
+        ...s,
+        statsSearched: true,
+      }));
+    }
+    searchStore.update(s => ({
+      ...s,
+      automated: false,
+    }));
   }
 
   function startEdit(id: string, currentName: string) {
