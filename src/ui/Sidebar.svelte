@@ -428,30 +428,44 @@ import { conquerors } from "$lib/constants/timeless";
             </TradeControls>
           </div>
         {/if}
-        <div class="flex gap-3 sticky bottom-0 bg-slate-900 pb-4 -mb-4">
-          <BackButton onclick={backToForm} />
+        <div class="flex gap-2 sticky bottom-0 bg-slate-900/95 backdrop-blur-sm pb-4 -mb-4 border-t border-slate-700">
+          <button
+            onclick={backToForm}
+            class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-all duration-200"
+            aria-label="Back to Search"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
 
-           <button
-             onclick={handleShare}
-             disabled={!canShare}
-             class="flex-1 py-2 px-3 rounded-lg font-medium text-sm cursor-pointer transition-all duration-200 shadow-lg {canShare
-               ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
-               : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
-           >
-             {shareButtonText}
-           </button>
+          <button
+            onclick={handleShare}
+            disabled={!canShare}
+            class="p-2 rounded-lg transition-all duration-200 {canShare
+              ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
+              : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
+            aria-label="Share Configuration"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+            </svg>
+          </button>
 
-           {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
-             <button
-               onclick={() => {
-                 favoriteSuggestion = generateFavoriteSuggestion();
-                 showSaveFavoriteModal = true;
-               }}
-               class="flex-1 py-2 px-3 rounded-lg font-medium text-sm cursor-pointer transition-all duration-200 shadow-lg bg-green-600 hover:bg-green-500 text-white shadow-green-500/20"
-             >
-               Save to Favorites
-             </button>
-           {/if}
+          {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+            <button
+              onclick={() => {
+                favoriteSuggestion = generateFavoriteSuggestion();
+                showSaveFavoriteModal = true;
+              }}
+              class="p-2 rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all duration-200 shadow-green-500/20"
+              aria-label="Save to Favorites"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
+          {/if}
         </div>
 
         {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
