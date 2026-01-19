@@ -38,6 +38,7 @@ import { conquerors } from "$lib/constants/timeless";
     import Favorites from "./Favorites.svelte";
     import SaveFavoriteModal from "./SaveFavoriteModal.svelte";
     import FavoriteNotification from "./FavoriteNotification.svelte";
+    import ShareNotification from "./ShareNotification.svelte";
     import { favoritesActions } from "$lib/stores/favoritesStore";
 
    const translation: Record<string, any[]> = JSON.parse(
@@ -56,6 +57,7 @@ import { conquerors } from "$lib/constants/timeless";
     let showSaveFavoriteModal = $state(false);
     let favoriteSuggestion = $state("");
     let showFavoriteNotification = $state(false);
+    let showShareNotification = $state(false);
     let favoriteNotificationName = $state("");
      let socketWarningMessage = $state("");
     let activeTab = $state<'search' | 'favorites' | 'history'>('search');
@@ -315,10 +317,17 @@ import { conquerors } from "$lib/constants/timeless";
     expandedGroups = { ...expandedGroups, [total]: !expandedGroups[total] };
   }
 
-   async function handleShare() {
-     const shareUrl = generateShareUrl($searchStore, $treeStore, treeData as unknown as TreeData);
-     await copyToClipboard(shareUrl);
-   }
+  async function handleShare() {
+    const shareUrl = generateShareUrl($searchStore, $treeStore, treeData as unknown as TreeData);
+    const success = await copyToClipboard(shareUrl);
+    if (success) {
+      showShareNotification = true;
+    }
+  }
+
+  function dismissShareNotification() {
+    showShareNotification = false;
+  }
 
   function findNearbyKeystone(socket: any): string {
     const treeNodes = (treeData as unknown as TreeData).nodes;
@@ -404,66 +413,66 @@ import { conquerors } from "$lib/constants/timeless";
     <div class="pt-4">
       {#if activeTab === 'search'}
       {#if $searchStore.searched}
-        {#if $searchStore.mode === "stats"}
-          <div class="flex items-center gap-3 mb-4">
-            <TradeControls
-              jewelType={$searchStore.jewelType}
-              conqueror={$searchStore.conqueror}
-              hasTraded={_hasTraded}
-              ontrade={handleTrade}
-              onnext={() => {
-                nextPage();
-                logNextPage();
+         {#if $searchStore.mode === "stats"}
+           <div class="flex items-center justify-between gap-3 mb-4">
+             <div class="flex gap-2">
+          <button
+            onclick={backToForm}
+            class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-all duration-200"
+            aria-label="Back to Search"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <button
+            onclick={handleShare}
+            disabled={!canShare}
+            class="p-2 rounded-lg transition-all duration-200 {canShare
+              ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
+              : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
+            aria-label="Share Configuration"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+            </svg>
+          </button>
+
+          {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+            <button
+              onclick={() => {
+                favoriteSuggestion = generateFavoriteSuggestion();
+                showSaveFavoriteModal = true;
               }}
-              ontargetposition={(pos) => (tooltipPosition = pos)}
+              class="p-2 rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all duration-200 shadow-green-500/20"
+              aria-label="Save to Favorites"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
+             {/if}
+             </div>
+
+             <TradeControls
+               jewelType={$searchStore.jewelType}
+               conqueror={$searchStore.conqueror}
+               hasTraded={_hasTraded}
+               ontrade={handleTrade}
+               onnext={() => {
+                 nextPage();
+                 logNextPage();
+               }}
+               ontargetposition={(pos) => (tooltipPosition = pos)}
              >
                <LeagueSelector slot="league" />
                <PlatformSelector slot="platform" />
-              </TradeControls>
-
-              <div class="flex gap-2 ml-auto">
-                <button
-                  onclick={backToForm}
-                  class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-all duration-200"
-                  aria-label="Back to Search"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-
-                <button
-                  onclick={handleShare}
-                  disabled={!canShare}
-                  class="p-2 rounded-lg transition-all duration-200 {canShare
-                    ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
-                    : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
-                  aria-label="Share Configuration"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                  </svg>
-                </button>
-
-                {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
-                  <button
-                    onclick={() => {
-                      favoriteSuggestion = generateFavoriteSuggestion();
-                      showSaveFavoriteModal = true;
-                    }}
-                    class="p-2 rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all duration-200 shadow-green-500/20"
-                    aria-label="Save to Favorites"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </button>
-                {/if}
-              </div>
+             </TradeControls>
            </div>
          {/if}
 
-        {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+         {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
           <StatsResults
             jewelType={$searchStore.jewelType}
             conqueror={$searchStore.conqueror}
@@ -616,5 +625,11 @@ import { conquerors } from "$lib/constants/timeless";
   <FavoriteNotification
     name={favoriteNotificationName}
     onDismiss={dismissFavoriteNotification}
+  />
+{/if}
+
+{#if showShareNotification}
+  <ShareNotification
+    onDismiss={dismissShareNotification}
   />
 {/if}

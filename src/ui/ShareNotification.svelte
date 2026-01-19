@@ -3,15 +3,14 @@
   import { fly } from "svelte/transition";
   import { cubicOut } from "svelte/easing";
 
-  let { name, onDismiss } = $props<{
-    name: string;
+  let { onDismiss } = $props<{
     onDismiss: () => void;
   }>();
 
   onMount(() => {
     const timeout = setTimeout(() => {
       onDismiss();
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timeout);
   });
@@ -21,7 +20,12 @@
   class="fixed right-4 bottom-20 bg-slate-800 border border-slate-600 rounded-lg shadow-xl p-4 z-50 flex items-center gap-3 max-w-xs"
   transition:fly={{ x: 320, duration: 500, easing: cubicOut }}
 >
-  <span class="text-slate-200 text-sm">Saved as '{name}'</span>
+  <div class="flex items-center gap-2">
+    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+    <span class="text-slate-200 text-sm font-medium">Link copied to clipboard!</span>
+  </div>
   <button
     onclick={onDismiss}
     class="text-slate-400 hover:text-white p-1 transition-colors duration-200 ml-auto"
