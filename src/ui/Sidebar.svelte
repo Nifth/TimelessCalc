@@ -428,13 +428,13 @@ import { conquerors } from "$lib/constants/timeless";
             </TradeControls>
           </div>
         {/if}
-        <div class="space-y-4">
+        <div class="flex gap-3">
           <BackButton onclick={backToForm} />
 
            <button
              onclick={handleShare}
              disabled={!canShare}
-             class="w-full py-3 px-4 rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg {canShare
+             class="flex-1 py-2 px-3 rounded-lg font-medium text-sm cursor-pointer transition-all duration-200 shadow-lg {canShare
                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
                : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
            >
@@ -447,7 +447,7 @@ import { conquerors } from "$lib/constants/timeless";
                  favoriteSuggestion = generateFavoriteSuggestion();
                  showSaveFavoriteModal = true;
                }}
-               class="w-full py-3 px-4 rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg bg-green-600 hover:bg-green-500 text-white shadow-green-500/20"
+               class="flex-1 py-2 px-3 rounded-lg font-medium text-sm cursor-pointer transition-all duration-200 shadow-lg bg-green-600 hover:bg-green-500 text-white shadow-green-500/20"
              >
                Save to Favorites
              </button>
