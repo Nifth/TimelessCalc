@@ -47,9 +47,9 @@ import { conquerors } from "$lib/constants/timeless";
    let groupPages: Record<string, number> = $state({});
    let hasGroupTraded: Record<string, boolean> = $state({});
    let _hasTraded = $state(false);
-   let tooltipPosition: { top: number; left: number } | null = $state(null);
-   let showSocketWarning = $state(false);
-    let shareButtonText = $state('Share Configuration');
+    let tooltipPosition: { top: number; left: number } | null = $state(null);
+     let shareButtonText = $state('Share Configuration');
+     let socketWarningMessage = $state("");
     let activeTab = $state<'search' | 'favorites' | 'history'>('search');
 
     let previousJewelType: typeof $searchStore.jewelType = null;
@@ -78,20 +78,15 @@ import { conquerors } from "$lib/constants/timeless";
       }
     });
 
-   function checkSocketAndSearch(action: () => void) {
-    if (!$treeStore.chosenSocket) {
-      showSocketWarning = true;
-      return;
-    }
-    action();
-  }
+    function checkSocketAndSearch(action: () => void) {
+     if (!$treeStore.chosenSocket) {
+       socketWarningMessage = "No jewel socket selected. Please select a socket on the passive tree before searching.";
+       return;
+     }
+     action();
+   }
 
-  function confirmSearch() {
-    showSocketWarning = false;
-    handleSearch();
-  }
-
-  let conquerorOptions = $derived(getConquerorOptions($searchStore.jewelType));
+   let conquerorOptions = $derived(getConquerorOptions($searchStore.jewelType));
 
   function nextPage() {
     const seedsPerPage = getSeedsPerPage(
@@ -525,10 +520,9 @@ import { conquerors } from "$lib/constants/timeless";
       searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
   />
 {/if}
-{#if showSocketWarning}
+{#if socketWarningMessage}
   <Modal
-    message="No jewel socket selected. Please select a socket on the passive tree before searching."
-    onConfirm={confirmSearch}
-    onCancel={() => (showSocketWarning = false)}
+    message={socketWarningMessage}
+    onCancel={() => (socketWarningMessage = "")}
   />
 {/if}
