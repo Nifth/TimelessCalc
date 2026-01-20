@@ -7,6 +7,27 @@ import { searchStore, setJewelLoadError } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
 import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
 
+const COLORBLIND_FRIENDLY_COLORS = [
+  "#C71585", // Magenta
+  "#FF7F0E", // Orange
+  "#2CA02C", // Green
+  "#D62728", // Red
+  "#9467BD", // Purple
+  "#008080", // Teal
+  "#E377C2", // Pink
+  "#7F7F7F", // Gray
+  "#BCBD22", // Olive
+  "#17BECF", // Cyan
+];
+
+function generateStatKeyColors(statKeys: number[]): Record<number, string> {
+  const colors: Record<number, string> = {};
+  statKeys.forEach((key, index) => {
+    colors[key] = COLORBLIND_FRIENDLY_COLORS[index % COLORBLIND_FRIENDLY_COLORS.length];
+  });
+  return colors;
+}
+
 function applySeedModifications(
   entry: JewelEntry,
   socketNodeIds: string[],
@@ -297,10 +318,18 @@ export async function handleSearch(
       orderedSeeds.push(...seedsInGroup);
     }
 
+    // Generate colors for all unique stat keys found in results
+    const allStatKeys = new Set<number>();
+    for (const { statCounts } of Object.values(results)) {
+      Object.keys(statCounts).forEach(key => allStatKeys.add(parseInt(key)));
+    }
+    const statKeyColors = generateStatKeyColors(Array.from(allStatKeys));
+
     searchStore.update((state) => {
       state.searched = true;
       state.loading = false;
       state.statsResults = grouped;
+      state.statKeyColors = statKeyColors;
       state.orderedSeeds = orderedSeeds;
       state.totalResults = orderedSeeds.length;
       state.currentPage = 0;

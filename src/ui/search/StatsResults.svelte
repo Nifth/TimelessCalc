@@ -50,18 +50,23 @@
   function highlightNodesWithStatKeys(statKeys: number[]) {
     canvas.highlightLayer?.destroyChildren();
 
-    for (const node of $treeStore.allocated.values()) {
-      if (node?.timelessStatKeys?.some((key) => statKeys.includes(key))) {
-        const circle = new Konva.Circle({
-          x: node.x,
-          y: node.y,
-          radius: node.isNotable ? 70 : 50,
-          stroke: "yellow", // todo: Make a random color per stat key
-          strokeWidth: 10,
-        });
-        canvas.highlightLayer?.add(circle);
+    // Draw circles for each stat key individually
+    statKeys.forEach((statKey, index) => {
+      const color = $searchStore.statKeyColors[statKey] || "yellow"; // fallback to yellow
+
+      for (const node of $treeStore.allocated.values()) {
+        if (node?.timelessStatKeys?.includes(statKey)) {
+          const circle = new Konva.Circle({
+            x: node.x,
+            y: node.y,
+            radius: node.isNotable ? 90 : 60,
+            stroke: color,
+            strokeWidth: 15,
+          });
+          canvas.highlightLayer?.add(circle);
+        }
       }
-    }
+    });
 
     canvas.highlightLayer?.batchDraw();
   }
@@ -264,17 +269,19 @@
                     (s) => s.statKey === parseInt(statKey),
                   )}
                   {@const total = item.statTotals?.[parseInt(statKey)] ?? 0}
-                  {#if stat}
-                    <div class="text-sm text-slate-300 flex justify-between">
-                      <div>
-                        <span class="text-blue-400">({count})</span>
-                        {stat.label}
-                      </div>
-                      <!-- TODO: use the same random color as used for the circle highlight -->
-                      <span class="text-green-400 font-semibold">[{total}]</span
-                      >
-                    </div>
-                  {/if}
+                   {#if stat}
+                     <div class="text-sm text-slate-300 flex justify-between" style="color: {$searchStore.statKeyColors[parseInt(statKey)] || '#10B981'}">
+                       <div>
+                         <span>({count})</span>
+                         {stat.label}
+                       </div>
+                       <span
+                         class="font-semibold"
+                       >
+                         total: [{total}]
+                       </span>
+                     </div>
+                   {/if}
                 {/each}
               </div>
             </div>

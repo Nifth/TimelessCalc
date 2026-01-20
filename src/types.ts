@@ -148,6 +148,7 @@ export interface SearchStore {
       totalWeight: number;
     }[]
   >;
+  statKeyColors: Record<number, string>;
   minTotalWeight: number;
   league: string;
   platform: Platform;

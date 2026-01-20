@@ -174,9 +174,7 @@
         $searchStore.conqueror,
         nextPage,
       );
-      console.log(query);
       const url = buildTradeUrl(query);
-      console.log(url);
       window.open(url, "_blank");
       storeTradeInfo(pageSeeds, nextPage, total);
     }

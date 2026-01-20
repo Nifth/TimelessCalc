@@ -12,6 +12,16 @@ import { searchStore } from "$lib/stores/searchStore";
 export function updateJewelSockets() {
   const chosenSocket = get(treeStore).chosenSocket;
 
+  searchStore.update((s) => ({
+    ...s,
+    searched: false,
+    statsResults: {},
+    currentPage: 0,
+    totalResults: 0,
+    orderedSeeds: [],
+    statsSearched: false,
+    seedSearched: false,
+  }));
   // Update visual appearance first
   updateSocketVisualSelection();
 
