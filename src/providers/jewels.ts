@@ -4,21 +4,18 @@ import { jewelTypes } from "$lib/constants/timeless";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
-// Typage clair de ce qu'on trouve dans chaque fichier
+// Clear typing for data in each file
 export interface JewelEntry {
   r: Record<string, number[]>;
   a: Record<string, number[]>;
 }
 
 // In-memory cache for jewel data
-const cache = new Map<string, Record<number, JewelEntry>>();
+export const cache = new Map<string, Record<number, JewelEntry>>();
 
 // Svelte store to react to loading (optional but practical)
 export const loadingJewels: Writable<Set<string>> = writable(new Set());
 export const loadedJewels: Writable<Set<string>> = writable(new Set());
-
-// Single global promise to avoid duplicates
-let globalPreloadPromise: Promise<void> | null = null;
 
 // Data file configuration
 const jewelFileNames = [
@@ -38,59 +35,58 @@ async function fetchText(url: string): Promise<string> {
   return response.text();
 }
 
-// todo: fix the militant faith, it keeps getting the same merchandise
-export async function preloadJewels(): Promise<void> {
-  if (globalPreloadPromise) return globalPreloadPromise;
+/**
+ * Load a single jewel data file by jewel ID (e.g., "karui", "maraketh", etc.)
+ * Uses cache to avoid reloading already loaded jewels.
+ * @throws Error if the file fails to load
+ */
+export async function loadJewel(jewelId: string): Promise<void> {
+  // Check if already loaded
+  if (cache.has(jewelId)) {
+    return;
+  }
 
-  globalPreloadPromise = (async () => {
-    const loadPromises = jewelTypes.map(async (jewel) => {
-      const key = jewel.name;
+  const jewel = jewelTypes.find((j) => j.name === jewelId);
+  if (!jewel) {
+    throw new Error(`Unknown jewel type: ${jewelId}`);
+  }
 
-      // Check if already loaded
-      if (cache.has(key)) return;
+  const fileName = jewel.label.replace(/\s+/g, "") + ".jsonl.gz";
 
-      const fileName = jewel.label.replace(/\s+/g, "") + ".jsonl.gz";
+  if (!jewelFileNames.includes(fileName)) {
+    throw new Error(`File not found: ${fileName}`);
+  }
 
-      if (!jewelFileNames.includes(fileName)) {
-        console.error(`File not found: ${fileName}`);
-        return;
-      }
+  const url = `/src/data/jewels/${fileName}`;
 
-      const url = `/src/data/jewels/${fileName}`;
+  loadingJewels.update((s) => new Set(s).add(jewelId));
 
-      loadingJewels.update((s) => new Set(s).add(key));
+  try {
+    const text = await fetchText(url);
 
-      try {
-        const text = await fetchText(url);
+    // JSONL: each line is a JSON object
+    const lines = text.trim().split("\n").filter(Boolean);
+    const data: Record<number, JewelEntry> = {};
+    let i = jewel.min;
+    const step = jewelId === "eternal" ? 20 : 1;
+    for (const line of lines) {
+      const entry = JSON.parse(line) as JewelEntry;
+      data[i] = entry;
+      i += step;
+    }
 
-        // JSONL → each line is a JSON object
-        const lines = text.trim().split("\n").filter(Boolean);
-        const data: Record<number, JewelEntry> = {};
-        let i = jewel.min;
-        const step = key === "eternal" ? 20 : 1;
-        for (const line of lines) {
-          const entry = JSON.parse(line) as JewelEntry;
-          data[i] = entry;
-          i += step;
-        }
-
-        cache.set(key, data);
-        loadedJewels.update((s) => new Set(s).add(key));
-      } catch (err) {
-        console.error(`[JewelCache] Failed loading ${fileName}:`, err);
-      } finally {
-        loadingJewels.update((s) => {
-          const next = new Set(s);
-          next.delete(key);
-          return next;
-        });
-      }
+    cache.set(jewelId, data);
+    loadedJewels.update((s) => new Set(s).add(jewelId));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    throw new Error(`Failed to load ${fileName}: ${message}`);
+  } finally {
+    loadingJewels.update((s) => {
+      const next = new Set(s);
+      next.delete(jewelId);
+      return next;
     });
-
-    await Promise.all(loadPromises);
-  })();
-
-  return globalPreloadPromise;
+  }
 }
 
 // Synchronous retrieval (returns undefined if not yet loaded)

@@ -1,9 +1,9 @@
 import { treeStore } from "$lib/stores/treeStore";
-import { getJewelData, preloadJewels } from "$lib/providers/jewels";
+import { getJewelData, loadJewel } from "$lib/providers/jewels";
 import { canvas } from "$lib/konva/canvasContext";
 import { parseKey, getTranslation } from "./sidebarUtils";
 import type { JewelType, Conqueror, Stat, Translation, JewelEntry } from "$lib/types";
-import { searchStore } from "$lib/stores/searchStore";
+import { searchStore, setJewelLoadError } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
 
 function applySeedModifications(
@@ -97,7 +97,13 @@ export async function applySeed(
   conqueror: Conqueror,
   translation: Record<string, Translation[]>,
 ) {
-  await preloadJewels();
+  try {
+    await loadJewel(jewelType.name);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    setJewelLoadError(jewelType, message);
+    return;
+  }
   const jewelData = getJewelData(jewelType.name);
   if (!jewelData) {
     return;
@@ -131,7 +137,7 @@ export async function handleSearch(
   searchStore.update((state) => ({ ...state, loading: true }));
 
   if (mode === "seed") {
-    if (!seedInput) {
+    if (!seedInput || !jewelType) {
       searchStore.update((state) => {
         state.searched = false;
         state.loading = false;
@@ -140,8 +146,15 @@ export async function handleSearch(
       return;
     }
     // Ensure data is loaded
-    await preloadJewels();
-    const jewelData = getJewelData(jewelType!.name);
+    try {
+      await loadJewel(jewelType.name);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      setJewelLoadError(jewelType, message);
+      searchStore.update((state) => ({ ...state, loading: false }));
+      return;
+    }
+    const jewelData = getJewelData(jewelType.name);
     if (!jewelData) {
       searchStore.update((state) => ({ ...state, loading: false }));
       return;
@@ -164,7 +177,7 @@ export async function handleSearch(
         return state;
       }
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
-      applySeedModifications(entry, socketNodeIds, translation, jewelType!);
+      applySeedModifications(entry, socketNodeIds, translation, jewelType);
       return state;
     });
     searchStore.update((state) => {
@@ -173,7 +186,7 @@ export async function handleSearch(
       return state;
     });
   } else if (mode === "stats") {
-    if (selectedStats.length === 0) {
+    if (selectedStats.length === 0 || !jewelType) {
       searchStore.update((state) => {
         state.searched = false;
         state.loading = false;
@@ -182,8 +195,15 @@ export async function handleSearch(
       return;
     }
     // Ensure data is loaded
-    await preloadJewels();
-    const jewelData = getJewelData(jewelType!.name);
+    try {
+      await loadJewel(jewelType.name);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      setJewelLoadError(jewelType, message);
+      searchStore.update((state) => ({ ...state, loading: false }));
+      return;
+    }
+    const jewelData = getJewelData(jewelType.name);
     if (!jewelData) {
       searchStore.update((state) => ({ ...state, loading: false }));
       return;

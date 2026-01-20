@@ -1,4 +1,4 @@
-import type { Platform, SearchStore } from "$lib/types";
+import type { Platform, SearchStore, JewelType } from "$lib/types";
 import { writable } from "svelte/store";
 
 export const defaultLeague = "Keepers";
@@ -23,6 +23,7 @@ export const searchStore = writable<SearchStore>({
   statsSearched: false,
   seedSearched: false,
   automated: false,
+  jewelLoadError: null,
 });
 
 /**
@@ -43,4 +44,12 @@ export function resetDependentFields() {
     statsSearched: false,
     seedSearched: false,
   }));
+}
+
+export function setJewelLoadError(jewel: JewelType, message: string) {
+  searchStore.update((s) => ({ ...s, jewelLoadError: { jewel, message } }));
+}
+
+export function clearJewelLoadError() {
+  searchStore.update((s) => ({ ...s, jewelLoadError: null }));
 }

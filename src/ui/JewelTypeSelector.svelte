@@ -1,12 +1,42 @@
 <script lang="ts">
   import { jewelTypes } from "$lib/constants/timeless";
   import type { JewelType } from "$lib/types";
+  import { loadJewel, cache } from "$lib/providers/jewels";
+  import { setJewelLoadError } from "$lib/stores/searchStore";
 
   interface Props {
     jewelType: JewelType | null;
   }
 
   let { jewelType = $bindable(null) }: Props = $props();
+
+  let loadingFor: string | null = null;
+
+  $effect(() => {
+    if (jewelType !== null) {
+      const jewelId = jewelType.name;
+
+      // Skip if already loaded (check cache directly)
+      if (cache.has(jewelId)) {
+        return;
+      }
+
+      // Skip if already loading this jewel
+      if (loadingFor === jewelId) {
+        return;
+      }
+
+      loadingFor = jewelId;
+      loadJewel(jewelId).catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err);
+        setJewelLoadError(jewelType, message);
+      }).finally(() => {
+        if (loadingFor === jewelId) {
+          loadingFor = null;
+        }
+      });
+    }
+  });
 </script>
 
 <div class="grid grid-cols-5 gap-3 items-stretch">

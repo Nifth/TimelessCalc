@@ -3,16 +3,17 @@
   import Sidebar from "./ui/Sidebar.svelte";
   import Tooltip from "./ui/Tooltip.svelte";
   import Preloader from "./ui/Preloader.svelte";
+  import DebugPanel from "./ui/DebugPanel.svelte";
+  import JewelLoadErrorModal from "./ui/JewelLoadErrorModal.svelte";
   import Konva from "konva";
   import treeData from "$lib/data/tree.json" with { type: "json" };
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import { preloadSprites } from "$lib/konva/utils/sprites";
-  import type { TreeData } from "$lib/types";
+  import type { TreeData, JewelType } from "$lib/types";
   import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import { perfMonitor } from "$lib/utils/performanceMonitor";
   import { viewportCuller } from "$lib/konva/utils/viewportCuller";
-  import DebugPanel from "./ui/DebugPanel.svelte";
 
   import { canvas } from "$lib/konva/canvasContext";
   import { drawBackground } from "$lib/konva/layers/background";
@@ -28,12 +29,12 @@
     changeRadius,
   } from "$lib/konva/utils/jewelHighlight";
   import { treeStore } from "./stores/treeStore";
-  import { searchStore } from "./stores/searchStore";
+  import { searchStore, clearJewelLoadError, setJewelLoadError } from "./stores/searchStore";
   import { mouseStore } from "./stores/mouseStore";
   import { getHighlighteableNodes } from "./konva/utils/nodes";
-  import { preloadJewels } from "./providers/jewels";
   import { fetchLeagues } from "./providers/leagues";
   import { get } from "svelte/store";
+  import { loadJewel } from "./providers/jewels";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(JSON.stringify(translationsJson));
@@ -102,9 +103,6 @@
         perfMonitor.mark('sprite-preload-end');
         perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-end');
 
-        // Start preloading jewels as early as possible (in parallel with canvas rendering)
-        const jewelPreloadPromise = preloadJewels();
-
         perfMonitor.mark('stage-setup-end');
         perfMonitor.measure('stage-setup', 'stage-setup-start', 'stage-setup-end');
         loadingProgress = 25;
@@ -132,67 +130,54 @@
          }
        );
 
-       perfMonitor.mark('lines-draw-start');
-       drawLines();
-       perfMonitor.mark('lines-draw-end');
-       perfMonitor.measure('lines-draw', 'lines-draw-start', 'lines-draw-end');
-       loadingProgress = 75;
-       currentLoadingStep = "Lines drawn";
+        perfMonitor.mark('lines-draw-start');
+        drawLines();
+        perfMonitor.mark('lines-draw-end');
+        perfMonitor.measure('lines-draw', 'lines-draw-start', 'lines-draw-end');
+        loadingProgress = 75;
+        currentLoadingStep = "Lines drawn";
 
-       perfMonitor.mark('base-radius-draw-start');
-       drawBaseRadius();
-       perfMonitor.mark('base-radius-draw-end');
-       perfMonitor.measure('base-radius-draw', 'base-radius-draw-start', 'base-radius-draw-end');
-       loadingProgress = 80;
-       currentLoadingStep = "Base radius drawn";
+        perfMonitor.mark('base-radius-draw-start');
+        drawBaseRadius();
+        perfMonitor.mark('base-radius-draw-end');
+        perfMonitor.measure('base-radius-draw', 'base-radius-draw-start', 'base-radius-draw-end');
+        loadingProgress = 80;
+        currentLoadingStep = "Base radius drawn";
 
-       perfMonitor.mark('hit-layer-setup-start');
-       createHitLayer();
-       perfMonitor.mark('hit-layer-setup-end');
-       perfMonitor.measure('hit-layer-setup', 'hit-layer-setup-start', 'hit-layer-setup-end');
-       loadingProgress = 85;
-       currentLoadingStep = "Hit layer created";
+        perfMonitor.mark('hit-layer-setup-start');
+        createHitLayer();
+        perfMonitor.mark('hit-layer-setup-end');
+        perfMonitor.measure('hit-layer-setup', 'hit-layer-setup-start', 'hit-layer-setup-end');
+        loadingProgress = 85;
+        currentLoadingStep = "Hit layer created";
 
-       perfMonitor.mark('event-setup-start');
-       setupZoom(() => {
-         if (canvas.stage) viewportCuller.updateViewport(canvas.stage);
-       });
-       setupHover();
-       setupClick();
-       perfMonitor.mark('event-setup-end');
-       perfMonitor.measure('event-setup', 'event-setup-start', 'event-setup-end');
-       loadingProgress = 90;
-       currentLoadingStep = "Events set up";
-
-       canvas.mainLayer.batchDraw();
-       canvas.lineLayer.batchDraw();
-
-       perfMonitor.mark('init-end');
-       perfMonitor.measure('total-init', 'init-start', 'init-end');
-
-       // Update metrics with canvas info
-       perfMonitor.getAllMetrics().canvas = {
-         nodeCount: canvas.nodes.size,
-         visibleNodes: viewportCuller.getVisibleCount(),
-         layerCount: canvas.stage?.children?.length || 0
-       };
-
+        perfMonitor.mark('event-setup-start');
+        setupZoom();
+        setupHover();
+        setupClick();
+        perfMonitor.mark('event-setup-end');
+        perfMonitor.measure('event-setup', 'event-setup-start', 'event-setup-end');
         loadingProgress = 90;
-        currentLoadingStep = "Loading jewel data...";
+        currentLoadingStep = "Events set up";
 
-        // Wait for jewel preload to complete (started earlier)
-        jewelPreloadPromise.then(() => {
-          loadingProgress = 100;
-          currentLoadingStep = "Complete!";
-          loadingComplete = true;
-        }).catch((err) => {
-          console.warn("Failed to preload jewels:", err);
-          loadingProgress = 100;
-          currentLoadingStep = "Complete!";
-          loadingComplete = true;
-        });
+        canvas.mainLayer.batchDraw();
+        canvas.lineLayer.batchDraw();
 
-         fetchLeagues();
+        perfMonitor.mark('init-end');
+        perfMonitor.measure('total-init', 'init-start', 'init-end');
+
+        // Update metrics with canvas info
+        perfMonitor.getAllMetrics().canvas = {
+          nodeCount: canvas.nodes.size,
+          visibleNodes: viewportCuller.getVisibleCount(),
+          layerCount: canvas.stage?.children?.length || 0
+        };
+
+         loadingProgress = 100;
+         currentLoadingStep = "Complete!";
+         loadingComplete = true;
+
+          fetchLeagues();
           debugMode = new URLSearchParams(window.location.search).has('debug');
           updateFPS();
          parsedFromUrl = parseUrlAndInitialize(
@@ -255,6 +240,24 @@
       isLoading = false;
     }, 50);
   }
+
+  function handleErrorClose() {
+    // Reset jewelType selection so user can try another jewel
+    searchStore.update((s) => ({ ...s, jewelType: null }));
+    clearJewelLoadError();
+  }
+
+  function handleErrorRetry() {
+    clearJewelLoadError();
+    // Re-load the jewel data
+    const state = get(searchStore);
+    if (state.jewelType) {
+      loadJewel(state.jewelType.name).catch((err) => {
+        const message = err instanceof Error ? err.message : String(err);
+        setJewelLoadError(state.jewelType!, message);
+      });
+    }
+  }
 </script>
 
 {#if isLoading}
@@ -268,6 +271,14 @@
 <Sidebar />
 {#if showFps}
 <div class="fps-counter">{fps} FPS</div>
+{/if}
+{#if $searchStore.jewelLoadError}
+<JewelLoadErrorModal
+  jewel={$searchStore.jewelLoadError.jewel}
+  errorMessage={$searchStore.jewelLoadError.message}
+  onclose={handleErrorClose}
+  onretry={handleErrorRetry}
+/>
 {/if}
 
 <style>

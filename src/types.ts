@@ -165,7 +165,8 @@ export interface SearchStore {
   mode: "seed" | "stats" | null;
   statsSearched: boolean;
   seedSearched: boolean;
-  automated: boolean
+  automated: boolean;
+  jewelLoadError: { jewel: JewelType; message: string } | null;
 }
 
 export interface SearchHistoryEntry {
