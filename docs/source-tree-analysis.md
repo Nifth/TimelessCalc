@@ -51,7 +51,6 @@ src/
 │   ├── Modal.svelte
 │   ├── NodeToggles.svelte
 │   ├── PlatformSelector.svelte
-│   ├── SeedResultDisplay.svelte
 │   ├── SeedSearch.svelte
 │   ├── Sidebar.svelte
 │   ├── SidebarHeader.svelte

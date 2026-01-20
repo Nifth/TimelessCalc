@@ -16,11 +16,10 @@
 - **JewelTypeSelector.svelte**: Jewel type selection dropdown
 - **NodeToggles.svelte**: Node toggle controls
 - **StatsSearch.svelte**: Stats search interface
-- **SeedSearch.svelte**: Seed search interface
+- **SeedSearch.svelte**: Seed search & results interface
 
 ### Display Components
 - **StatsResults.svelte**: Display stat calculation results
-- **SeedResultDisplay.svelte**: Display seed results
 - **Tooltip.svelte**: Tooltip component
 - **TradeNotification.svelte**: Trade-related notifications
 
