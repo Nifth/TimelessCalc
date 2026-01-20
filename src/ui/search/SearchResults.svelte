@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { TreeData, Node } from "$lib/types";
-  import { searchStore } from "$lib/stores/searchStore";
-  import { treeStore } from "$lib/stores/treeStore";
+   import { searchStore } from "$lib/stores/searchStore";
+   import { treeStore } from "$lib/stores/treeStore";
+   import { URLS } from "$lib/constants/urls";
   import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { applySeed } from "$lib/utils/sidebar/searchLogic";
    import {
@@ -79,7 +80,7 @@
         ? ""
         : $searchStore.platform.toLowerCase() + "/";
     const league = encodeURIComponent($searchStore.league);
-    return `https://www.pathofexile.com/trade/search/${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
+    return `${URLS.POE_TRADE_SEARCH}${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
   }
 
   function logNextPage() {

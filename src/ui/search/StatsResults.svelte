@@ -1,7 +1,8 @@
 <script lang="ts">
 
-  import { searchStore } from "$lib/stores/searchStore";
-  import { treeStore } from "$lib/stores/treeStore";
+   import { searchStore } from "$lib/stores/searchStore";
+   import { treeStore } from "$lib/stores/treeStore";
+   import { URLS } from "$lib/constants/urls";
   import { canvas } from "$lib/konva/canvasContext";
   import {
     getSeedsPerPage,
@@ -42,7 +43,7 @@
       0,
     );
     // Todo: move pattern to constants file and use replace to build the url
-    const url = `https://www.pathofexile.com/trade/search/${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
+    const url = `${URLS.POE_TRADE_SEARCH}${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
     window.open(url, "_blank");
   }
 

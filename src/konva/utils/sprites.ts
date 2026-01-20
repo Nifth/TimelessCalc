@@ -2,6 +2,7 @@ import Konva from "konva";
 import type { Sprite } from "$lib/types";
 import type { HalfDirectionValue } from "$lib/constants/tree";
 import { TREE_CONSTANTS } from "$lib/constants/tree";
+import { URLS } from "$lib/constants/urls";
 
 const spriteCache: { [key: string]: HTMLImageElement } = {};
 const spriteConfig: Record<string, Sprite> = {};
@@ -89,10 +90,7 @@ function preloadSprite(
 ): Promise<HTMLImageElement> {
   if (!spriteCache[spriteKey]) {
     const img = new Image();
-    const url = spriteUrl.replace(
-      "https://web.poecdn.com/image/passive-skill/",
-      "assets/",
-    );
+    const url = spriteUrl.replace(URLS.POE_CDN_PASSIVE_SKILL, "assets/");
     img.src = url;
 
     spriteCache[spriteKey] = img;
