@@ -109,6 +109,14 @@
   </div>
 
   <div class="space-y-2">
+    {#if $searchStore.selectedStats.length > 0}
+      <div class="flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-slate-300 text-xs">
+        <span class="flex-1">Stat</span>
+        <span class="w-16 text-center">Weight</span>
+        <span class="w-16 text-center">Min</span>
+        <span class="w-8"></span>
+      </div>
+    {/if}
     {#each $searchStore.selectedStats as stat, i (i)}
       <div class="flex items-center gap-2 px-3 py-2 bg-slate-800 rounded-lg">
         <span class="flex-1 text-sm text-slate-200 truncate">{stat.label}</span>
@@ -162,7 +170,7 @@
         for="minTotalWeight"
         class="text-sm text-slate-300 whitespace-nowrap"
       >
-        Min total weight (0 = auto):
+        Min total weight
       </label>
       <input
         id="minTotalWeight"
