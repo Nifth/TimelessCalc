@@ -125,27 +125,6 @@
   }
 
   async function handleShare(entry: FavoriteEntry) {
-    // Load the favorite temporarily to generate the share URL
-    const tempSearchStore = { ...$searchStore };
-    console.log(entry);
-    // needed data:
-    /**
-  - `jt`: Jewel type name
-  - `c`: Conqueror label
-  - `s`: Selected stats (JSON array)
-  - `seed`: Seed number
-  - `l`: League name
-  - `p`: Platform (PC/Xbox/Playstation)
-  - `so`: Socket skill ID
-  - `a`/`un`: Allocated or unallocated node skills (JSON array)
-     */
-    console.log(entry.jewelType);
-    console.log(entry.conqueror);
-    console.log(entry.stats);
-    console.log(entry.socket);
-    console.log(entry.allocatedSkillIds);
-    //favoritesActions.loadFavorite(entry);
-
     const shareUrl = generateShareUrlFromData(
       entry.jewelType,
       entry.conqueror,
@@ -156,13 +135,9 @@
       null
     );
     const success = await copyToClipboard(shareUrl);
-
-    // Restore the original search state
-    //searchStore.set(tempSearchStore);
-
-      if (success) {
-        showNotification('share', 'Link copied to clipboard!');
-      }
+    if (success) {
+      showNotification('share', 'Link copied to clipboard!');
+    }
    }
 
   $effect(() => {

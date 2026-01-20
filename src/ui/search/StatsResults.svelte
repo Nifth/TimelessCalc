@@ -82,7 +82,7 @@
   {#each Object.keys($searchStore.statsResults).sort((a, b) => parseFloat(b) - parseFloat(a)) as total (total)}
     <div class="bg-slate-800 rounded-lg overflow-hidden">
       <div
-        class="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white text-left font-medium transition-all duration-200 flex items-center justify-between cursor-pointer"
+        class="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white text-left font-medium transition-all duration-200 flex items-center justify-between"
         onclick={() => {
           const t = parseFloat(total);
           onexpand(t);
@@ -116,7 +116,10 @@
           <div class="flex items-center gap-2">
             <button
               type="button"
-              onclick={() => ongrouptrade(total)}
+              onclick={(e) => {
+                e.stopPropagation();
+                ongrouptrade(total);
+              }}
               class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium cursor-pointer transition-all duration-200"
             >
               Trade
