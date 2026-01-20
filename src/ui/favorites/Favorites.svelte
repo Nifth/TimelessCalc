@@ -139,9 +139,9 @@
     // Restore the original search state
     searchStore.set(tempSearchStore);
 
-     if (success) {
-       showNotification('share');
-     }
+      if (success) {
+        showNotification('share', 'Link copied to clipboard!');
+      }
    }
 
   $effect(() => {
@@ -222,7 +222,7 @@
             <div class="flex gap-2 flex-shrink-0">
               <button
                 onclick={() => handleShare(entry)}
-                class="p-2 rounded-lg bg-slate-600 hover:bg-slate-500 text-slate-300 hover:text-white transition-all duration-200"
+                class="p-2 rounded-lg bg-slate-600 hover:bg-slate-500 text-slate-300 hover:text-white transition-all duration-200 cursor-pointer"
                 aria-label="Share favorite"
               >
                 <svg

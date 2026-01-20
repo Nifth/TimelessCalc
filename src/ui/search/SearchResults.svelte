@@ -221,10 +221,10 @@
       $treeStore,
       treeData as unknown as TreeData,
     );
-     const success = await copyToClipboard(shareUrl);
-     if (success) {
-       showNotification('share');
-     }
+      const success = await copyToClipboard(shareUrl);
+      if (success) {
+        showNotification('share', 'Link copied to clipboard!');
+      }
    }
 
    function findNearbyKeystone(socket: Node): string {
@@ -278,7 +278,7 @@
      favoritesActions.saveFavorite(finalName);
      showSaveFavoriteModal = false;
      favoriteNotificationName = finalName;
-     showNotification('favorite', { name: favoriteNotificationName });
+      showNotification('favorite', `Saved as '${favoriteNotificationName}'`, 3000);
    }
 </script>
 
@@ -286,7 +286,7 @@
   <div class="flex gap-2">
     <button
       onclick={backToForm}
-      class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-all duration-200"
+      class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-all duration-200 cursor-pointer"
       aria-label="Back to Search"
     >
       <svg
@@ -307,7 +307,7 @@
     <button
       onclick={handleShare}
       disabled={!canShare}
-      class="p-2 rounded-lg transition-all duration-200 {canShare
+      class="p-2 cursor-pointer rounded-lg transition-all duration-200 {canShare
         ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
         : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
       aria-label="Share Configuration"
@@ -327,13 +327,13 @@
       </svg>
     </button>
 
-    {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+    {#if Object.keys($searchStore.statsResults).length > 0}
       <button
         onclick={() => {
           favoriteSuggestion = generateFavoriteSuggestion();
           showSaveFavoriteModal = true;
         }}
-        class="p-2 rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all duration-200 shadow-green-500/20"
+        class="p-2 cursor-pointer rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all duration-200 shadow-green-500/20"
         aria-label="Save to Favorites"
       >
         <svg

@@ -2,19 +2,25 @@ import { writable } from 'svelte/store';
 
 export type NotificationType = 'share' | 'favorite';
 
-export interface NotificationData {
+export interface Notification {
+  id: number;
   type: NotificationType;
-  show: boolean;
-  props?: any;
-  id?: number;
+  text: string;
+  timeout: number;
 }
 
-export const notificationStore = writable<NotificationData>({ type: 'share', show: false });
+export const notificationStore = writable<Notification[]>([]);
 
-export function showNotification(type: NotificationType, props?: any) {
-  notificationStore.set({ type, show: true, props, id: Date.now() });
+export function showNotification(type: NotificationType, text: string, timeout = 2000) {
+  const id = Date.now();
+  notificationStore.update(notifications => [
+    ...notifications,
+    { id, type, text, timeout }
+  ]);
 }
 
-export function hideNotification() {
-  notificationStore.update(n => ({ ...n, show: false }));
+export function hideNotification(id: number) {
+  notificationStore.update(notifications =>
+    notifications.filter(n => n.id !== id)
+  );
 }

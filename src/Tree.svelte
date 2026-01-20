@@ -42,10 +42,8 @@
   import { fetchLeagues } from "./providers/leagues";
   import { get } from "svelte/store";
    import { loadJewel } from "$lib/providers/jewels";
-   import { notificationStore } from "$lib/stores/notificationStore";
-   import ShareNotification from "$lib/ui/notifications/ShareNotification.svelte";
-   import FavoriteNotification from "$lib/ui/notifications/FavoriteNotification.svelte";
-   import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
+    import Notification from "$lib/ui/notifications/Notification.svelte";
+    import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 
    const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(
@@ -343,13 +341,7 @@
   />
 {/if}
 
-{#if $notificationStore.type === 'share'}
-    <ShareNotification />
-{:else if $notificationStore.type === 'favorite'}
-    <FavoriteNotification
-      name={$notificationStore.props.name}
-    />
-{/if}
+<Notification />
 
 <style>
   :global(body) {
