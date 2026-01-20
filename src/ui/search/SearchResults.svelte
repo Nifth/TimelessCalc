@@ -4,12 +4,10 @@
   import { treeStore } from "$lib/stores/treeStore";
   import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { applySeed } from "$lib/utils/sidebar/searchLogic";
-  import {
-    buildTradeQuery,
-    getSeedsPerPage,
-    getPageRangeFromOrdered,
-    MAX_FILTERS,
-  } from "$lib/utils/sidebar/tradeQuery";
+   import {
+     buildTradeQuery,
+     getSeedsPerPage,
+   } from "$lib/utils/sidebar/tradeQuery";
   import {
     generateShareUrl,
     copyToClipboard,
@@ -20,7 +18,7 @@
    import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
    import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
    import StatsResults from "$lib/ui/search/StatsResults.svelte";
-   import TradeControls from "$lib/ui/debug/TradeControls.svelte";
+   import TradeControls from "$lib/ui/search/TradeControls.svelte";
    import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
    import { favoritesActions } from "$lib/stores/favoritesStore";
    import { showNotification } from "$lib/stores/notificationStore";
@@ -30,11 +28,12 @@
     JSON.stringify(translationsJson),
   );
 
-  let expandedGroups: Record<number, boolean> = $state({});
-  let groupPages: Record<string, number> = $state({});
-  let hasGroupTraded: Record<string, boolean> = $state({});
-  let _hasTraded = $state(false);
-  let tooltipPosition: { top: number; left: number } | null = $state(null);
+   let { ontargetposition }: { ontargetposition?: (pos: { top: number; left: number } | null) => void } = $props();
+
+   let expandedGroups: Record<number, boolean> = $state({});
+   let groupPages: Record<string, number> = $state({});
+   let hasGroupTraded: Record<string, boolean> = $state({});
+   let _hasTraded = $state(false);
 
    let showSaveFavoriteModal = $state(false);
    let favoriteSuggestion = $state("");
@@ -352,17 +351,17 @@
     {/if}
   </div>
 
-  <TradeControls
-    jewelType={$searchStore.jewelType}
-    conqueror={$searchStore.conqueror}
-    hasTraded={_hasTraded}
-    ontrade={handleTrade}
-    onnext={() => {
-      nextPage();
-      logNextPage();
-    }}
-    ontargetposition={(pos) => (tooltipPosition = pos)}
-  >
+   <TradeControls
+     jewelType={$searchStore.jewelType}
+     conqueror={$searchStore.conqueror}
+     hasTraded={_hasTraded}
+     ontrade={handleTrade}
+     onnext={() => {
+       nextPage();
+       logNextPage();
+     }}
+     {ontargetposition}
+   >
     <LeagueSelector slot="league" />
     <PlatformSelector slot="platform" />
   </TradeControls>
@@ -384,42 +383,6 @@
   </div>
 {/if}
 
-{#if tooltipPosition}
-  {@const pageInfo = getPageRangeFromOrdered(
-    $searchStore.orderedSeeds,
-    $searchStore.currentPage,
-    $searchStore.jewelType!,
-    $searchStore.conqueror,
-  )}
-  <div
-    class="fixed z-[100] w-64 p-3 bg-slate-800 border border-slate-600 rounded-lg shadow-xl text-sm text-slate-200"
-    style="top: {tooltipPosition.top}px; left: {tooltipPosition.left}px"
-  >
-    <p class="font-semibold mb-2">Trade Link Pagination</p>
-    <p class="mb-2">
-      Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when
-      possible (e.g., 10020-10022) to maximize filter usage, allowing to have a
-      bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
-      (best matches first).
-    </p>
-    <p>
-      {#if pageInfo.count > 0}
-        {@const seedsPerPage = getSeedsPerPage(
-          $searchStore.jewelType!,
-          $searchStore.conqueror,
-        )}
-        {@const startNum = $searchStore.currentPage * seedsPerPage + 1}
-        {@const endNum = Math.min(
-          startNum + seedsPerPage - 1,
-          $searchStore.totalResults,
-        )}
-        Showing seeds {startNum}-{endNum} of {$searchStore.totalResults}
-      {:else}
-        No results to display
-      {/if}
-    </p>
-  </div>
-{/if}
 
 
 

@@ -26,6 +26,7 @@ export function generateShareUrl(
     searchState.selectedStats,
     treeState.chosenSocket,
     Array.from(treeState.allocated.values()).map((n) => n.skill),
+    searchState.minTotalWeight,
     searchState.league,
     searchState.platform,
 )
@@ -37,6 +38,7 @@ export function generateShareUrlFromData(
   selectedStats: Stat[],
   chosenSocket: Node | null,
   allocatedSkills: number[],
+  minTotalWeight: number | null,
   league: string | null,
   platform: string | null,
 ): string {
@@ -56,6 +58,9 @@ export function generateShareUrlFromData(
   }
   if (platform) {
     params.set("p", platform);
+  }
+  if (minTotalWeight) {
+    params.set("tw", minTotalWeight.toString());
   }
   if (chosenSocket) {
     params.set('so', chosenSocket.skill.toString());

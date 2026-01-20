@@ -110,6 +110,8 @@ export function parseUrlAndInitialize(
     mode = "seed";
   }
 
+  const minTotalWeight = urlParams.get("tw") || 0;
+
   // Parse chosen socket
   const socketSkill = parseInt(socketSkillStr, 10);
   if (isNaN(socketSkill)) {
@@ -178,6 +180,7 @@ export function parseUrlAndInitialize(
     orderedSeeds: [],
     lastTradeInfo: null,
     mode,
+    minTotalWeight: Number(minTotalWeight),
     statsSearched: mode === "stats",
     seedSearched: mode === "seed",
     automated: true,

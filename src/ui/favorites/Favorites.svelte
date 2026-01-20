@@ -30,7 +30,7 @@
    let editInput: HTMLInputElement | null = $state(null);
 
   function formatDate(timestamp: number): string {
-    return new Date(timestamp).toISOString().split("T")[0]; // YYYY-MM-DD
+    return new Date(timestamp).toLocaleString();
   }
 
   function formatStats(stats: Stat[]): string {
@@ -131,6 +131,7 @@
       entry.stats,
       entry.socket,
       entry.allocatedSkillIds.map((i) => Number(i)),
+      entry.minTotalWeight,
       null,
       null
     );
