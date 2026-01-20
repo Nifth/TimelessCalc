@@ -274,18 +274,6 @@
     searchStore.update((s) => ({ ...s, jewelType: null }));
     clearJewelLoadError();
   }
-
-  function handleErrorRetry() {
-    clearJewelLoadError();
-    // Re-load the jewel data
-    const state = get(searchStore);
-    if (state.jewelType) {
-      loadJewel(state.jewelType.name).catch((err) => {
-        const message = err instanceof Error ? err.message : String(err);
-        setJewelLoadError(state.jewelType!, message);
-      });
-    }
-  }
 </script>
 
 {#if isLoading}
