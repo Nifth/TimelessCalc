@@ -13,7 +13,6 @@
   import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import { perfMonitor } from "$lib/utils/performanceMonitor";
-  import { viewportCuller } from "$lib/konva/utils/viewportCuller";
 
   import { canvas } from "$lib/konva/canvasContext";
   import { drawBackground } from "$lib/konva/layers/background";
@@ -204,13 +203,6 @@
       perfMonitor.mark("init-end");
       perfMonitor.measure("total-init", "init-start", "init-end");
 
-      // Update metrics with canvas info
-      perfMonitor.getAllMetrics().canvas = {
-        nodeCount: canvas.nodes.size,
-        visibleNodes: viewportCuller.getVisibleCount(),
-        layerCount: canvas.stage?.children?.length || 0,
-      };
-
       loadingProgress = 100;
       currentLoadingStep = "Complete!";
       loadingComplete = true;
@@ -230,8 +222,6 @@
           canvas.stage.width(window.innerWidth);
           canvas.stage.height(window.innerHeight);
           canvas.stage.batchDraw();
-          // Update viewport culling on resize
-          viewportCuller.updateViewport(canvas.stage);
         }
       };
 
@@ -327,7 +317,6 @@
      jewel={$searchStore.jewelLoadError.jewel}
      errorMessage={$searchStore.jewelLoadError.message}
      onclose={handleErrorClose}
-     onretry={handleErrorRetry}
    />
 {/if}
 

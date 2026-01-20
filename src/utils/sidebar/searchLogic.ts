@@ -5,6 +5,7 @@ import { parseKey, getTranslation } from "./sidebarUtils";
 import type { JewelType, Conqueror, Stat, Translation, JewelEntry } from "$lib/types";
 import { searchStore, setJewelLoadError } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
+import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
 
 function applySeedModifications(
   entry: JewelEntry,
@@ -135,7 +136,7 @@ export async function handleSearch(
 ) {
   // Set loading state
   searchStore.update((state) => ({ ...state, loading: true }));
-
+  clearHighlights()
   if (mode === "seed") {
     if (!seedInput || !jewelType) {
       searchStore.update((state) => {

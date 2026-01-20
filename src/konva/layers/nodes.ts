@@ -3,7 +3,6 @@ import type { Node } from "$lib/types";
 import { createSprite } from "../utils/sprites";
 import { TREE_CONSTANTS } from "$lib/constants/tree";
 import { canvas } from "$lib/konva/canvasContext";
-import { viewportCuller } from "../utils/viewportCuller";
 
 export function drawNodesProgressive(
   onProgress?: (progress: number, step: string) => void,
@@ -38,7 +37,6 @@ export function drawNodesProgressive(
               nodeY,
             );
             layer.add(img);
-            viewportCuller.registerNode(node.skill, img);
             return;
           } else {
             if (node.isJewelSocket) {
@@ -56,7 +54,6 @@ export function drawNodesProgressive(
               jewelSocketImages.set(node.skill, image);
 
               layer.add(image);
-              viewportCuller.registerNode(node.skill, image);
             } else {
               const key = node.isMastery
                 ? node.inactiveIcon
@@ -108,10 +105,8 @@ export function drawNodesProgressive(
                   icon: relativeIcon,
                   frame: relativeFrame,
                 });
-                viewportCuller.registerNode(node.skill, group);
               } else {
                 layer.add(icon);
-                viewportCuller.registerNode(node.skill, icon);
               }
             }
           }
@@ -129,8 +124,6 @@ export function drawNodesProgressive(
 
       if (currentIndex >= totalNodes) {
         layer.batchDraw();
-        // Initial cull after drawing all nodes
-        viewportCuller.forceUpdate();
         if (onComplete) onComplete();
         resolve();
       } else {

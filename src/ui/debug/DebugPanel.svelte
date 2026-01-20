@@ -115,13 +115,6 @@
           </p>
         </div>
 
-        <div class="section">
-          <h4>Canvas</h4>
-          {#each Object.entries(metrics.canvas || {}) as [key, value]}
-            <p>{key}: {value}</p>
-          {/each}
-        </div>
-
         <button on:click={exportMetrics}>Export Metrics</button>
       </div>
     {/if}

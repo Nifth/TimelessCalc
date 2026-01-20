@@ -259,8 +259,7 @@ export function changeKeystone(chosenSocket: Node | null) {
 }
 
 export function resetHighlights() {
-  canvas.highlightLayer?.destroyChildren();
-  canvas.highlightLayer?.batchDraw();
+  clearHighlights();
   const chosenSocket = get(treeStore).chosenSocket;
   if (chosenSocket) {
     const socketNodeIds = canvas.treeData.socketNodes[chosenSocket.skill];
@@ -271,4 +270,9 @@ export function resetHighlights() {
       node.timelessStatValues = undefined;
     }
   }
+}
+
+export function clearHighlights() {
+  canvas.highlightLayer?.destroyChildren();
+  canvas.highlightLayer?.batchDraw();
 }

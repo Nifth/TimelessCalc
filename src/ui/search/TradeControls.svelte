@@ -1,11 +1,9 @@
 <script lang="ts">
-  import type { Conqueror, JewelType } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
   import { getSeedsPerPage } from "$lib/utils/sidebar/tradeQuery";
+  import { get } from "svelte/store";
 
   interface Props {
-    jewelType: JewelType | null;
-    conqueror: Conqueror | null;
     hasTraded?: boolean;
     ontrade: () => void;
     onnext: () => void;
@@ -13,13 +11,14 @@
   }
 
   let {
-    jewelType,
-    conqueror,
     hasTraded = false,
     ontrade,
     onnext,
     ontargetposition,
   }: Props = $props();
+  
+  const jewelType = get(searchStore).jewelType;
+  const conqueror = get(searchStore).conqueror;
 
   let showTooltip = $state(false);
   let tooltipButton: HTMLButtonElement | undefined = $state();

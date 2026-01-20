@@ -1,4 +1,4 @@
-# API Contracts - Main
+# API Contracts
 
 ## External APIs
 

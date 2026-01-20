@@ -118,7 +118,6 @@ interface PerformanceMetrics {
     totalDuration: number;     // Total network time
     requestCount: number;      // Number of requests
   };
-  canvas: Record<string, any>; // Canvas-specific metrics
 }
 ```
 
@@ -136,24 +135,6 @@ perfMonitor.mark('init-start');
 perfMonitor.mark('sprite-preload-start');
 // ... rendering code ...
 perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-end');
-
-// Update canvas metrics
-perfMonitor.getAllMetrics().canvas = {
-  nodeCount: canvas.nodes.size,
-  visibleNodes: viewportCuller.getVisibleCount(),
-  layerCount: canvas.stage?.children?.length || 0
-};
-```
-
-### ViewportCuller Integration
-
-The viewport culling system provides canvas metrics:
-
-```typescript
-// In ViewportCuller
-getVisibleCount(): number {
-  return this.visibleNodes.size;
-}
 ```
 
 ## Best Practices

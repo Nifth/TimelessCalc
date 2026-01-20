@@ -1,18 +1,18 @@
 <script lang="ts">
-  import type { JewelType } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { canvas } from "$lib/konva/canvasContext";
   import Konva from "konva";
+  import { get } from "svelte/store";
 
   interface Props {
-    jewelType: JewelType | null;
     seed: number | null;
     onapplyseed: (seed: number) => void;
   }
 
-  let { jewelType, seed = $bindable(null), onapplyseed }: Props = $props();
+  let { seed = $bindable(null), onapplyseed }: Props = $props();
 
+  const jewelType = get(searchStore).jewelType;
   let seedInput: number | null = $state(null);
   let searchTimeout: number | null = $state(null);
 

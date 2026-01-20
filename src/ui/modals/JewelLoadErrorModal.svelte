@@ -5,11 +5,11 @@
     jewel: JewelType;
     errorMessage: string;
     onclose: () => void;
-    onretry: () => void;
   }
 
-  let { jewel, errorMessage, onclose, onretry }: Props = $props();
+  let { jewel, errorMessage, onclose }: Props = $props();
 
+  // Todo: move to constants file
   const issueUrl = "https://github.com/Nifth/TimelessCalc/issues/new";
 
   function copyError() {

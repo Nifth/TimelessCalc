@@ -352,8 +352,6 @@
   </div>
 
    <TradeControls
-     jewelType={$searchStore.jewelType}
-     conqueror={$searchStore.conqueror}
      hasTraded={_hasTraded}
      ontrade={handleTrade}
      onnext={() => {

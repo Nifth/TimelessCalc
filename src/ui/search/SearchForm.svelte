@@ -13,7 +13,7 @@
    import ModeSelector from "$lib/ui/selectors/ModeSelector.svelte";
    import SeedSearch from "$lib/ui/search/SeedSearch.svelte";
    import StatsSearch from "$lib/ui/search/StatsSearch.svelte";
-   import NodeToggles from "$lib/ui/debug/NodeToggles.svelte";
+   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
    import Modal from "$lib/ui/common/Modal.svelte";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,7 +142,6 @@
 
       {#if $searchStore.mode === "seed"}
         <SeedSearch
-          jewelType={$searchStore.jewelType}
           bind:seed={seedInput}
           onapplyseed={handleSeedInput}
         />

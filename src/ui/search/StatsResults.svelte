@@ -41,6 +41,7 @@
       $searchStore.conqueror,
       0,
     );
+    // Todo: move pattern to constants file and use replace to build the url
     const url = `https://www.pathofexile.com/trade/search/${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
     window.open(url, "_blank");
   }
@@ -54,7 +55,7 @@
           x: node.x,
           y: node.y,
           radius: node.isNotable ? 70 : 50,
-          stroke: "yellow",
+          stroke: "yellow", // todo: Make a random color per stat key
           strokeWidth: 10,
         });
         canvas.highlightLayer?.add(circle);
@@ -268,6 +269,7 @@
                         <span class="text-blue-400">({count})</span>
                         {stat.label}
                       </div>
+                      <!-- TODO: use the same random color as used for the circle highlight -->
                       <span class="text-green-400 font-semibold">[{total}]</span
                       >
                     </div>

@@ -1,4 +1,4 @@
-# Data Models - Main
+# Data Models
 
 ## TypeScript Interfaces
 

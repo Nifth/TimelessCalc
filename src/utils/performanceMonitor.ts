@@ -89,7 +89,6 @@ export class PerformanceMonitor {
         delta: this.getMemoryDelta(),
       },
       network: networkStats,
-      canvas: {}, // Will be populated by canvas-specific code
     };
   }
 
