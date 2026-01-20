@@ -4,7 +4,7 @@
 
 <button
   onclick={() => (isOpen = !isOpen)}
-  class="fixed top-4 left-4 z-50 bg-slate-800 hover:bg-slate-700 text-white w-10 h-10 rounded-lg flex flex-col justify-center items-center gap-1 cursor-pointer transition-all duration-200 shadow-lg border border-slate-600"
+  class="fixed top-4 left-2 md:left-4 z-50 bg-slate-800 hover:bg-slate-700 text-white w-10 h-10 rounded-lg flex flex-col justify-center items-center gap-1 cursor-pointer transition-all duration-200 shadow-lg border border-slate-600"
   aria-label="Toggle menu"
 >
   <span

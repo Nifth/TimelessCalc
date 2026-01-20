@@ -45,7 +45,7 @@
   }
 </script>
 
-<div class="flex gap-2 items-center">
+<div class="flex flex-wrap gap-2 items-center">
   <div class="w-36">
     <slot name="league" />
   </div>

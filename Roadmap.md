@@ -5,9 +5,3 @@ Add buttons to export a given seed as Path of Exile format, ready for POB import
 
 ### Jewel Import
 Capture Ctrl+V shortcut to paste a jewel (Path of Exile format), validate, if valid, show a modal / something to display the possible stats for each socket
-
-### Mobile Responsive Design
-Make the UI fully responsive for mobile devices. Adjust sidebar positioning, canvas controls, and touch interactions for smaller screens.
-
-### Virtual Scrolling Optimization
-Optimize Konva rendering for large passive trees using virtual scrolling techniques. Only render visible nodes and layers to improve performance on lower-end devices.
