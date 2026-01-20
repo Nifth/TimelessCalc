@@ -83,9 +83,20 @@
     <div class="bg-slate-800 rounded-lg overflow-hidden">
       <div
         class="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white text-left font-medium transition-all duration-200 flex items-center justify-between"
+        role="button"
+        tabindex="0"
+        aria-expanded={expandedGroups[parseFloat(total)] ? 'true' : 'false'}
+        aria-label="Expand group"
         onclick={() => {
           const t = parseFloat(total);
           onexpand(t);
+        }}
+        onkeydown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const t = parseFloat(total);
+            onexpand(t);
+          }
         }}
       >
         {#if $searchStore.statsResults[total].length > 0}
