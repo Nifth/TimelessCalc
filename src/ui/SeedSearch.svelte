@@ -67,7 +67,7 @@
   }
 
   let timelessStats = $derived(
-    $treeStore.chosenSocket && $searchStore.searched ? getTimelessStats() : {},
+    $treeStore.chosenSocket && $searchStore.seedSearched ? getTimelessStats() : {},
   );
 </script>
 

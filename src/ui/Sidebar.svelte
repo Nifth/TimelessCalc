@@ -3,6 +3,7 @@
   import { searchStore, resetDependentFields } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { historyActions } from "$lib/stores/historyStore";
+  import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
   import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
   import TradeNotification from "$lib/ui/TradeNotification.svelte";
@@ -86,6 +87,7 @@
           resetDependentFields();
         }
       }
+      clearHighlights();
       previousJewelType = current;
     }
   });
@@ -261,6 +263,8 @@
 
   function backToForm() {
     seedInput = null;
+    clearHighlights();
+    expandedGroups = {};
     searchStore.update((s) => {
       s.searched = false;
       s.statsResults = {};
@@ -274,6 +278,7 @@
   }
 
   function setMode(newMode: "seed" | "stats" | null) {
+    clearHighlights();
     searchStore.update((s) => ({
       ...s,
       mode: newMode,
