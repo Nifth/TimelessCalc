@@ -2,37 +2,47 @@
 
 ## Component Categories
 
-### Layout Components
-- **Sidebar.svelte**: Tab container for search interface
-- **SidebarToggle.svelte**: Toggle sidebar visibility
-- **SidebarHeader.svelte**: Sidebar header section
+### common/ - Shared Components
 - **Modal.svelte**: Modal dialog component
+- **Tooltip.svelte**: Tooltip component
+- **Preloader.svelte**: Loading progress indicator
+- **SidebarToggle.svelte**: Toggle sidebar visibility
 
-### Search Components
+### search/ - Search Components
 - **SearchTab.svelte**: Container switching between search form and results
 - **SearchForm.svelte**: Search configuration form
 - **SearchResults.svelte**: Search results display and actions
-
-### Form/Input Components
-- **PlatformSelector.svelte**: Platform selection dropdown
-- **LeagueSelector.svelte**: League selection dropdown
-- **ModeSelector.svelte**: Mode selection component
-- **ConquerorSelector.svelte**: Conqueror selection dropdown
-- **JewelTypeSelector.svelte**: Jewel type selection dropdown
-- **NodeToggles.svelte**: Node toggle controls
+- **SearchHistory.svelte**: Search history management
+- **StatsResults.svelte**: Display stat calculation results
 - **StatsSearch.svelte**: Stats search interface
 - **SeedSearch.svelte**: Seed search & results interface
 
-### Display Components
-- **StatsResults.svelte**: Display stat calculation results
-- **Tooltip.svelte**: Tooltip component
+### selectors/ - Form Controls
+- **JewelTypeSelector.svelte**: Jewel type selection dropdown
+- **ConquerorSelector.svelte**: Conqueror selection dropdown
+- **PlatformSelector.svelte**: Platform selection dropdown
+- **LeagueSelector.svelte**: League selection dropdown
+- **ModeSelector.svelte**: Mode selection component
+
+### modals/ - Modal Dialogs
+- **SaveFavoriteModal.svelte**: Save to favorites dialog
+- **JewelLoadErrorModal.svelte**: Jewel data loading error dialog
+
+### notifications/ - Notifications
+- **ShareNotification.svelte**: Share URL notifications
+- **FavoriteNotification.svelte**: Favorites action notifications
 - **TradeNotification.svelte**: Trade-related notifications
 
-### Navigation Components
-- **BackButton.svelte**: Navigation back button
+### favorites/ - Favorites Feature
+- **Favorites.svelte**: Favorites management interface
 
-### Interactive Components
+### sidebar/ - Sidebar Layout
+- **Sidebar.svelte**: Tab container for search interface
+
+### debug/ - Development Tools
+- **DebugPanel.svelte**: Development debug panel
 - **TradeControls.svelte**: Trade query controls
+- **NodeToggles.svelte**: Node toggle controls
 
 ## Design System
 

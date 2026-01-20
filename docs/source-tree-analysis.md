@@ -42,24 +42,41 @@ src/
 │   ├── searchStore.ts      # Search state management
 │   ├── treeStore.ts        # Tree state management
 │   └── mouseStore.ts       # Mouse interaction state
-├── ui/                    # UI components
-│   ├── BackButton.svelte
-│   ├── ConquerorSelector.svelte
-│   ├── JewelTypeSelector.svelte
-│   ├── LeagueSelector.svelte
-│   ├── ModeSelector.svelte
-│   ├── Modal.svelte
-│   ├── NodeToggles.svelte
-│   ├── PlatformSelector.svelte
-│   ├── SeedSearch.svelte
-│   ├── Sidebar.svelte
-│   ├── SidebarHeader.svelte
-│   ├── SidebarToggle.svelte
-│   ├── StatsResults.svelte
-│   ├── StatsSearch.svelte
-│   ├── Tooltip.svelte
-│   ├── TradeControls.svelte
-│   └── TradeNotification.svelte
+├── ui/                    # UI components (organized by feature)
+│   ├── common/              # Shared/reusable components
+│   │   ├── Modal.svelte
+│   │   ├── Tooltip.svelte
+│   │   ├── Preloader.svelte
+│   │   └── SidebarToggle.svelte
+│   ├── search/              # Search-related components
+│   │   ├── SearchForm.svelte
+│   │   ├── SearchResults.svelte
+│   │   ├── StatsResults.svelte
+│   │   ├── SearchTab.svelte
+│   │   ├── SeedSearch.svelte
+│   │   ├── StatsSearch.svelte
+│   │   └── SearchHistory.svelte
+│   ├── selectors/           # Form control selectors
+│   │   ├── JewelTypeSelector.svelte
+│   │   ├── ConquerorSelector.svelte
+│   │   ├── PlatformSelector.svelte
+│   │   ├── LeagueSelector.svelte
+│   │   └── ModeSelector.svelte
+│   ├── modals/              # Modal dialogs
+│   │   ├── SaveFavoriteModal.svelte
+│   │   └── JewelLoadErrorModal.svelte
+│   ├── notifications/       # Notification components
+│   │   ├── ShareNotification.svelte
+│   │   ├── FavoriteNotification.svelte
+│   │   └── TradeNotification.svelte
+│   ├── favorites/           # Favorites feature
+│   │   └── Favorites.svelte
+│   ├── sidebar/             # Sidebar layout
+│   │   └── Sidebar.svelte
+│   └── debug/               # Debug/development tools
+│       ├── DebugPanel.svelte
+│       ├── TradeControls.svelte
+│       └── NodeToggles.svelte
 └── utils/
     └── sidebar/
         ├── options.ts
@@ -100,12 +117,17 @@ src/
 - `mouseStore.ts`: Mouse position and interaction
 
 ### ui/
-**Purpose**: Reusable UI components
+**Purpose**: Reusable UI components organized by feature
 
-**Categories**:
-- Form controls (selectors, toggles, search)
-- Display components (results, notifications)
-- Layout components (sidebar, modal)
+**Subfolders**:
+- `common/`: Shared components used across features
+- `search/`: All search-related components and interfaces
+- `selectors/`: Form control dropdowns and selectors
+- `modals/`: Modal dialog components
+- `notifications/`: Notification and alert components
+- `favorites/`: Favorites feature components
+- `sidebar/`: Sidebar layout and navigation
+- `debug/`: Development and debugging tools
 
 ### providers/
 **Purpose**: Data loading and API integration

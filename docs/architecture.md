@@ -48,12 +48,15 @@ The application is frontend-only with no backend API endpoints.
 
 ## Component Overview
 
-### UI Components (26 components)
-- **Layout**: Sidebar (tab container), Modal, Header components
-- **Search**: SearchTab, SearchForm, SearchResults components
-- **Forms**: Various selector components for configuration
-- **Display**: Result display and notification components
-- **Interactive**: Trade controls and search interfaces
+### UI Components (26 components organized in feature-based subfolders)
+- **common/**: Shared components (Modal, Tooltip, Preloader, SidebarToggle)
+- **search/**: Search interface and results components
+- **selectors/**: Configuration form controls and selectors
+- **modals/**: Modal dialog components
+- **notifications/**: Notification and alert components
+- **favorites/**: Favorites management interface
+- **sidebar/**: Sidebar layout and navigation
+- **debug/**: Development and debugging tools
 
 ### Canvas Components
 - **Layers**: Background, nodes, connections, hit detection

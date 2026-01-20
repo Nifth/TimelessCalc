@@ -40,11 +40,15 @@ src/
 ├── app.css              # Global styles
 ├── types.ts             # TypeScript type definitions
 ├── Tree.svelte          # Main application component
-├── ui/                  # UI components
-│   ├── Sidebar.svelte       # Tab container for search interface
-│   ├── SearchTab.svelte     # Switches between search form and results
-│   ├── SearchForm.svelte    # Search configuration form
-│   ├── SearchResults.svelte # Search results display and actions
+├── ui/                  # UI components (organized by feature)
+│   ├── common/              # Shared/reusable components
+│   ├── search/              # Search-related components
+│   ├── selectors/           # Form control selectors
+│   ├── modals/              # Modal dialogs
+│   ├── notifications/       # Notification components
+│   ├── favorites/           # Favorites feature
+│   ├── sidebar/             # Sidebar layout
+│   └── debug/               # Debug/development tools
 ├── stores/              # Svelte stores
 │   ├── searchStore.ts   # Search state management
 │   ├── treeStore.ts     # Tree state management
