@@ -219,7 +219,6 @@
     const shareUrl = generateShareUrl(
       $searchStore,
       $treeStore,
-      treeData as unknown as TreeData,
     );
       const success = await copyToClipboard(shareUrl);
       if (success) {

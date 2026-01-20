@@ -1,4 +1,5 @@
-import type { SearchStore, TreeStore, TreeData } from "$lib/types";
+import type { SearchStore, TreeStore, TreeData, Stat, JewelType, Conqueror, Node } from "$lib/types";
+import data from "$lib/data/tree.json" with { type: "json" };
 
 /**
  * Copies text to clipboard using modern API
@@ -18,68 +19,66 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 export function generateShareUrl(
   searchState: SearchStore,
   treeState: TreeStore,
-  treeData: TreeData,
 ): string {
+  return generateShareUrlFromData(
+    searchState.jewelType,
+    searchState.conqueror,
+    searchState.selectedStats,
+    treeState.chosenSocket,
+    Array.from(treeState.allocated.values()).map((n) => n.skill),
+    searchState.league,
+    searchState.platform,
+)
+}
+
+export function generateShareUrlFromData(
+  jewelType: JewelType | null,
+  conqueror: Conqueror | null,
+  selectedStats: Stat[],
+  chosenSocket: Node | null,
+  allocatedSkills: number[],
+  league: string | null,
+  platform: string | null,
+): string {
+  const treeData: TreeData = data as unknown as TreeData;
   const params = new URLSearchParams();
-
-  // Encode search filters with short names
-  if (searchState.jewelType) {
-    params.set("jt", searchState.jewelType.name);
+  if (jewelType) {
+    params.set("jt", jewelType.name);
   }
-
-  if (searchState.conqueror) {
-    params.set("c", searchState.conqueror.label);
+  if (conqueror) {
+    params.set("c", conqueror.label);
   }
-
-  if (searchState.selectedStats && searchState.selectedStats.length > 0) {
-    params.set("s", JSON.stringify(searchState.selectedStats));
+  if (selectedStats.length > 0) {
+    params.set("s", JSON.stringify(selectedStats));
   }
-
-  if (searchState.seed !== null) {
-    params.set("seed", searchState.seed.toString());
+  if (league) {
+    params.set("l", league);
   }
-
-  if (searchState.league) {
-    params.set("l", searchState.league);
+  if (platform) {
+    params.set("p", platform);
   }
+  if (chosenSocket) {
+    params.set('so', chosenSocket.skill.toString());
+    if (allocatedSkills.length > 0) {
+      const socketNodeIds = treeData.socketNodes[chosenSocket.skill.toString()] || [];
+      const radiusNodes: number[] = socketNodeIds.map((id: string) =>
+        parseInt(id, 10),
+      );
 
-  if (searchState.platform) {
-    params.set("p", searchState.platform);
-  }
+      const unallocatedSkills = radiusNodes.filter(
+        (skill) => !allocatedSkills.includes(skill),
+      );
 
-  if (searchState.mode) {
-    params.set("m", searchState.mode);
-  }
-
-  // Encode tree state
-  if (treeState.chosenSocket) {
-    params.set("so", treeState.chosenSocket.skill.toString());
-
-    // Get nodes in jewel radius for optimization
-    const socket = treeState.chosenSocket;
-    const socketNodeIds = treeData.socketNodes[socket.skill.toString()] || [];
-    const radiusNodes: number[] = socketNodeIds.map((id: string) =>
-      parseInt(id, 10),
-    );
-
-    // Encode allocated nodes - optimize for URL size
-    const allocatedSkills = Array.from(treeState.allocated.values()).map(
-      (n) => n.skill,
-    );
-    const unallocatedSkills = radiusNodes.filter(
-      (skill) => !allocatedSkills.includes(skill),
-    );
-
-    if (allocatedSkills.length > unallocatedSkills.length) {
-      // Encode unallocated list (smaller)
-      params.set("un", JSON.stringify(unallocatedSkills));
-    } else {
-      // Encode allocated list
-      params.set("a", JSON.stringify(allocatedSkills));
+      if (allocatedSkills.length > unallocatedSkills.length) {
+        // Encode unallocated list (smaller)
+        params.set("un", JSON.stringify(unallocatedSkills));
+      } else {
+        // Encode allocated list
+        params.set("a", JSON.stringify(allocatedSkills));
+      }
     }
   }
 
-  // Build URL
   const baseUrl = window.location.origin + window.location.pathname;
   const url = new URL(baseUrl);
   url.search = params.toString();

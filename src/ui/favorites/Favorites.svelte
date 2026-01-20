@@ -1,7 +1,7 @@
 <script lang="ts">
   import { favoritesStore, favoritesActions } from "$lib/stores/favoritesStore";
   import {
-    generateShareUrl,
+    generateShareUrlFromData,
     copyToClipboard,
   } from "$lib/utils/sharing/shareUtils";
   import { searchStore } from "$lib/stores/searchStore";
@@ -127,17 +127,38 @@
   async function handleShare(entry: FavoriteEntry) {
     // Load the favorite temporarily to generate the share URL
     const tempSearchStore = { ...$searchStore };
-    favoritesActions.loadFavorite(entry);
+    console.log(entry);
+    // needed data:
+    /**
+  - `jt`: Jewel type name
+  - `c`: Conqueror label
+  - `s`: Selected stats (JSON array)
+  - `seed`: Seed number
+  - `l`: League name
+  - `p`: Platform (PC/Xbox/Playstation)
+  - `so`: Socket skill ID
+  - `a`/`un`: Allocated or unallocated node skills (JSON array)
+     */
+    console.log(entry.jewelType);
+    console.log(entry.conqueror);
+    console.log(entry.stats);
+    console.log(entry.socket);
+    console.log(entry.allocatedSkillIds);
+    //favoritesActions.loadFavorite(entry);
 
-    const shareUrl = generateShareUrl(
-      $searchStore,
-      $treeStore,
-      treeData as unknown as TreeData,
+    const shareUrl = generateShareUrlFromData(
+      entry.jewelType,
+      entry.conqueror,
+      entry.stats,
+      entry.socket,
+      entry.allocatedSkillIds.map((i) => Number(i)),
+      null,
+      null
     );
     const success = await copyToClipboard(shareUrl);
 
     // Restore the original search state
-    searchStore.set(tempSearchStore);
+    //searchStore.set(tempSearchStore);
 
       if (success) {
         showNotification('share', 'Link copied to clipboard!');
