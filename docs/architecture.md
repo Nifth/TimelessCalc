@@ -27,24 +27,11 @@ TimelessCalc is a web application for calculating and visualizing Path of Exile 
 
 ## Data Architecture
 
-### Data Sources
-- **Static JSON Files**: Tree structure, translations, constants
-- **Compressed JSONL Files**: Precomputed jewel statistics
-- **External API**: PoE Watch for league information
-
-### Data Flow
-1. **Load Phase**: Static data loaded on application start
-2. **Search Phase**: User selections filter and process data
-3. **Display Phase**: Results rendered in UI and canvas
-
 ## API Design
 
 ### External APIs
 - **PoE Watch Leagues**: Simple GET endpoint for league data
 - **Local Data Loading**: Client-side loading of static assets
-
-### No REST API
-The application is frontend-only with no backend API endpoints.
 
 ## Component Overview
 
@@ -62,9 +49,6 @@ The application is frontend-only with no backend API endpoints.
 - **Layers**: Background, nodes, connections, hit detection
 - **Utilities**: Zoom, hover, click handling
 
-## Source Tree
-
-See [Source Tree Analysis](./source-tree-analysis.md) for detailed directory structure.
 
 ## Development Workflow
 

@@ -1,7 +1,3 @@
-# TimelessCalc Roadmap
-
-This roadmap outlines planned features and improvements for the TimelessCalc application, a Svelte + TypeScript tool for calculating and visualizing Path of Exile timeless jewel configurations.
-
 ## Features
 
 ### Jewel Export
@@ -15,7 +11,3 @@ Make the UI fully responsive for mobile devices. Adjust sidebar positioning, can
 
 ### Virtual Scrolling Optimization
 Optimize Konva rendering for large passive trees using virtual scrolling techniques. Only render visible nodes and layers to improve performance on lower-end devices.
-
-### Debug Panel
-1. Considérer rendre le Debug Panel conditionnel pour la production (param ?debug pour trigger le debug panel, si absent, complètement ignoré)
-2. Ajouter des guards pour les APIs non-standards (performance.memory)

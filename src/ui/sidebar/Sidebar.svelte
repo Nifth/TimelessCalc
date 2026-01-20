@@ -6,7 +6,7 @@
     import { searchStore } from "$lib/stores/searchStore";
     import { getSeedsPerPage, getPageRangeFromOrdered, MAX_FILTERS } from "$lib/utils/sidebar/tradeQuery";
 
-   let isOpen = $state(true);
+    let isOpen = $state(typeof window !== 'undefined' && window.innerWidth >= 768);
    let activeTab = $state<"search" | "favorites" | "history">("search");
    let tooltipPosition: { top: number; left: number } | null = $state(null);
 </script>
@@ -15,7 +15,7 @@
 
 {#if isOpen}
   <aside
-    class="fixed left-0 top-0 h-screen w-[650px] bg-slate-900/80 backdrop-blur-sm p-6 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700 custom-scrollbar"
+    class="fixed left-0 top-0 h-screen w-full md:w-[650px] bg-slate-900/80 backdrop-blur-sm p-6 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700 custom-scrollbar"
   >
     <header class="pl-12 pr-6 relative flex">
       <button

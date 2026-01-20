@@ -9,6 +9,7 @@
 - **SidebarToggle.svelte**: Toggle sidebar visibility
 
 ### search/ - Search Components
+- **NodeToggles.svelte**: Node toggle controls
 - **SearchTab.svelte**: Container switching between search form and results
 - **SearchForm.svelte**: Search configuration form
 - **SearchResults.svelte**: Search results display and actions
@@ -16,6 +17,7 @@
 - **StatsResults.svelte**: Display stat calculation results
 - **StatsSearch.svelte**: Stats search interface
 - **SeedSearch.svelte**: Seed search & results interface
+- **TradeControls.svelte**: Trade query controls
 
 ### selectors/ - Form Controls
 - **JewelTypeSelector.svelte**: Jewel type selection dropdown
@@ -41,20 +43,3 @@
 
 ### debug/ - Development Tools
 - **DebugPanel.svelte**: Development debug panel
-- **TradeControls.svelte**: Trade query controls
-- **NodeToggles.svelte**: Node toggle controls
-
-## Design System
-
-### Styling Approach
-- **Framework**: Tailwind CSS for utility-first styling
-- **Custom CSS**: app.css for global styles
-- **Component Scoping**: Scoped styles in .svelte files
-
-### Component Patterns
-- **Reactive Props**: Components respond to prop changes
-- **Event Dispatching**: Custom events for parent communication
-- **Store Integration**: Direct integration with Svelte stores
-
-### No Dedicated Component Library
-The application uses custom components without external UI libraries, maintaining consistency through Tailwind CSS utilities.

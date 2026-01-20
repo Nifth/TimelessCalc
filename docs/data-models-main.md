@@ -136,7 +136,3 @@
   - `index`: Index
   - `proxy`: Proxy
   - `parent?`: Parent node
-
-## No Database Models
-
-This is a frontend-only application with no backend database. All data is loaded from static JSON/JSONL files and external APIs.
