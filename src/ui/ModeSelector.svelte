@@ -16,7 +16,7 @@
       : 'cursor-pointer'} {mode === 'seed'
       ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
       : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}"
-    disabled={disabled}
+    {disabled}
   >
     Enter Seed
   </button>
@@ -27,7 +27,7 @@
       : 'cursor-pointer'} {mode === 'stats'
       ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
       : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}"
-    disabled={disabled}
+    {disabled}
   >
     Select Stats
   </button>

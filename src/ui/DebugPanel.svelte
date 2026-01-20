@@ -34,9 +34,9 @@
 
   function exportMetrics() {
     exportData = perfMonitor.exportMetrics();
-    const blob = new Blob([exportData], { type: 'application/json' });
+    const blob = new Blob([exportData], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `timelesscalc-metrics-${Date.now()}.json`;
     a.click();
@@ -44,11 +44,11 @@
   }
 
   function formatBytes(bytes: number): string {
-    if (bytes === 0) return '0 B';
+    if (bytes === 0) return "0 B";
     const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const sizes = ["B", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }
 
   function formatDuration(ms: number): string {
@@ -63,7 +63,7 @@
 
 {#if isVisible}
   <div class="debug-panel" class:expanded>
-    <div class="header" on:click={() => expanded = !expanded}>
+    <div class="header" on:click={() => (expanded = !expanded)}>
       <span class="title">Debug Panel</span>
       <span class="fps">{fps} FPS</span>
     </div>
@@ -85,7 +85,10 @@
           <p>Limit: {formatBytes(metrics.memory?.limit || 0)}</p>
           <div class="memory-graph">
             {#each memoryHistory as mem, i}
-              <div class="memory-bar" style="height: {(mem / (metrics.memory?.limit || 1)) * 100}%"></div>
+              <div
+                class="memory-bar"
+                style="height: {(mem / (metrics.memory?.limit || 1)) * 100}%"
+              ></div>
             {/each}
           </div>
         </div>
@@ -93,15 +96,23 @@
         <div class="section">
           <h4>Timing</h4>
           {#each Object.entries(metrics.timing || {}) as [key, measure] (key)}
-            <p>{key}: {formatDuration((measure as PerformanceMeasure).duration)}</p>
+            <p>
+              {key}: {formatDuration((measure as PerformanceMeasure).duration)}
+            </p>
           {/each}
         </div>
 
         <div class="section">
           <h4>Network</h4>
           <p>Requests: {metrics.network?.requestCount || 0}</p>
-          <p>Total Size: {formatBytes(metrics.network?.totalTransferred || 0)}</p>
-          <p>Total Duration: {formatDuration(metrics.network?.totalDuration || 0)}</p>
+          <p>
+            Total Size: {formatBytes(metrics.network?.totalTransferred || 0)}
+          </p>
+          <p>
+            Total Duration: {formatDuration(
+              metrics.network?.totalDuration || 0,
+            )}
+          </p>
         </div>
 
         <div class="section">
@@ -160,7 +171,7 @@
 
   .section h4 {
     margin: 0 0 4px 0;
-    color: #4CAF50;
+    color: #4caf50;
   }
 
   .progress-bar {
@@ -173,7 +184,7 @@
 
   .progress-fill {
     height: 100%;
-    background: #4CAF50;
+    background: #4caf50;
     transition: width 0.3s ease;
   }
 
@@ -186,14 +197,14 @@
 
   .memory-bar {
     flex: 1;
-    background: #FF9800;
+    background: #ff9800;
     min-height: 1px;
   }
 
   button {
     width: 100%;
     padding: 6px;
-    background: #2196F3;
+    background: #2196f3;
     color: white;
     border: none;
     border-radius: 4px;
@@ -201,6 +212,6 @@
   }
 
   button:hover {
-    background: #1976D2;
+    background: #1976d2;
   }
 </style>

@@ -3,7 +3,10 @@ import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { canvas } from "$lib/konva/canvasContext";
 
-function debounce<T extends (e: Konva.KonvaEventObject<WheelEvent>) => void>(func: T, wait: number): T {
+function debounce<T extends (e: Konva.KonvaEventObject<WheelEvent>) => void>(
+  func: T,
+  wait: number,
+): T {
   let timeout: number;
   return ((e: Konva.KonvaEventObject<WheelEvent>) => {
     clearTimeout(timeout);

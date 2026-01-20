@@ -3,7 +3,10 @@ import type { FavoriteEntry, TreeData, Node as TreeNode } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
-import { updateAllocatedDisplay, updateSocketVisualSelection } from "$lib/konva/utils/jewelHighlight";
+import {
+  updateAllocatedDisplay,
+  updateSocketVisualSelection,
+} from "$lib/konva/utils/jewelHighlight";
 import treeData from "$lib/data/tree.json" with { type: "json" };
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
 
@@ -40,10 +43,17 @@ export const favoritesActions = {
     const currentSearchStore = get(searchStore);
     const currentTreeStore = get(treeStore);
 
-    console.log('Saving favorite - allocated nodes:', currentTreeStore.allocated.size);
+    console.log(
+      "Saving favorite - allocated nodes:",
+      currentTreeStore.allocated.size,
+    );
 
     // Only save if we have required data
-    if (!currentTreeStore.chosenSocket || !currentSearchStore.jewelType || !currentSearchStore.conqueror) {
+    if (
+      !currentTreeStore.chosenSocket ||
+      !currentSearchStore.jewelType ||
+      !currentSearchStore.conqueror
+    ) {
       return;
     }
 
@@ -61,20 +71,28 @@ export const favoritesActions = {
       name,
     };
 
-    console.log('Favorite entry allocated skill IDs:', allocatedSkillIds.length, allocatedSkillIds);
+    console.log(
+      "Favorite entry allocated skill IDs:",
+      allocatedSkillIds.length,
+      allocatedSkillIds,
+    );
 
-    favoritesStore.update(favorites => [entry, ...favorites]);
+    favoritesStore.update((favorites) => [entry, ...favorites]);
   },
 
   // Load a favorite configuration
   loadFavorite(entry: FavoriteEntry): void {
     // Find the correct object references from constants to ensure proper binding
-    const jewelType = jewelTypes.find(jt => jt.name === entry.jewelType.name) || entry.jewelType;
+    const jewelType =
+      jewelTypes.find((jt) => jt.name === entry.jewelType.name) ||
+      entry.jewelType;
     const conquerorOptions = jewelType ? conquerors[jewelType.name] || [] : [];
-    const conqueror = conquerorOptions.find(c => c.id === entry.conqueror?.id) || entry.conqueror;
+    const conqueror =
+      conquerorOptions.find((c) => c.id === entry.conqueror?.id) ||
+      entry.conqueror;
 
     // Update search store
-    searchStore.update(store => ({
+    searchStore.update((store) => ({
       ...store,
       jewelType,
       conqueror,
@@ -90,7 +108,7 @@ export const favoritesActions = {
     }));
 
     // Update tree store socket and allocated nodes
-    treeStore.update(store => {
+    treeStore.update((store) => {
       // Reconstruct allocated Map from skill IDs using real node data
       const allocated = new Map<string, TreeNode>();
       const nodes = (treeData as unknown as TreeData).nodes;
@@ -118,15 +136,17 @@ export const favoritesActions = {
 
   // Delete a favorite entry
   deleteFavorite(id: string): void {
-    favoritesStore.update(favorites => favorites.filter(entry => entry.id !== id));
+    favoritesStore.update((favorites) =>
+      favorites.filter((entry) => entry.id !== id),
+    );
   },
 
   // Update the name of a favorite
   updateName(id: string, newName: string): void {
-    favoritesStore.update(favorites =>
-      favorites.map(entry =>
-        entry.id === id ? { ...entry, name: newName } : entry
-      )
+    favoritesStore.update((favorites) =>
+      favorites.map((entry) =>
+        entry.id === id ? { ...entry, name: newName } : entry,
+      ),
     );
   },
 
@@ -146,6 +166,6 @@ export const favoritesActions = {
   // Check if a favorite with the given id exists
   exists(id: string): boolean {
     const favorites = get(favoritesStore);
-    return favorites.some(entry => entry.id === id);
+    return favorites.some((entry) => entry.id === id);
   },
 };

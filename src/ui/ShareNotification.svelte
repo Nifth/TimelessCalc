@@ -21,22 +21,29 @@
   transition:fly={{ x: 320, duration: 500, easing: cubicOut }}
 >
   <div class="flex items-center gap-2">
-    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    <svg
+      class="w-5 h-5 text-green-400"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M5 13l4 4L19 7"
+      />
     </svg>
-    <span class="text-slate-200 text-sm font-medium">Link copied to clipboard!</span>
+    <span class="text-slate-200 text-sm font-medium"
+      >Link copied to clipboard!</span
+    >
   </div>
   <button
     onclick={onDismiss}
     class="text-slate-400 hover:text-white p-1 transition-colors duration-200 ml-auto"
     aria-label="Dismiss"
   >
-    <svg
-      class="w-4 h-4"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"

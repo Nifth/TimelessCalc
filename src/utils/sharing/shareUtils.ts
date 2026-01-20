@@ -1,4 +1,4 @@
-import type { SearchStore, TreeStore, TreeData } from '$lib/types';
+import type { SearchStore, TreeStore, TreeData } from "$lib/types";
 
 /**
  * Copies text to clipboard using modern API
@@ -15,57 +15,67 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 /**
  * Generates a shareable URL that encodes the current search and tree state
  */
-export function generateShareUrl(searchState: SearchStore, treeState: TreeStore, treeData: TreeData): string {
+export function generateShareUrl(
+  searchState: SearchStore,
+  treeState: TreeStore,
+  treeData: TreeData,
+): string {
   const params = new URLSearchParams();
 
   // Encode search filters with short names
   if (searchState.jewelType) {
-    params.set('jt', searchState.jewelType.name);
+    params.set("jt", searchState.jewelType.name);
   }
 
   if (searchState.conqueror) {
-    params.set('c', searchState.conqueror.label);
+    params.set("c", searchState.conqueror.label);
   }
 
   if (searchState.selectedStats && searchState.selectedStats.length > 0) {
-    params.set('s', JSON.stringify(searchState.selectedStats));
+    params.set("s", JSON.stringify(searchState.selectedStats));
   }
 
   if (searchState.seed !== null) {
-    params.set('seed', searchState.seed.toString());
+    params.set("seed", searchState.seed.toString());
   }
 
   if (searchState.league) {
-    params.set('l', searchState.league);
+    params.set("l", searchState.league);
   }
 
   if (searchState.platform) {
-    params.set('p', searchState.platform);
+    params.set("p", searchState.platform);
   }
 
   if (searchState.mode) {
-    params.set('m', searchState.mode);
+    params.set("m", searchState.mode);
   }
 
   // Encode tree state
   if (treeState.chosenSocket) {
-    params.set('so', treeState.chosenSocket.skill.toString());
+    params.set("so", treeState.chosenSocket.skill.toString());
 
     // Get nodes in jewel radius for optimization
     const socket = treeState.chosenSocket;
     const socketNodeIds = treeData.socketNodes[socket.skill.toString()] || [];
-    const radiusNodes: number[] = socketNodeIds.map((id: string) => parseInt(id, 10));
+    const radiusNodes: number[] = socketNodeIds.map((id: string) =>
+      parseInt(id, 10),
+    );
 
     // Encode allocated nodes - optimize for URL size
-    const allocatedSkills = Array.from(treeState.allocated.values()).map((n) => n.skill);
-    const unallocatedSkills = radiusNodes.filter(skill => !allocatedSkills.includes(skill));
+    const allocatedSkills = Array.from(treeState.allocated.values()).map(
+      (n) => n.skill,
+    );
+    const unallocatedSkills = radiusNodes.filter(
+      (skill) => !allocatedSkills.includes(skill),
+    );
 
     if (allocatedSkills.length > unallocatedSkills.length) {
       // Encode unallocated list (smaller)
-      params.set('un', JSON.stringify(unallocatedSkills));
+      params.set("un", JSON.stringify(unallocatedSkills));
     } else {
       // Encode allocated list
-      params.set('a', JSON.stringify(allocatedSkills));
+      params.set("a", JSON.stringify(allocatedSkills));
     }
   }
 
@@ -76,4 +86,3 @@ export function generateShareUrl(searchState: SearchStore, treeState: TreeStore,
 
   return url.toString();
 }
-

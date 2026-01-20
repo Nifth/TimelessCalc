@@ -18,7 +18,10 @@
   import { canvas } from "$lib/konva/canvasContext";
   import { drawBackground } from "$lib/konva/layers/background";
   import { drawLines } from "$lib/konva/layers/lines";
-  import { drawBaseRadius, drawNodesProgressive } from "$lib/konva/layers/nodes";
+  import {
+    drawBaseRadius,
+    drawNodesProgressive,
+  } from "$lib/konva/layers/nodes";
   import { createHitLayer } from "$lib/konva/layers/hit";
   import { setupZoom } from "$lib/konva/utils/zoom";
   import { setupHover } from "$lib/konva/utils/hover";
@@ -29,7 +32,11 @@
     changeRadius,
   } from "$lib/konva/utils/jewelHighlight";
   import { treeStore } from "./stores/treeStore";
-  import { searchStore, clearJewelLoadError, setJewelLoadError } from "./stores/searchStore";
+  import {
+    searchStore,
+    clearJewelLoadError,
+    setJewelLoadError,
+  } from "./stores/searchStore";
   import { mouseStore } from "./stores/mouseStore";
   import { getHighlighteableNodes } from "./konva/utils/nodes";
   import { fetchLeagues } from "./providers/leagues";
@@ -37,7 +44,9 @@
   import { loadJewel } from "./providers/jewels";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
-  const translation: Record<string, any[]> = JSON.parse(JSON.stringify(translationsJson));
+  const translation: Record<string, any[]> = JSON.parse(
+    JSON.stringify(translationsJson),
+  );
 
   let previousSkill: number | null = null;
 
@@ -62,12 +71,12 @@
     requestAnimationFrame(updateFPS);
   }
 
-   onMount(() => {
+  onMount(() => {
     let cleanup: () => void = () => {};
     (async () => {
-      perfMonitor.mark('init-start');
+      perfMonitor.mark("init-start");
 
-      perfMonitor.mark('stage-setup-start');
+      perfMonitor.mark("stage-setup-start");
       canvas.stage = new Konva.Stage({
         container: document.getElementById("tree")! as HTMLDivElement,
         width: window.innerWidth,
@@ -97,79 +106,107 @@
         canvas.highlightLayer,
       );
 
-      perfMonitor.mark('sprite-preload-start');
+      perfMonitor.mark("sprite-preload-start");
       await preloadSprites(data.sprites);
-      perfMonitor.mark('sprite-preload-end');
-      perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-end');
+      perfMonitor.mark("sprite-preload-end");
+      perfMonitor.measure(
+        "sprite-preload",
+        "sprite-preload-start",
+        "sprite-preload-end",
+      );
 
-      perfMonitor.mark('stage-setup-end');
-      perfMonitor.measure('stage-setup', 'stage-setup-start', 'stage-setup-end');
+      perfMonitor.mark("stage-setup-end");
+      perfMonitor.measure(
+        "stage-setup",
+        "stage-setup-start",
+        "stage-setup-end",
+      );
       loadingProgress = 25;
       currentLoadingStep = "Canvas initialized";
 
-      perfMonitor.mark('background-draw-start');
+      perfMonitor.mark("background-draw-start");
       getHighlighteableNodes(); // initialize the highlighteable nodes cache
       drawBackground();
-      perfMonitor.mark('background-draw-end');
-      perfMonitor.measure('background-draw', 'background-draw-start', 'background-draw-end');
+      perfMonitor.mark("background-draw-end");
+      perfMonitor.measure(
+        "background-draw",
+        "background-draw-start",
+        "background-draw-end",
+      );
       loadingProgress = 30;
       currentLoadingStep = "Background drawn";
 
-      perfMonitor.mark('nodes-draw-start');
+      perfMonitor.mark("nodes-draw-start");
       loadingProgress = 30;
       currentLoadingStep = "Drawing nodes...";
       await drawNodesProgressive(
         (progress: number, step: string) => {
-          loadingProgress = 30 + (progress * 0.4); // 30-70% for nodes
+          loadingProgress = 30 + progress * 0.4; // 30-70% for nodes
           currentLoadingStep = step;
         },
         () => {
-          perfMonitor.mark('nodes-draw-end');
-          perfMonitor.measure('nodes-draw', 'nodes-draw-start', 'nodes-draw-end');
-        }
+          perfMonitor.mark("nodes-draw-end");
+          perfMonitor.measure(
+            "nodes-draw",
+            "nodes-draw-start",
+            "nodes-draw-end",
+          );
+        },
       );
 
-      perfMonitor.mark('lines-draw-start');
+      perfMonitor.mark("lines-draw-start");
       drawLines();
-      perfMonitor.mark('lines-draw-end');
-      perfMonitor.measure('lines-draw', 'lines-draw-start', 'lines-draw-end');
+      perfMonitor.mark("lines-draw-end");
+      perfMonitor.measure("lines-draw", "lines-draw-start", "lines-draw-end");
       loadingProgress = 75;
       currentLoadingStep = "Lines drawn";
 
-      perfMonitor.mark('base-radius-draw-start');
+      perfMonitor.mark("base-radius-draw-start");
       drawBaseRadius();
-      perfMonitor.mark('base-radius-draw-end');
-      perfMonitor.measure('base-radius-draw', 'base-radius-draw-start', 'base-radius-draw-end');
+      perfMonitor.mark("base-radius-draw-end");
+      perfMonitor.measure(
+        "base-radius-draw",
+        "base-radius-draw-start",
+        "base-radius-draw-end",
+      );
       loadingProgress = 80;
       currentLoadingStep = "Base radius drawn";
 
-      perfMonitor.mark('hit-layer-setup-start');
+      perfMonitor.mark("hit-layer-setup-start");
       createHitLayer();
-      perfMonitor.mark('hit-layer-setup-end');
-      perfMonitor.measure('hit-layer-setup', 'hit-layer-setup-start', 'hit-layer-setup-end');
+      perfMonitor.mark("hit-layer-setup-end");
+      perfMonitor.measure(
+        "hit-layer-setup",
+        "hit-layer-setup-start",
+        "hit-layer-setup-end",
+      );
       loadingProgress = 85;
       currentLoadingStep = "Hit layer created";
 
-      perfMonitor.mark('event-setup-start');
+      perfMonitor.mark("event-setup-start");
       setupZoom();
       setupHover();
       setupClick();
-      perfMonitor.mark('event-setup-end');
-      perfMonitor.measure('event-setup', 'event-setup-start', 'event-setup-end');
+      perfMonitor.mark("event-setup-end");
+      perfMonitor.measure(
+        "event-setup",
+        "event-setup-start",
+        "event-setup-end",
+      );
       loadingProgress = 90;
       currentLoadingStep = "Events set up";
 
       canvas.mainLayer.batchDraw();
       canvas.lineLayer.batchDraw();
 
-      perfMonitor.mark('init-end');
-      perfMonitor.measure('total-init', 'init-start', 'init-end');
+      perfMonitor.mark("init-end");
+      perfMonitor.measure("total-init", "init-start", "init-end");
 
       // Update metrics with canvas info
       perfMonitor.getAllMetrics().canvas = {
         nodeCount: canvas.nodes.size,
         visibleNodes: viewportCuller.getVisibleCount(),
-        layerCount: canvas.stage?.children?.length || 0
+        layerCount: canvas.stage?.children?.length || 0,
       };
 
       loadingProgress = 100;
@@ -196,19 +233,19 @@
         }
       };
 
-      window.addEventListener('resize', handleResize);
+      window.addEventListener("resize", handleResize);
 
       const handleKeydown = (e: KeyboardEvent) => {
-        if (e.ctrlKey && e.altKey && e.key === 'f') {
+        if (e.ctrlKey && e.altKey && e.key === "f") {
           e.preventDefault();
           debugMode = !debugMode;
         }
       };
-      window.addEventListener('keydown', handleKeydown);
+      window.addEventListener("keydown", handleKeydown);
 
       cleanup = () => {
-        window.removeEventListener('resize', handleResize);
-        window.removeEventListener('keydown', handleKeydown);
+        window.removeEventListener("resize", handleResize);
+        window.removeEventListener("keydown", handleKeydown);
         canvas.stage?.destroy();
       };
     })();
@@ -260,24 +297,37 @@
 </script>
 
 {#if isLoading}
-   <Preloader {loadingComplete} progress={loadingProgress} currentStep={currentLoadingStep} />
+  <Preloader
+    {loadingComplete}
+    progress={loadingProgress}
+    currentStep={currentLoadingStep}
+  />
 {/if}
 
-<DebugPanel isVisible={debugMode} {fps} progress={loadingProgress} currentStep={currentLoadingStep} />
+<DebugPanel
+  isVisible={debugMode}
+  {fps}
+  progress={loadingProgress}
+  currentStep={currentLoadingStep}
+/>
 
-<div id="tree" style="position:fixed;inset:0;background:#070c11" on:mouseleave={() => treeStore.update(s => ({ ...s, hovered: null }))}></div>
+<div
+  id="tree"
+  style="position:fixed;inset:0;background:#070c11"
+  on:mouseleave={() => treeStore.update((s) => ({ ...s, hovered: null }))}
+></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />
 {#if debugMode}
-<div class="fps-counter">{fps} FPS</div>
+  <div class="fps-counter">{fps} FPS</div>
 {/if}
 {#if $searchStore.jewelLoadError}
-<JewelLoadErrorModal
-  jewel={$searchStore.jewelLoadError.jewel}
-  errorMessage={$searchStore.jewelLoadError.message}
-  onclose={handleErrorClose}
-  onretry={handleErrorRetry}
-/>
+  <JewelLoadErrorModal
+    jewel={$searchStore.jewelLoadError.jewel}
+    errorMessage={$searchStore.jewelLoadError.message}
+    onclose={handleErrorClose}
+    onretry={handleErrorRetry}
+  />
 {/if}
 
 <style>

@@ -1,7 +1,9 @@
 <script lang="ts">
-
   import { favoritesStore, favoritesActions } from "$lib/stores/favoritesStore";
-  import { generateShareUrl, copyToClipboard } from "$lib/utils/sharing/shareUtils";
+  import {
+    generateShareUrl,
+    copyToClipboard,
+  } from "$lib/utils/sharing/shareUtils";
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
@@ -32,8 +34,6 @@
     return new Date(timestamp).toISOString().split("T")[0]; // YYYY-MM-DD
   }
 
-
-
   function formatStats(stats: Stat[]): string {
     if (stats.length === 0) return "No stats";
     if (stats.length === 1) return stats[0].label;
@@ -61,7 +61,7 @@
 
   async function loadEntry(entry: FavoriteEntry) {
     // Load the configuration
-    searchStore.update(s => ({
+    searchStore.update((s) => ({
       ...s,
       automated: true,
     }));
@@ -71,7 +71,7 @@
     if (canvas.stage && entry.socket) {
       centerCanvasOnSocket(canvas.stage, entry.socket, 0.2);
       // Update tree store scale to match
-      treeStore.update(s => ({ ...s, scale: 0.2 }));
+      treeStore.update((s) => ({ ...s, scale: 0.2 }));
     }
 
     // Automatically trigger the search
@@ -84,16 +84,16 @@
     );
 
     // Switch to search tab to show results
-    onswitchtotab('search');
+    onswitchtotab("search");
 
     // Update search state after successful search
     if ($searchStore.searched) {
-      searchStore.update(s => ({
+      searchStore.update((s) => ({
         ...s,
         statsSearched: true,
       }));
     }
-    searchStore.update(s => ({
+    searchStore.update((s) => ({
       ...s,
       automated: false,
     }));
@@ -130,7 +130,11 @@
     const tempSearchStore = { ...$searchStore };
     favoritesActions.loadFavorite(entry);
 
-    const shareUrl = generateShareUrl($searchStore, $treeStore, treeData as unknown as TreeData);
+    const shareUrl = generateShareUrl(
+      $searchStore,
+      $treeStore,
+      treeData as unknown as TreeData,
+    );
     const success = await copyToClipboard(shareUrl);
 
     // Restore the original search state
@@ -151,12 +155,6 @@
       editInput.select();
     }
   });
-
-
-
-
-
-
 </script>
 
 <div class="space-y-4">
@@ -194,8 +192,18 @@
                       class="text-slate-400 hover:text-slate-200 p-1 ml-1 opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
                       aria-label="Edit name"
                     >
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -216,32 +224,52 @@
               </div>
             </div>
 
-             <div class="flex gap-2 flex-shrink-0">
-               <button
-                 onclick={() => handleShare(entry)}
-                 class="p-2 rounded-lg bg-slate-600 hover:bg-slate-500 text-slate-300 hover:text-white transition-all duration-200"
-                 aria-label="Share favorite"
-               >
-                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                 </svg>
-               </button>
-               <button
-                 onclick={() => handleLoadEntry(entry)}
-                 class="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded cursor-pointer transition-all duration-200"
-               >
-                 Load
-               </button>
-               <button
-                 onclick={() => favoritesActions.deleteFavorite(entry.id)}
-                 class="px-3 py-1.5 text-sm bg-red-600/80 hover:bg-red-600 text-white rounded cursor-pointer transition-all duration-200"
-                 aria-label="Delete favorite"
-               >
-                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                 </svg>
-               </button>
-             </div>
+            <div class="flex gap-2 flex-shrink-0">
+              <button
+                onclick={() => handleShare(entry)}
+                class="p-2 rounded-lg bg-slate-600 hover:bg-slate-500 text-slate-300 hover:text-white transition-all duration-200"
+                aria-label="Share favorite"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                  />
+                </svg>
+              </button>
+              <button
+                onclick={() => handleLoadEntry(entry)}
+                class="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded cursor-pointer transition-all duration-200"
+              >
+                Load
+              </button>
+              <button
+                onclick={() => favoritesActions.deleteFavorite(entry.id)}
+                class="px-3 py-1.5 text-sm bg-red-600/80 hover:bg-red-600 text-white rounded cursor-pointer transition-all duration-200"
+                aria-label="Delete favorite"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       {/each}
@@ -261,7 +289,5 @@
 {/if}
 
 {#if showShareNotification}
-  <ShareNotification
-    onDismiss={dismissShareNotification}
-  />
+  <ShareNotification onDismiss={dismissShareNotification} />
 {/if}

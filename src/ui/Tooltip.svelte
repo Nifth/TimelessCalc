@@ -19,10 +19,10 @@
     <div class="font-bold mb-2">{header}</div>
     <div class="space-y-1">
       {#each statsToDisplay as stat (stat)}
-        <div class="text-sm" class:text-red-400={!baseStats.includes(stat)}>{stat}</div>
+        <div class="text-sm" class:text-red-400={!baseStats.includes(stat)}>
+          {stat}
+        </div>
       {/each}
     </div>
   </div>
 {/if}
-
-

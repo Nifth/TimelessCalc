@@ -10,24 +10,30 @@
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "./Modal.svelte";
 
-  let { onswitchtotab }: { onswitchtotab: (tab: 'search' | 'favorites' | 'history') => void } = $props();
+  let {
+    onswitchtotab,
+  }: { onswitchtotab: (tab: "search" | "favorites" | "history") => void } =
+    $props();
 
   const translation: Record<string, any[]> = JSON.parse(
     JSON.stringify(translationsJson),
   );
 
-  const treeNodes: Record<string, Node> = (treeData as unknown as TreeData).nodes;
+  const treeNodes: Record<string, Node> = (treeData as unknown as TreeData)
+    .nodes;
 
   let showConfirmModal = $state(false);
   let pendingLoadEntry: SearchHistoryEntry | null = $state(null);
 
   function formatDate(timestamp: number): string {
-    return new Date(timestamp).toISOString().split('T')[0]; // YYYY-MM-DD
+    return new Date(timestamp).toISOString().split("T")[0]; // YYYY-MM-DD
   }
 
   function findNearbyKeystone(socket: Node): string {
     // Get nodes that are actually within the socket's radius
-    const socketNodes = (treeData as unknown as TreeData).socketNodes[socket.skill.toString()];
+    const socketNodes = (treeData as unknown as TreeData).socketNodes[
+      socket.skill.toString()
+    ];
 
     if (!socketNodes) {
       return socket.name; // Fallback if no socket data
@@ -52,7 +58,12 @@
     // If nothing special found, look for any named node (not just "Basic Jewel Socket")
     for (const nodeId of socketNodes) {
       const node = treeNodes[nodeId];
-      if (node && node.name && node.name !== "Basic Jewel Socket" && !node.name.includes("Jewel Socket")) {
+      if (
+        node &&
+        node.name &&
+        node.name !== "Basic Jewel Socket" &&
+        !node.name.includes("Jewel Socket")
+      ) {
         return node.name;
       }
     }
@@ -88,7 +99,7 @@
 
   async function loadEntry(entry: SearchHistoryEntry) {
     // Load the configuration
-    searchStore.update(s => ({
+    searchStore.update((s) => ({
       ...s,
       automated: true,
     }));
@@ -98,7 +109,7 @@
     if (canvas.stage && entry.socket) {
       centerCanvasOnSocket(canvas.stage, entry.socket, 0.2);
       // Update tree store scale to match
-      treeStore.update(s => ({ ...s, scale: 0.2 }));
+      treeStore.update((s) => ({ ...s, scale: 0.2 }));
     }
 
     // Automatically trigger the search
@@ -111,16 +122,16 @@
     );
 
     // Switch to search tab to show results
-    onswitchtotab('search');
+    onswitchtotab("search");
 
     // Update search state after successful search
     if ($searchStore.searched) {
-      searchStore.update(s => ({
+      searchStore.update((s) => ({
         ...s,
         statsSearched: true,
       }));
     }
-    searchStore.update(s => ({
+    searchStore.update((s) => ({
       ...s,
       automated: false,
     }));
@@ -139,7 +150,9 @@
   {#if $historyStore.length === 0}
     <div class="bg-slate-800 rounded-lg p-8 text-center">
       <p class="text-slate-400 italic">No search history yet.</p>
-      <p class="text-slate-500 text-sm mt-2">Search configurations will appear here automatically.</p>
+      <p class="text-slate-500 text-sm mt-2">
+        Search configurations will appear here automatically.
+      </p>
     </div>
   {:else}
     <div class="space-y-3">
@@ -186,8 +199,18 @@
                 class="px-3 py-1.5 text-sm bg-red-600/80 hover:bg-red-600 text-white rounded cursor-pointer transition-all duration-200"
                 aria-label="Delete search"
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
                 </svg>
               </button>
             </div>

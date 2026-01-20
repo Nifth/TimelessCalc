@@ -7,7 +7,7 @@ import { viewportCuller } from "../utils/viewportCuller";
 
 export function drawNodesProgressive(
   onProgress?: (progress: number, step: string) => void,
-  onComplete?: () => void
+  onComplete?: () => void,
 ): Promise<void> {
   return new Promise((resolve) => {
     const layer = canvas.mainLayer!,
@@ -69,17 +69,21 @@ export function drawNodesProgressive(
                     : TREE_CONSTANTS.SPRITES.NORMAL_INACTIVE;
               const icon = createSprite(
                 key,
-                node.inactiveIcon || node.icon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
+                node.inactiveIcon ||
+                  node.icon ||
+                  TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
                 nodeX,
                 nodeY,
               );
 
-               if (!node.isMastery && !node.isJewelSocket) {
-                 const group = new Konva.Group({ x: nodeX, y: nodeY });
+              if (!node.isMastery && !node.isJewelSocket) {
+                const group = new Konva.Group({ x: nodeX, y: nodeY });
                 // Create relative sprites for the group
                 const relativeIcon = createSprite(
                   key,
-                  node.inactiveIcon || node.icon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
+                  node.inactiveIcon ||
+                    node.icon ||
+                    TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
                   0,
                   0,
                   undefined,
@@ -112,7 +116,7 @@ export function drawNodesProgressive(
             }
           }
         } catch (e) {
-          console.error('Error drawing node', node?.skill, e);
+          console.error("Error drawing node", node?.skill, e);
         }
       });
 

@@ -12,7 +12,8 @@
       .map((id) => canvas.treeData.nodes[id])
       .filter((n): n is Node => n && n.isNotable === true);
 
-    const allNotableAllocated = notableNodes.length > 0 &&
+    const allNotableAllocated =
+      notableNodes.length > 0 &&
       notableNodes.every((n) => $treeStore.allocated.has(n.skill.toString()));
 
     treeStore.update((state) => {
@@ -36,9 +37,17 @@
     const socketNodeIds = canvas.treeData.socketNodes[chosenSocket.skill];
     const smallNodes = socketNodeIds
       .map((id) => canvas.treeData.nodes[id])
-      .filter((n): n is Node => n && !n.isNotable && !n.isMastery && !n.isKeystone && !n.isJewelSocket);
+      .filter(
+        (n): n is Node =>
+          n &&
+          !n.isNotable &&
+          !n.isMastery &&
+          !n.isKeystone &&
+          !n.isJewelSocket,
+      );
 
-    const allSmallAllocated = smallNodes.length > 0 &&
+    const allSmallAllocated =
+      smallNodes.length > 0 &&
       smallNodes.every((n) => $treeStore.allocated.has(n.skill.toString()));
 
     treeStore.update((state) => {

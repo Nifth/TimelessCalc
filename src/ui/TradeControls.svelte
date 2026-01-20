@@ -83,12 +83,7 @@
     aria-label="Show pagination info"
     class="h-[46px] px-3 rounded-lg bg-blue-900/50 hover:bg-blue-800/50 text-blue-200 text-sm font-medium cursor-pointer transition-all duration-200 flex items-center justify-center border border-blue-700/50"
   >
-    <svg
-      class="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"

@@ -1,11 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  let {
-    suggestedName,
-    onSave,
-    onCancel
-  } = $props<{
+  let { suggestedName, onSave, onCancel } = $props<{
     suggestedName: string;
     onSave: (name: string) => void;
     onCancel: () => void;
@@ -37,8 +33,13 @@
   }
 </script>
 
-<div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick={handleBackdropClick}>
-  <div class="bg-slate-800 rounded-xl shadow-2xl p-6 max-w-md w-full border border-slate-700">
+<div
+  class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+  onclick={handleBackdropClick}
+>
+  <div
+    class="bg-slate-800 rounded-xl shadow-2xl p-6 max-w-md w-full border border-slate-700"
+  >
     <h3 class="text-slate-200 text-lg font-semibold mb-4">Save to Favorites</h3>
     <input
       bind:this={inputElement}

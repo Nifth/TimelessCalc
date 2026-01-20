@@ -3,7 +3,10 @@
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { canvas } from "$lib/konva/canvasContext";
-  import { getSeedsPerPage, buildTradeQuery } from "$lib/utils/sidebar/tradeQuery";
+  import {
+    getSeedsPerPage,
+    buildTradeQuery,
+  } from "$lib/utils/sidebar/tradeQuery";
   import Konva from "konva";
 
   interface Props {
@@ -130,7 +133,7 @@
               >
                 Next
               </button>
-             {/if}
+            {/if}
             <button
               type="button"
               onclick={() => {
@@ -218,42 +221,45 @@
               class="w-full px-4 py-3 text-left hover:bg-slate-700/50 cursor-pointer transition-all duration-200"
               onclick={() => handleSeedClick(item)}
               onkeydown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   handleSeedClick(item);
                 }
               }}
             >
-                <div class="flex items-center justify-between">
-                  <span class="font-semibold text-blue-300">Seed: {item.seed}</span>
-                  <button
-                    type="button"
-                    onclick={(e) => {
-                      e.stopPropagation();
-                      openTradeForSeed(item.seed);
-                    }}
-                    class="px-2 py-1 rounded bg-blue-600/50 hover:bg-blue-600/70 text-blue-200 text-xs font-medium cursor-pointer transition-all duration-200"
-                  >
-                    Trade
-                  </button>
-                </div>
-                <div class="mt-2 space-y-1">
-                  {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
-                    {@const stat = $searchStore.selectedStats.find(
-                      (s) => s.statKey === parseInt(statKey),
-                    )}
-                    {@const total = item.statTotals?.[parseInt(statKey)] ?? 0}
-                    {#if stat}
-                      <div class="text-sm text-slate-300 flex justify-between">
-                        <div>
-                          <span class="text-blue-400">({count})</span>
-                          {stat.label}
-                        </div>
-                        <span class="text-green-400 font-semibold">[{total}]</span>
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-blue-300"
+                  >Seed: {item.seed}</span
+                >
+                <button
+                  type="button"
+                  onclick={(e) => {
+                    e.stopPropagation();
+                    openTradeForSeed(item.seed);
+                  }}
+                  class="px-2 py-1 rounded bg-blue-600/50 hover:bg-blue-600/70 text-blue-200 text-xs font-medium cursor-pointer transition-all duration-200"
+                >
+                  Trade
+                </button>
+              </div>
+              <div class="mt-2 space-y-1">
+                {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
+                  {@const stat = $searchStore.selectedStats.find(
+                    (s) => s.statKey === parseInt(statKey),
+                  )}
+                  {@const total = item.statTotals?.[parseInt(statKey)] ?? 0}
+                  {#if stat}
+                    <div class="text-sm text-slate-300 flex justify-between">
+                      <div>
+                        <span class="text-blue-400">({count})</span>
+                        {stat.label}
                       </div>
-                    {/if}
-                  {/each}
-                </div>
+                      <span class="text-green-400 font-semibold">[{total}]</span
+                      >
+                    </div>
+                  {/if}
+                {/each}
+              </div>
             </div>
           {/each}
         </div>

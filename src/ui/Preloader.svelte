@@ -29,9 +29,14 @@
       <div class="sparkle sparkle-3"></div>
     </div>
     <div class="progress-bar">
-      <div class="wave-indicator" class:loading-complete={loadingComplete}></div>
+      <div
+        class="wave-indicator"
+        class:loading-complete={loadingComplete}
+      ></div>
     </div>
-    <p class="loading-text" aria-label="Loading Path of Exile Passive Tree">Loading Path of Exile Passive Tree...</p>
+    <p class="loading-text" aria-label="Loading Path of Exile Passive Tree">
+      Loading Path of Exile Passive Tree...
+    </p>
     <p class="loading-subtext">Preparing your destiny</p>
   </div>
 </div>
@@ -49,17 +54,31 @@
   }
 
   .preloader-overlay::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 30% 40%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(220, 20, 60, 0.08) 0%, transparent 50%);
+    background:
+      radial-gradient(
+        circle at 30% 40%,
+        rgba(255, 140, 0, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 70% 60%,
+        rgba(220, 20, 60, 0.08) 0%,
+        transparent 50%
+      );
     animation: backgroundShift 8s ease-in-out infinite;
   }
 
   @keyframes backgroundShift {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 
   .preloader-content {
@@ -81,18 +100,25 @@
     background: linear-gradient(135deg, #ff8c00 0%, #ff4500 50%, #dc143c 100%);
     clip-path: polygon(50% 0%, 0% 25%, 25% 100%, 75% 100%, 100% 25%);
     position: relative;
-    box-shadow: 0 0 30px rgba(255, 140, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 0 30px rgba(255, 140, 0, 0.6),
+      inset 0 0 20px rgba(255, 255, 255, 0.3);
     animation: gemPulse 2s ease-in-out infinite;
   }
 
   @keyframes gemPulse {
-    0%, 100% {
+    0%,
+    100% {
       transform: scale(1);
-      box-shadow: 0 0 30px rgba(255, 140, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
+      box-shadow:
+        0 0 30px rgba(255, 140, 0, 0.6),
+        inset 0 0 20px rgba(255, 255, 255, 0.3);
     }
     50% {
       transform: scale(1.05);
-      box-shadow: 0 0 40px rgba(255, 140, 0, 0.8), inset 0 0 25px rgba(255, 255, 255, 0.4);
+      box-shadow:
+        0 0 40px rgba(255, 140, 0, 0.8),
+        inset 0 0 25px rgba(255, 255, 255, 0.4);
     }
   }
 
@@ -124,8 +150,15 @@
   }
 
   @keyframes sparkleTwinkle {
-    0%, 100% { opacity: 0; transform: scale(0.5); }
-    50% { opacity: 1; transform: scale(1.2); }
+    0%,
+    100% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
   }
 
   .progress-bar {
@@ -206,8 +239,13 @@
   }
 
   @keyframes textShimmer {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 
   .loading-subtext {

@@ -1,101 +1,105 @@
 <script lang="ts">
   import type { Conqueror, Translation, TreeData } from "$lib/types";
   import { searchStore, resetDependentFields } from "$lib/stores/searchStore";
-    import { treeStore } from "$lib/stores/treeStore";
-    import { historyActions } from "$lib/stores/historyStore";
-   import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
-   import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
-   import TradeNotification from "$lib/ui/TradeNotification.svelte";
-import { conquerors } from "$lib/constants/timeless";
-    import {
-      getConquerorOptions,
-    } from "$lib/utils/sidebar/options";
-   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
-   import { applySeed } from "$lib/utils/sidebar/searchLogic";
+  import { treeStore } from "$lib/stores/treeStore";
+  import { historyActions } from "$lib/stores/historyStore";
+  import LeagueSelector from "$lib/ui/LeagueSelector.svelte";
+  import PlatformSelector from "$lib/ui/PlatformSelector.svelte";
+  import TradeNotification from "$lib/ui/TradeNotification.svelte";
+  import { conquerors } from "$lib/constants/timeless";
+  import { getConquerorOptions } from "$lib/utils/sidebar/options";
+  import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
+  import { applySeed } from "$lib/utils/sidebar/searchLogic";
 
-   import {
-     buildTradeQuery,
-     getSeedsPerPage,
-     getPageRangeFromOrdered,
-     MAX_FILTERS,
-   } from "$lib/utils/sidebar/tradeQuery";
-   import { generateShareUrl, copyToClipboard } from "$lib/utils/sharing/shareUtils";
-   import translationsJson from "$lib/data/translation.json" with { type: "json" };
-   import treeData from "$lib/data/tree.json" with { type: "json" };
-   import SidebarToggle from "./SidebarToggle.svelte";
-   import JewelTypeSelector from "./JewelTypeSelector.svelte";
-   import ConquerorSelector from "./ConquerorSelector.svelte";
-   import ModeSelector from "./ModeSelector.svelte";
-   import SeedSearch from "./SeedSearch.svelte";
-   import StatsSearch from "./StatsSearch.svelte";
-   import StatsResults from "./StatsResults.svelte";
-   import TradeControls from "./TradeControls.svelte";
+  import {
+    buildTradeQuery,
+    getSeedsPerPage,
+    getPageRangeFromOrdered,
+    MAX_FILTERS,
+  } from "$lib/utils/sidebar/tradeQuery";
+  import {
+    generateShareUrl,
+    copyToClipboard,
+  } from "$lib/utils/sharing/shareUtils";
+  import translationsJson from "$lib/data/translation.json" with { type: "json" };
+  import treeData from "$lib/data/tree.json" with { type: "json" };
+  import SidebarToggle from "./SidebarToggle.svelte";
+  import JewelTypeSelector from "./JewelTypeSelector.svelte";
+  import ConquerorSelector from "./ConquerorSelector.svelte";
+  import ModeSelector from "./ModeSelector.svelte";
+  import SeedSearch from "./SeedSearch.svelte";
+  import StatsSearch from "./StatsSearch.svelte";
+  import StatsResults from "./StatsResults.svelte";
+  import TradeControls from "./TradeControls.svelte";
 
-    import NodeToggles from "./NodeToggles.svelte";
-    import Modal from "./Modal.svelte";
-    import SearchHistory from "./SearchHistory.svelte";
-    import Favorites from "./Favorites.svelte";
-    import SaveFavoriteModal from "./SaveFavoriteModal.svelte";
-    import FavoriteNotification from "./FavoriteNotification.svelte";
-    import ShareNotification from "./ShareNotification.svelte";
-    import { favoritesActions } from "$lib/stores/favoritesStore";
+  import NodeToggles from "./NodeToggles.svelte";
+  import Modal from "./Modal.svelte";
+  import SearchHistory from "./SearchHistory.svelte";
+  import Favorites from "./Favorites.svelte";
+  import SaveFavoriteModal from "./SaveFavoriteModal.svelte";
+  import FavoriteNotification from "./FavoriteNotification.svelte";
+  import ShareNotification from "./ShareNotification.svelte";
+  import { favoritesActions } from "$lib/stores/favoritesStore";
 
-   const translation: Record<string, any[]> = JSON.parse(
-     JSON.stringify(translationsJson),
-   );
+  const translation: Record<string, any[]> = JSON.parse(
+    JSON.stringify(translationsJson),
+  );
 
-   let isOpen = $state(true);
-   let seedInput: number | null = $state(null);
+  let isOpen = $state(true);
+  let seedInput: number | null = $state(null);
 
-   let expandedGroups: Record<number, boolean> = $state({});
-   let groupPages: Record<string, number> = $state({});
-   let hasGroupTraded: Record<string, boolean> = $state({});
-    let _hasTraded = $state(false);
-     let tooltipPosition: { top: number; left: number } | null = $state(null);
+  let expandedGroups: Record<number, boolean> = $state({});
+  let groupPages: Record<string, number> = $state({});
+  let hasGroupTraded: Record<string, boolean> = $state({});
+  let _hasTraded = $state(false);
+  let tooltipPosition: { top: number; left: number } | null = $state(null);
 
-    let showSaveFavoriteModal = $state(false);
-    let favoriteSuggestion = $state("");
-    let showFavoriteNotification = $state(false);
-    let showShareNotification = $state(false);
-    let favoriteNotificationName = $state("");
-     let socketWarningMessage = $state("");
-    let activeTab = $state<'search' | 'favorites' | 'history'>('search');
+  let showSaveFavoriteModal = $state(false);
+  let favoriteSuggestion = $state("");
+  let showFavoriteNotification = $state(false);
+  let showShareNotification = $state(false);
+  let favoriteNotificationName = $state("");
+  let socketWarningMessage = $state("");
+  let activeTab = $state<"search" | "favorites" | "history">("search");
 
-    let previousJewelType: typeof $searchStore.jewelType = null;
+  let previousJewelType: typeof $searchStore.jewelType = null;
 
-    let canShare = $derived(
-      !!$searchStore.jewelType &&
+  let canShare = $derived(
+    !!$searchStore.jewelType &&
       !!$searchStore.conqueror &&
-      ($searchStore.selectedStats.length > 0 || $searchStore.seed !== null)
-    );
+      ($searchStore.selectedStats.length > 0 || $searchStore.seed !== null),
+  );
 
-    $effect(() => {
-      const current = $searchStore.jewelType;
-      if (current !== previousJewelType) {
-        // Only reset if changing jewelType AND conqueror doesn't match the new type
-        // This allows history/URL loading to work (they set all fields correctly)
-        // while resetting on user interaction
-        if (previousJewelType !== null) {
-          const currentConqueror = $searchStore.conqueror;
-          const validConquerors = current ? conquerors[current.name] || [] : [];
-          const isValidConqueror = validConquerors.some((c: Conqueror) => c.label === currentConqueror?.label);
-          if (!isValidConqueror) {
-            resetDependentFields();
-          }
+  $effect(() => {
+    const current = $searchStore.jewelType;
+    if (current !== previousJewelType) {
+      // Only reset if changing jewelType AND conqueror doesn't match the new type
+      // This allows history/URL loading to work (they set all fields correctly)
+      // while resetting on user interaction
+      if (previousJewelType !== null) {
+        const currentConqueror = $searchStore.conqueror;
+        const validConquerors = current ? conquerors[current.name] || [] : [];
+        const isValidConqueror = validConquerors.some(
+          (c: Conqueror) => c.label === currentConqueror?.label,
+        );
+        if (!isValidConqueror) {
+          resetDependentFields();
         }
-        previousJewelType = current;
       }
-    });
+      previousJewelType = current;
+    }
+  });
 
-    function checkSocketAndSearch(action: () => void) {
-     if (!$treeStore.chosenSocket) {
-       socketWarningMessage = "No jewel socket selected. Please select a socket on the passive tree before searching.";
-       return;
-     }
-     action();
-   }
+  function checkSocketAndSearch(action: () => void) {
+    if (!$treeStore.chosenSocket) {
+      socketWarningMessage =
+        "No jewel socket selected. Please select a socket on the passive tree before searching.";
+      return;
+    }
+    action();
+  }
 
-   let conquerorOptions = $derived(getConquerorOptions($searchStore.jewelType));
+  let conquerorOptions = $derived(getConquerorOptions($searchStore.jewelType));
 
   function nextPage() {
     const seedsPerPage = getSeedsPerPage(
@@ -242,7 +246,7 @@ import { conquerors } from "$lib/constants/timeless";
       $searchStore.selectedStats,
     );
     if ($searchStore.searched) {
-      searchStore.update(s => {
+      searchStore.update((s) => {
         if (s.mode === "stats") {
           s.statsSearched = true;
           // Save successful stats search to history
@@ -270,7 +274,7 @@ import { conquerors } from "$lib/constants/timeless";
   }
 
   function setMode(newMode: "seed" | "stats" | null) {
-    searchStore.update(s => ({
+    searchStore.update((s) => ({
       ...s,
       mode: newMode,
       searched: newMode === "stats" ? false : s.searched,
@@ -280,7 +284,6 @@ import { conquerors } from "$lib/constants/timeless";
     }));
     seedInput = null;
     if (newMode === "stats") {
-      ;
     }
   }
 
@@ -317,7 +320,11 @@ import { conquerors } from "$lib/constants/timeless";
   }
 
   async function handleShare() {
-    const shareUrl = generateShareUrl($searchStore, $treeStore, treeData as unknown as TreeData);
+    const shareUrl = generateShareUrl(
+      $searchStore,
+      $treeStore,
+      treeData as unknown as TreeData,
+    );
     const success = await copyToClipboard(shareUrl);
     if (success) {
       showShareNotification = true;
@@ -330,7 +337,9 @@ import { conquerors } from "$lib/constants/timeless";
 
   function findNearbyKeystone(socket: any): string {
     const treeNodes = (treeData as unknown as TreeData).nodes;
-    const socketNodes = (treeData as unknown as TreeData).socketNodes[socket.skill.toString()];
+    const socketNodes = (treeData as unknown as TreeData).socketNodes[
+      socket.skill.toString()
+    ];
 
     if (!socketNodes) {
       return socket.name;
@@ -352,7 +361,12 @@ import { conquerors } from "$lib/constants/timeless";
 
     for (const nodeId of socketNodes) {
       const node = treeNodes[nodeId];
-      if (node && node.name && node.name !== "Basic Jewel Socket" && !node.name.includes("Jewel Socket")) {
+      if (
+        node &&
+        node.name &&
+        node.name !== "Basic Jewel Socket" &&
+        !node.name.includes("Jewel Socket")
+      ) {
         return node.name;
       }
     }
@@ -386,96 +400,133 @@ import { conquerors } from "$lib/constants/timeless";
   <aside
     class="fixed left-0 top-0 h-screen w-[650px] bg-slate-900/80 backdrop-blur-sm p-6 overflow-y-auto shadow-2xl z-40 transition-all duration-300 ease-out border-r border-slate-700 custom-scrollbar"
   >
-    <header
-      class="pl-12 pr-6 relative flex"
-    >
+    <header class="pl-12 pr-6 relative flex">
       <button
-        class="flex-1 py-2 transition-colors cursor-pointer {activeTab === 'search' ? 'text-white border-b-2 border-blue-400' : 'text-slate-300 hover:text-slate-100'}"
-        onclick={() => activeTab = 'search'}
+        class="flex-1 py-2 transition-colors cursor-pointer {activeTab ===
+        'search'
+          ? 'text-white border-b-2 border-blue-400'
+          : 'text-slate-300 hover:text-slate-100'}"
+        onclick={() => (activeTab = "search")}
       >
         Search
       </button>
       <button
-        class="flex-1 py-2 transition-colors cursor-pointer {activeTab === 'favorites' ? 'text-white border-b-2 border-green-400' : 'text-slate-300 hover:text-slate-100'}"
-        onclick={() => activeTab = 'favorites'}
+        class="flex-1 py-2 transition-colors cursor-pointer {activeTab ===
+        'favorites'
+          ? 'text-white border-b-2 border-green-400'
+          : 'text-slate-300 hover:text-slate-100'}"
+        onclick={() => (activeTab = "favorites")}
       >
         Favorites
       </button>
       <button
-        class="flex-1 py-2 transition-colors cursor-pointer {activeTab === 'history' ? 'text-white border-b-2 border-purple-400' : 'text-slate-300 hover:text-slate-100'}"
-        onclick={() => activeTab = 'history'}
+        class="flex-1 py-2 transition-colors cursor-pointer {activeTab ===
+        'history'
+          ? 'text-white border-b-2 border-purple-400'
+          : 'text-slate-300 hover:text-slate-100'}"
+        onclick={() => (activeTab = "history")}
       >
         History
       </button>
     </header>
 
     <div class="pt-4">
-      {#if activeTab === 'search'}
-      {#if $searchStore.statsSearched}
-         {#if $searchStore.mode === "stats"}
-           <div class="flex items-center justify-between gap-3 mb-4">
-             <div class="flex gap-2">
-          <button
-            onclick={backToForm}
-            class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-all duration-200"
-            aria-label="Back to Search"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+      {#if activeTab === "search"}
+        {#if $searchStore.statsSearched}
+          {#if $searchStore.mode === "stats"}
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <div class="flex gap-2">
+                <button
+                  onclick={backToForm}
+                  class="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition-all duration-200"
+                  aria-label="Back to Search"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
 
-          <button
-            onclick={handleShare}
-            disabled={!canShare}
-            class="p-2 rounded-lg transition-all duration-200 {canShare
-              ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
-              : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
-            aria-label="Share Configuration"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-            </svg>
-          </button>
+                <button
+                  onclick={handleShare}
+                  disabled={!canShare}
+                  class="p-2 rounded-lg transition-all duration-200 {canShare
+                    ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
+                    : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
+                  aria-label="Share Configuration"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                    />
+                  </svg>
+                </button>
 
-          {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
-            <button
-              onclick={() => {
-                favoriteSuggestion = generateFavoriteSuggestion();
-                showSaveFavoriteModal = true;
-              }}
-              class="p-2 rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all duration-200 shadow-green-500/20"
-              aria-label="Save to Favorites"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button>
-             {/if}
-             </div>
+                {#if $searchStore.searched && $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+                  <button
+                    onclick={() => {
+                      favoriteSuggestion = generateFavoriteSuggestion();
+                      showSaveFavoriteModal = true;
+                    }}
+                    class="p-2 rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all duration-200 shadow-green-500/20"
+                    aria-label="Save to Favorites"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                  </button>
+                {/if}
+              </div>
 
-             <TradeControls
-               jewelType={$searchStore.jewelType}
-               conqueror={$searchStore.conqueror}
-               hasTraded={_hasTraded}
-               ontrade={handleTrade}
-               onnext={() => {
-                 nextPage();
-                 logNextPage();
-               }}
-               ontargetposition={(pos) => (tooltipPosition = pos)}
-             >
-               <LeagueSelector slot="league" />
-               <PlatformSelector slot="platform" />
-             </TradeControls>
-           </div>
-         {/if}
+              <TradeControls
+                jewelType={$searchStore.jewelType}
+                conqueror={$searchStore.conqueror}
+                hasTraded={_hasTraded}
+                ontrade={handleTrade}
+                onnext={() => {
+                  nextPage();
+                  logNextPage();
+                }}
+                ontargetposition={(pos) => (tooltipPosition = pos)}
+              >
+                <LeagueSelector slot="league" />
+                <PlatformSelector slot="platform" />
+              </TradeControls>
+            </div>
+          {/if}
 
-         {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
-          <StatsResults
-            jewelType={$searchStore.jewelType}
-            conqueror={$searchStore.conqueror}
-            bind:expandedGroups
+          {#if $searchStore.mode === "stats" && $searchStore.statsSearched && Object.keys($searchStore.statsResults).length > 0}
+            <StatsResults
+              jewelType={$searchStore.jewelType}
+              conqueror={$searchStore.conqueror}
+              bind:expandedGroups
               bind:groupPages
               bind:hasGroupTraded
               onapplyseed={applySeedFromResults}
@@ -488,109 +539,107 @@ import { conquerors } from "$lib/constants/timeless";
               <p class="text-slate-400 italic">No results to display.</p>
             </div>
           {/if}
-      {:else}
-        <div class="mb-4">
-          <span
-            class="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap"
-          >Jewel Type</span>
-        </div>
-        <div class="space-y-6">
-          <section>
-            <JewelTypeSelector bind:jewelType={$searchStore.jewelType} />
-          </section>
-
-          {#if $searchStore.jewelType}
+        {:else}
+          <div class="mb-4">
+            <span
+              class="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap"
+              >Jewel Type</span
+            >
+          </div>
+          <div class="space-y-6">
             <section>
-              <h2
-                class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3"
-              >
-                Conqueror
-              </h2>
-              <ConquerorSelector
-                bind:conqueror={$searchStore.conqueror}
-                options={conquerorOptions}
-              />
+              <JewelTypeSelector bind:jewelType={$searchStore.jewelType} />
             </section>
 
-            {#if $searchStore.conqueror}
+            {#if $searchStore.jewelType}
               <section>
-                <ModeSelector
-                  mode={$searchStore.mode}
-                  disabled={!$searchStore.jewelType}
-                  onselectmode={setMode}
+                <h2
+                  class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3"
+                >
+                  Conqueror
+                </h2>
+                <ConquerorSelector
+                  bind:conqueror={$searchStore.conqueror}
+                  options={conquerorOptions}
                 />
               </section>
 
-              {#if $searchStore.mode === "seed"}
-                <SeedSearch
-                  jewelType={$searchStore.jewelType}
-                  bind:seed={seedInput}
-                  onapplyseed={handleSeedInput}
-                />
-              {/if}
+              {#if $searchStore.conqueror}
+                <section>
+                  <ModeSelector
+                    mode={$searchStore.mode}
+                    disabled={!$searchStore.jewelType}
+                    onselectmode={setMode}
+                  />
+                </section>
 
-              {#if $searchStore.mode === "stats"}
-                <StatsSearch
-                  jewelType={$searchStore.jewelType}
-                />
-                <button
-                  onclick={() => checkSocketAndSearch(handleSearch)}
-                  class="w-full py-3 px-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-green-500/20"
-                >
-                  Search
-                </button>
+                {#if $searchStore.mode === "seed"}
+                  <SeedSearch
+                    jewelType={$searchStore.jewelType}
+                    bind:seed={seedInput}
+                    onapplyseed={handleSeedInput}
+                  />
+                {/if}
+
+                {#if $searchStore.mode === "stats"}
+                  <StatsSearch jewelType={$searchStore.jewelType} />
+                  <button
+                    onclick={() => checkSocketAndSearch(handleSearch)}
+                    class="w-full py-3 px-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-green-500/20"
+                  >
+                    Search
+                  </button>
+                {/if}
               {/if}
             {/if}
-          {/if}
 
-             <NodeToggles />
-           </div>
-       {/if}
-
-
-      {:else if activeTab === 'favorites'}
-        <Favorites onswitchtotab={(tab) => activeTab = tab} />
-      {:else if activeTab === 'history'}
-         <SearchHistory onswitchtotab={(tab) => activeTab = tab} />
+            <NodeToggles />
+          </div>
+        {/if}
+      {:else if activeTab === "favorites"}
+        <Favorites onswitchtotab={(tab) => (activeTab = tab)} />
+      {:else if activeTab === "history"}
+        <SearchHistory onswitchtotab={(tab) => (activeTab = tab)} />
       {/if}
     </div>
-     </aside>
+  </aside>
 
-    {#if tooltipPosition}
-      {@const pageInfo = getPageRangeFromOrdered(
-        $searchStore.orderedSeeds,
-        $searchStore.currentPage,
-        $searchStore.jewelType!,
-        $searchStore.conqueror,
-      )}
-      <div
-        class="fixed z-[100] w-64 p-3 bg-slate-800 border border-slate-600 rounded-lg shadow-xl text-sm text-slate-200"
-        style="top: {tooltipPosition.top}px; left: {tooltipPosition.left}px"
-      >
-        <p class="font-semibold mb-2">Trade Link Pagination</p>
-        <p class="mb-2">
-          Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when possible (e.g.,
-          10020-10022) to maximize filter usage, allowing to have a bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
-          (best matches first).
-        </p>
-        <p>
-          {#if pageInfo.count > 0}
-            {@const seedsPerPage = getSeedsPerPage(
-              $searchStore.jewelType!,
-              $searchStore.conqueror,
-            )}
-            {@const startNum = $searchStore.currentPage * seedsPerPage + 1}
-            {@const endNum = Math.min(
-              startNum + seedsPerPage - 1,
-              $searchStore.totalResults,
-            )}
-            Showing seeds {startNum}-{endNum} of {$searchStore.totalResults}
-          {:else}
-            No results to display
-          {/if}
-        </p>
-      </div>
-    {/if}
+  {#if tooltipPosition}
+    {@const pageInfo = getPageRangeFromOrdered(
+      $searchStore.orderedSeeds,
+      $searchStore.currentPage,
+      $searchStore.jewelType!,
+      $searchStore.conqueror,
+    )}
+    <div
+      class="fixed z-[100] w-64 p-3 bg-slate-800 border border-slate-600 rounded-lg shadow-xl text-sm text-slate-200"
+      style="top: {tooltipPosition.top}px; left: {tooltipPosition.left}px"
+    >
+      <p class="font-semibold mb-2">Trade Link Pagination</p>
+      <p class="mb-2">
+        Maximum {MAX_FILTERS} filters per query. Seeds are grouped into ranges when
+        possible (e.g., 10020-10022) to maximize filter usage, allowing to have a
+        bit more than {MAX_FILTERS} seeds in search. Results are ordered by weight
+        (best matches first).
+      </p>
+      <p>
+        {#if pageInfo.count > 0}
+          {@const seedsPerPage = getSeedsPerPage(
+            $searchStore.jewelType!,
+            $searchStore.conqueror,
+          )}
+          {@const startNum = $searchStore.currentPage * seedsPerPage + 1}
+          {@const endNum = Math.min(
+            startNum + seedsPerPage - 1,
+            $searchStore.totalResults,
+          )}
+          Showing seeds {startNum}-{endNum} of {$searchStore.totalResults}
+        {:else}
+          No results to display
+        {/if}
+      </p>
+    </div>
+  {/if}
 {/if}
 
 {#if $searchStore.lastTradeInfo}
@@ -599,8 +648,7 @@ import { conquerors } from "$lib/constants/timeless";
     conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
     page={$searchStore.lastTradeInfo.page}
     groupName={$searchStore.lastTradeInfo.groupName}
-    onDismiss={() =>
-      searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
+    onDismiss={() => searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
   />
 {/if}
 {#if socketWarningMessage}
@@ -614,7 +662,7 @@ import { conquerors } from "$lib/constants/timeless";
   <SaveFavoriteModal
     suggestedName={favoriteSuggestion}
     onSave={handleSaveFavorite}
-    onCancel={() => showSaveFavoriteModal = false}
+    onCancel={() => (showSaveFavoriteModal = false)}
   />
 {/if}
 
@@ -626,7 +674,5 @@ import { conquerors } from "$lib/constants/timeless";
 {/if}
 
 {#if showShareNotification}
-  <ShareNotification
-    onDismiss={dismissShareNotification}
-  />
+  <ShareNotification onDismiss={dismissShareNotification} />
 {/if}

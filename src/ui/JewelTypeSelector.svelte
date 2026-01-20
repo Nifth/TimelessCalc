@@ -27,14 +27,16 @@
       }
 
       loadingFor = jewelId;
-      loadJewel(jewelId).catch((err: unknown) => {
-        const message = err instanceof Error ? err.message : String(err);
-        setJewelLoadError(jewelType, message);
-      }).finally(() => {
-        if (loadingFor === jewelId) {
-          loadingFor = null;
-        }
-      });
+      loadJewel(jewelId)
+        .catch((err: unknown) => {
+          const message = err instanceof Error ? err.message : String(err);
+          setJewelLoadError(jewelType, message);
+        })
+        .finally(() => {
+          if (loadingFor === jewelId) {
+            loadingFor = null;
+          }
+        });
     }
   });
 </script>

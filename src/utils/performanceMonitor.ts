@@ -14,10 +14,17 @@ export class PerformanceMonitor {
     this.marks.set(name, performance.now());
   }
 
-  measure(name: string, startMark: string, endMark: string): PerformanceMeasure | null {
+  measure(
+    name: string,
+    startMark: string,
+    endMark: string,
+  ): PerformanceMeasure | null {
     try {
       performance.measure(name, startMark, endMark);
-      const measure = performance.getEntriesByName(name, 'measure')[0] as PerformanceMeasure;
+      const measure = performance.getEntriesByName(
+        name,
+        "measure",
+      )[0] as PerformanceMeasure;
       this.measures.set(name, measure);
       return measure;
     } catch (e) {
@@ -46,16 +53,27 @@ export class PerformanceMonitor {
   }
 
   getResourceTiming(urlPattern?: string): PerformanceResourceTiming[] {
-    const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-    return urlPattern ? resources.filter(r => r.name.includes(urlPattern)) : resources;
+    const resources = performance.getEntriesByType(
+      "resource",
+    ) as PerformanceResourceTiming[];
+    return urlPattern
+      ? resources.filter((r) => r.name.includes(urlPattern))
+      : resources;
   }
 
-  getNetworkStats(): { totalTransferred: number; totalDuration: number; requestCount: number } {
+  getNetworkStats(): {
+    totalTransferred: number;
+    totalDuration: number;
+    requestCount: number;
+  } {
     const resources = this.getResourceTiming();
     return {
-      totalTransferred: resources.reduce((sum, r) => sum + (r.transferSize || 0), 0),
+      totalTransferred: resources.reduce(
+        (sum, r) => sum + (r.transferSize || 0),
+        0,
+      ),
       totalDuration: resources.reduce((sum, r) => sum + r.duration, 0),
-      requestCount: resources.length
+      requestCount: resources.length,
     };
   }
 
@@ -68,10 +86,10 @@ export class PerformanceMonitor {
         current: this.getMemoryUsage(),
         total: this.getTotalMemory(),
         limit: this.getMemoryLimit(),
-        delta: this.getMemoryDelta()
+        delta: this.getMemoryDelta(),
       },
       network: networkStats,
-      canvas: {} // Will be populated by canvas-specific code
+      canvas: {}, // Will be populated by canvas-specific code
     };
   }
 

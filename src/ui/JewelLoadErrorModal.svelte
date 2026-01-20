@@ -22,19 +22,34 @@
   }
 </script>
 
-<div class="modal-overlay" onclick={onclose} role="button" tabindex="0" onkeydown={(e) => e.key === "Escape" && onclose()}>
-  <div class="modal" onclick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+<div
+  class="modal-overlay"
+  onclick={onclose}
+  role="button"
+  tabindex="0"
+  onkeydown={(e) => e.key === "Escape" && onclose()}
+>
+  <div
+    class="modal"
+    onclick={(e) => e.stopPropagation()}
+    role="dialog"
+    aria-modal="true"
+  >
     <h2>Failed to load {jewel.name} data</h2>
     <p class="error-message">{errorMessage}</p>
-    
+
     <div class="actions">
       <button onclick={copyError}>Copy error</button>
       <button onclick={reloadPage}>Reload page</button>
       <button class="cancel" onclick={onclose}>Cancel</button>
     </div>
-    
+
     <p class="help-text">
-      If the issue persists, please <a href={issueUrl} target="_blank" rel="noopener noreferrer">open an issue</a>.
+      If the issue persists, please <a
+        href={issueUrl}
+        target="_blank"
+        rel="noopener noreferrer">open an issue</a
+      >.
     </p>
   </div>
 </div>

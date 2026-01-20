@@ -1,9 +1,16 @@
 import { writable } from "svelte/store";
-import type { SearchHistoryEntry, TreeData, Node as TreeNode } from "$lib/types";
+import type {
+  SearchHistoryEntry,
+  TreeData,
+  Node as TreeNode,
+} from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
-import { updateAllocatedDisplay, updateSocketVisualSelection } from "$lib/konva/utils/jewelHighlight";
+import {
+  updateAllocatedDisplay,
+  updateSocketVisualSelection,
+} from "$lib/konva/utils/jewelHighlight";
 import treeData from "$lib/data/tree.json" with { type: "json" };
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
 
@@ -41,10 +48,17 @@ export const historyActions = {
     const currentSearchStore = get(searchStore);
     const currentTreeStore = get(treeStore);
 
-    console.log('Saving search - allocated nodes:', currentTreeStore.allocated.size);
+    console.log(
+      "Saving search - allocated nodes:",
+      currentTreeStore.allocated.size,
+    );
 
     // Only save if we have required data
-    if (!currentTreeStore.chosenSocket || !currentSearchStore.jewelType || !currentSearchStore.conqueror) {
+    if (
+      !currentTreeStore.chosenSocket ||
+      !currentSearchStore.jewelType ||
+      !currentSearchStore.conqueror
+    ) {
       return;
     }
 
@@ -61,9 +75,13 @@ export const historyActions = {
       allocatedSkillIds,
     };
 
-    console.log('Entry allocated skill IDs:', allocatedSkillIds.length, allocatedSkillIds);
+    console.log(
+      "Entry allocated skill IDs:",
+      allocatedSkillIds.length,
+      allocatedSkillIds,
+    );
 
-    historyStore.update(history => {
+    historyStore.update((history) => {
       // Add new entry at the beginning and limit to MAX_HISTORY_ENTRIES
       const newHistory = [entry, ...history.slice(0, MAX_HISTORY_ENTRIES - 1)];
       return newHistory;
@@ -73,12 +91,16 @@ export const historyActions = {
   // Load a search configuration from history
   loadSearch(entry: SearchHistoryEntry): void {
     // Find the correct object references from constants to ensure proper binding
-    const jewelType = jewelTypes.find(jt => jt.name === entry.jewelType.name) || entry.jewelType;
+    const jewelType =
+      jewelTypes.find((jt) => jt.name === entry.jewelType.name) ||
+      entry.jewelType;
     const conquerorOptions = jewelType ? conquerors[jewelType.name] || [] : [];
-    const conqueror = conquerorOptions.find(c => c.id === entry.conqueror?.id) || entry.conqueror;
+    const conqueror =
+      conquerorOptions.find((c) => c.id === entry.conqueror?.id) ||
+      entry.conqueror;
 
     // Update search store
-    searchStore.update(store => ({
+    searchStore.update((store) => ({
       ...store,
       jewelType,
       conqueror,
@@ -94,7 +116,7 @@ export const historyActions = {
     }));
 
     // Update tree store socket and allocated nodes
-    treeStore.update(store => {
+    treeStore.update((store) => {
       // Reconstruct allocated Map from skill IDs using real node data
       const allocated = new Map<string, TreeNode>();
       const nodes = (treeData as unknown as TreeData).nodes;
@@ -122,7 +144,9 @@ export const historyActions = {
 
   // Delete a history entry
   deleteEntry(id: string): void {
-    historyStore.update(history => history.filter(entry => entry.id !== id));
+    historyStore.update((history) =>
+      history.filter((entry) => entry.id !== id),
+    );
   },
 
   // Check if current search has any configuration

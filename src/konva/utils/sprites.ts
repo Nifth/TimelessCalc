@@ -83,7 +83,10 @@ function preloadSprites(sprites: Record<string, Record<string, Sprite>>) {
   return Promise.all(promises);
 }
 
-function preloadSprite(spriteUrl: string, spriteKey: string): Promise<HTMLImageElement> {
+function preloadSprite(
+  spriteUrl: string,
+  spriteKey: string,
+): Promise<HTMLImageElement> {
   if (!spriteCache[spriteKey]) {
     const img = new Image();
     const url = spriteUrl.replace(

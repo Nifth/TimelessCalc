@@ -23,7 +23,7 @@ export class ViewportCuller {
       left: -stage.x() / scale,
       top: -stage.y() / scale,
       right: (-stage.x() + stage.width()) / scale,
-      bottom: (-stage.y() + stage.height()) / scale
+      bottom: (-stage.y() + stage.height()) / scale,
     };
 
     const newVisible: Set<number> = new Set();
@@ -36,14 +36,14 @@ export class ViewportCuller {
     });
 
     // Add newly visible nodes
-    newVisible.forEach(skill => {
+    newVisible.forEach((skill) => {
       if (!this.visibleNodes.has(skill)) {
         this.renderNode(skill);
       }
     });
 
     // Remove no longer visible nodes
-    this.visibleNodes.forEach(skill => {
+    this.visibleNodes.forEach((skill) => {
       if (!newVisible.has(skill)) {
         this.hideNode(skill);
       }
@@ -52,7 +52,10 @@ export class ViewportCuller {
     this.visibleNodes = newVisible;
   }
 
-  private isNodeVisible(node: Node, viewport: { left: number; top: number; right: number; bottom: number }): boolean {
+  private isNodeVisible(
+    node: Node,
+    viewport: { left: number; top: number; right: number; bottom: number },
+  ): boolean {
     const buffer = this.bufferSize;
     return !(
       node.x + 50 < viewport.left - buffer ||

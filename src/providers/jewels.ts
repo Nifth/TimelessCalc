@@ -63,13 +63,13 @@ export async function loadJewel(jewelId: string): Promise<void> {
   loadingJewels.update((s) => new Set(s).add(jewelId));
 
   try {
-    perfMonitor.mark(jewel.label + ' preload-start');
+    perfMonitor.mark(jewel.label + " preload-start");
     const text = await fetchText(url);
-    perfMonitor.mark(jewel.label + ' preload-end');
+    perfMonitor.mark(jewel.label + " preload-end");
     perfMonitor.measure(
-      jewel.label + ' preload',
-      jewel.label + ' preload-start',
-      jewel.label + ' preload-end',
+      jewel.label + " preload",
+      jewel.label + " preload-start",
+      jewel.label + " preload-end",
     );
 
     // JSONL: each line is a JSON object
