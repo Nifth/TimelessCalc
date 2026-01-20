@@ -1,6 +1,7 @@
 // src/providers/jewels.ts
 
 import { jewelTypes } from "$lib/constants/timeless";
+import { perfMonitor } from "$lib/utils/performanceMonitor";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
@@ -62,7 +63,14 @@ export async function loadJewel(jewelId: string): Promise<void> {
   loadingJewels.update((s) => new Set(s).add(jewelId));
 
   try {
+    perfMonitor.mark(jewel.label + ' preload-start');
     const text = await fetchText(url);
+    perfMonitor.mark(jewel.label + ' preload-end');
+    perfMonitor.measure(
+      jewel.label + ' preload',
+      jewel.label + ' preload-start',
+      jewel.label + ' preload-end',
+    );
 
     // JSONL: each line is a JSON object
     const lines = text.trim().split("\n").filter(Boolean);

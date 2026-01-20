@@ -39,18 +39,17 @@
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(JSON.stringify(translationsJson));
 
-   let previousSkill: number | null = null;
+  let previousSkill: number | null = null;
 
-    let fps = 0;
-    let lastTime = performance.now();
-    let frameCount = 0;
-    let parsedFromUrl = false;
-     let isLoading = true;
-     let loadingComplete = false;
-     let loadingProgress = 0;
-     let currentLoadingStep = "Initializing...";
-     let debugMode = false;
-    let showFps = false;
+  let fps = 0;
+  let lastTime = performance.now();
+  let frameCount = 0;
+  let parsedFromUrl = false;
+  let isLoading = true;
+  let loadingComplete = false;
+  let loadingProgress = 0;
+  let currentLoadingStep = "Initializing...";
+  let debugMode = false;
 
   function updateFPS() {
     frameCount++;
@@ -64,154 +63,154 @@
   }
 
    onMount(() => {
-     let cleanup: () => void = () => {};
-     (async () => {
-       perfMonitor.mark('init-start');
+    let cleanup: () => void = () => {};
+    (async () => {
+      perfMonitor.mark('init-start');
 
-        perfMonitor.mark('stage-setup-start');
-        canvas.stage = new Konva.Stage({
-           container: document.getElementById("tree")! as HTMLDivElement,
-           width: window.innerWidth,
-           height: window.innerHeight,
-           draggable: true,
-         });
+      perfMonitor.mark('stage-setup-start');
+      canvas.stage = new Konva.Stage({
+        container: document.getElementById("tree")! as HTMLDivElement,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        draggable: true,
+      });
 
-        // initialization
-        canvas.stage.scale({ x: 0.2, y: 0.2 });
-        canvas.stage.position({
-          x: window.innerWidth / 2,
-          y: window.innerHeight / 2,
-        });
+      // initialization
+      canvas.stage.scale({ x: 0.2, y: 0.2 });
+      canvas.stage.position({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      });
 
-        canvas.backgroundLayer = new Konva.Layer({ listening: false });
-        canvas.mainLayer = new Konva.Layer({ listening: false });
-        canvas.lineLayer = new Konva.Layer({ listening: false });
-        canvas.hitLayer = new Konva.Layer({ listening: true });
-        canvas.highlightLayer = new Konva.Layer({ listening: false });
-        canvas.treeData = data;
+      canvas.backgroundLayer = new Konva.Layer({ listening: false });
+      canvas.mainLayer = new Konva.Layer({ listening: false });
+      canvas.lineLayer = new Konva.Layer({ listening: false });
+      canvas.hitLayer = new Konva.Layer({ listening: true });
+      canvas.highlightLayer = new Konva.Layer({ listening: false });
+      canvas.treeData = data;
 
-        canvas.stage.add(
-          canvas.backgroundLayer,
-          canvas.lineLayer,
-          canvas.mainLayer,
-          canvas.hitLayer,
-          canvas.highlightLayer,
-        );
+      canvas.stage.add(
+        canvas.backgroundLayer,
+        canvas.lineLayer,
+        canvas.mainLayer,
+        canvas.hitLayer,
+        canvas.highlightLayer,
+      );
 
-        perfMonitor.mark('sprite-preload-start');
-        await preloadSprites(data.sprites);
-        perfMonitor.mark('sprite-preload-end');
-        perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-end');
+      perfMonitor.mark('sprite-preload-start');
+      await preloadSprites(data.sprites);
+      perfMonitor.mark('sprite-preload-end');
+      perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-end');
 
-        perfMonitor.mark('stage-setup-end');
-        perfMonitor.measure('stage-setup', 'stage-setup-start', 'stage-setup-end');
-        loadingProgress = 25;
-        currentLoadingStep = "Canvas initialized";
+      perfMonitor.mark('stage-setup-end');
+      perfMonitor.measure('stage-setup', 'stage-setup-start', 'stage-setup-end');
+      loadingProgress = 25;
+      currentLoadingStep = "Canvas initialized";
 
-       perfMonitor.mark('background-draw-start');
-       getHighlighteableNodes(); // initialize the highlighteable nodes cache
-       drawBackground();
-       perfMonitor.mark('background-draw-end');
-       perfMonitor.measure('background-draw', 'background-draw-start', 'background-draw-end');
-       loadingProgress = 30;
-       currentLoadingStep = "Background drawn";
+      perfMonitor.mark('background-draw-start');
+      getHighlighteableNodes(); // initialize the highlighteable nodes cache
+      drawBackground();
+      perfMonitor.mark('background-draw-end');
+      perfMonitor.measure('background-draw', 'background-draw-start', 'background-draw-end');
+      loadingProgress = 30;
+      currentLoadingStep = "Background drawn";
 
-       perfMonitor.mark('nodes-draw-start');
-       loadingProgress = 30;
-       currentLoadingStep = "Drawing nodes...";
-       await drawNodesProgressive(
-         (progress: number, step: string) => {
-           loadingProgress = 30 + (progress * 0.4); // 30-70% for nodes
-           currentLoadingStep = step;
-         },
-         () => {
-           perfMonitor.mark('nodes-draw-end');
-           perfMonitor.measure('nodes-draw', 'nodes-draw-start', 'nodes-draw-end');
-         }
-       );
+      perfMonitor.mark('nodes-draw-start');
+      loadingProgress = 30;
+      currentLoadingStep = "Drawing nodes...";
+      await drawNodesProgressive(
+        (progress: number, step: string) => {
+          loadingProgress = 30 + (progress * 0.4); // 30-70% for nodes
+          currentLoadingStep = step;
+        },
+        () => {
+          perfMonitor.mark('nodes-draw-end');
+          perfMonitor.measure('nodes-draw', 'nodes-draw-start', 'nodes-draw-end');
+        }
+      );
 
-        perfMonitor.mark('lines-draw-start');
-        drawLines();
-        perfMonitor.mark('lines-draw-end');
-        perfMonitor.measure('lines-draw', 'lines-draw-start', 'lines-draw-end');
-        loadingProgress = 75;
-        currentLoadingStep = "Lines drawn";
+      perfMonitor.mark('lines-draw-start');
+      drawLines();
+      perfMonitor.mark('lines-draw-end');
+      perfMonitor.measure('lines-draw', 'lines-draw-start', 'lines-draw-end');
+      loadingProgress = 75;
+      currentLoadingStep = "Lines drawn";
 
-        perfMonitor.mark('base-radius-draw-start');
-        drawBaseRadius();
-        perfMonitor.mark('base-radius-draw-end');
-        perfMonitor.measure('base-radius-draw', 'base-radius-draw-start', 'base-radius-draw-end');
-        loadingProgress = 80;
-        currentLoadingStep = "Base radius drawn";
+      perfMonitor.mark('base-radius-draw-start');
+      drawBaseRadius();
+      perfMonitor.mark('base-radius-draw-end');
+      perfMonitor.measure('base-radius-draw', 'base-radius-draw-start', 'base-radius-draw-end');
+      loadingProgress = 80;
+      currentLoadingStep = "Base radius drawn";
 
-        perfMonitor.mark('hit-layer-setup-start');
-        createHitLayer();
-        perfMonitor.mark('hit-layer-setup-end');
-        perfMonitor.measure('hit-layer-setup', 'hit-layer-setup-start', 'hit-layer-setup-end');
-        loadingProgress = 85;
-        currentLoadingStep = "Hit layer created";
+      perfMonitor.mark('hit-layer-setup-start');
+      createHitLayer();
+      perfMonitor.mark('hit-layer-setup-end');
+      perfMonitor.measure('hit-layer-setup', 'hit-layer-setup-start', 'hit-layer-setup-end');
+      loadingProgress = 85;
+      currentLoadingStep = "Hit layer created";
 
-        perfMonitor.mark('event-setup-start');
-        setupZoom();
-        setupHover();
-        setupClick();
-        perfMonitor.mark('event-setup-end');
-        perfMonitor.measure('event-setup', 'event-setup-start', 'event-setup-end');
-        loadingProgress = 90;
-        currentLoadingStep = "Events set up";
+      perfMonitor.mark('event-setup-start');
+      setupZoom();
+      setupHover();
+      setupClick();
+      perfMonitor.mark('event-setup-end');
+      perfMonitor.measure('event-setup', 'event-setup-start', 'event-setup-end');
+      loadingProgress = 90;
+      currentLoadingStep = "Events set up";
 
-        canvas.mainLayer.batchDraw();
-        canvas.lineLayer.batchDraw();
+      canvas.mainLayer.batchDraw();
+      canvas.lineLayer.batchDraw();
 
-        perfMonitor.mark('init-end');
-        perfMonitor.measure('total-init', 'init-start', 'init-end');
+      perfMonitor.mark('init-end');
+      perfMonitor.measure('total-init', 'init-start', 'init-end');
 
-        // Update metrics with canvas info
-        perfMonitor.getAllMetrics().canvas = {
-          nodeCount: canvas.nodes.size,
-          visibleNodes: viewportCuller.getVisibleCount(),
-          layerCount: canvas.stage?.children?.length || 0
-        };
+      // Update metrics with canvas info
+      perfMonitor.getAllMetrics().canvas = {
+        nodeCount: canvas.nodes.size,
+        visibleNodes: viewportCuller.getVisibleCount(),
+        layerCount: canvas.stage?.children?.length || 0
+      };
 
-         loadingProgress = 100;
-         currentLoadingStep = "Complete!";
-         loadingComplete = true;
+      loadingProgress = 100;
+      currentLoadingStep = "Complete!";
+      loadingComplete = true;
 
-          fetchLeagues();
-          debugMode = new URLSearchParams(window.location.search).has('debug');
-          updateFPS();
-         parsedFromUrl = parseUrlAndInitialize(
-          data,
-          canvas,
-          performSearch,
-          translation,
-         );
+      fetchLeagues();
+      parsedFromUrl = parseUrlAndInitialize(
+        data,
+        canvas,
+        performSearch,
+        translation,
+      );
 
-         const handleResize = () => {
-          if (canvas.stage) {
-            canvas.stage.width(window.innerWidth);
-            canvas.stage.height(window.innerHeight);
-            canvas.stage.batchDraw();
-            // Update viewport culling on resize
-            viewportCuller.updateViewport(canvas.stage);
-          }
-        };
+      updateFPS();
 
-        window.addEventListener('resize', handleResize);
+      const handleResize = () => {
+        if (canvas.stage) {
+          canvas.stage.width(window.innerWidth);
+          canvas.stage.height(window.innerHeight);
+          canvas.stage.batchDraw();
+          // Update viewport culling on resize
+          viewportCuller.updateViewport(canvas.stage);
+        }
+      };
 
-        const handleKeydown = (e: KeyboardEvent) => {
-          if (e.ctrlKey && e.altKey && e.key === 'f') {
-            e.preventDefault();
-            showFps = !showFps;
-          }
-        };
-        window.addEventListener('keydown', handleKeydown);
+      window.addEventListener('resize', handleResize);
 
-        cleanup = () => {
-          window.removeEventListener('resize', handleResize);
-          window.removeEventListener('keydown', handleKeydown);
-          canvas.stage?.destroy();
-        };
+      const handleKeydown = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.altKey && e.key === 'f') {
+          e.preventDefault();
+          debugMode = !debugMode;
+        }
+      };
+      window.addEventListener('keydown', handleKeydown);
+
+      cleanup = () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('keydown', handleKeydown);
+        canvas.stage?.destroy();
+      };
     })();
 
     return () => cleanup();
@@ -269,7 +268,7 @@
 <div id="tree" style="position:fixed;inset:0;background:#070c11" on:mouseleave={() => treeStore.update(s => ({ ...s, hovered: null }))}></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />
-{#if showFps}
+{#if debugMode}
 <div class="fps-counter">{fps} FPS</div>
 {/if}
 {#if $searchStore.jewelLoadError}
