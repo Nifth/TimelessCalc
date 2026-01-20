@@ -48,8 +48,9 @@ The application is frontend-only with no backend API endpoints.
 
 ## Component Overview
 
-### UI Components (23 components)
-- **Layout**: Sidebar, Modal, Header components
+### UI Components (26 components)
+- **Layout**: Sidebar (tab container), Modal, Header components
+- **Search**: SearchTab, SearchForm, SearchResults components
 - **Forms**: Various selector components for configuration
 - **Display**: Result display and notification components
 - **Interactive**: Trade controls and search interfaces

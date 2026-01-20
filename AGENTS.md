@@ -41,7 +41,10 @@ src/
 ├── types.ts             # TypeScript type definitions
 ├── Tree.svelte          # Main application component
 ├── ui/                  # UI components
-│   └── Sidebar.svelte   # Search sidebar
+│   ├── Sidebar.svelte       # Tab container for search interface
+│   ├── SearchTab.svelte     # Switches between search form and results
+│   ├── SearchForm.svelte    # Search configuration form
+│   ├── SearchResults.svelte # Search results display and actions
 ├── stores/              # Svelte stores
 │   ├── searchStore.ts   # Search state management
 │   ├── treeStore.ts     # Tree state management

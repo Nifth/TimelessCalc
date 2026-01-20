@@ -3,10 +3,15 @@
 ## Component Categories
 
 ### Layout Components
-- **Sidebar.svelte**: Main sidebar container
+- **Sidebar.svelte**: Tab container for search interface
 - **SidebarToggle.svelte**: Toggle sidebar visibility
 - **SidebarHeader.svelte**: Sidebar header section
 - **Modal.svelte**: Modal dialog component
+
+### Search Components
+- **SearchTab.svelte**: Container switching between search form and results
+- **SearchForm.svelte**: Search configuration form
+- **SearchResults.svelte**: Search results display and actions
 
 ### Form/Input Components
 - **PlatformSelector.svelte**: Platform selection dropdown

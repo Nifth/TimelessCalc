@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Conqueror, JewelType } from "$lib/types";
+
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { canvas } from "$lib/konva/canvasContext";
@@ -10,8 +10,6 @@
   import Konva from "konva";
 
   interface Props {
-    jewelType: JewelType | null;
-    conqueror: Conqueror | null;
     expandedGroups: Record<number, boolean>;
     groupPages: Record<string, number>;
     hasGroupTraded: Record<string, boolean>;
@@ -22,8 +20,6 @@
   }
 
   let {
-    jewelType,
-    conqueror,
     expandedGroups = $bindable({}),
     groupPages = $bindable({}),
     hasGroupTraded = $bindable({}),
@@ -112,7 +108,7 @@
           {@const groupSeeds = $searchStore.statsResults[total].map(
             (g) => g.seed,
           )}
-          {@const seedsPerPage = getSeedsPerPage(jewelType!, conqueror)}
+           {@const seedsPerPage = getSeedsPerPage($searchStore.jewelType!, $searchStore.conqueror)}
           {@const currentGroupPage = groupPages[total] || 0}
           {@const maxGroupPage = Math.floor(
             (groupSeeds.length - 1) / seedsPerPage,
