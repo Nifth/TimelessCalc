@@ -85,7 +85,7 @@
     From {jewelType?.min} to {jewelType?.max}
   </p>
 
-  {#if $searchStore.searched && Object.keys(timelessStats).length > 0}
+  {#if $searchStore.seedSearched && Object.keys(timelessStats).length > 0}
     <div class="bg-slate-800 rounded-lg p-4">
       <h4 class="text-sm font-semibold text-white mb-3">Current Stats</h4>
       <div class="space-y-2">

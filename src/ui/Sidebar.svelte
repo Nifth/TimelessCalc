@@ -31,7 +31,6 @@ import { conquerors } from "$lib/constants/timeless";
    import StatsResults from "./StatsResults.svelte";
    import TradeControls from "./TradeControls.svelte";
 
-    import SeedResultDisplay from "./SeedResultDisplay.svelte";
     import NodeToggles from "./NodeToggles.svelte";
     import Modal from "./Modal.svelte";
     import SearchHistory from "./SearchHistory.svelte";
@@ -412,7 +411,7 @@ import { conquerors } from "$lib/constants/timeless";
 
     <div class="pt-4">
       {#if activeTab === 'search'}
-      {#if $searchStore.searched}
+      {#if $searchStore.statsSearched}
          {#if $searchStore.mode === "stats"}
            <div class="flex items-center justify-between gap-3 mb-4">
              <div class="flex gap-2">
@@ -484,8 +483,6 @@ import { conquerors } from "$lib/constants/timeless";
               ongroupnext={handleGroupNext}
               onexpand={expandGroup}
             />
-          {:else if $searchStore.mode === "seed" && $searchStore.seedSearched}
-            <SeedResultDisplay seed={$searchStore.seed} />
           {:else}
             <div class="bg-slate-800 rounded-lg p-8 text-center">
               <p class="text-slate-400 italic">No results to display.</p>
