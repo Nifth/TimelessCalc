@@ -11,9 +11,9 @@
   import treeData from "$lib/data/tree.json" with { type: "json" };
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
-  import Modal from "$lib/ui/common/Modal.svelte";
-  import ShareNotification from "$lib/ui/notifications/ShareNotification.svelte";
-  import type { FavoriteEntry, Stat, TreeData } from "$lib/types";
+   import Modal from "$lib/ui/common/Modal.svelte";
+   import { showNotification } from "$lib/stores/notificationStore";
+   import type { FavoriteEntry, Stat, TreeData } from "$lib/types";
 
   let { onswitchtotab } = $props<{
     onswitchtotab: (tab: "search" | "favorites" | "history") => void;
@@ -27,8 +27,7 @@
   let pendingLoadEntry: FavoriteEntry | null = $state(null);
   let editingId: string | null = $state(null);
   let editValue = $state("");
-  let editInput: HTMLInputElement | null = $state(null);
-  let showShareNotification = $state(false);
+   let editInput: HTMLInputElement | null = $state(null);
 
   function formatDate(timestamp: number): string {
     return new Date(timestamp).toISOString().split("T")[0]; // YYYY-MM-DD
@@ -140,14 +139,10 @@
     // Restore the original search state
     searchStore.set(tempSearchStore);
 
-    if (success) {
-      showShareNotification = true;
-    }
-  }
-
-  function dismissShareNotification() {
-    showShareNotification = false;
-  }
+     if (success) {
+       showNotification('share');
+     }
+   }
 
   $effect(() => {
     if (editingId && editInput) {
@@ -288,6 +283,3 @@
   />
 {/if}
 
-{#if showShareNotification}
-  <ShareNotification onDismiss={dismissShareNotification} />
-{/if}

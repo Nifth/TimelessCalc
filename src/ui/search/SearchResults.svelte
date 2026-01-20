@@ -19,13 +19,11 @@
 
    import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
    import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
-   import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
    import StatsResults from "$lib/ui/search/StatsResults.svelte";
    import TradeControls from "$lib/ui/debug/TradeControls.svelte";
    import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
-   import FavoriteNotification from "$lib/ui/notifications/FavoriteNotification.svelte";
-   import ShareNotification from "$lib/ui/notifications/ShareNotification.svelte";
-  import { favoritesActions } from "$lib/stores/favoritesStore";
+   import { favoritesActions } from "$lib/stores/favoritesStore";
+   import { showNotification } from "$lib/stores/notificationStore";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const translation: Record<string, any[]> = JSON.parse(
@@ -38,11 +36,9 @@
   let _hasTraded = $state(false);
   let tooltipPosition: { top: number; left: number } | null = $state(null);
 
-  let showSaveFavoriteModal = $state(false);
-  let favoriteSuggestion = $state("");
-  let showFavoriteNotification = $state(false);
-  let showShareNotification = $state(false);
-  let favoriteNotificationName = $state("");
+   let showSaveFavoriteModal = $state(false);
+   let favoriteSuggestion = $state("");
+   let favoriteNotificationName = $state("");
 
   let canShare = $derived(
     !!$searchStore.jewelType &&
@@ -225,17 +221,13 @@
       $treeStore,
       treeData as unknown as TreeData,
     );
-    const success = await copyToClipboard(shareUrl);
-    if (success) {
-      showShareNotification = true;
-    }
-  }
+     const success = await copyToClipboard(shareUrl);
+     if (success) {
+       showNotification('share');
+     }
+   }
 
-  function dismissShareNotification() {
-    showShareNotification = false;
-  }
-
-  function findNearbyKeystone(socket: Node): string {
+   function findNearbyKeystone(socket: Node): string {
     const treeNodes = (treeData as unknown as TreeData).nodes;
     const socketNodes = (treeData as unknown as TreeData).socketNodes[
       socket.skill.toString()
@@ -283,15 +275,11 @@
 
   function handleSaveFavorite(name: string) {
     const finalName = name.trim() === "" ? favoriteSuggestion : name;
-    favoritesActions.saveFavorite(finalName);
-    showSaveFavoriteModal = false;
-    favoriteNotificationName = finalName;
-    showFavoriteNotification = true;
-  }
-
-  function dismissFavoriteNotification() {
-    showFavoriteNotification = false;
-  }
+     favoritesActions.saveFavorite(finalName);
+     showSaveFavoriteModal = false;
+     favoriteNotificationName = finalName;
+     showNotification('favorite', { name: favoriteNotificationName });
+   }
 </script>
 
 <div class="flex items-center justify-between gap-3 mb-4">
@@ -434,15 +422,7 @@
   </div>
 {/if}
 
-{#if $searchStore.lastTradeInfo}
-  <TradeNotification
-    seeds={$searchStore.lastTradeInfo.seeds}
-    conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
-    page={$searchStore.lastTradeInfo.page}
-    groupName={$searchStore.lastTradeInfo.groupName}
-    onDismiss={() => searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
-  />
-{/if}
+
 
 {#if showSaveFavoriteModal}
   <SaveFavoriteModal
@@ -452,13 +432,3 @@
   />
 {/if}
 
-{#if showFavoriteNotification}
-  <FavoriteNotification
-    name={favoriteNotificationName}
-    onDismiss={dismissFavoriteNotification}
-  />
-{/if}
-
-{#if showShareNotification}
-  <ShareNotification onDismiss={dismissShareNotification} />
-{/if}

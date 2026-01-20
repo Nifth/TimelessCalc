@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { fly } from "svelte/transition";
+  import { cubicOut } from "svelte/easing";
+
   export let seeds: number[];
   export let conquerorLabel: string;
   export let page: number;
@@ -8,6 +11,7 @@
 
 <div
   class="fixed right-4 bottom-4 w-72 max-h-80 bg-slate-800 border border-slate-600 rounded-lg shadow-xl overflow-hidden z-50"
+  transition:fly={{ x: 320, duration: 500, easing: cubicOut }}
 >
   <div
     class="flex items-center justify-between px-3 py-2 bg-slate-700 border-b border-slate-600"

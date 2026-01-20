@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Sidebar from "$lib/ui/Sidebar.svelte";
-  import Tooltip from "$lib/ui/Tooltip.svelte";
+   import Sidebar from "$lib/ui/sidebar/Sidebar.svelte";
+   import Tooltip from "$lib/ui/common/Tooltip.svelte";
   import Preloader from "$lib/ui/common/Preloader.svelte";
   import DebugPanel from "$lib/ui/debug/DebugPanel.svelte";
   import JewelLoadErrorModal from "$lib/ui/modals/JewelLoadErrorModal.svelte";
@@ -41,9 +41,13 @@
   import { getHighlighteableNodes } from "$lib/konva/utils/nodes";
   import { fetchLeagues } from "./providers/leagues";
   import { get } from "svelte/store";
-  import { loadJewel } from "$lib/providers/jewels";
+   import { loadJewel } from "$lib/providers/jewels";
+   import { notificationStore, hideNotification } from "$lib/stores/notificationStore";
+   import ShareNotification from "$lib/ui/notifications/ShareNotification.svelte";
+   import FavoriteNotification from "$lib/ui/notifications/FavoriteNotification.svelte";
+   import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 
-  const data: TreeData = JSON.parse(JSON.stringify(treeData));
+   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(
     JSON.stringify(translationsJson),
   );
@@ -321,12 +325,30 @@
   <div class="fps-counter">{fps} FPS</div>
 {/if}
 {#if $searchStore.jewelLoadError}
-  <JewelLoadErrorModal
-    jewel={$searchStore.jewelLoadError.jewel}
-    errorMessage={$searchStore.jewelLoadError.message}
-    onclose={handleErrorClose}
-    onretry={handleErrorRetry}
+   <JewelLoadErrorModal
+     jewel={$searchStore.jewelLoadError.jewel}
+     errorMessage={$searchStore.jewelLoadError.message}
+     onclose={handleErrorClose}
+     onretry={handleErrorRetry}
+   />
+{/if}
+
+{#if $searchStore.lastTradeInfo}
+  <TradeNotification
+    seeds={$searchStore.lastTradeInfo.seeds}
+    conquerorLabel={$searchStore.lastTradeInfo.conquerorLabel}
+    page={$searchStore.lastTradeInfo.page}
+    groupName={$searchStore.lastTradeInfo.groupName}
+    onDismiss={() => searchStore.update((s) => ({ ...s, lastTradeInfo: null }))}
   />
+{/if}
+
+{#if $notificationStore.show}
+  {#if $notificationStore.type === 'share'}
+    <ShareNotification onDismiss={hideNotification} />
+  {:else if $notificationStore.type === 'favorite'}
+    <FavoriteNotification name={$notificationStore.props?.name || ''} onDismiss={hideNotification} />
+  {/if}
 {/if}
 
 <style>
