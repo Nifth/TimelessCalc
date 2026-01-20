@@ -40,14 +40,16 @@
 
    let previousSkill: number | null = null;
 
-   let fps = 0;
-   let lastTime = performance.now();
-   let frameCount = 0;
-   let parsedFromUrl = false;
-   let isLoading = true;
-   let loadingComplete = false;
-   let loadingProgress = 0;
-   let currentLoadingStep = "Initializing...";
+    let fps = 0;
+    let lastTime = performance.now();
+    let frameCount = 0;
+    let parsedFromUrl = false;
+     let isLoading = true;
+     let loadingComplete = false;
+     let loadingProgress = 0;
+     let currentLoadingStep = "Initializing...";
+     let debugMode = false;
+    let showFps = false;
 
   function updateFPS() {
     frameCount++;
@@ -190,18 +192,17 @@
           loadingComplete = true;
         });
 
-        fetchLeagues();
-         // Parse URL and initialize if parameters present
-        parsedFromUrl = parseUrlAndInitialize(
+         fetchLeagues();
+          debugMode = new URLSearchParams(window.location.search).has('debug');
+          updateFPS();
+         parsedFromUrl = parseUrlAndInitialize(
           data,
           canvas,
           performSearch,
           translation,
-        );
+         );
 
-       updateFPS();
-
-        const handleResize = () => {
+         const handleResize = () => {
           if (canvas.stage) {
             canvas.stage.width(window.innerWidth);
             canvas.stage.height(window.innerHeight);
@@ -211,12 +212,21 @@
           }
         };
 
-       window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize);
 
-       cleanup = () => {
-         window.removeEventListener('resize', handleResize);
-         canvas.stage?.destroy();
-       };
+        const handleKeydown = (e: KeyboardEvent) => {
+          if (e.ctrlKey && e.altKey && e.key === 'f') {
+            e.preventDefault();
+            showFps = !showFps;
+          }
+        };
+        window.addEventListener('keydown', handleKeydown);
+
+        cleanup = () => {
+          window.removeEventListener('resize', handleResize);
+          window.removeEventListener('keydown', handleKeydown);
+          canvas.stage?.destroy();
+        };
     })();
 
     return () => cleanup();
@@ -251,12 +261,14 @@
    <Preloader {loadingComplete} progress={loadingProgress} currentStep={currentLoadingStep} />
 {/if}
 
-<DebugPanel isVisible={true} {fps} progress={loadingProgress} currentStep={currentLoadingStep} />
+<DebugPanel isVisible={debugMode} {fps} progress={loadingProgress} currentStep={currentLoadingStep} />
 
 <div id="tree" style="position:fixed;inset:0;background:#070c11" on:mouseleave={() => treeStore.update(s => ({ ...s, hovered: null }))}></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />
+{#if showFps}
 <div class="fps-counter">{fps} FPS</div>
+{/if}
 
 <style>
   :global(body) {

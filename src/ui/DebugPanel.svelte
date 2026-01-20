@@ -26,6 +26,7 @@
   }
 
   function updateMetrics() {
+    if (!isVisible) return;
     metrics = perfMonitor.getAllMetrics();
     memoryHistory.push(metrics.memory.current);
     if (memoryHistory.length > 20) memoryHistory.shift();
@@ -56,8 +57,10 @@
   }
 
   onMount(() => {
-    updateFPS();
-    updateMetrics();
+    if (isVisible) {
+      updateFPS();
+      updateMetrics();
+    }
   });
 </script>
 
