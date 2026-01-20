@@ -27,6 +27,7 @@
 - [Data Models](./data-models-main.md)
 - [Performance Monitoring](./performance-monitoring.md)
 - [Search History](./search-history.md)
+- [Favorites](./favorites.md)
 
 ## Existing Documentation
 
@@ -68,6 +69,13 @@ The application provides an interactive interface for calculating and visualizin
 - Each entry preserves jewel type, conqueror, stats, and allocated nodes
 - Load previous searches with one click
 - Confirmation dialog prevents accidental configuration loss
+
+### Favorites
+- Explicitly save and organize preferred search configurations
+- User-defined names for easy identification
+- Support for pinning frequently used favorites
+- Stores up to 50 entries in localStorage
+- Load favorites with one click to restore complete configuration
 
 ### Sharing Configurations
 - Generate shareable URLs that encode current search filters and tree state
