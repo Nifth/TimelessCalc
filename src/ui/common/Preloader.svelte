@@ -1,7 +1,6 @@
 <script lang="ts">
   export let loadingComplete: boolean = false;
   export let progress: number = 0;
-  export let currentStep: string = "Initializing...";
 
   let displayProgress: number = 0;
 

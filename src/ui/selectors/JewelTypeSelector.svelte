@@ -41,6 +41,12 @@
   });
 </script>
 
+<div class="mb-4">
+  <span
+    class="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap"
+    >Jewel Type</span
+  >
+</div>
 <div class="grid grid-cols-5 gap-3 items-stretch">
   {#each jewelTypes as jewel (jewel.name)}
     <label class="relative cursor-pointer h-full">

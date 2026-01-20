@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Sidebar from "./ui/Sidebar.svelte";
-  import Tooltip from "./ui/Tooltip.svelte";
-  import Preloader from "./ui/Preloader.svelte";
-  import DebugPanel from "./ui/DebugPanel.svelte";
-  import JewelLoadErrorModal from "./ui/JewelLoadErrorModal.svelte";
+  import Sidebar from "$lib/ui/Sidebar.svelte";
+  import Tooltip from "$lib/ui/Tooltip.svelte";
+  import Preloader from "$lib/ui/common/Preloader.svelte";
+  import DebugPanel from "$lib/ui/debug/DebugPanel.svelte";
+  import JewelLoadErrorModal from "$lib/ui/modals/JewelLoadErrorModal.svelte";
   import Konva from "konva";
   import treeData from "$lib/data/tree.json" with { type: "json" };
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
@@ -31,17 +31,17 @@
     updateJewelSockets,
     changeRadius,
   } from "$lib/konva/utils/jewelHighlight";
-  import { treeStore } from "./stores/treeStore";
+  import { treeStore } from "$lib/stores/treeStore";
   import {
     searchStore,
     clearJewelLoadError,
     setJewelLoadError,
-  } from "./stores/searchStore";
-  import { mouseStore } from "./stores/mouseStore";
-  import { getHighlighteableNodes } from "./konva/utils/nodes";
+  } from "$lib/stores/searchStore";
+  import { mouseStore } from "$lib/stores/mouseStore";
+  import { getHighlighteableNodes } from "$lib/konva/utils/nodes";
   import { fetchLeagues } from "./providers/leagues";
   import { get } from "svelte/store";
-  import { loadJewel } from "./providers/jewels";
+  import { loadJewel } from "$lib/providers/jewels";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(
@@ -300,7 +300,6 @@
   <Preloader
     {loadingComplete}
     progress={loadingProgress}
-    currentStep={currentLoadingStep}
   />
 {/if}
 

@@ -11,8 +11,8 @@
   import treeData from "$lib/data/tree.json" with { type: "json" };
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
-  import Modal from "./Modal.svelte";
-  import ShareNotification from "./ShareNotification.svelte";
+  import Modal from "$lib/ui/common/Modal.svelte";
+  import ShareNotification from "$lib/ui/notifications/ShareNotification.svelte";
   import type { FavoriteEntry, Stat, TreeData } from "$lib/types";
 
   let { onswitchtotab } = $props<{

@@ -17,14 +17,14 @@
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import treeData from "$lib/data/tree.json" with { type: "json" };
 
-  import LeagueSelector from "./LeagueSelector.svelte";
-  import PlatformSelector from "./PlatformSelector.svelte";
-  import TradeNotification from "./TradeNotification.svelte";
-  import StatsResults from "./StatsResults.svelte";
-  import TradeControls from "./TradeControls.svelte";
-  import SaveFavoriteModal from "./SaveFavoriteModal.svelte";
-  import FavoriteNotification from "./FavoriteNotification.svelte";
-  import ShareNotification from "./ShareNotification.svelte";
+   import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
+   import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
+   import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
+   import StatsResults from "$lib/ui/search/StatsResults.svelte";
+   import TradeControls from "$lib/ui/debug/TradeControls.svelte";
+   import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
+   import FavoriteNotification from "$lib/ui/notifications/FavoriteNotification.svelte";
+   import ShareNotification from "$lib/ui/notifications/ShareNotification.svelte";
   import { favoritesActions } from "$lib/stores/favoritesStore";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

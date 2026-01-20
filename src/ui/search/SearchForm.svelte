@@ -8,13 +8,13 @@
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
 
-  import JewelTypeSelector from "./JewelTypeSelector.svelte";
-  import ConquerorSelector from "./ConquerorSelector.svelte";
-  import ModeSelector from "./ModeSelector.svelte";
-  import SeedSearch from "./SeedSearch.svelte";
-  import StatsSearch from "./StatsSearch.svelte";
-  import NodeToggles from "./NodeToggles.svelte";
-  import Modal from "./Modal.svelte";
+   import JewelTypeSelector from "$lib/ui/selectors/JewelTypeSelector.svelte";
+   import ConquerorSelector from "$lib/ui/selectors/ConquerorSelector.svelte";
+   import ModeSelector from "$lib/ui/selectors/ModeSelector.svelte";
+   import SeedSearch from "$lib/ui/search/SeedSearch.svelte";
+   import StatsSearch from "$lib/ui/search/StatsSearch.svelte";
+   import NodeToggles from "$lib/ui/debug/NodeToggles.svelte";
+   import Modal from "$lib/ui/common/Modal.svelte";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const translation: Record<string, any[]> = JSON.parse(
@@ -118,12 +118,6 @@
   }
 </script>
 
-<div class="mb-4">
-  <span
-    class="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap"
-    >Jewel Type</span
-  >
-</div>
 <div class="space-y-6">
   <section>
     <JewelTypeSelector bind:jewelType={$searchStore.jewelType} />
@@ -131,11 +125,6 @@
 
   {#if $searchStore.jewelType}
     <section>
-      <h2
-        class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3"
-      >
-        Conqueror
-      </h2>
       <ConquerorSelector
         bind:conqueror={$searchStore.conqueror}
         options={conquerorOptions}

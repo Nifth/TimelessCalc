@@ -1,8 +1,8 @@
 <script lang="ts">
-  import SidebarToggle from "./SidebarToggle.svelte";
-  import SearchTab from "./SearchTab.svelte";
-  import SearchHistory from "./SearchHistory.svelte";
-  import Favorites from "./Favorites.svelte";
+   import SidebarToggle from "$lib/ui/common/SidebarToggle.svelte";
+   import SearchTab from "$lib/ui/search/SearchTab.svelte";
+   import SearchHistory from "$lib/ui/search/SearchHistory.svelte";
+   import Favorites from "$lib/ui/Favorites.svelte";
 
   let isOpen = $state(true);
   let activeTab = $state<"search" | "favorites" | "history">("search");

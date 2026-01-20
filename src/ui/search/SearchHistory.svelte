@@ -8,7 +8,7 @@
   import treeData from "$lib/data/tree.json" with { type: "json" };
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
-  import Modal from "./Modal.svelte";
+  import Modal from "$lib/ui/common/Modal.svelte";
 
   let {
     onswitchtotab,
