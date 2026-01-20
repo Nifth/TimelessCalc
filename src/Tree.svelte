@@ -42,7 +42,7 @@
   import { fetchLeagues } from "./providers/leagues";
   import { get } from "svelte/store";
    import { loadJewel } from "$lib/providers/jewels";
-   import { notificationStore, hideNotification } from "$lib/stores/notificationStore";
+   import { notificationStore } from "$lib/stores/notificationStore";
    import ShareNotification from "$lib/ui/notifications/ShareNotification.svelte";
    import FavoriteNotification from "$lib/ui/notifications/FavoriteNotification.svelte";
    import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
@@ -343,12 +343,12 @@
   />
 {/if}
 
-{#if $notificationStore.show}
-  {#if $notificationStore.type === 'share'}
-    <ShareNotification onDismiss={hideNotification} />
-  {:else if $notificationStore.type === 'favorite'}
-    <FavoriteNotification name={$notificationStore.props?.name || ''} onDismiss={hideNotification} />
-  {/if}
+{#if $notificationStore.type === 'share'}
+    <ShareNotification />
+{:else if $notificationStore.type === 'favorite'}
+    <FavoriteNotification
+      name={$notificationStore.props.name}
+    />
 {/if}
 
 <style>

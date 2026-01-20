@@ -2,10 +2,9 @@
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
   import { cubicOut } from "svelte/easing";
+  import { hideNotification, notificationStore } from "$lib/stores/notificationStore";
 
-  let { onDismiss } = $props<{
-    onDismiss: () => void;
-  }>();
+  const onDismiss: () => void = () => hideNotification;
 
   onMount(() => {
     const timeout = setTimeout(() => {
@@ -16,6 +15,7 @@
   });
 </script>
 
+{#if $notificationStore.show}
 <div
   class="fixed right-4 bottom-20 bg-slate-800 border border-slate-600 rounded-lg shadow-xl p-4 z-50 flex items-center gap-3 max-w-xs"
   transition:fly={{ x: 320, duration: 500, easing: cubicOut }}
@@ -53,3 +53,4 @@
     </svg>
   </button>
 </div>
+{/if}
