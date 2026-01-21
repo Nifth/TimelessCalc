@@ -9,7 +9,7 @@ export function parseKey(key: string): { statId: number; value: number }[] {
   });
 }
 
-export function getTranslation(
+export function formatStatTranslation(
   statId: number,
   value: number,
   translation: Record<string, Translation[]>,

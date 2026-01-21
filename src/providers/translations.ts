@@ -5,6 +5,6 @@ export const translations: Record<string, Translation[]> = JSON.parse(
   JSON.stringify(translationsJson),
 );
 
-export function getTranslation(key: string): Translation[] | undefined {
+export function getStatTranslations(key: string): Translation[] | undefined {
   return translations[key];
 }

@@ -1,10 +1,20 @@
 import type { Node } from "$lib/types";
 
+/**
+ * Internal helper: Find node ID by skill number.
+ */
+function findNodeIdInternal(
+  skill: number,
+  nodes: Record<string, Node>,
+): string | null {
+  return Object.keys(nodes).find((k) => nodes[k].skill === skill) || null;
+}
+
 export function findNodeBySkill(
   skill: number,
   nodes: Record<string, Node>,
 ): Node | null {
-  const nodeId = Object.keys(nodes).find((k) => nodes[k].skill === skill);
+  const nodeId = findNodeIdInternal(skill, nodes);
   return nodeId ? nodes[nodeId] : null;
 }
 
@@ -12,8 +22,7 @@ export function findNodeIdBySkill(
   skill: number,
   nodes: Record<string, Node>,
 ): string | null {
-  const nodeId = Object.keys(nodes).find((k) => nodes[k].skill === skill);
-  return nodeId || null;
+  return findNodeIdInternal(skill, nodes);
 }
 
 export function getNodeWithFallback(

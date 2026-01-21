@@ -1,7 +1,13 @@
 import { treeStore } from "$lib/stores/treeStore";
 import { canvas } from "$lib/konva/canvasContext";
-import { parseKey, getTranslation } from "./sidebarUtils";
-import type { JewelType, Stat, Translation, JewelEntry } from "$lib/types";
+import { parseKey, formatStatTranslation } from "./sidebarUtils";
+import type {
+  JewelType,
+  Stat,
+  Translation,
+  JewelEntry,
+  Node as TreeNode,
+} from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
 import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
@@ -30,9 +36,30 @@ const COLORBLIND_FRIENDLY_COLORS = [
 function generateStatKeyColors(statKeys: number[]): Record<number, string> {
   const colors: Record<number, string> = {};
   statKeys.forEach((key, index) => {
-    colors[key] = COLORBLIND_FRIENDLY_COLORS[index % COLORBLIND_FRIENDLY_COLORS.length];
+    colors[key] =
+      COLORBLIND_FRIENDLY_COLORS[index % COLORBLIND_FRIENDLY_COLORS.length];
   });
   return colors;
+}
+
+function processNodeModifications(
+  entry: Record<string, number[]>,
+  socketNodeIds: string[],
+  translation: Record<string, Translation[]>,
+  processor: (
+    node: TreeNode,
+    stats: { statId: number; value: number }[],
+  ) => void,
+) {
+  for (const [key, nodeIds] of Object.entries(entry)) {
+    const stats = parseKey(key);
+    for (const nodeId of nodeIds) {
+      if (!socketNodeIds.includes(nodeId.toString())) continue;
+      const node = canvas.treeData.nodes[nodeId.toString()];
+      if (!node) continue;
+      processor(node, stats);
+    }
+  }
 }
 
 function applySeedModifications(
@@ -42,26 +69,25 @@ function applySeedModifications(
   jewelType: JewelType,
 ) {
   // Process replacements (r)
-  for (const [key, nodeIds] of Object.entries(entry.r) as [string, number[]][]) {
-    const stats = parseKey(key);
-    for (const nodeId of nodeIds) {
-      if (!socketNodeIds.includes(nodeId.toString())) continue;
-      const node = canvas.treeData.nodes[nodeId.toString()];
-      if (!node) continue;
+  processNodeModifications(
+    entry.r,
+    socketNodeIds,
+    translation,
+    (node, stats) => {
       node.timelessStats = stats.map(({ statId, value }) =>
-        getTranslation(statId, value, translation),
+        formatStatTranslation(statId, value, translation),
       );
       node.timelessStatKeys = stats.map(({ statId }) => statId);
       node.timelessStatValues = stats.map(({ value }) => value);
-    }
-  }
+    },
+  );
+
   // Process additions (a)
-  for (const [key, nodeIds] of Object.entries(entry.a) as [string, number[]][]) {
-    const stats = parseKey(key);
-    for (const nodeId of nodeIds) {
-      if (!socketNodeIds.includes(nodeId.toString())) continue;
-      const node = canvas.treeData.nodes[nodeId.toString()];
-      if (!node) continue;
+  processNodeModifications(
+    entry.a,
+    socketNodeIds,
+    translation,
+    (node, stats) => {
       node.timelessStats = [];
       node.timelessStatKeys = [];
       node.timelessStatValues = [];
@@ -70,23 +96,23 @@ function applySeedModifications(
       });
       stats.forEach(({ statId, value }) => {
         node.timelessStats!.push(
-          getTranslation(statId, value, translation),
+          formatStatTranslation(statId, value, translation),
         );
         node.timelessStatKeys!.push(statId);
         node.timelessStatValues!.push(value);
       });
-    }
-  }
+    },
+  );
   // Apply base effects according to jewelType
   const label = jewelType.name;
   let travelStat = "",
     baseStat = "";
   if (label === "karui") {
     travelStat = "+2 to Strength";
-    baseStat = '+4 to Strength';
+    baseStat = "+4 to Strength";
   } else if (label === "maraketh") {
     travelStat = "+2 to Dexterity";
-    baseStat = '+4 to Strength';
+    baseStat = "+4 to Strength";
   } else if (label === "templar") {
     baseStat = "+5 to Devotion";
     travelStat = "+10 to Devotion";
@@ -109,7 +135,7 @@ function applySeedModifications(
           node.stats?.forEach((stat) => {
             node.timelessStats!.push(stat);
           });
-          if (['Strength', 'Dexterity', 'Intelligence'].includes(node.name)) {
+          if (["Strength", "Dexterity", "Intelligence"].includes(node.name)) {
             node.timelessStats.push(travelStat);
           } else {
             node.timelessStats.push(baseStat);
@@ -188,12 +214,12 @@ export async function handleSearch(
         return state;
       }
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
-      
+
       applySeedModifications(entry, socketNodeIds, translation, jewelType);
-      
+
       const allocatedNodeIds = Array.from(state.allocated.keys());
       applySeedModifications(entry, allocatedNodeIds, translation, jewelType);
-      
+
       return state;
     });
     setSearchComplete();
@@ -258,7 +284,7 @@ export async function handleSearch(
         totalWeight: number;
       }[]
     > = {};
-for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
+    for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
       let totalWeight = 0;
       const minTotalWeight = get(searchStore).minTotalWeight;
       for (const stat of selectedStats) {
@@ -293,7 +319,7 @@ for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
     // Generate colors for all unique stat keys found in results
     const allStatKeys = new Set<number>();
     for (const { statCounts } of Object.values(results)) {
-      Object.keys(statCounts).forEach(key => allStatKeys.add(parseInt(key)));
+      Object.keys(statCounts).forEach((key) => allStatKeys.add(parseInt(key)));
     }
     const statKeyColors = generateStatKeyColors(Array.from(allStatKeys));
 
