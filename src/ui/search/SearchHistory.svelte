@@ -7,6 +7,7 @@
   import Modal from "$lib/ui/common/Modal.svelte";
   import { translations } from "$lib/providers/translations";
   import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
+  import { formatDate, formatStats, findNearbyKeystone } from "$lib/utils/formatters";
 
   let {
     onswitchtotab,
@@ -14,63 +15,10 @@
     $props();
 
   const treeNodes: Record<string, Node> = canvas.treeData.nodes;
+  const treeData: TreeData = canvas.treeData;
 
   let showConfirmModal = $state(false);
   let pendingLoadEntry: SearchHistoryEntry | null = $state(null);
-
-  function formatDate(timestamp: number): string {
-    return new Date(timestamp).toLocaleString();
-  }
-
-  function findNearbyKeystone(socket: Node): string {
-    // Get nodes that are actually within the socket's radius
-    const socketNodes = canvas.treeData.socketNodes[
-      socket.skill.toString()
-    ];
-
-    if (!socketNodes) {
-      return socket.name; // Fallback if no socket data
-    }
-
-    // Look for keystones first among nodes in socket radius
-    for (const nodeId of socketNodes) {
-      const node = treeNodes[nodeId];
-      if (node && node.isKeystone) {
-        return node.name;
-      }
-    }
-
-    // If no keystone found, look for notables
-    for (const nodeId of socketNodes) {
-      const node = treeNodes[nodeId];
-      if (node && node.isNotable) {
-        return node.name;
-      }
-    }
-
-    // If nothing special found, look for any named node (not just "Basic Jewel Socket")
-    for (const nodeId of socketNodes) {
-      const node = treeNodes[nodeId];
-      if (
-        node &&
-        node.name &&
-        node.name !== "Basic Jewel Socket" &&
-        !node.name.includes("Jewel Socket")
-      ) {
-        return node.name;
-      }
-    }
-
-    // Fallback to socket name if nothing found
-    return socket.name;
-  }
-
-  function formatStats(stats: any[]): string {
-    if (stats.length === 0) return "No stats";
-    if (stats.length === 1) return stats[0].label;
-    if (stats.length === 2) return `${stats[0].label}, ${stats[1].label}`;
-    return `${stats[0].label}, ${stats[1].label} (+${stats.length - 2} more)`;
-  }
 
   function handleLoadEntry(entry: SearchHistoryEntry) {
     if (historyActions.hasCurrentConfiguration()) {
@@ -126,7 +74,7 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-2">
                 <span class="text-sm font-medium text-slate-200 truncate">
-                  {findNearbyKeystone(entry.socket)}
+                  {findNearbyKeystone(entry.socket, treeNodes, treeData)}
                 </span>
                 <span class="text-xs text-slate-500">•</span>
                 <span class="text-sm text-slate-300 truncate">

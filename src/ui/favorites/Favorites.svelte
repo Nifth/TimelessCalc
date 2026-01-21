@@ -12,6 +12,7 @@
   import type { FavoriteEntry, Stat } from "$lib/types";
   import { translations } from "$lib/providers/translations";
   import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
+  import { formatDate, formatStats } from "$lib/utils/formatters";
 
   let { onswitchtotab } = $props<{
     onswitchtotab: (tab: "search" | "favorites" | "history") => void;
@@ -22,17 +23,6 @@
   let editingId: string | null = $state(null);
   let editValue = $state("");
    let editInput: HTMLInputElement | null = $state(null);
-
-  function formatDate(timestamp: number): string {
-    return new Date(timestamp).toLocaleString();
-  }
-
-  function formatStats(stats: Stat[]): string {
-    if (stats.length === 0) return "No stats";
-    if (stats.length === 1) return stats[0].label;
-    if (stats.length === 2) return `${stats[0].label}, ${stats[1].label}`;
-    return `${stats[0].label}, ${stats[1].label} (+${stats.length - 2} more)`;
-  }
 
   function handleLoadEntry(entry: FavoriteEntry) {
     if (favoritesActions.hasCurrentConfiguration()) {
