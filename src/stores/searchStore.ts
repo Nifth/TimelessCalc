@@ -27,26 +27,7 @@ export const searchStore = writable<SearchStore>({
   jewelLoadError: null,
 });
 
-/**
- * Resets fields that depend on jewelType selection.
- * Called when jewelType changes since conqueror/stats differ per jewel type.
- */
-export function resetDependentFields() {
-  searchStore.update((s) => ({
-    ...s,
-    conqueror: null,
-    selectedStats: [],
-    minTotalWeight: 0,
-    searched: false,
-    statsResults: {},
-    statKeyColors: {},
-    orderedSeeds: [],
-    currentPage: 0,
-    totalResults: 0,
-    statsSearched: false,
-    seedSearched: false,
-  }));
-}
+export { resetDependentFields } from "$lib/utils/search/resetStore";
 
 export function setJewelLoadError(jewel: JewelType, message: string) {
   searchStore.update((s) => ({ ...s, jewelLoadError: { jewel, message } }));

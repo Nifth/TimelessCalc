@@ -1,6 +1,7 @@
 import { loadJewel, getJewelData } from "$lib/providers/jewels";
 import { searchStore, setJewelLoadError } from "$lib/stores/searchStore";
 import type { JewelType, JewelEntry, Stat, Conqueror, Platform } from "$lib/types";
+import { resetFull } from "$lib/utils/search/resetStore";
 
 export interface JewelLoadResult {
   jewelData: Record<number, JewelEntry> | null;
@@ -77,6 +78,7 @@ export async function ensureJewelDataLoaded(
 }
 
 export function initializeSearchStore(params: SearchStoreInitParams): void {
+  resetFull();
   searchStore.update((s) => ({
     ...s,
     jewelType: params.jewelType,
@@ -85,11 +87,6 @@ export function initializeSearchStore(params: SearchStoreInitParams): void {
     seed: params.seed,
     league: params.league,
     platform: params.platform,
-    searched: false,
-    statsResults: {},
-    currentPage: 0,
-    totalResults: 0,
-    orderedSeeds: [],
     lastTradeInfo: null,
     mode: params.mode,
     minTotalWeight: params.minTotalWeight,

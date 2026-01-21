@@ -74,7 +74,6 @@ function applySeedModifications(
         node.timelessStatKeys!.push(statId);
         node.timelessStatValues!.push(value);
       });
-      console.log(node);
     }
   }
   // Apply base effects according to jewelType

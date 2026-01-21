@@ -8,6 +8,7 @@ import { TREE_CONSTANTS, type JewelCode } from "$lib/constants/tree";
 import { getHighlighteableNodes } from "./nodes";
 import { canvas } from "$lib/konva/canvasContext";
 import { searchStore } from "$lib/stores/searchStore";
+import { resetFull } from "$lib/utils/search/resetStore";
 
 // Global animation registry for proper cleanup
 const jewelAnimations: Map<string, Konva.Animation> = new Map();
@@ -19,22 +20,10 @@ let lastJewelType: string | null = null;
 export function updateJewelSockets() {
   const chosenSocket = get(treeStore).chosenSocket;
 
-  // Optimized store update - only modify required fields
-  searchStore.update((s) => {
-    s.searched = false;
-    s.statsResults = {};
-    s.currentPage = 0;
-    s.totalResults = 0;
-    s.orderedSeeds = [];
-    s.statsSearched = false;
-    s.seedSearched = false;
-    return s;
-  });
+  resetFull();
   
-  // Update visual appearance first
   updateSocketVisualSelection();
 
-  // Then apply socket-specific effects
   changeRadius(chosenSocket);
   changeKeystone(chosenSocket);
   setAllocatedNodes(chosenSocket);

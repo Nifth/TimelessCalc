@@ -15,7 +15,8 @@
   import StatsSearch from "$lib/ui/search/StatsSearch.svelte";
   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
   import Modal from "$lib/ui/common/Modal.svelte";
-  import { changeRadius } from "$lib/konva/utils/jewelHighlight";
+  import { changeRadius, clearHighlights } from "$lib/konva/utils/jewelHighlight";
+  import { resetDependentFields, resetForModeChange } from "$lib/utils/search/resetStore";
 
   let seedInput: number | null = $state(null);
   let socketWarningMessage = $state("");
@@ -36,19 +37,7 @@
           (c: Conqueror) => c.label === currentConqueror?.label,
         );
         if (!isValidConqueror) {
-          searchStore.update((s) => ({
-            ...s,
-            conqueror: null,
-            selectedStats: [],
-            minTotalWeight: 0,
-            searched: false,
-            statsResults: {},
-            orderedSeeds: [],
-            currentPage: 0,
-            totalResults: 0,
-            statsSearched: false,
-            seedSearched: false,
-          }));
+          resetDependentFields();
         }
       }
       previousJewelType = current;
@@ -89,14 +78,8 @@
   }
 
   function setMode(newMode: "seed" | "stats" | null) {
-    searchStore.update((s) => ({
-      ...s,
-      mode: newMode,
-      searched: newMode === "stats" ? false : s.searched,
-      statsResults: newMode === "stats" ? {} : s.statsResults,
-      statsSearched: false,
-      seedSearched: newMode === "seed" ? false : s.seedSearched,
-    }));
+    resetForModeChange(newMode);
+    clearHighlights();
     seedInput = null;
   }
 
