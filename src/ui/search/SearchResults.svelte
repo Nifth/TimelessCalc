@@ -2,12 +2,11 @@
   import type { Node } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
-  import { URLS } from "$lib/constants/urls";
   import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { applySeed } from "$lib/utils/sidebar/searchLogic";
   import {
-    buildTradeQuery,
     getSeedsPerPage,
+    openTradeUrl,
   } from "$lib/utils/sidebar/tradeQuery";
   import {
     generateShareUrl,
@@ -74,15 +73,6 @@
     }));
   }
 
-  function buildTradeUrl(query: object): string {
-    const platform =
-      $searchStore.platform === "PC"
-        ? ""
-        : $searchStore.platform.toLowerCase() + "/";
-    const league = encodeURIComponent($searchStore.league);
-    return `${URLS.POE_TRADE_SEARCH}${platform}${league}?q=${encodeURIComponent(JSON.stringify(query))}`;
-  }
-
   function logNextPage() {
     const nextPageNum = $searchStore.currentPage;
     const seedsPerPage = getSeedsPerPage(
@@ -95,16 +85,14 @@
       $searchStore.orderedSeeds.length,
     );
     const pageSeeds = $searchStore.orderedSeeds.slice(startIdx, endIdx);
-    const query = buildTradeQuery(
+    openTradeUrl(
       $searchStore.orderedSeeds,
       $searchStore.jewelType!,
       $searchStore.conqueror,
       nextPageNum,
+      $searchStore.platform,
+      $searchStore.league,
     );
-    console.log(query);
-    const url = buildTradeUrl(query);
-    console.log(url);
-    window.open(url, "_blank");
     storeTradeInfo(pageSeeds, nextPageNum);
   }
 
@@ -119,16 +107,14 @@
       $searchStore.conqueror,
     );
     const pageSeeds = $searchStore.orderedSeeds.slice(0, seedsPerPage);
-    const query = buildTradeQuery(
+    openTradeUrl(
       $searchStore.orderedSeeds,
       $searchStore.jewelType!,
       $searchStore.conqueror,
       0,
+      $searchStore.platform,
+      $searchStore.league,
     );
-    console.log(query);
-    const url = buildTradeUrl(query);
-    console.log(url);
-    window.open(url, "_blank");
     storeTradeInfo(pageSeeds, 0);
   }
 
@@ -141,16 +127,14 @@
     const pageSeeds = groupSeeds.slice(0, seedsPerPage);
     groupPages = { ...groupPages, [total]: 0 };
     hasGroupTraded = { ...hasGroupTraded, [total]: true };
-    const query = buildTradeQuery(
+    openTradeUrl(
       groupSeeds,
       $searchStore.jewelType!,
       $searchStore.conqueror,
       0,
+      $searchStore.platform,
+      $searchStore.league,
     );
-    console.log(query);
-    const url = buildTradeUrl(query);
-    console.log(url);
-    window.open(url, "_blank");
     storeTradeInfo(pageSeeds, 0, total);
   }
 
@@ -168,14 +152,14 @@
       const endIdx = Math.min(startIdx + seedsPerPage, groupSeeds.length);
       const pageSeeds = groupSeeds.slice(startIdx, endIdx);
       groupPages = { ...groupPages, [total]: nextPage };
-      const query = buildTradeQuery(
+      openTradeUrl(
         groupSeeds,
         $searchStore.jewelType!,
         $searchStore.conqueror,
         nextPage,
+        $searchStore.platform,
+        $searchStore.league,
       );
-      const url = buildTradeUrl(query);
-      window.open(url, "_blank");
       storeTradeInfo(pageSeeds, nextPage, total);
     }
   }
