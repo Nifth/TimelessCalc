@@ -106,16 +106,18 @@ function applySeedModifications(
   // Apply base effects according to jewelType
   const label = jewelType.name;
   let travelStat = "",
-    baseStat = "";
+    baseStat = "",
+    travelReplace = false;
   if (label === "karui") {
     travelStat = "+2 to Strength";
     baseStat = "+4 to Strength";
   } else if (label === "maraketh") {
     travelStat = "+2 to Dexterity";
-    baseStat = "+4 to Strength";
+    baseStat = "+4 to Dexterity";
   } else if (label === "templar") {
     baseStat = "+5 to Devotion";
     travelStat = "+10 to Devotion";
+    travelReplace = true;
   } else if (label === "eternal") {
     baseStat = "void";
     travelStat = "void";
@@ -131,13 +133,19 @@ function applySeedModifications(
         node.timelessStats = [];
         node.timelessStatKeys = [];
         node.timelessStatValues = [];
-        if (baseStat !== "void") {
-          node.stats?.forEach((stat) => {
-            node.timelessStats!.push(stat);
-          });
-          if (["Strength", "Dexterity", "Intelligence"].includes(node.name)) {
+        if (baseStat !== 'void') {
+          const isTravelStat = ["Strength", "Dexterity", "Intelligence"].includes(node.name);
+          if (isTravelStat) {
+            if (!travelReplace) {
+              node.stats?.forEach((stat) => {
+                node.timelessStats!.push(stat);
+              });
+            }
             node.timelessStats.push(travelStat);
           } else {
+            node.stats?.forEach((stat) => {
+              node.timelessStats!.push(stat);
+            });
             node.timelessStats.push(baseStat);
           }
         }
@@ -218,9 +226,6 @@ export async function handleSearch(
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
 
       applySeedModifications(entry, socketNodeIds, translation, jewelType);
-
-      const allocatedNodeIds = Array.from(state.allocated.keys());
-      applySeedModifications(entry, allocatedNodeIds, translation, jewelType);
 
       return state;
     });

@@ -15,7 +15,7 @@
   import StatsSearch from "$lib/ui/search/StatsSearch.svelte";
   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
   import Modal from "$lib/ui/common/Modal.svelte";
-  import { changeRadius, clearHighlights } from "$lib/konva/utils/jewelHighlight";
+  import { changeRadius, changeKeystone, clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { resetDependentFields, resetForModeChange } from "$lib/utils/search/resetStore";
   import { validateSocket } from "$lib/utils/socketValidation";
 
@@ -23,6 +23,7 @@
   let socketWarningMessage = $state("");
 
   let previousJewelType: typeof $searchStore.jewelType = null;
+  let previousConqueror: typeof $searchStore.conqueror = null;
 
   $effect(() => {
     const current = $searchStore.jewelType;
@@ -42,6 +43,14 @@
         }
       }
       previousJewelType = current;
+    }
+  });
+
+  $effect(() => {
+    const current = $searchStore.conqueror;
+    if (current !== previousConqueror) {
+      changeKeystone($treeStore.chosenSocket);
+      previousConqueror = current;
     }
   });
 
