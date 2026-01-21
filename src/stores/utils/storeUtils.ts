@@ -20,6 +20,10 @@ export interface BaseEntry {
   allocatedSkillIds: string[];
 }
 
+/**
+ * @deprecated Use storeFactory.createPersistedStore instead for new stores.
+ * This function is kept for backward compatibility.
+ */
 export function createLocalStorageManager<T>(key: string) {
   function load(): T[] {
     try {
