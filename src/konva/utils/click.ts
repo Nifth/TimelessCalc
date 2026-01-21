@@ -2,6 +2,7 @@ import Konva from "konva";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { canvas } from "$lib/konva/canvasContext";
+import { updateAllocatedDisplay } from "./jewelHighlight";
 
 export function setupClick() {
   const stage = canvas.stage!,
@@ -42,6 +43,7 @@ export function setupClick() {
           }
           return state;
         });
+        updateAllocatedDisplay();
       }
     }
   });

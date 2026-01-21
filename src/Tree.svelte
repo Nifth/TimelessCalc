@@ -26,15 +26,12 @@
   import { setupHover } from "$lib/konva/utils/hover";
   import { setupClick } from "$lib/konva/utils/click";
   import {
-    updateAllocatedDisplay,
     updateJewelSockets,
-    changeRadius,
   } from "$lib/konva/utils/jewelHighlight";
   import { treeStore } from "$lib/stores/treeStore";
   import {
     searchStore,
     clearJewelLoadError,
-    setJewelLoadError,
   } from "$lib/stores/searchStore";
   import { mouseStore } from "$lib/stores/mouseStore";
   import { getHighlighteableNodes } from "$lib/konva/utils/nodes";
@@ -50,26 +47,12 @@
 
   let previousSkill: number | null = null;
 
-  let fps = 0;
-  let lastTime = performance.now();
-  let frameCount = 0;
   let parsedFromUrl = false;
   let isLoading = true;
   let loadingComplete = false;
   let loadingProgress = 0;
   let currentLoadingStep = "Initializing...";
   let debugMode = false;
-
-  function updateFPS() {
-    frameCount++;
-    const now = performance.now();
-    if (now - lastTime >= 1000) {
-      fps = frameCount;
-      frameCount = 0;
-      lastTime = now;
-    }
-    requestAnimationFrame(updateFPS);
-  }
 
   onMount(() => {
     let cleanup: () => void = () => {};
@@ -133,7 +116,6 @@
         "background-draw-start",
         "background-draw-end",
       );
-      loadingProgress = 30;
       currentLoadingStep = "Background drawn";
 
       perfMonitor.mark("nodes-draw-start");
@@ -214,7 +196,6 @@
         translation,
       );
 
-      updateFPS();
 
       const handleResize = () => {
         if (canvas.stage) {
@@ -253,14 +234,6 @@
     previousSkill = currentSkill;
   }
 
-  $: if (canvas.mainLayer && $searchStore.jewelType) {
-    changeRadius($treeStore.chosenSocket);
-  }
-
-  $: if (canvas.mainLayer && $treeStore.allocated) {
-    updateAllocatedDisplay();
-  }
-
   $: if (loadingComplete) {
     // Allow progress bar to complete its animation before hiding preloader
     setTimeout(() => {
@@ -284,9 +257,6 @@
 
 <DebugPanel
   isVisible={debugMode}
-  {fps}
-  progress={loadingProgress}
-  currentStep={currentLoadingStep}
 />
 
 <div
@@ -296,9 +266,6 @@
 ></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />
-{#if debugMode}
-  <div class="fps-counter">{fps} FPS</div>
-{/if}
 {#if $searchStore.jewelLoadError}
    <JewelLoadErrorModal
      jewel={$searchStore.jewelLoadError.jewel}
@@ -324,17 +291,5 @@
     margin: 0;
     overflow: hidden;
     font-family: Fontin, sans-serif;
-  }
-
-  .fps-counter {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: white;
-    font-size: 14px;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 5px;
-    border-radius: 3px;
   }
 </style>

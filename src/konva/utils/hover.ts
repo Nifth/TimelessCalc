@@ -3,6 +3,7 @@ import { mouseStore } from "$lib/stores/mouseStore";
 import { treeStore } from "$lib/stores/treeStore";
 import { canvas } from "$lib/konva/canvasContext";
 import { get } from "svelte/store";
+import type { Node } from "$lib/types";
 
 function throttle<T extends (...args: never[]) => void>(
   func: T,
@@ -23,38 +24,83 @@ export function setupHover() {
     hitLayer = canvas.hitLayer!,
     nodes = canvas.nodes,
     treeNodes = canvas.treeData.nodes;
+  
+  // Cache optimization for hover state
+  let lastShape: Konva.Shape | null = null;
+  let lastPosition: { x: number; y: number } | null = null;
+  let lastHoveredNode: Node | null = null;
+  
   // ---------- HOVER ----------
   const throttledHover = throttle(() => {
     const p = stage.getPointerPosition()!;
+    
+    // Skip processing if position hasn't moved significantly
+    if (lastPosition && 
+        Math.abs(p.x - lastPosition.x) < 5 && 
+        Math.abs(p.y - lastPosition.y) < 5) {
+      return;
+    }
+    
     const shape = hitLayer.getIntersection(p);
+    
+    // Update mouse position always (needed for tooltip)
     mouseStore.set({ x: p.x, y: p.y });
+    
+    // Skip if shape hasn't changed
+    if (shape === lastShape) {
+      lastPosition = { x: p.x, y: p.y };
+      return;
+    }
+    
+    lastShape = shape;
+    lastPosition = { x: p.x, y: p.y };
+    
     if (shape instanceof Konva.Circle) {
       const skill = Number(shape.name());
-      treeStore.update((state) => {
-        const allocatedNode = state.allocated.get(skill.toString());
-        if (allocatedNode) {
-          state.hovered = allocatedNode;
-        } else {
-          const original =
-            nodes.get(skill)?.node ||
-            treeNodes[
-              Object.keys(treeNodes).find((k) => treeNodes[k].skill === skill)!
-            ];
-          state.hovered = original;
-        }
-        return state;
-      });
-      if (get(treeStore).hovered?.isJewelSocket) {
+      
+      // Find the node (cached approach)
+      let hoveredNode = null;
+      const allocatedNode = get(treeStore).allocated.get(skill.toString());
+      
+      if (allocatedNode) {
+        hoveredNode = allocatedNode;
+      } else {
+        hoveredNode = nodes.get(skill)?.node || 
+          treeNodes[Object.keys(treeNodes).find((k) => treeNodes[k].skill === skill)!];
+      }
+      
+      // Only update store if hovered node actually changed
+      if (hoveredNode?.skill !== lastHoveredNode?.skill) {
+        treeStore.update((state) => {
+          state.hovered = hoveredNode;
+          return state;
+        });
+        lastHoveredNode = hoveredNode;
+      }
+      
+      // Update cursor only if jewel socket status changed
+      if (hoveredNode?.isJewelSocket) {
         document.body.style.cursor = "pointer";
+      } else {
+        document.body.style.cursor = "default";
       }
     } else {
-      treeStore.update((state) => {
-        state.hovered = null;
-        return state;
-      });
-      document.body.style.cursor = "default";
+      // Only update if we previously had a hovered node
+      if (lastHoveredNode !== null) {
+        treeStore.update((state) => {
+          state.hovered = null;
+          return state;
+        });
+        lastHoveredNode = null;
+        document.body.style.cursor = "default";
+      }
     }
   }, 16); // throttle to ~60fps
 
   stage.on("mousemove", throttledHover);
+  
+  // Return cleanup function
+  return () => {
+    stage.off("mousemove", throttledHover);
+  };
 }

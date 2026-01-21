@@ -9,19 +9,28 @@ import { getHighlighteableNodes } from "./nodes";
 import { canvas } from "$lib/konva/canvasContext";
 import { searchStore } from "$lib/stores/searchStore";
 
+// Global animation registry for proper cleanup
+const jewelAnimations: Map<string, Konva.Animation> = new Map();
+
+// Cache pour éviter de recréer les animations inutilement
+let lastSocketSkill: number | null = null;
+let lastJewelType: string | null = null;
+
 export function updateJewelSockets() {
   const chosenSocket = get(treeStore).chosenSocket;
 
-  searchStore.update((s) => ({
-    ...s,
-    searched: false,
-    statsResults: {},
-    currentPage: 0,
-    totalResults: 0,
-    orderedSeeds: [],
-    statsSearched: false,
-    seedSearched: false,
-  }));
+  // Optimized store update - only modify required fields
+  searchStore.update((s) => {
+    s.searched = false;
+    s.statsResults = {};
+    s.currentPage = 0;
+    s.totalResults = 0;
+    s.orderedSeeds = [];
+    s.statsSearched = false;
+    s.seedSearched = false;
+    return s;
+  });
+  
   // Update visual appearance first
   updateSocketVisualSelection();
 
@@ -38,6 +47,8 @@ export function updateSocketVisualSelection() {
     data = canvas.treeData;
   const chosenSocket = get(treeStore).chosenSocket;
   const nodes = data.nodes;
+  let needsRedraw = false;
+  
   jewelImages.forEach((img, skill) => {
     const node = Object.values(nodes).find((n: Node) => n.skill === skill);
     if (!node?.isJewelSocket) return;
@@ -45,40 +56,60 @@ export function updateSocketVisualSelection() {
     const isExpansion = !!node.expansionJewel;
     const isSelected = chosenSocket?.skill === skill;
 
-    const type = isSelected
-      ? isExpansion
-        ? TREE_CONSTANTS.SPRITES.CLUSTER_ACTIVE
-        : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_ACTIVE
-      : isExpansion
-        ? TREE_CONSTANTS.SPRITES.CLUSTER_UNALLOCATED
-        : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_UNALLOCATED;
+    // Check if image needs to be updated
+    const wasSelected = canvas.nodesHighlight.get(skill)?.opacity() === 0;
+    if (isSelected !== wasSelected) {
+      const type = isSelected
+        ? isExpansion
+          ? TREE_CONSTANTS.SPRITES.CLUSTER_ACTIVE
+          : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_ACTIVE
+        : isExpansion
+          ? TREE_CONSTANTS.SPRITES.CLUSTER_UNALLOCATED
+          : TREE_CONSTANTS.SPRITES.JEWEL_FRAME_UNALLOCATED;
 
-    if (isSelected) {
-      canvas.nodesHighlight.get(skill)?.opacity(0);
-    } else {
-      canvas.nodesHighlight.get(skill)?.opacity(1);
+      if (isSelected) {
+        canvas.nodesHighlight.get(skill)?.opacity(0);
+      } else {
+        canvas.nodesHighlight.get(skill)?.opacity(1);
+      }
+      
+      const sprite = createSprite(
+        TREE_CONSTANTS.SPRITES.FRAME,
+        type,
+        img.x(),
+        img.y(),
+      );
+      img.crop(sprite.crop());
+      img.offsetX(sprite.offsetX());
+      img.offsetY(sprite.offsetY());
+      img.width(sprite.width());
+      img.height(sprite.height());
+      needsRedraw = true;
     }
-    const sprite = createSprite(
-      TREE_CONSTANTS.SPRITES.FRAME,
-      type,
-      img.x(),
-      img.y(),
-    );
-    img.crop(sprite.crop());
-    img.offsetX(sprite.offsetX());
-    img.offsetY(sprite.offsetY());
-    img.width(sprite.width());
-    img.height(sprite.height());
   });
 
-  layer.batchDraw();
+  // Only batchDraw if something actually changed
+  if (needsRedraw) {
+    layer.batchDraw();
+  }
 }
 
 export function changeRadius(chosenSocket: Node | null) {
   const jewelRadiusImages = canvas.jewelRadiusImages;
   const radiusImages = jewelRadiusImages.get("default"); // use a store
+  const currentJewelType = get(searchStore).jewelType?.name as JewelCode | undefined;
+  
+  // Check if we need to cleanup animations (socket or jewelType changed)
+  const socketChanged = chosenSocket?.skill !== lastSocketSkill;
+  const jewelTypeChanged = currentJewelType !== lastJewelType;
+  
+  if (socketChanged || jewelTypeChanged) {
+    stopAllJewelAnimations();
+    lastSocketSkill = chosenSocket?.skill || null;
+    lastJewelType = currentJewelType || null;
+  }
+  
   if (chosenSocket && radiusImages) {
-    const jewelType = get(searchStore).jewelType?.name as JewelCode | undefined;
     const socketX = chosenSocket.x || 0;
     const socketY = chosenSocket.y || 0;
     const radiusImg = radiusImages.a;
@@ -86,29 +117,35 @@ export function changeRadius(chosenSocket: Node | null) {
     radiusImg.visible(true);
     radiusImg.x(socketX);
     radiusImg.y(socketY);
-    if (jewelType) {
+    if (currentJewelType) {
       const sprit = createSprite(
         TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
-        TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[jewelType].default,
+        TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[currentJewelType].default,
         0,
         0,
       );
       radiusImg.crop(sprit.crop());
     }
-    if (jewelType) {
+    if (currentJewelType) {
       // use a store
       radiusImg2.visible(true);
       radiusImg2.x(socketX);
       radiusImg2.y(socketY);
       const sprit2 = createSprite(
         TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
-        TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[jewelType].inverse,
+        TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[currentJewelType].inverse,
         0,
         0,
       );
       radiusImg2.crop(sprit2.crop());
-      startJewelRotation(radiusImg, true);
-      startJewelRotation(radiusImg2);
+      
+      // Start animations only if they're not already running
+      if (!radiusImg.getAttr("rotating")) {
+        startJewelRotation(radiusImg, true);
+      }
+      if (!radiusImg2.getAttr("rotating")) {
+        startJewelRotation(radiusImg2);
+      }
     } else {
       radiusImg2.visible(false);
     }
@@ -121,34 +158,65 @@ export function changeRadius(chosenSocket: Node | null) {
 function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
   if (image.getAttr("rotating")) return;
 
+  const animKey = `${reverse ? 'reverse' : 'forward'}_${image.id()}`;
+  
   image.setAttr("rotating", true);
 
-  new Konva.Animation((frame) => {
+  const anim = new Konva.Animation((frame) => {
     if (!frame) return;
     const angle = (frame.time * 360) / 180000;
     image.rotation(reverse ? -(angle % 360) : angle % 360);
-  }, image.getLayer()).start();
+  }, image.getLayer());
+
+  jewelAnimations.set(animKey, anim);
+  anim.start();
+}
+
+// Cleanup function to stop all jewel animations
+function stopAllJewelAnimations() {
+  jewelAnimations.forEach(anim => {
+    anim.stop();
+  });
+  jewelAnimations.clear();
+  
+  // Reset rotating attributes on all radius images
+  const radiusImages = canvas.jewelRadiusImages.get("default");
+  if (radiusImages) {
+    radiusImages.a.setAttr("rotating", false);
+    radiusImages.b.setAttr("rotating", false);
+  }
 }
 
 function setAllocatedNodes(socket: Node | null) {
   const data = canvas.treeData;
   if (!socket) {
-    treeStore.update((state) => {
-      state.allocated.clear();
-      return state;
-    });
+    const currentAllocated = get(treeStore).allocated;
+    if (currentAllocated.size > 0) {
+      treeStore.update((state) => {
+        state.allocated.clear();
+        return state;
+      });
+      updateAllocatedDisplay();
+    }
     return;
   }
 
+  const currentAllocated = get(treeStore).allocated;
   const allocatedNodes = new Map<string, Node>();
   data.socketNodes[socket.skill].forEach((nodeId) => {
     allocatedNodes.set(nodeId, data.nodes[nodeId]);
   });
-  treeStore.update((state) => {
-    state.allocated = allocatedNodes;
-    return state;
-  });
-  canvas.mainLayer?.batchDraw();
+  
+  // Only update if allocated nodes actually changed
+  if (currentAllocated.size !== allocatedNodes.size || 
+      !Array.from(allocatedNodes.keys()).every(key => currentAllocated.has(key))) {
+    treeStore.update((state) => {
+      state.allocated = allocatedNodes;
+      return state;
+    });
+    updateAllocatedDisplay();
+    canvas.mainLayer?.batchDraw();
+  }
 }
 
 function showActive(node: Node) {

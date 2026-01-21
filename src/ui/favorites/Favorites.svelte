@@ -13,6 +13,7 @@
   import Modal from "$lib/ui/common/Modal.svelte";
   import { showNotification } from "$lib/stores/notificationStore";
   import type { FavoriteEntry, Stat } from "$lib/types";
+  import { changeRadius } from "$lib/konva/utils/jewelHighlight";
 
   let { onswitchtotab } = $props<{
     onswitchtotab: (tab: "search" | "favorites" | "history") => void;
@@ -68,6 +69,7 @@
     // Center canvas on the socket
     if (canvas.stage && entry.socket) {
       centerCanvasOnSocket(canvas.stage, entry.socket, 0.2);
+      changeRadius(entry.socket);
       // Update tree store scale to match
       treeStore.update((s) => ({ ...s, scale: 0.2 }));
     }

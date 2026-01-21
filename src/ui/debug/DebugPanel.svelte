@@ -4,8 +4,6 @@
 
   export let isVisible: boolean = true;
   export let metrics: any = {};
-  export let progress: number = 0;
-  export let currentStep: string = "";
   export let fps: number = 0;
 
   let expanded: boolean = false;
@@ -70,14 +68,6 @@
 
     {#if expanded}
       <div class="content">
-        <div class="section">
-          <h4>Progress</h4>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: {progress}%"></div>
-          </div>
-          <p>{currentStep} ({progress.toFixed(1)}%)</p>
-        </div>
-
         <div class="section">
           <h4>Memory</h4>
           <p>Current: {formatBytes(metrics.memory?.current || 0)}</p>
@@ -165,20 +155,6 @@
   .section h4 {
     margin: 0 0 4px 0;
     color: #4caf50;
-  }
-
-  .progress-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: #4caf50;
-    transition: width 0.3s ease;
   }
 
   .memory-graph {

@@ -8,13 +8,14 @@
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
 
-   import JewelTypeSelector from "$lib/ui/selectors/JewelTypeSelector.svelte";
-   import ConquerorSelector from "$lib/ui/selectors/ConquerorSelector.svelte";
-   import ModeSelector from "$lib/ui/selectors/ModeSelector.svelte";
-   import SeedSearch from "$lib/ui/search/SeedSearch.svelte";
-   import StatsSearch from "$lib/ui/search/StatsSearch.svelte";
-   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
-   import Modal from "$lib/ui/common/Modal.svelte";
+  import JewelTypeSelector from "$lib/ui/selectors/JewelTypeSelector.svelte";
+  import ConquerorSelector from "$lib/ui/selectors/ConquerorSelector.svelte";
+  import ModeSelector from "$lib/ui/selectors/ModeSelector.svelte";
+  import SeedSearch from "$lib/ui/search/SeedSearch.svelte";
+  import StatsSearch from "$lib/ui/search/StatsSearch.svelte";
+  import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
+  import Modal from "$lib/ui/common/Modal.svelte";
+  import { changeRadius } from "$lib/konva/utils/jewelHighlight";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const translation: Record<string, any[]> = JSON.parse(
@@ -29,6 +30,7 @@
   $effect(() => {
     const current = $searchStore.jewelType;
     if (current !== previousJewelType) {
+      changeRadius($treeStore.chosenSocket);
       // Only reset if changing jewelType AND conqueror doesn't match the new type
       // This allows history/URL loading to work (they set all fields correctly)
       // while resetting on user interaction

@@ -8,6 +8,7 @@
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
+  import { changeRadius } from "$lib/konva/utils/jewelHighlight";
 
   let {
     onswitchtotab,
@@ -106,6 +107,7 @@
     // Center canvas on the socket
     if (canvas.stage && entry.socket) {
       centerCanvasOnSocket(canvas.stage, entry.socket, 0.2);
+      changeRadius(entry.socket);
       // Update tree store scale to match
       treeStore.update((s) => ({ ...s, scale: 0.2 }));
     }
