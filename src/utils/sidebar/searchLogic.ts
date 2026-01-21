@@ -1,11 +1,17 @@
 import { treeStore } from "$lib/stores/treeStore";
-import { getJewelData, loadJewel } from "$lib/providers/jewels";
 import { canvas } from "$lib/konva/canvasContext";
 import { parseKey, getTranslation } from "./sidebarUtils";
 import type { JewelType, Stat, Translation, JewelEntry } from "$lib/types";
-import { searchStore, setJewelLoadError } from "$lib/stores/searchStore";
+import { searchStore } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
 import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
+import {
+  ensureJewelDataLoaded,
+  getEntryForSeed,
+  setSearchLoading,
+  setSearchNotFound,
+  setSearchComplete,
+} from "./searchUtils";
 
 const COLORBLIND_FRIENDLY_COLORS = [
   "#C71585", // Magenta
@@ -119,23 +125,15 @@ export async function applySeed(
   jewelType: JewelType,
   translation: Record<string, Translation[]>,
 ) {
-  try {
-    await loadJewel(jewelType.name);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    setJewelLoadError(jewelType, message);
-    return;
-  }
-  const jewelData = getJewelData(jewelType.name);
+  const jewelData = await ensureJewelDataLoaded(jewelType);
   if (!jewelData) {
     return;
   }
-  const entry = jewelData[seed];
+  const entry = getEntryForSeed(jewelData, seed);
   if (!entry) {
     return;
   }
 
-  // Apply modifications to nodes
   treeStore.update((state) => {
     const chosenSocket = state.chosenSocket?.skill;
     if (!chosenSocket) {
@@ -155,43 +153,24 @@ export async function handleSearch(
   jewelType: JewelType | null,
   selectedStats: Stat[],
 ) {
-  // Set loading state
-  searchStore.update((state) => ({ ...state, loading: true }));
-  clearHighlights()
+  setSearchLoading(true);
+  clearHighlights();
   if (mode === "seed") {
     if (!seedInput || !jewelType) {
-      searchStore.update((state) => {
-        state.searched = false;
-        state.loading = false;
-        return state;
-      });
+      setSearchNotFound();
       return;
     }
-    // Ensure data is loaded
-    try {
-      await loadJewel(jewelType.name);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      setJewelLoadError(jewelType, message);
-      searchStore.update((state) => ({ ...state, loading: false }));
-      return;
-    }
-    const jewelData = getJewelData(jewelType.name);
+    const jewelData = await ensureJewelDataLoaded(jewelType);
     if (!jewelData) {
-      searchStore.update((state) => ({ ...state, loading: false }));
+      setSearchLoading(false);
       return;
     }
-    const entry = jewelData[seedInput];
+    const entry = getEntryForSeed(jewelData, seedInput);
     if (!entry) {
-      searchStore.update((state) => {
-        state.searched = false;
-        state.loading = false;
-        return state;
-      });
+      setSearchNotFound();
       return;
     }
 
-    // Apply modifications to nodes
     treeStore.update((state) => {
       const chosenSocket = state.chosenSocket?.skill;
       if (!chosenSocket) {
@@ -200,43 +179,22 @@ export async function handleSearch(
       }
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
       
-      // Apply to socket nodes (original behavior)
       applySeedModifications(entry, socketNodeIds, translation, jewelType);
       
-      // Also apply to allocated nodes to ensure they have timelessStatKeys for highlighting
-      // This is crucial for favorites/history entries where allocated nodes might
-      // be outside socket radius but still need stat keys for highlighting
       const allocatedNodeIds = Array.from(state.allocated.keys());
       applySeedModifications(entry, allocatedNodeIds, translation, jewelType);
       
       return state;
     });
-    searchStore.update((state) => {
-      state.searched = true;
-      state.loading = false;
-      return state;
-    });
+    setSearchComplete();
   } else if (mode === "stats") {
     if (selectedStats.length === 0 || !jewelType) {
-      searchStore.update((state) => {
-        state.searched = false;
-        state.loading = false;
-        return state;
-      });
+      setSearchNotFound();
       return;
     }
-    // Ensure data is loaded
-    try {
-      await loadJewel(jewelType.name);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      setJewelLoadError(jewelType, message);
-      searchStore.update((state) => ({ ...state, loading: false }));
-      return;
-    }
-    const jewelData = getJewelData(jewelType.name);
+    const jewelData = await ensureJewelDataLoaded(jewelType);
     if (!jewelData) {
-      searchStore.update((state) => ({ ...state, loading: false }));
+      setSearchLoading(false);
       return;
     }
     // Results: for each seed, count occurrences of each selected stat on allocated nodes

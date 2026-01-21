@@ -8,6 +8,10 @@ import {
   updateSocketVisualSelection,
 } from "$lib/konva/utils/jewelHighlight";
 import type Konva from "konva";
+import {
+  initializeSearchStore,
+  finalizeSearchStoreInitialization,
+} from "$lib/utils/sidebar/searchUtils";
 
 /**
  * Parses URL parameters and initializes the application state
@@ -165,26 +169,16 @@ export function parseUrlAndInitialize(
   }
 
   // Update stores
-  searchStore.update((s) => ({
-    ...s,
+  initializeSearchStore({
     jewelType,
     conqueror,
     selectedStats,
     seed,
     league,
     platform,
-    searched: false, // Will be set after search
-    statsResults: {},
-    currentPage: 0,
-    totalResults: 0,
-    orderedSeeds: [],
-    lastTradeInfo: null,
     mode,
     minTotalWeight: Number(minTotalWeight),
-    statsSearched: mode === "stats",
-    seedSearched: mode === "seed",
-    automated: true,
-  }));
+  });
 
   treeStore.update((t) => ({
     ...t,
@@ -228,10 +222,7 @@ export function parseUrlAndInitialize(
 
   // Clear URL parameters after successful parsing to prevent re-initialization on reload
   window.history.replaceState(null, "", window.location.pathname);
-  searchStore.update((s) => ({
-    ...s,
-    automated: false,
-  }));
+  finalizeSearchStoreInitialization();
   return true;
 }
 
