@@ -268,8 +268,12 @@ export async function handleSearch(
         }
       }
 
-      // If at least one stat has a count > 0, add to results
-      if (Object.values(statCounts).some((count) => count > 0)) {
+      // All selected stats must meet their minimum weight requirement
+      if (
+        selectedStats.every(
+          (stat) => (statCounts[stat.statKey] || 0) >= stat.minWeight,
+        )
+      ) {
         results[seed] = { statCounts, statTotals };
       }
     }
