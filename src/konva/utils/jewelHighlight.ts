@@ -219,80 +219,75 @@ function setAllocatedNodes(socket: Node | null) {
   }
 }
 
-function showActive(node: Node) {
-  if (!canvas.nodes.has(node.skill)) return;
-  const { icon, frame } = canvas.nodes.get(node.skill)!;
-  const spriteKey = node.isKeystone
-    ? TREE_CONSTANTS.SPRITES.KEYSTONE_ACTIVE
-    : node.isNotable
-      ? TREE_CONSTANTS.SPRITES.NOTABLE_ACTIVE
-      : TREE_CONSTANTS.SPRITES.NORMAL_ACTIVE;
-  const activeSprite = createSprite(
-    spriteKey,
-    node.icon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
-    icon.x(),
-    icon.y(),
-  );
-  icon.image(activeSprite.image());
-  icon.crop(activeSprite.crop());
-  icon.offsetX(activeSprite.offsetX());
-  icon.offsetY(activeSprite.offsetY());
-  icon.width(activeSprite.width());
-  icon.height(activeSprite.height());
+function getSpriteKeys(node: Node, isActive: boolean): {
+  iconKey: string;
+  frameKey: string;
+} {
+  if (isActive) {
+    return {
+      iconKey: node.isKeystone
+        ? TREE_CONSTANTS.SPRITES.KEYSTONE_ACTIVE
+        : node.isNotable
+          ? TREE_CONSTANTS.SPRITES.NOTABLE_ACTIVE
+          : TREE_CONSTANTS.SPRITES.NORMAL_ACTIVE,
+      frameKey: node.isKeystone
+        ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_ACTIVE
+        : node.isNotable
+          ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_ACTIVE
+          : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME_ACTIVE,
+    };
+  } else {
+    return {
+      iconKey: node.isKeystone
+        ? TREE_CONSTANTS.SPRITES.KEYSTONE_INACTIVE
+        : node.isNotable
+          ? TREE_CONSTANTS.SPRITES.NOTABLE_INACTIVE
+          : TREE_CONSTANTS.SPRITES.NORMAL_INACTIVE,
+      frameKey: node.isKeystone
+        ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_UNALLOCATED
+        : node.isNotable
+          ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_UNALLOCATED
+          : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME,
+    };
+  }
+}
 
-  const activeFrame = createSprite(
+function updateNodeSprites(node: Node, isActive: boolean): void {
+  if (!canvas.nodes.has(node.skill)) return;
+
+  const { icon, frame } = canvas.nodes.get(node.skill)!;
+  const { iconKey, frameKey } = getSpriteKeys(node, isActive);
+  const iconSource = node.icon ||
+    (isActive ? undefined : node.inactiveIcon) ||
+    TREE_CONSTANTS.SPRITES.DEFAULT_ICON;
+
+  const iconSprite = createSprite(iconKey, iconSource, icon.x(), icon.y());
+  icon.image(iconSprite.image());
+  icon.crop(iconSprite.crop());
+  icon.offsetX(iconSprite.offsetX());
+  icon.offsetY(iconSprite.offsetY());
+  icon.width(iconSprite.width());
+  icon.height(iconSprite.height());
+
+  const frameSprite = createSprite(
     TREE_CONSTANTS.SPRITES.FRAME,
-    node.isKeystone
-      ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_ACTIVE
-      : node.isNotable
-        ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_ACTIVE
-        : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME_ACTIVE,
+    frameKey,
     frame.x(),
-    frame.y(),
+    frame.y()
   );
-  frame.crop(activeFrame.crop());
-  frame.offsetX(activeFrame.offsetX());
-  frame.offsetY(activeFrame.offsetY());
-  frame.width(activeFrame.width());
-  frame.height(activeFrame.height());
+  frame.crop(frameSprite.crop());
+  frame.offsetX(frameSprite.offsetX());
+  frame.offsetY(frameSprite.offsetY());
+  frame.width(frameSprite.width());
+  frame.height(frameSprite.height());
+}
+
+function showActive(node: Node) {
+  updateNodeSprites(node, true);
 }
 
 function showInactive(node: Node) {
-  if (!canvas.nodes.has(node.skill)) return;
-  const { icon, frame } = canvas.nodes.get(node.skill)!;
-  const spriteKey = node.isKeystone
-    ? TREE_CONSTANTS.SPRITES.KEYSTONE_INACTIVE
-    : node.isNotable
-      ? TREE_CONSTANTS.SPRITES.NOTABLE_INACTIVE
-      : TREE_CONSTANTS.SPRITES.NORMAL_INACTIVE;
-  const inactiveSprite = createSprite(
-    spriteKey,
-    node.icon || node.inactiveIcon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON,
-    icon.x(),
-    icon.y(),
-  );
-  icon.image(inactiveSprite.image());
-  icon.crop(inactiveSprite.crop());
-  icon.offsetX(inactiveSprite.offsetX());
-  icon.offsetY(inactiveSprite.offsetY());
-  icon.width(inactiveSprite.width());
-  icon.height(inactiveSprite.height());
-
-  const inactiveFrame = createSprite(
-    TREE_CONSTANTS.SPRITES.FRAME,
-    node.isKeystone
-      ? TREE_CONSTANTS.SPRITES.KEYSTONE_FRAME_UNALLOCATED
-      : node.isNotable
-        ? TREE_CONSTANTS.SPRITES.NOTABLE_FRAME_UNALLOCATED
-        : TREE_CONSTANTS.SPRITES.DEFAULT_FRAME,
-    frame.x(),
-    frame.y(),
-  );
-  frame.crop(inactiveFrame.crop());
-  frame.offsetX(inactiveFrame.offsetX());
-  frame.offsetY(inactiveFrame.offsetY());
-  frame.width(inactiveFrame.width());
-  frame.height(inactiveFrame.height());
+  updateNodeSprites(node, false);
 }
 
 export function updateAllocatedDisplay() {
