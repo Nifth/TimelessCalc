@@ -17,6 +17,7 @@
   import Modal from "$lib/ui/common/Modal.svelte";
   import { changeRadius, clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { resetDependentFields, resetForModeChange } from "$lib/utils/search/resetStore";
+  import { validateSocket } from "$lib/utils/socketValidation";
 
   let seedInput: number | null = $state(null);
   let socketWarningMessage = $state("");
@@ -45,9 +46,9 @@
   });
 
   function checkSocketAndSearch(action: () => void) {
-    if (!$treeStore.chosenSocket) {
-      socketWarningMessage =
-        "No jewel socket selected. Please select a socket on the passive tree before searching.";
+    const warning = validateSocket();
+    if (warning) {
+      socketWarningMessage = warning;
       return;
     }
     action();

@@ -12,6 +12,7 @@ import {
   setSearchNotFound,
   setSearchComplete,
 } from "./searchUtils";
+import { validateSocket } from "$lib/utils/socketValidation";
 
 const COLORBLIND_FRIENDLY_COLORS = [
   "#C71585", // Magenta
@@ -134,9 +135,13 @@ export async function applySeed(
   }
 
   treeStore.update((state) => {
+    const warning = validateSocket();
+    if (warning) {
+      alert(warning);
+      return state;
+    }
     const chosenSocket = state.chosenSocket?.skill;
     if (!chosenSocket) {
-      alert("No jewel socket selected");
       return state;
     }
     const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
@@ -171,9 +176,15 @@ export async function handleSearch(
     }
 
     treeStore.update((state) => {
+      const warning = validateSocket();
+      if (warning) {
+        alert(warning);
+        setSearchNotFound();
+        return state;
+      }
       const chosenSocket = state.chosenSocket?.skill;
       if (!chosenSocket) {
-        alert("No jewel socket selected");
+        setSearchNotFound();
         return state;
       }
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
