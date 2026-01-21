@@ -49,7 +49,7 @@
   <div class="w-36">
     <slot name="league" />
   </div>
-  <div class="w-18">
+  <div class="w-22">
     <slot name="platform" />
   </div>
   <button
