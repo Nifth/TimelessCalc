@@ -9,7 +9,7 @@
   import treeData from "$lib/data/tree.json" with { type: "json" };
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import { preloadSprites } from "$lib/konva/utils/sprites";
-  import type { TreeData, JewelType } from "$lib/types";
+  import type { TreeData } from "$lib/types";
   import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import { perfMonitor } from "$lib/utils/performanceMonitor";
@@ -40,11 +40,10 @@
   import { getHighlighteableNodes } from "$lib/konva/utils/nodes";
   import { fetchLeagues } from "./providers/leagues";
   import { get } from "svelte/store";
-   import { loadJewel } from "$lib/providers/jewels";
-    import Notification from "$lib/ui/notifications/Notification.svelte";
-    import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
+  import Notification from "$lib/ui/notifications/Notification.svelte";
+  import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 
-   const data: TreeData = JSON.parse(JSON.stringify(treeData));
+  const data: TreeData = JSON.parse(JSON.stringify(treeData));
   const translation: Record<string, any[]> = JSON.parse(
     JSON.stringify(translationsJson),
   );

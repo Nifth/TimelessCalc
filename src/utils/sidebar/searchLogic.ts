@@ -68,6 +68,7 @@ function applySeedModifications(
         node.timelessStatKeys!.push(statId);
         node.timelessStatValues!.push(value);
       });
+      console.log(node);
     }
   }
   // Apply base effects according to jewelType
@@ -116,7 +117,6 @@ function applySeedModifications(
 export async function applySeed(
   seed: number,
   jewelType: JewelType,
-  conqueror: Conqueror,
   translation: Record<string, Translation[]>,
 ) {
   try {
@@ -199,7 +199,16 @@ export async function handleSearch(
         return state;
       }
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
+      
+      // Apply to socket nodes (original behavior)
       applySeedModifications(entry, socketNodeIds, translation, jewelType);
+      
+      // Also apply to allocated nodes to ensure they have timelessStatKeys for highlighting
+      // This is crucial for favorites/history entries where allocated nodes might
+      // be outside socket radius but still need stat keys for highlighting
+      const allocatedNodeIds = Array.from(state.allocated.keys());
+      applySeedModifications(entry, allocatedNodeIds, translation, jewelType);
+      
       return state;
     });
     searchStore.update((state) => {

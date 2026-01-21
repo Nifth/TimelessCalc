@@ -5,7 +5,6 @@
   import { treeStore } from "$lib/stores/treeStore";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
-  import treeData from "$lib/data/tree.json" with { type: "json" };
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
@@ -19,8 +18,7 @@
     JSON.stringify(translationsJson),
   );
 
-  const treeNodes: Record<string, Node> = (treeData as unknown as TreeData)
-    .nodes;
+  const treeNodes: Record<string, Node> = canvas.treeData.nodes;
 
   let showConfirmModal = $state(false);
   let pendingLoadEntry: SearchHistoryEntry | null = $state(null);
@@ -31,7 +29,7 @@
 
   function findNearbyKeystone(socket: Node): string {
     // Get nodes that are actually within the socket's radius
-    const socketNodes = (treeData as unknown as TreeData).socketNodes[
+    const socketNodes = canvas.treeData.socketNodes[
       socket.skill.toString()
     ];
 

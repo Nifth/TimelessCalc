@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import type {
   SearchHistoryEntry,
-  TreeData,
   Node as TreeNode,
 } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
@@ -11,8 +10,8 @@ import {
   updateAllocatedDisplay,
   updateSocketVisualSelection,
 } from "$lib/konva/utils/jewelHighlight";
-import treeData from "$lib/data/tree.json" with { type: "json" };
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
+import { canvas } from "$lib/konva/canvasContext";
 
 const HISTORY_KEY = "timelessCalc_searchHistory";
 const MAX_HISTORY_ENTRIES = 10;
@@ -119,7 +118,7 @@ export const historyActions = {
     treeStore.update((store) => {
       // Reconstruct allocated Map from skill IDs using real node data
       const allocated = new Map<string, TreeNode>();
-      const nodes = (treeData as unknown as TreeData).nodes;
+      const nodes = canvas.treeData.nodes;
 
       for (const skillId of entry.allocatedSkillIds || []) {
         const node = nodes[skillId];

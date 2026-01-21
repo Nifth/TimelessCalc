@@ -1,5 +1,5 @@
 import type { SearchStore, TreeStore, TreeData, Stat, JewelType, Conqueror, Node } from "$lib/types";
-import data from "$lib/data/tree.json" with { type: "json" };
+import { canvas } from "$lib/konva/canvasContext";
 
 /**
  * Copies text to clipboard using modern API
@@ -42,7 +42,7 @@ export function generateShareUrlFromData(
   league: string | null,
   platform: string | null,
 ): string {
-  const treeData: TreeData = data as unknown as TreeData;
+  const treeData = canvas.treeData;
   const params = new URLSearchParams();
   if (jewelType) {
     params.set("jt", jewelType.name);

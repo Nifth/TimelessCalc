@@ -5,6 +5,9 @@
   export let x: number = 0;
   export let y: number = 0;
 
+  $: if (node) {
+    console.log("Tooltip node:", node);
+  }
   $: baseStats = node?.stats || [];
   $: timelessStats = node?.timelessStats;
   $: statsToDisplay = timelessStats ? timelessStats : baseStats;

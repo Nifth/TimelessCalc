@@ -1,28 +1,28 @@
 <script lang="ts">
-  import type { TreeData, Node } from "$lib/types";
-   import { searchStore } from "$lib/stores/searchStore";
-   import { treeStore } from "$lib/stores/treeStore";
-   import { URLS } from "$lib/constants/urls";
+  import type { Node } from "$lib/types";
+  import { searchStore } from "$lib/stores/searchStore";
+  import { treeStore } from "$lib/stores/treeStore";
+  import { URLS } from "$lib/constants/urls";
   import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { applySeed } from "$lib/utils/sidebar/searchLogic";
-   import {
-     buildTradeQuery,
-     getSeedsPerPage,
-   } from "$lib/utils/sidebar/tradeQuery";
+  import {
+    buildTradeQuery,
+    getSeedsPerPage,
+  } from "$lib/utils/sidebar/tradeQuery";
   import {
     generateShareUrl,
     copyToClipboard,
   } from "$lib/utils/sharing/shareUtils";
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
-  import treeData from "$lib/data/tree.json" with { type: "json" };
 
-   import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
-   import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
-   import StatsResults from "$lib/ui/search/StatsResults.svelte";
-   import TradeControls from "$lib/ui/search/TradeControls.svelte";
-   import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
-   import { favoritesActions } from "$lib/stores/favoritesStore";
-   import { showNotification } from "$lib/stores/notificationStore";
+  import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
+  import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
+  import StatsResults from "$lib/ui/search/StatsResults.svelte";
+  import TradeControls from "$lib/ui/search/TradeControls.svelte";
+  import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
+  import { favoritesActions } from "$lib/stores/favoritesStore";
+  import { showNotification } from "$lib/stores/notificationStore";
+    import { canvas } from "$lib/konva/canvasContext";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const translation: Record<string, any[]> = JSON.parse(
@@ -199,7 +199,6 @@
     await applySeed(
       seed,
       $searchStore.jewelType!,
-      $searchStore.conqueror!,
       translation,
     );
     searchStore.update((s) => {
@@ -225,8 +224,8 @@
    }
 
    function findNearbyKeystone(socket: Node): string {
-    const treeNodes = (treeData as unknown as TreeData).nodes;
-    const socketNodes = (treeData as unknown as TreeData).socketNodes[
+    const treeNodes = canvas.treeData.nodes;
+    const socketNodes = canvas.treeData.socketNodes[
       socket.skill.toString()
     ];
 

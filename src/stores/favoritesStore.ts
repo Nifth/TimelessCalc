@@ -7,8 +7,8 @@ import {
   updateAllocatedDisplay,
   updateSocketVisualSelection,
 } from "$lib/konva/utils/jewelHighlight";
-import treeData from "$lib/data/tree.json" with { type: "json" };
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
+import { canvas } from "$lib/konva/canvasContext";
 
 const FAVORITES_KEY = "timelessCalc_favorites";
 
@@ -111,7 +111,7 @@ export const favoritesActions = {
     treeStore.update((store) => {
       // Reconstruct allocated Map from skill IDs using real node data
       const allocated = new Map<string, TreeNode>();
-      const nodes = (treeData as unknown as TreeData).nodes;
+      const nodes = canvas.treeData.nodes;
 
       for (const skillId of entry.allocatedSkillIds || []) {
         const node = nodes[skillId];
