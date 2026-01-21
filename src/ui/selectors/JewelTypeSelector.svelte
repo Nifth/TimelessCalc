@@ -3,6 +3,7 @@
   import type { JewelType } from "$lib/types";
   import { loadJewel, cache } from "$lib/providers/jewels";
   import { setJewelLoadError } from "$lib/stores/searchStore";
+  import RadioButton from "$lib/ui/common/RadioButton.svelte";
 
   interface Props {
     jewelType: JewelType | null;
@@ -58,13 +59,16 @@
         value={jewel}
         class="sr-only"
       />
-      <div
-        class="flex items-center justify-center px-4 py-3 rounded-lg border-2 text-center transition-all duration-200 h-full {jewelType ===
-        jewel
-          ? 'border-blue-400 bg-slate-700/50 text-white shadow-lg shadow-blue-500/10'
-          : 'border-slate-600 bg-slate-800 text-slate-300 hover:border-slate-500 hover:bg-slate-700'}"
-      >
-        <span class="font-medium">{jewel.label}</span>
+      <div class="flex items-center justify-center h-full">
+        <RadioButton
+          _value={jewel}
+          label={jewel.label}
+          isSelected={jewelType === jewel}
+          size="lg"
+          onclick={() => {
+            jewelType = jewel;
+          }}
+        />
       </div>
     </label>
   {/each}

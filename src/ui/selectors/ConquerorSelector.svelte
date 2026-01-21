@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Conqueror } from "$lib/types";
+  import RadioButton from "$lib/ui/common/RadioButton.svelte";
 
   interface Props {
     conqueror: Conqueror | null;
@@ -21,14 +22,15 @@
         value={conquerorOption}
         class="sr-only"
       />
-      <div
-        class="px-2 py-2 rounded-lg border-2 text-center text-sm transition-all duration-200 {conqueror ===
-        conquerorOption
-          ? 'border-blue-400 bg-slate-700/50 text-white shadow-lg shadow-blue-500/10'
-          : 'border-slate-600 bg-slate-800 text-slate-300 hover:border-slate-500 hover:bg-slate-700'}"
-      >
-        <span class="font-medium">{conquerorOption.label}</span>
-      </div>
+      <RadioButton
+        _value={conquerorOption}
+        label={conquerorOption.label}
+        isSelected={conqueror === conquerorOption}
+        size="sm"
+        onclick={() => {
+          conqueror = conquerorOption;
+        }}
+      />
     </label>
   {/each}
 </div>

@@ -9,6 +9,7 @@
     buildTradeQuery,
   } from "$lib/utils/sidebar/tradeQuery";
   import Konva from "konva";
+  import TradeButton from "$lib/ui/common/TradeButton.svelte";
 
   interface Props {
     expandedGroups: Record<number, boolean>;
@@ -121,58 +122,54 @@
           {@const maxGroupPage = Math.floor(
             (groupSeeds.length - 1) / seedsPerPage,
           )}
-          <div class="flex items-center gap-2">
-            <button
-              type="button"
-              onclick={(e) => {
-                e.stopPropagation();
-                ongrouptrade(total);
-              }}
-              class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium cursor-pointer transition-all duration-200"
-            >
-              Trade
-            </button>
-            {#if hasGroupTraded[total] && currentGroupPage < maxGroupPage}
-              <button
-                type="button"
-                onclick={(e) => {
-                  e.stopPropagation();
-                  ongroupnext(total);
-                }}
-                class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium cursor-pointer transition-all duration-200"
-              >
-                Next
-              </button>
-            {/if}
-            <button
-              type="button"
-              onclick={(e) => {
-                e.stopPropagation();
-                const t = parseFloat(total);
-                onexpand(t);
-              }}
-              aria-label="Expand group"
-              class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
-            >
-              <svg
-                class="w-4 h-4 transition-transform duration-200 {expandedGroups[
-                  parseFloat(total)
-                ]
-                  ? 'rotate-180'
-                  : ''}"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-          </div>
+           <div class="flex items-center gap-2">
+            <TradeButton
+               onclick={(e) => {
+                 e.stopPropagation();
+                 ongrouptrade(total);
+               }}
+             >
+               Trade
+             </TradeButton>
+             {#if hasGroupTraded[total] && currentGroupPage < maxGroupPage}
+               <TradeButton
+                 onclick={(e) => {
+                   e.stopPropagation();
+                   ongroupnext(total);
+                 }}
+               >
+                 Next
+               </TradeButton>
+             {/if}
+             <button
+               type="button"
+               onclick={(e) => {
+                 e.stopPropagation();
+                 const t = parseFloat(total);
+                 onexpand(t);
+               }}
+               aria-label="Expand group"
+               class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
+             >
+               <svg
+                 class="w-4 h-4 transition-transform duration-200 {expandedGroups[
+                   parseFloat(total)
+                 ]
+                   ? 'rotate-180'
+                   : ''}"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+               >
+                 <path
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   stroke-width="2"
+                   d="M19 9l-7 7-7-7"
+                 />
+               </svg>
+             </button>
+           </div>
         {:else}
           <button
             type="button"
@@ -181,46 +178,44 @@
           >
             0 matches (0 results)
           </button>
-          <div class="flex items-center gap-2">
-            <button
-              type="button"
-              onclick={(e) => {
-                e.stopPropagation();
-                ongrouptrade(total);
-              }}
-              class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium cursor-pointer transition-all duration-200"
-            >
-              Trade
-            </button>
-            <button
-              type="button"
-              onclick={(e) => {
-                e.stopPropagation();
-                const t = parseFloat(total);
-                onexpand(t);
-              }}
-              aria-label="Expand group"
-              class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
-            >
-              <svg
-                class="w-4 h-4 transition-transform duration-200 {expandedGroups[
-                  parseFloat(total)
-                ]
-                  ? 'rotate-180'
-                  : ''}"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-          </div>
+           <div class="flex items-center gap-2">
+            <TradeButton
+               onclick={(e) => {
+                 e.stopPropagation();
+                 ongrouptrade(total);
+               }}
+             >
+               Trade
+             </TradeButton>
+             <button
+               type="button"
+               onclick={(e) => {
+                 e.stopPropagation();
+                 const t = parseFloat(total);
+                 onexpand(t);
+               }}
+               aria-label="Expand group"
+               class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
+             >
+               <svg
+                 class="w-4 h-4 transition-transform duration-200 {expandedGroups[
+                   parseFloat(total)
+                 ]
+                   ? 'rotate-180'
+                   : ''}"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+               >
+                 <path
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   stroke-width="2"
+                   d="M19 9l-7 7-7-7"
+                 />
+               </svg>
+             </button>
+           </div>
         {/if}
       </div>
       {#if expandedGroups[parseFloat(total)]}
@@ -238,21 +233,20 @@
                 }
               }}
             >
-              <div class="flex items-center justify-between">
-                <span class="font-semibold text-blue-300"
-                  >Seed: {item.seed}</span
-                >
-                <button
-                  type="button"
-                  onclick={(e) => {
-                    e.stopPropagation();
-                    openTradeForSeed(item.seed);
-                  }}
-                  class="px-2 py-1 rounded bg-blue-600/50 hover:bg-blue-600/70 text-blue-200 text-xs font-medium cursor-pointer transition-all duration-200"
-                >
-                  Trade
-                </button>
-              </div>
+               <div class="flex items-center justify-between">
+                 <span class="font-semibold text-blue-300"
+                   >Seed: {item.seed}</span
+                 >
+                 <TradeButton
+                   variant="secondary"
+                   onclick={(e) => {
+                     e.stopPropagation();
+                     openTradeForSeed(item.seed);
+                   }}
+                 >
+                   Trade
+                 </TradeButton>
+               </div>
               <div class="mt-2 space-y-1">
                 {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
                   {@const stat = $searchStore.selectedStats.find(
