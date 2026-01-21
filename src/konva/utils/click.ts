@@ -3,6 +3,7 @@ import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { canvas } from "$lib/konva/canvasContext";
 import { updateAllocatedDisplay } from "./jewelHighlight";
+import { findNodeBySkill } from "$lib/utils/nodeUtils";
 
 export function setupClick() {
   const stage = canvas.stage!,
@@ -14,8 +15,8 @@ export function setupClick() {
     const shape = e.target;
     if (shape instanceof Konva.Circle) {
       const skill = Number(shape.name());
-      const node =
-        nodes[Object.keys(nodes).find((k) => nodes[k].skill === skill)!];
+      const node = findNodeBySkill(skill, nodes);
+      if (!node) return;
       const nodeId = String(node.skill);
       if (node.isJewelSocket) {
         if (treeState.chosenSocket === node) {

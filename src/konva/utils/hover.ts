@@ -4,6 +4,7 @@ import { treeStore } from "$lib/stores/treeStore";
 import { canvas } from "$lib/konva/canvasContext";
 import { get } from "svelte/store";
 import type { Node } from "$lib/types";
+import { getNodeWithFallback } from "$lib/utils/nodeUtils";
 
 function throttle<T extends (...args: never[]) => void>(
   func: T,
@@ -59,15 +60,11 @@ export function setupHover() {
       const skill = Number(shape.name());
       
       // Find the node (cached approach)
-      let hoveredNode = null;
-      const allocatedNode = get(treeStore).allocated.get(skill.toString());
-      
-      if (allocatedNode) {
-        hoveredNode = allocatedNode;
-      } else {
-        hoveredNode = nodes.get(skill)?.node || 
-          treeNodes[Object.keys(treeNodes).find((k) => treeNodes[k].skill === skill)!];
-      }
+      const hoveredNode = getNodeWithFallback(skill, {
+        allocated: get(treeStore).allocated,
+        canvasNodes: nodes,
+        treeNodes: treeNodes,
+      });
       
       // Only update store if hovered node actually changed
       if (hoveredNode?.skill !== lastHoveredNode?.skill) {

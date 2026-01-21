@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import type { Node as TreeNode, JewelType, Conqueror, Stat } from "$lib/types";
+import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import {
@@ -87,11 +88,11 @@ export function loadConfiguration(entry: BaseEntry): void {
   // Update tree store socket and allocated nodes
   treeStore.update((store) => {
     // Reconstruct allocated Map from skill IDs using real node data
-    const allocated = new Map<string, TreeNode>();
     const nodes = canvas.treeData.nodes;
+    const allocated = new Map<string, TreeNode>();
 
     for (const skillId of entry.allocatedSkillIds || []) {
-      const node = nodes[skillId];
+      const node = findNodeBySkill(parseInt(skillId, 10), nodes);
       if (node) {
         allocated.set(skillId, node);
       }

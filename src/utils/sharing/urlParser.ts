@@ -1,11 +1,13 @@
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
 import type { TreeData, Node, Stat, Translation, JewelType } from "$lib/types";
+import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import {
   changeRadius,
   changeKeystone,
   updateSocketVisualSelection,
+  updateAllocatedDisplay,
 } from "$lib/konva/utils/jewelHighlight";
 import type Konva from "konva";
 import {
@@ -122,9 +124,7 @@ export function parseUrlAndInitialize(
     console.log("Invalid socket skill:", socketSkillStr);
     return false;
   }
-  const chosenSocket: Node | null =
-    Object.values(treeData.nodes).find((node) => node.skill === socketSkill) ||
-    null;
+  const chosenSocket = findNodeBySkill(socketSkill, treeData.nodes);
   if (!chosenSocket) {
     console.log("Socket not found:", socketSkill);
     return false;
@@ -161,7 +161,7 @@ export function parseUrlAndInitialize(
 
     // Convert skills to nodes
     allocatedSkills.forEach((skill) => {
-      const node = Object.values(treeData.nodes).find((n) => n.skill === skill);
+      const node = findNodeBySkill(skill, treeData.nodes);
       if (node) {
         allocated.set(node.skill.toString(), node);
       }
@@ -192,6 +192,8 @@ export function parseUrlAndInitialize(
 
   // Update visual display of jewel sockets (selected state)
   updateSocketVisualSelection();
+
+  updateAllocatedDisplay();
 
   // Center canvas on chosen socket if available
   if (chosenSocket && canvas.stage) {
