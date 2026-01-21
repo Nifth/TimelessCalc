@@ -8,14 +8,13 @@ export function getHighlighteableNodes() {
   if (highlightableNodes.size > 0) {
     return highlightableNodes;
   }
-  Object.entries(data.socketNodes).forEach(([_, nodeIds]) => {
-    for (let index = 0; index < nodeIds.length; index++) {
-      const element = nodeIds[index];
+  for (const [_, nodeIds] of Object.entries(data.socketNodes)) {
+    for (const element of nodeIds) {
       const node = data.nodes[element];
-      if (node.isJewelSocket || node.isMastery || node.classStartIndex) return;
-      highlightableNodes.set(element, data.nodes[element]);
+      if (node.isJewelSocket || node.isMastery || node.classStartIndex) continue;
+      highlightableNodes.set(element, node);
     }
-  });
+  }
 
   return highlightableNodes;
 }

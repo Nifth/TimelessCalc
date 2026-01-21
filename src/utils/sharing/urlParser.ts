@@ -70,8 +70,8 @@ export function parseUrlAndInitialize(
   }
 
   // Parse conqueror
-  const conqueror =
-    conquerors[jewelType.name]?.find((c) => c.label === conquerorLabel) || null;
+  const jewelTypeConquerors = conquerors[jewelType.name] || [];
+  const conqueror = jewelTypeConquerors.find((c) => c.label === conquerorLabel) || null;
   if (!conqueror) {
     console.log("Invalid conqueror:", conquerorLabel);
     return false;
@@ -117,7 +117,7 @@ export function parseUrlAndInitialize(
     mode = "seed";
   }
 
-  const minTotalWeight = urlParams.get("tw") || 0;
+  const minTotalWeight = urlParams.get("tw") ? Number(urlParams.get("tw")) : 0;
 
   // Parse chosen socket
   const socketSkill = parseInt(socketSkillStr, 10);

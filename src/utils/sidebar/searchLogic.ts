@@ -160,12 +160,13 @@ export async function applySeed(
     return;
   }
 
+  const warning = validateSocket();
+  if (warning) {
+    alert(warning);
+    return;
+  }
+
   treeStore.update((state) => {
-    const warning = validateSocket();
-    if (warning) {
-      alert(warning);
-      return state;
-    }
     const chosenSocket = state.chosenSocket?.skill;
     if (!chosenSocket) {
       return state;
@@ -201,13 +202,14 @@ export async function handleSearch(
       return;
     }
 
+    const warning = validateSocket();
+    if (warning) {
+      alert(warning);
+      setSearchNotFound();
+      return;
+    }
+
     treeStore.update((state) => {
-      const warning = validateSocket();
-      if (warning) {
-        alert(warning);
-        setSearchNotFound();
-        return state;
-      }
       const chosenSocket = state.chosenSocket?.skill;
       if (!chosenSocket) {
         setSearchNotFound();
@@ -299,6 +301,7 @@ export async function handleSearch(
       }
       if (totalWeight >= minTotalWeight) {
         const key = totalWeight.toFixed(1);
+        if (!totalWeight) continue;
         if (!grouped[key]) grouped[key] = [];
         grouped[key].push({
           seed: parseInt(seed),

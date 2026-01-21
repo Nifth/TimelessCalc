@@ -244,7 +244,11 @@
   function generateFavoriteSuggestion(): string {
     const conquerorLabel = $searchStore.conqueror?.label || "Any";
     const jewelTypeLabel = $searchStore.jewelType?.label || "";
-    const keystone = findNearbyKeystone($treeStore.chosenSocket!);
+    const socket = $treeStore.chosenSocket;
+    if (!socket) {
+      return `${conquerorLabel} (${jewelTypeLabel}) - No socket`;
+    }
+    const keystone = findNearbyKeystone(socket);
     return `${conquerorLabel} (${jewelTypeLabel}) - ${keystone}`;
   }
 
