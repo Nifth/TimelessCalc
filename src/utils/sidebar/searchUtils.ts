@@ -21,19 +21,22 @@ export interface SearchStoreInitParams {
 
 export async function loadJewelData(
   jewelType: JewelType,
-): Promise<JewelLoadResult> {
+): Promise<Record<number, JewelEntry> | null> {
+  const cached = getJewelData(jewelType.name);
+  if (cached) {
+    return cached;
+  }
+
   try {
     await loadJewel(jewelType.name);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     setJewelLoadError(jewelType, message);
-    return { jewelData: null, entry: null };
+    return null;
   }
+
   const jewelData = getJewelData(jewelType.name);
-  if (!jewelData) {
-    return { jewelData: null, entry: null };
-  }
-  return { jewelData, entry: null };
+  return jewelData ?? null;
 }
 
 export function getEntryForSeed(
@@ -63,19 +66,7 @@ export function setSearchComplete(): void {
   }));
 }
 
-export async function ensureJewelDataLoaded(
-  jewelType: JewelType,
-): Promise<Record<number, JewelEntry> | null> {
-  try {
-    await loadJewel(jewelType.name);
-    const jewelData = getJewelData(jewelType.name);
-    return jewelData ?? null;
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    setJewelLoadError(jewelType, message);
-    return null;
-  }
-}
+export const ensureJewelDataLoaded = loadJewelData;
 
 export function initializeSearchStore(params: SearchStoreInitParams): void {
   resetFull();

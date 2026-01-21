@@ -6,7 +6,7 @@ import { searchStore } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
 import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
 import {
-  ensureJewelDataLoaded,
+  loadJewelData,
   getEntryForSeed,
   setSearchLoading,
   setSearchNotFound,
@@ -124,7 +124,7 @@ export async function applySeed(
   jewelType: JewelType,
   translation: Record<string, Translation[]>,
 ) {
-  const jewelData = await ensureJewelDataLoaded(jewelType);
+  const jewelData = await loadJewelData(jewelType);
   if (!jewelData) {
     return;
   }
@@ -159,7 +159,7 @@ export async function handleSearch(
       setSearchNotFound();
       return;
     }
-    const jewelData = await ensureJewelDataLoaded(jewelType);
+    const jewelData = await loadJewelData(jewelType);
     if (!jewelData) {
       setSearchLoading(false);
       return;
@@ -191,7 +191,7 @@ export async function handleSearch(
       setSearchNotFound();
       return;
     }
-    const jewelData = await ensureJewelDataLoaded(jewelType);
+    const jewelData = await loadJewelData(jewelType);
     if (!jewelData) {
       setSearchLoading(false);
       return;
