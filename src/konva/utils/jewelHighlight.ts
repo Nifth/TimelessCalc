@@ -278,7 +278,6 @@ export function resetHighlights() {
       node.timelessStats = undefined;
       node.timelessStatKeys = undefined;
       node.timelessStatValues = undefined;
-      console.log('??');
     }
   }
 }

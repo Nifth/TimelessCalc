@@ -51,7 +51,7 @@
     canvas.highlightLayer?.destroyChildren();
 
     // Draw circles for each stat key individually
-    statKeys.forEach((statKey, index) => {
+    statKeys.forEach((statKey, _index) => {
       const color = $searchStore.statKeyColors[statKey] || "yellow"; // fallback to yellow
 
       for (const node of $treeStore.allocated.values()) {
@@ -107,21 +107,11 @@
         }}
       >
         {#if $searchStore.statsResults[total].length > 0}
-          {@const firstItem = $searchStore.statsResults[total][0]}
-          {@const modifiedNodesCount = Object.values(
-            firstItem.statCounts,
-          ).reduce((sum, count) => sum + count, 0)}
-
           <button
             type="button"
             class="flex-1 text-left w-full h-full"
           >
-            {#if $searchStore.minTotalWeight > 0}
-              Weight {total} ({$searchStore.statsResults[total].length} results)
-            {:else}
-              {modifiedNodesCount} matches ({$searchStore.statsResults[total]
-                .length} results)
-            {/if}
+            Total weight {total} ({$searchStore.statsResults[total].length} {#if $searchStore.statsResults[total].length === 1}seed{:else}seeds{/if})
           </button>
           {@const groupSeeds = $searchStore.statsResults[total].map(
             (g) => g.seed,

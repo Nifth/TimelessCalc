@@ -10,9 +10,9 @@
   import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
-   import Modal from "$lib/ui/common/Modal.svelte";
-   import { showNotification } from "$lib/stores/notificationStore";
-   import type { FavoriteEntry, Stat } from "$lib/types";
+  import Modal from "$lib/ui/common/Modal.svelte";
+  import { showNotification } from "$lib/stores/notificationStore";
+  import type { FavoriteEntry, Stat } from "$lib/types";
 
   let { onswitchtotab } = $props<{
     onswitchtotab: (tab: "search" | "favorites" | "history") => void;

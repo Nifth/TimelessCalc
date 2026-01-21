@@ -2,7 +2,7 @@ import { treeStore } from "$lib/stores/treeStore";
 import { getJewelData, loadJewel } from "$lib/providers/jewels";
 import { canvas } from "$lib/konva/canvasContext";
 import { parseKey, getTranslation } from "./sidebarUtils";
-import type { JewelType, Conqueror, Stat, Translation, JewelEntry } from "$lib/types";
+import type { JewelType, Stat, Translation, JewelEntry } from "$lib/types";
 import { searchStore, setJewelLoadError } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
 import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
@@ -290,19 +290,14 @@ export async function handleSearch(
         totalWeight: number;
       }[]
     > = {};
-    for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
+for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
       let totalWeight = 0;
-      let minTotalWeight = get(searchStore).minTotalWeight;
-      let statsMinWeight = 0;
+      const minTotalWeight = get(searchStore).minTotalWeight;
       for (const stat of selectedStats) {
         const count = statCounts[stat.statKey] || 0;
         if (count >= stat.minWeight) {
           totalWeight += count * stat.weight;
         }
-        statsMinWeight += stat.minWeight;
-      }
-      if (minTotalWeight === 0) {
-        minTotalWeight = statsMinWeight;
       }
       if (totalWeight >= minTotalWeight) {
         const key = totalWeight.toFixed(1);
