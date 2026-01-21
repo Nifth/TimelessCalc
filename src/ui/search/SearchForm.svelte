@@ -6,7 +6,7 @@
   import { conquerors } from "$lib/constants/timeless";
   import { getConquerorOptions } from "$lib/utils/sidebar/options";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
-  import translationsJson from "$lib/data/translation.json" with { type: "json" };
+  import { translations } from "$lib/providers/translations";
 
   import JewelTypeSelector from "$lib/ui/selectors/JewelTypeSelector.svelte";
   import ConquerorSelector from "$lib/ui/selectors/ConquerorSelector.svelte";
@@ -16,11 +16,6 @@
   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
   import Modal from "$lib/ui/common/Modal.svelte";
   import { changeRadius } from "$lib/konva/utils/jewelHighlight";
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const translation: Record<string, any[]> = JSON.parse(
-    JSON.stringify(translationsJson),
-  );
 
   let seedInput: number | null = $state(null);
   let socketWarningMessage = $state("");
@@ -75,7 +70,7 @@
     await performSearch(
       $searchStore.mode,
       seedInput,
-      translation,
+      translations,
       $searchStore.jewelType,
       $searchStore.selectedStats,
     );

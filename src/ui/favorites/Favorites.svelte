@@ -7,21 +7,17 @@
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
-  import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
   import { showNotification } from "$lib/stores/notificationStore";
   import type { FavoriteEntry, Stat } from "$lib/types";
   import { changeRadius } from "$lib/konva/utils/jewelHighlight";
+  import { translations } from "$lib/providers/translations";
 
   let { onswitchtotab } = $props<{
     onswitchtotab: (tab: "search" | "favorites" | "history") => void;
   }>();
-
-  const translation: Record<string, any[]> = JSON.parse(
-    JSON.stringify(translationsJson),
-  );
 
   let showConfirmModal = $state(false);
   let pendingLoadEntry: FavoriteEntry | null = $state(null);
@@ -78,7 +74,7 @@
     await performSearch(
       "stats", // Force stats mode
       null, // No seed input for stats mode
-      translation,
+      translations,
       entry.jewelType,
       entry.stats,
     );

@@ -4,20 +4,16 @@
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
-  import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
   import { changeRadius } from "$lib/konva/utils/jewelHighlight";
+  import { translations } from "$lib/providers/translations";
 
   let {
     onswitchtotab,
   }: { onswitchtotab: (tab: "search" | "favorites" | "history") => void } =
     $props();
-
-  const translation: Record<string, any[]> = JSON.parse(
-    JSON.stringify(translationsJson),
-  );
 
   const treeNodes: Record<string, Node> = canvas.treeData.nodes;
 
@@ -116,7 +112,7 @@
     await performSearch(
       "stats", // Force stats mode
       null, // No seed input for stats mode
-      translation,
+      translations,
       entry.jewelType,
       entry.stats,
     );

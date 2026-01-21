@@ -7,10 +7,10 @@
   import JewelLoadErrorModal from "$lib/ui/modals/JewelLoadErrorModal.svelte";
   import Konva from "konva";
   import treeData from "$lib/data/tree.json" with { type: "json" };
-  import translationsJson from "$lib/data/translation.json" with { type: "json" };
   import { preloadSprites } from "$lib/konva/utils/sprites";
   import type { TreeData } from "$lib/types";
   import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
+  import { translations } from "$lib/providers/translations";
   import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
   import { perfMonitor } from "$lib/utils/performanceMonitor";
 
@@ -41,9 +41,6 @@
   import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 
   const data: TreeData = JSON.parse(JSON.stringify(treeData));
-  const translation: Record<string, any[]> = JSON.parse(
-    JSON.stringify(translationsJson),
-  );
 
   let previousSkill: number | null = null;
 
@@ -193,7 +190,7 @@
         data,
         canvas,
         performSearch,
-        translation,
+        translations,
       );
 
 

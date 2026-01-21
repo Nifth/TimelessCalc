@@ -4,7 +4,7 @@
   import { filterStats } from "$lib/utils/sidebar/sidebarUtils";
   import { getStatsOptions } from "$lib/utils/sidebar/options";
   import jewelStatsJson from "$lib/data/jewelstats.json" with { type: "json" };
-  import translationsJson from "$lib/data/translation.json" with { type: "json" };
+  import { translations } from "$lib/providers/translations";
 
   let { jewelType }: { jewelType: JewelType | null } = $props();
 
@@ -12,16 +12,12 @@
     JSON.stringify(jewelStatsJson),
   );
 
-  const translation: Record<string, Translation[]> = JSON.parse(
-    JSON.stringify(translationsJson),
-  );
-
   let searchValue = $state("");
   let showDropdown = $state(false);
   let inputElement: HTMLInputElement;
 
   let filteredStats = $derived.by(() => {
-    const computedOptions = getStatsOptions(jewelType, jewelStats, translation);
+    const computedOptions = getStatsOptions(jewelType, jewelStats, translations);
     return filterStats(
       searchValue,
       computedOptions,

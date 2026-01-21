@@ -12,7 +12,7 @@
     generateShareUrl,
     copyToClipboard,
   } from "$lib/utils/sharing/shareUtils";
-  import translationsJson from "$lib/data/translation.json" with { type: "json" };
+  import { translations } from "$lib/providers/translations";
 
   import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
   import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
@@ -22,11 +22,6 @@
   import { favoritesActions } from "$lib/stores/favoritesStore";
   import { showNotification } from "$lib/stores/notificationStore";
     import { canvas } from "$lib/konva/canvasContext";
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const translation: Record<string, any[]> = JSON.parse(
-    JSON.stringify(translationsJson),
-  );
 
    let { ontargetposition }: { ontargetposition?: (pos: { top: number; left: number } | null) => void } = $props();
 
@@ -183,7 +178,7 @@
     await applySeed(
       seed,
       $searchStore.jewelType!,
-      translation,
+      translations,
     );
     searchStore.update((s) => {
       s.searched = true;
