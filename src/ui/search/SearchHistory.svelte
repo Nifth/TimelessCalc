@@ -3,12 +3,10 @@
   import { historyStore, historyActions } from "$lib/stores/historyStore";
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
-  import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
-  import { centerCanvasOnSocket } from "$lib/utils/sharing/urlParser";
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
-  import { changeRadius } from "$lib/konva/utils/jewelHighlight";
   import { translations } from "$lib/providers/translations";
+  import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
 
   let {
     onswitchtotab,
@@ -75,62 +73,32 @@
   }
 
   function handleLoadEntry(entry: SearchHistoryEntry) {
-    // Check if current search has configuration
     if (historyActions.hasCurrentConfiguration()) {
       pendingLoadEntry = entry;
       showConfirmModal = true;
     } else {
-      loadEntry(entry);
+      loadEntryUtil({
+        entry,
+        loadAction: (e) => historyActions.loadSearch(e),
+        translation: translations,
+        canvas,
+        onSwitchToTab: () => onswitchtotab("search"),
+      });
     }
   }
 
-  function confirmLoad() {
+  async function confirmLoad() {
     if (pendingLoadEntry) {
-      loadEntry(pendingLoadEntry);
+      await loadEntryUtil({
+        entry: pendingLoadEntry,
+        loadAction: (e) => historyActions.loadSearch(e),
+        translation: translations,
+        canvas,
+        onSwitchToTab: () => onswitchtotab("search"),
+      });
       showConfirmModal = false;
       pendingLoadEntry = null;
     }
-  }
-
-  async function loadEntry(entry: SearchHistoryEntry) {
-    // Load the configuration
-    searchStore.update((s) => ({
-      ...s,
-      automated: true,
-    }));
-    historyActions.loadSearch(entry);
-
-    // Center canvas on the socket
-    if (canvas.stage && entry.socket) {
-      centerCanvasOnSocket(canvas.stage, entry.socket, 0.2);
-      changeRadius(entry.socket);
-      // Update tree store scale to match
-      treeStore.update((s) => ({ ...s, scale: 0.2 }));
-    }
-
-    // Automatically trigger the search
-    await performSearch(
-      "stats", // Force stats mode
-      null, // No seed input for stats mode
-      translations,
-      entry.jewelType,
-      entry.stats,
-    );
-
-    // Switch to search tab to show results
-    onswitchtotab("search");
-
-    // Update search state after successful search
-    if ($searchStore.searched) {
-      searchStore.update((s) => ({
-        ...s,
-        statsSearched: true,
-      }));
-    }
-    searchStore.update((s) => ({
-      ...s,
-      automated: false,
-    }));
   }
 
   function handleDeleteEntry(entryId: string) {
