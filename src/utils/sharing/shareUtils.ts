@@ -1,5 +1,6 @@
-import type { SearchStore, TreeStore, TreeData, Stat, JewelType, Conqueror, Node } from "$lib/types";
+import type { SearchStore, TreeStore, Stat, JewelType, Conqueror, Node } from "$lib/types";
 import { canvas } from "$lib/konva/canvasContext";
+import { getSocketNodeIds, prepareNodeListForEncoding } from "$lib/utils/socketNodeProcessor";
 
 /**
  * Copies text to clipboard using modern API
@@ -65,22 +66,11 @@ export function generateShareUrlFromData(
   if (chosenSocket) {
     params.set('so', chosenSocket.skill.toString());
     if (allocatedSkills.length > 0) {
-      const socketNodeIds = treeData.socketNodes[chosenSocket.skill.toString()] || [];
-      const radiusNodes: number[] = socketNodeIds.map((id: string) =>
-        parseInt(id, 10),
+      const { list, param } = prepareNodeListForEncoding(
+        getSocketNodeIds(chosenSocket.skill.toString(), treeData),
+        allocatedSkills
       );
-
-      const unallocatedSkills = radiusNodes.filter(
-        (skill) => !allocatedSkills.includes(skill),
-      );
-
-      if (allocatedSkills.length > unallocatedSkills.length) {
-        // Encode unallocated list (smaller)
-        params.set("un", JSON.stringify(unallocatedSkills));
-      } else {
-        // Encode allocated list
-        params.set("a", JSON.stringify(allocatedSkills));
-      }
+      params.set(param, JSON.stringify(list));
     }
   }
 

@@ -2,6 +2,7 @@
   import type { Node } from "$lib/types";
   import { treeStore } from "$lib/stores/treeStore";
   import { canvas } from "$lib/konva/canvasContext";
+    import { updateAllocatedDisplay } from "$lib/konva/utils/jewelHighlight";
 
   function toggleNotableNodes() {
     const chosenSocket = $treeStore.chosenSocket;
@@ -28,6 +29,8 @@
       }
       return state;
     });
+
+    updateAllocatedDisplay();
   }
 
   function toggleSmallNodes() {
@@ -62,6 +65,7 @@
       }
       return state;
     });
+    updateAllocatedDisplay();
   }
 </script>
 

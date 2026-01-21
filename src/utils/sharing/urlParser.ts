@@ -14,6 +14,7 @@ import {
   initializeSearchStore,
   finalizeSearchStoreInitialization,
 } from "$lib/utils/sidebar/searchUtils";
+import { reconstructAllocatedNodes } from "$lib/utils/socketNodeProcessor";
 
 /**
  * Parses URL parameters and initializes the application state
@@ -130,43 +131,31 @@ export function parseUrlAndInitialize(
     return false;
   }
 
-  // Parse allocated/unallocated nodes
-  const allocated = new Map<string, Node>();
-  if (chosenSocket && socketSkillStr) {
-    const socketNodeIds = treeData.socketNodes[socketSkillStr] || [];
-    const radiusNodes: number[] = socketNodeIds.map((id: string) =>
-      parseInt(id, 10),
-    );
-    const allocatedJson = urlParams.get("a");
-    const unallocatedJson = urlParams.get("un");
+  let allocatedSkills: number[] | null = null;
+  let unallocatedSkills: number[] | null = null;
 
-    let allocatedSkills: number[] = [];
-
-    if (allocatedJson) {
-      try {
-        allocatedSkills = JSON.parse(allocatedJson);
-      } catch (e) {
-        console.error("Failed to parse allocated nodes from URL:", e);
-      }
-    } else if (unallocatedJson) {
-      try {
-        const unallocatedSkills: number[] = JSON.parse(unallocatedJson);
-        allocatedSkills = radiusNodes.filter(
-          (skill) => !unallocatedSkills.includes(skill),
-        );
-      } catch (e) {
-        console.error("Failed to parse unallocated nodes from URL:", e);
-      }
-    }
-
-    // Convert skills to nodes
-    allocatedSkills.forEach((skill) => {
-      const node = findNodeBySkill(skill, treeData.nodes);
-      if (node) {
-        allocated.set(node.skill.toString(), node);
-      }
-    });
+  try {
+    allocatedSkills = urlParams.get("a")
+      ? JSON.parse(urlParams.get("a")!)
+      : null;
+  } catch (e) {
+    console.error("Failed to parse allocated nodes from URL:", e);
   }
+
+  try {
+    unallocatedSkills = urlParams.get("un")
+      ? JSON.parse(urlParams.get("un")!)
+      : null;
+  } catch (e) {
+    console.error("Failed to parse unallocated nodes from URL:", e);
+  }
+
+  const allocated = reconstructAllocatedNodes(
+    socketSkillStr,
+    allocatedSkills,
+    unallocatedSkills,
+    treeData
+  );
 
   // Update stores
   initializeSearchStore({
