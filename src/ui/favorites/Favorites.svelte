@@ -88,6 +88,7 @@
       entry.socket,
       entry.allocatedSkillIds.map((i) => Number(i)),
       entry.minTotalWeight,
+      entry.statSearchMode || null,
       null,
       null
     );

@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import type { Node as TreeNode, JewelType, Conqueror, Stat } from "$lib/types";
+import type { Node as TreeNode, JewelType, Conqueror, Stat, StatSearchMode } from "$lib/types";
 import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
@@ -19,6 +19,7 @@ export interface BaseEntry {
   stats: Stat[];
   minTotalWeight: number;
   allocatedSkillIds: string[];
+  statSearchMode?: StatSearchMode;
 }
 
 /**
@@ -76,6 +77,7 @@ export function loadConfiguration(entry: BaseEntry): void {
     conqueror,
     selectedStats: [...entry.stats],
     minTotalWeight: entry.minTotalWeight,
+    statSearchMode: entry.statSearchMode ?? "occurrences",
     mode: "stats",
     searched: false, // Will be set to true when search executes
     statsResults: {},
@@ -141,6 +143,7 @@ export function createBaseEntry(): BaseEntry | null {
     stats: [...currentSearchStore.selectedStats],
     minTotalWeight: currentSearchStore.minTotalWeight,
     allocatedSkillIds,
+    statSearchMode: currentSearchStore.statSearchMode,
   };
 
   console.log(

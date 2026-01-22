@@ -13,6 +13,7 @@ export const searchStore = writable<SearchStore>({
   statsResults: {},
   statKeyColors: {},
   minTotalWeight: 0,
+  statSearchMode: "occurrences",
   league: defaultLeague,
   platform: defaultPlatform,
   currentPage: 0,

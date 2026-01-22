@@ -17,6 +17,7 @@ export interface SearchStoreInitParams {
   platform: Platform;
   mode: "seed" | "stats" | null;
   minTotalWeight: number;
+  statSearchMode?: "occurrences" | "totalValue";
 }
 
 export async function loadJewelData(
@@ -81,6 +82,7 @@ export function initializeSearchStore(params: SearchStoreInitParams): void {
     lastTradeInfo: null,
     mode: params.mode,
     minTotalWeight: params.minTotalWeight,
+    statSearchMode: params.statSearchMode ?? "occurrences",
     statsSearched: params.mode === "stats",
     seedSearched: params.mode === "seed",
     automated: true,

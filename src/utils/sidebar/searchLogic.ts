@@ -276,11 +276,17 @@ export async function handleSearch(
       }
 
       // All selected stats must meet their minimum weight requirement
-      if (
-        selectedStats.every(
-          (stat) => (statCounts[stat.statKey] || 0) >= stat.minWeight,
-        )
-      ) {
+      // Check based on statSearchMode: occurrences or total value
+      const statSearchMode = get(searchStore).statSearchMode;
+      const meetsMinRequirement = selectedStats.every((stat) => {
+        if (statSearchMode === "occurrences") {
+          return (statCounts[stat.statKey] || 0) >= stat.minWeight;
+        } else {
+          return (statTotals[stat.statKey] || 0) >= stat.minWeight;
+        }
+      });
+
+      if (meetsMinRequirement) {
         results[seed] = { statCounts, statTotals };
       }
     }
@@ -295,13 +301,23 @@ export async function handleSearch(
         totalWeight: number;
       }[]
     > = {};
+    const statSearchMode = get(searchStore).statSearchMode;
     for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
       let totalWeight = 0;
       const minTotalWeight = get(searchStore).minTotalWeight;
       for (const stat of selectedStats) {
         const count = statCounts[stat.statKey] || 0;
-        if (count >= stat.minWeight) {
-          totalWeight += count * stat.weight;
+        const total = statTotals[stat.statKey] || 0;
+        // Check min requirement for this stat based on mode
+        const meetsMin =
+          statSearchMode === "occurrences"
+            ? count >= stat.minWeight
+            : total >= stat.minWeight;
+        if (meetsMin) {
+          // Weight is based on mode: occurrences or total value
+          const weightValue =
+            statSearchMode === "occurrences" ? count : total;
+          totalWeight += weightValue * stat.weight;
         }
       }
       if (totalWeight >= minTotalWeight) {

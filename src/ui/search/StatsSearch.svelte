@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { JewelType, Stat, Translation } from "$lib/types";
+  import type { JewelType, Stat, Translation, StatSearchMode } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
   import { filterStats } from "$lib/utils/sidebar/sidebarUtils";
   import { getStatsOptions } from "$lib/utils/sidebar/options";
@@ -24,6 +24,11 @@
       $searchStore.selectedStats,
     );
   });
+
+  let isGloriousVanity = $derived(jewelType?.name === "vaal");
+  let minLabel = $derived.by(() =>
+    $searchStore.statSearchMode === "occurrences" ? "Min" : "Min Value",
+  );
 
   function removeStat(index: number) {
     searchStore.update((state) => {
@@ -56,6 +61,10 @@
     setTimeout(() => {
       showDropdown = false;
     }, 150);
+  }
+
+  function handleStatSearchModeChange(mode: StatSearchMode) {
+    searchStore.update((s) => ({ ...s, statSearchMode: mode }));
   }
 </script>
 
@@ -104,12 +113,39 @@
     {/if}
   </div>
 
+  {#if isGloriousVanity}
+    <div class="space-y-2">
+      <span
+        class="text-sm font-semibold text-slate-300 uppercase tracking-wider whitespace-nowrap"
+        >Search by</span
+      >
+      <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+        <button
+          onclick={() => handleStatSearchModeChange("occurrences")}
+          class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 {$searchStore.statSearchMode === 'occurrences'
+            ? 'bg-blue-600 text-white shadow-md'
+            : 'text-slate-300 hover:text-white hover:bg-slate-700'}"
+        >
+          Occurrences
+        </button>
+        <button
+          onclick={() => handleStatSearchModeChange("totalValue")}
+          class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 {$searchStore.statSearchMode === 'totalValue'
+            ? 'bg-blue-600 text-white shadow-md'
+            : 'text-slate-300 hover:text-white hover:bg-slate-700'}"
+        >
+          Total Value
+        </button>
+      </div>
+    </div>
+  {/if}
+
   <div class="space-y-2">
     {#if $searchStore.selectedStats.length > 0}
       <div class="flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-slate-300 text-xs">
         <span class="flex-1">Stat</span>
         <span class="w-16 text-center">Weight</span>
-        <span class="w-16 text-center">Min</span>
+        <span class="w-16 text-center">{minLabel}</span>
         <span class="w-8"></span>
       </div>
     {/if}
@@ -127,7 +163,7 @@
         <input
           type="number"
           bind:value={stat.minWeight}
-          placeholder="Min"
+          placeholder={minLabel}
           min="0"
           step="0.1"
           class="w-16 px-2 py-1.5 text-sm bg-slate-700 border border-slate-600 rounded text-white focus:outline-none focus:border-blue-400"

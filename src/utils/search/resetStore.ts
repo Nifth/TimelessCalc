@@ -6,6 +6,7 @@ export function resetDependentFields(): void {
     conqueror: null,
     selectedStats: [],
     minTotalWeight: 0,
+    statSearchMode: "occurrences",
     searched: false,
     statsResults: {},
     statKeyColors: {},

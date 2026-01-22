@@ -119,6 +119,14 @@ export function parseUrlAndInitialize(
 
   const minTotalWeight = urlParams.get("tw") ? Number(urlParams.get("tw")) : 0;
 
+  // Parse stat search mode (occurrences or totalValue)
+  // Default to 'occurrences' for backward compatibility
+  const statSearchModeParam = urlParams.get("sm");
+  let statSearchMode: "occurrences" | "totalValue" = "occurrences";
+  if (statSearchModeParam === "occurrences" || statSearchModeParam === "totalValue") {
+    statSearchMode = statSearchModeParam;
+  }
+
   // Parse chosen socket
   const socketSkill = parseInt(socketSkillStr, 10);
   if (isNaN(socketSkill)) {
@@ -167,6 +175,7 @@ export function parseUrlAndInitialize(
     platform,
     mode,
     minTotalWeight: Number(minTotalWeight),
+    statSearchMode,
   });
 
   treeStore.update((t) => ({

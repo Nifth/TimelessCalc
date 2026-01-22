@@ -3,6 +3,7 @@
   import type { JewelType } from "$lib/types";
   import { loadJewel, cache } from "$lib/providers/jewels";
   import { setJewelLoadError } from "$lib/stores/searchStore";
+  import { searchStore } from "$lib/stores/searchStore";
   import RadioButton from "$lib/ui/common/RadioButton.svelte";
 
   interface Props {
@@ -12,6 +13,7 @@
   let { jewelType = $bindable(null) }: Props = $props();
 
   let loadingFor: string | null = null;
+  let previousJewelTypeName: string | null = null;
 
   $effect(() => {
     if (jewelType !== null) {
@@ -40,6 +42,17 @@
             loadingFor = null;
           }
         });
+    }
+  });
+
+  $effect(() => {
+    // Reset statSearchMode to 'occurrences' whenever jewelType changes
+    if (jewelType !== null) {
+      const currentJewelTypeName = jewelType.name;
+      if (previousJewelTypeName !== null && currentJewelTypeName !== previousJewelTypeName) {
+        searchStore.update((s) => ({ ...s, statSearchMode: "occurrences" }));
+      }
+      previousJewelTypeName = currentJewelTypeName;
     }
   });
 </script>

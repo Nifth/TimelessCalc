@@ -112,6 +112,8 @@ export interface Stat {
   minWeight: number;
 }
 
+export type StatSearchMode = "occurrences" | "totalValue";
+
 export interface Translation {
   from: number | undefined;
   to: number | undefined;
@@ -151,6 +153,7 @@ export interface SearchStore {
   >;
   statKeyColors: Record<number, string>;
   minTotalWeight: number;
+  statSearchMode: StatSearchMode;
   league: string;
   platform: Platform;
   currentPage: number;
@@ -179,6 +182,7 @@ export interface SearchHistoryEntry {
   stats: Stat[];
   minTotalWeight: number;
   allocatedSkillIds: string[];
+  statSearchMode?: StatSearchMode;
 }
 
 export interface FavoriteEntry extends SearchHistoryEntry {
