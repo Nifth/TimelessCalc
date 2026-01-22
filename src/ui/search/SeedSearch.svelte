@@ -38,7 +38,8 @@
     canvas.highlightLayer?.destroyChildren();
 
     for (const node of $treeStore.allocated.values()) {
-      if (node?.timelessStats?.includes(stat)) {
+      // todo: might need to adjust in case there are case where we add a stat that is already on the node ?
+      if (node?.timelessStats?.includes(stat) && !node.stats?.includes(stat)) {
         const circle = new Konva.Circle({
           x: node.x,
           y: node.y,

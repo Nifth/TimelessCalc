@@ -8,6 +8,17 @@
   $: baseStats = node?.stats || [];
   $: timelessStats = node?.timelessStats;
   $: statsToDisplay = timelessStats ? timelessStats : baseStats;
+  $: isExtraStat = timelessStats
+    ? timelessStats.map((stat, i) => {
+        const statIndexInBase = baseStats.indexOf(stat);
+        if (statIndexInBase === -1) return true;
+        const occurrencesInBase = baseStats.filter((s) => s === stat).length;
+        const occurrencesUpToI = timelessStats
+          .slice(0, i + 1)
+          .filter((s) => s === stat).length;
+        return occurrencesUpToI > occurrencesInBase;
+      })
+    : [];
   $: header = node?.conqueredName || node?.name || "";
 </script>
 
@@ -18,8 +29,8 @@
   >
     <div class="font-bold mb-2">{header}</div>
     <div class="space-y-1">
-      {#each statsToDisplay as stat (stat)}
-        <div class="text-sm" class:text-red-400={!baseStats.includes(stat)}>
+      {#each statsToDisplay as stat, index (index)}
+        <div class="text-sm" class:text-red-400={isExtraStat[index]}>
           {stat}
         </div>
       {/each}
