@@ -11,25 +11,29 @@
   import Konva from "konva";
   import TradeButton from "$lib/ui/common/TradeButton.svelte";
 
-  interface Props {
-    expandedGroups: Record<number, boolean>;
-    groupPages: Record<string, number>;
-    hasGroupTraded: Record<string, boolean>;
-    onapplyseed: (seed: number) => void;
-    ongrouptrade: (total: string) => void;
-    ongroupnext: (total: string) => void;
-    onexpand: (total: number) => void;
-  }
+   import type { Translation } from "$lib/types";
 
-  let {
-    expandedGroups = $bindable({}),
-    groupPages = $bindable({}),
-    hasGroupTraded = $bindable({}),
-    onapplyseed,
-    ongrouptrade,
-    ongroupnext,
-    onexpand,
-  }: Props = $props();
+ interface Props {
+     expandedGroups: Record<number, boolean>;
+     groupPages: Record<string, number>;
+     hasGroupTraded: Record<string, boolean>;
+     translation: Record<string, Translation[]>;
+     onapplyseed: (seed: number) => void;
+     ongrouptrade: (total: string) => void;
+     ongroupnext: (total: string) => void;
+     onexpand: (total: number) => void;
+   }
+
+   let {
+     expandedGroups = $bindable({}),
+     groupPages = $bindable({}),
+     hasGroupTraded = $bindable({}),
+     translation,
+     onapplyseed,
+     ongrouptrade,
+     ongroupnext,
+     onexpand,
+   }: Props = $props();
 
   function openTradeForSeed(seed: number) {
     const platform =
@@ -248,25 +252,28 @@
                  </TradeButton>
                </div>
               <div class="mt-2 space-y-1">
-                {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
-                  {@const stat = $searchStore.selectedStats.find(
-                    (s) => s.statKey === parseInt(statKey),
-                  )}
-                  {@const total = item.statTotals?.[parseInt(statKey)] ?? 0}
-                   {#if stat}
-                     <div class="text-sm text-slate-300 flex justify-between" style="color: {$searchStore.statKeyColors[parseInt(statKey)] || '#10B981'}">
-                       <div>
-                         <span>({count})</span>
-                         {stat.label}
-                       </div>
-                       <span
-                         class="font-semibold"
-                       >
-                         total: [{total}]
-                       </span>
-                     </div>
-                   {/if}
-                {/each}
+                 {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
+                   {@const stat = $searchStore.selectedStats.find(
+                     (s) => s.statKey === parseInt(statKey),
+                   )}
+                   {@const total = item.statTotals?.[parseInt(statKey)] ?? 0}
+                   {@const transEntry = translation[statKey]?.[0]}
+                   {@const divider = transEntry?.divider ?? 1}
+                   {@const displayTotal = total / divider}
+                    {#if stat}
+                      <div class="text-sm text-slate-300 flex justify-between" style="color: {$searchStore.statKeyColors[parseInt(statKey)] || '#10B981'}">
+                        <div>
+                          <span>({count})</span>
+                          {stat.label}
+                        </div>
+                        <span
+                          class="font-semibold"
+                        >
+                          total: [{displayTotal}]
+                        </span>
+                      </div>
+                    {/if}
+                 {/each}
               </div>
             </div>
           {/each}

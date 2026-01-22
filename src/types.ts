@@ -115,6 +115,7 @@ export interface Stat {
 export interface Translation {
   from: number | undefined;
   to: number | undefined;
+  divider: number | undefined;
   translation: string;
 }
 

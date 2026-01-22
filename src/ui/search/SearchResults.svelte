@@ -346,16 +346,17 @@
   </TradeControls>
 </div>
 
-{#if Object.keys($searchStore.statsResults).length > 0}
-  <StatsResults
-    bind:expandedGroups
-    bind:groupPages
-    bind:hasGroupTraded
-    onapplyseed={applySeedFromResults}
-    ongrouptrade={handleGroupTrade}
-    ongroupnext={handleGroupNext}
-    onexpand={expandGroup}
-  />
+ {#if Object.keys($searchStore.statsResults).length > 0}
+   <StatsResults
+     translation={translations}
+     bind:expandedGroups
+     bind:groupPages
+     bind:hasGroupTraded
+     onapplyseed={applySeedFromResults}
+     ongrouptrade={handleGroupTrade}
+     ongroupnext={handleGroupNext}
+     onexpand={expandGroup}
+   />
 {:else}
   <div class="bg-slate-800 rounded-lg p-8 text-center">
     <p class="text-slate-400 italic">No results to display.</p>
