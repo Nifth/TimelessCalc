@@ -15,6 +15,7 @@
   import StatsSearch from "$lib/ui/search/StatsSearch.svelte";
   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
   import Modal from "$lib/ui/common/Modal.svelte";
+  import Spinner from "$lib/ui/common/Spinner.svelte";
   import { changeRadius, changeKeystone, clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { resetDependentFields, resetForModeChange } from "$lib/utils/search/resetStore";
   import { validateSocket } from "$lib/utils/socketValidation";
@@ -108,7 +109,14 @@
   }
 </script>
 
-<div class="space-y-6">
+<div class="relative min-h-[200px]">
+  {#if $searchStore.loading && $searchStore.mode === "stats"}
+    <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-md z-20 flex items-center justify-center rounded-lg">
+      <Spinner text="Searching..." />
+    </div>
+  {/if}
+
+  <div class="space-y-6 {$searchStore.loading && $searchStore.mode === 'stats' ? 'opacity-50 pointer-events-none' : ''}">
   <section>
     <JewelTypeSelector bind:jewelType={$searchStore.jewelType} />
   </section>
@@ -151,8 +159,9 @@
 
   <NodeToggles />
 </div>
+</div>
 
-{#if socketWarningMessage}
+ {#if socketWarningMessage}
   <Modal
     message={socketWarningMessage}
     onCancel={() => (socketWarningMessage = "")}

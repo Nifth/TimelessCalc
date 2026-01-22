@@ -10,6 +10,7 @@ import type {
 } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
+import { tick } from "svelte";
 import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
 import {
   loadJewelData,
@@ -194,6 +195,7 @@ export async function handleSearch(
 ) {
   setSearchLoading(true);
   clearHighlights();
+  await tick();
   if (mode === "seed") {
     if (!seedInput || !jewelType) {
       setSearchNotFound();
@@ -235,6 +237,7 @@ export async function handleSearch(
       setSearchNotFound();
       return;
     }
+    await new Promise((resolve) => setTimeout(resolve, 200));
     const jewelData = await loadJewelData(jewelType);
     if (!jewelData) {
       setSearchLoading(false);
