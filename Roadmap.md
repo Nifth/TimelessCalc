@@ -8,4 +8,3 @@ Capture Ctrl+V shortcut to paste a jewel (Path of Exile format), validate, if va
 
 ### Fixes to do
 - Glorious Vanity => maybe only group by stats, and not stat/roll ? Or add a button to let the user group by stat ?
-- Check stats values (40% instead of 0.4%)
