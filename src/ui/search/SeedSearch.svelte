@@ -4,6 +4,8 @@
   import { canvas } from "$lib/konva/canvasContext";
   import Konva from "konva";
   import { get } from "svelte/store";
+  import { translations } from "$lib/providers/translations";
+  import { formatStatTranslation } from "$lib/utils/sidebar/sidebarUtils";
 
   interface Props {
     seed: number | null;
@@ -16,41 +18,52 @@
   let seedInput: number | null = $state(null);
   let searchTimeout: number | null = $state(null);
 
-  function getTimelessStats(): Record<string, number> {
+  function getTimelessStats(): Record<number, { count: number; total: number }> {
     const chosenSocket = $treeStore.chosenSocket;
     if (!chosenSocket) return {};
-
-    const statsCount: Record<string, number> = {};
-
+    const statData: Record<number, { count: number; total: number }> = {};
     for (const node of $treeStore.allocated.values()) {
-      if (node?.timelessStats) {
-        for (const stat of node.timelessStats) {
-          if (node.stats?.includes(stat)) continue;
-          statsCount[stat] = (statsCount[stat] || 0) + 1;
+      if (node?.timelessStatKeys && node?.timelessStatValues) {
+        for (let i = 0; i < node.timelessStatKeys.length; i++) {
+          const statKey = node.timelessStatKeys[i];
+          const value = node.timelessStatValues[i];
+
+          const statEntry = translations[statKey.toString()]?.[0];
+          if (statEntry && node.stats) {
+            const statLabel = formatStatTranslation(statKey, value, translations);
+            if (node.stats.includes(statLabel)) continue;
+          }
+
+          if (!statData[statKey]) {
+            statData[statKey] = { count: 0, total: 0 };
+          }
+          statData[statKey].count++;
+          statData[statKey].total += value;
         }
       }
     }
-
-    return statsCount;
+    return statData;
   }
 
-  function highlightNodesWithStat(stat: string) {
+  function highlightNodesWithStat(statKey: number) {
     canvas.highlightLayer?.destroyChildren();
-
     for (const node of $treeStore.allocated.values()) {
-      // todo: might need to adjust in case there are case where we add a stat that is already on the node ?
-      if (node?.timelessStats?.includes(stat) && !node.stats?.includes(stat)) {
-        const circle = new Konva.Circle({
-          x: node.x,
-          y: node.y,
-          radius: node.isNotable ? 70 : 50,
-          stroke: "yellow",
-          strokeWidth: 10,
-        });
-        canvas.highlightLayer?.add(circle);
+      if (node?.timelessStatKeys?.includes(statKey) && node?.timelessStatValues) {
+        const index = node.timelessStatKeys.indexOf(statKey);
+        const value = node.timelessStatValues[index];
+        const statLabel = formatStatTranslation(statKey, value, translations);
+        if (!node.stats?.includes(statLabel)) {
+          const circle = new Konva.Circle({
+            x: node.x,
+            y: node.y,
+            radius: node.isNotable ? 70 : 50,
+            stroke: "yellow",
+            strokeWidth: 10,
+          });
+          canvas.highlightLayer?.add(circle);
+        }
       }
     }
-
     canvas.highlightLayer?.batchDraw();
   }
 
@@ -89,14 +102,25 @@
   {#if $searchStore.seedSearched && Object.keys(timelessStats).length > 0}
     <div class="bg-slate-800 rounded-lg p-4">
       <h4 class="text-sm font-semibold text-white mb-3">Current Stats</h4>
-      <div class="space-y-2">
-        {#each Object.entries(timelessStats) as [stat, count] (stat)}
+      <div>
+        {#each Object.entries(timelessStats) as [statKeyStr, data] (statKeyStr)}
+          {@const statKey = parseInt(statKeyStr)}
+          {@const transEntry = translations[statKeyStr]?.[0]}
+          {@const divider = transEntry?.divider ?? 1}
+          {@const displayTotal = data.total / divider}
+          {@const translation = transEntry?.translation?.replace('{0}', '#') || statKey}
+
           <button
-            class="w-full px-3 py-2 text-left text-slate-300 hover:bg-slate-700 rounded cursor-pointer transition-all duration-200 text-sm"
-            onclick={() => highlightNodesWithStat(stat)}
+            class="w-full px-3 py-1 hover:bg-slate-700 rounded cursor-pointer transition-all duration-200 text-sm"
+            onclick={() => highlightNodesWithStat(statKey)}
           >
-            <span class="text-blue-400">({count})</span>
-            {stat}
+            <div class="flex justify-between text-slate-300">
+              <div>
+                <span class="text-blue-400">({data.count})</span>
+                {translation}
+              </div>
+              <span class="font-semibold">total: [{displayTotal}]</span>
+            </div>
           </button>
         {/each}
       </div>
