@@ -15,6 +15,7 @@ import {
   finalizeSearchStoreInitialization,
 } from "$lib/utils/sidebar/searchUtils";
 import { reconstructAllocatedNodes } from "$lib/utils/socketNodeProcessor";
+import { DEBUG } from "$lib/constants/debug";
 
 function validateStatsArray(data: unknown): Stat[] {
   if (!Array.isArray(data)) return [];
@@ -65,10 +66,12 @@ export async function parseUrlAndInitialize(
     return false;
   }
 
-  console.log(
-    "Initializing from URL parameters:",
-    Object.fromEntries(urlParams.entries()),
-  );
+  if (DEBUG) {
+    console.log(
+      "Initializing from URL parameters:",
+      Object.fromEntries(urlParams.entries()),
+    );
+  }
 
   // Check for required parameters
   const jewelTypeName = urlParams.get("jt");
@@ -92,7 +95,7 @@ export async function parseUrlAndInitialize(
   // Parse jewel type
   const jewelType = jewelTypes.find((jt) => jt.name === jewelTypeName) || null;
   if (!jewelType) {
-    console.log("Invalid jewel type:", jewelTypeName);
+    console.warn("Invalid jewel type:", jewelTypeName);
     return false;
   }
 
@@ -101,7 +104,7 @@ export async function parseUrlAndInitialize(
   const conqueror =
     jewelTypeConquerors.find((c) => c.label === conquerorLabel) || null;
   if (!conqueror) {
-    console.log("Invalid conqueror:", conquerorLabel);
+    console.warn("Invalid conqueror:", conquerorLabel);
     return false;
   }
 
@@ -122,7 +125,7 @@ export async function parseUrlAndInitialize(
   if (seedStr) {
     seed = parseInt(seedStr, 10) || null;
     if (seed === null || isNaN(seed)) {
-      console.log("Invalid seed:", seedStr);
+      console.warn("Invalid seed:", seedStr);
       return false;
     }
   }
@@ -162,12 +165,12 @@ export async function parseUrlAndInitialize(
   // Parse chosen socket
   const socketSkill = parseInt(socketSkillStr, 10);
   if (isNaN(socketSkill)) {
-    console.log("Invalid socket skill:", socketSkillStr);
+    console.warn("Invalid socket skill:", socketSkillStr);
     return false;
   }
   const chosenSocket = findNodeBySkill(socketSkill, treeData.nodes);
   if (!chosenSocket) {
-    console.log("Socket not found:", socketSkill);
+    console.warn("Socket not found:", socketSkill);
     return false;
   }
 

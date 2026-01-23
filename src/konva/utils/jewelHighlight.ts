@@ -109,26 +109,26 @@ export function changeRadius(chosenSocket: Node | null) {
     radiusImg.x(socketX);
     radiusImg.y(socketY);
     if (currentJewelType) {
-      const sprit = createSprite(
+      const sprite = createSprite(
         TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
         TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[currentJewelType].default,
         0,
         0,
       );
-      radiusImg.crop(sprit.crop());
+      radiusImg.crop(sprite.crop());
     }
     if (currentJewelType) {
       // use a store
       radiusImg2.visible(true);
       radiusImg2.x(socketX);
       radiusImg2.y(socketY);
-      const sprit2 = createSprite(
+      const sprite2 = createSprite(
         TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
         TREE_CONSTANTS.SOCKET.RADIUS_SPRITES[currentJewelType].inverse,
         0,
         0,
       );
-      radiusImg2.crop(sprit2.crop());
+      radiusImg2.crop(sprite2.crop());
 
       // Start animations only if they're not already running
       if (!radiusImg.getAttr("rotating")) {

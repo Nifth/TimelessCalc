@@ -1,6 +1,7 @@
 import type { Conqueror, JewelType } from "$lib/types";
 import { conquerors } from "$lib/constants/timeless";
 import { URLS } from "$lib/constants/urls";
+import { DEBUG } from "$lib/constants/debug";
 
 export const MAX_FILTERS = 150;
 
@@ -171,8 +172,10 @@ export function openTradeUrl(
   league: string,
 ): void {
   const query = buildTradeQuery(seeds, jewelType, conqueror, page);
-  console.log(query);
   const url = buildTradeUrl(query, platform, league);
-  console.log(url);
+  if (DEBUG) {
+    console.log(query);
+    console.log(url);
+  }
   window.open(url, "_blank");
 }

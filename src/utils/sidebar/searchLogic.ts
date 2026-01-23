@@ -52,7 +52,7 @@ function processNodeModifications(
     node: TreeNode,
     stats: { statId: number; value: number }[],
   ) => void,
-) {
+): void {
   for (const [key, nodeIds] of Object.entries(entry)) {
     const stats = parseKey(key);
     for (const nodeId of nodeIds) {

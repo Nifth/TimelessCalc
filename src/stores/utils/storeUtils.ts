@@ -6,7 +6,6 @@ import type {
   Stat,
   StatSearchMode,
 } from "$lib/types";
-import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import {
@@ -15,6 +14,8 @@ import {
 } from "$lib/konva/utils/jewelHighlight";
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
 import { canvas } from "$lib/konva/canvasContext";
+import { findNodeBySkill } from "$lib/utils/nodeUtils";
+import { DEBUG } from "$lib/constants/debug";
 
 export interface BaseEntry {
   id: string;
@@ -28,10 +29,6 @@ export interface BaseEntry {
   statSearchMode?: StatSearchMode;
 }
 
-/**
- * @deprecated Use storeFactory.createPersistedStore instead for new stores.
- * This function is kept for backward compatibility.
- */
 export function createLocalStorageManager<T>(key: string) {
   function load(): T[] {
     try {
@@ -144,10 +141,12 @@ export function createBaseEntry(): BaseEntry | null {
   const currentSearchStore = get(searchStore);
   const currentTreeStore = get(treeStore);
 
-  console.log(
-    "Creating entry - allocated nodes:",
-    currentTreeStore.allocated.size,
-  );
+  if (DEBUG) {
+    console.log(
+      "Creating entry - allocated nodes:",
+      currentTreeStore.allocated.size,
+    );
+  }
 
   // Only save if we have required data
   if (
@@ -172,11 +171,13 @@ export function createBaseEntry(): BaseEntry | null {
     statSearchMode: currentSearchStore.statSearchMode,
   };
 
-  console.log(
-    "Entry allocated skill IDs:",
-    allocatedSkillIds.length,
-    allocatedSkillIds,
-  );
+  if (DEBUG) {
+    console.log(
+      "Entry allocated skill IDs:",
+      allocatedSkillIds.length,
+      allocatedSkillIds,
+    );
+  }
 
   return entry;
 }
