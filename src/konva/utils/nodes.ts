@@ -3,7 +3,7 @@ import { canvas } from "$lib/konva/canvasContext";
 
 const highlightableNodes = new Map<string, Node>();
 
-export function getHighlighteableNodes() {
+export function getHighlightableNodes() {
   const data = canvas.treeData;
   if (highlightableNodes.size > 0) {
     return highlightableNodes;

@@ -41,6 +41,40 @@
     });
   }
 
+  function clampValue(value: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function handleWeightChange(stat: Stat, newValue: number) {
+    const clamped = clampValue(newValue, 0, 999);
+    searchStore.update((state) => {
+      const statToUpdate = state.selectedStats.find((s) => s.statKey === stat.statKey);
+      if (statToUpdate) {
+        statToUpdate.weight = clamped;
+      }
+      return state;
+    });
+  }
+
+  function handleMinWeightChange(stat: Stat, newValue: number) {
+    const clamped = clampValue(newValue, 0, 999);
+    searchStore.update((state) => {
+      const statToUpdate = state.selectedStats.find((s) => s.statKey === stat.statKey);
+      if (statToUpdate) {
+        statToUpdate.minWeight = clamped;
+      }
+      return state;
+    });
+  }
+
+  function handleMinTotalWeightChange(newValue: number) {
+    const clamped = clampValue(newValue, 0, 99999);
+    searchStore.update((state) => {
+      state.minTotalWeight = clamped;
+      return state;
+    });
+  }
+
   function selectStat(stat: Stat) {
     if (!$searchStore.selectedStats.some((s) => s.label === stat.label)) {
       searchStore.update((state) => {
@@ -162,7 +196,11 @@
         <span class="flex-1 text-sm text-slate-200 truncate">{stat.label}</span>
         <input
           type="number"
-          bind:value={stat.weight}
+          value={stat.weight}
+          oninput={(e) => {
+            const target = e.target as HTMLInputElement;
+            handleWeightChange(stat, parseFloat(target.value) || 0);
+          }}
           placeholder="Weight"
           min="0"
           step="0.1"
@@ -170,7 +208,11 @@
         />
         <input
           type="number"
-          bind:value={stat.minWeight}
+          value={stat.minWeight}
+          oninput={(e) => {
+            const target = e.target as HTMLInputElement;
+            handleMinWeightChange(stat, parseFloat(target.value) || 0);
+          }}
           placeholder={minLabel}
           min="0"
           step="0.1"
@@ -215,7 +257,11 @@
       <input
         id="minTotalWeight"
         type="number"
-        bind:value={$searchStore.minTotalWeight}
+        value={$searchStore.minTotalWeight}
+        oninput={(e) => {
+          const target = e.target as HTMLInputElement;
+          handleMinTotalWeightChange(parseFloat(target.value) || 0);
+        }}
         placeholder="0"
         min="0"
         step="0.1"

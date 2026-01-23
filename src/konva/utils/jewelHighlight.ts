@@ -5,7 +5,7 @@ import type { Node } from "$lib/types";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { TREE_CONSTANTS, type JewelCode } from "$lib/constants/tree";
-import { getHighlighteableNodes } from "./nodes";
+import { getHighlightableNodes } from "./nodes";
 import { canvas } from "$lib/konva/canvasContext";
 import { searchStore } from "$lib/stores/searchStore";
 import { resetFull } from "$lib/utils/search/resetStore";
@@ -289,7 +289,7 @@ function showInactive(node: Node) {
 
 export function updateAllocatedDisplay() {
   const allocatedNodes = get(treeStore).allocated;
-  const highlightableNodes = getHighlighteableNodes();
+  const highlightableNodes = getHighlightableNodes();
 
   for (const [_nodeId, node] of allocatedNodes) {
     showActive(node);

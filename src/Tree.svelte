@@ -32,7 +32,7 @@
   import { treeStore } from "$lib/stores/treeStore";
   import { searchStore, clearJewelLoadError } from "$lib/stores/searchStore";
   import { mouseStore } from "$lib/stores/mouseStore";
-  import { getHighlighteableNodes } from "$lib/konva/utils/nodes";
+  import { getHighlightableNodes } from "$lib/konva/utils/nodes";
   import { fetchLeagues } from "./providers/leagues";
   import { get } from "svelte/store";
   import Notification from "$lib/ui/notifications/Notification.svelte";
@@ -104,7 +104,7 @@
         currentLoadingStep = "Canvas initialized";
 
         perfMonitor.mark("background-draw-start");
-        getHighlighteableNodes();
+        getHighlightableNodes();
         drawBackground();
         perfMonitor.mark("background-draw-end");
         perfMonitor.measure(
@@ -257,9 +257,9 @@
   }
 </script>
 
-{#if isLoading}
-  <Preloader {loadingComplete} progress={loadingProgress} />
-{/if}
+ {#if isLoading}
+   <Preloader {loadingComplete} progress={loadingProgress} />
+ {/if}
 
 <DebugPanel isVisible={debugMode} />
 

@@ -1,47 +1,76 @@
-# Svelte + TS + Vite
+# TimelessCalc
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+Interactive Path of Exile Timeless Jewel Calculator - calculate and visualize optimal passive tree jewel configurations.
+
+## Features
+
+- **Passive Tree Visualization**: Interactive canvas rendering of the Path of Exile passive skill tree
+- **Timeless Jewel Configuration**: Support for all timeless jewel types (Glorious Vanity, Lethal Pride, Brutal Restraint, Militant Faith, Elegant Hubris)
+- **Search by Seed**: Visualize specific timeless jewel seed configurations
+- **Search by Stats**: Find optimal jewels based on desired stat modifiers
+- **Trade Integration**: Generate PoE trade links for found jewel seeds
+- **Search History**: Automatically saves your recent searches
+- **Favorites**: Save and organize your preferred configurations
+- **Share URLs**: Share configurations with others via URL
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (18 or higher)
+- npm or yarn
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Type Check
+
+```bash
+npm run check
+```
+
+## Project Structure
+
+```
+src/
+├── main.ts              # Application entry point
+├── Tree.svelte          # Main application component
+├── types.ts             # TypeScript type definitions
+├── konva/               # Canvas rendering logic
+│   ├── canvasContext.ts  # Canvas context management
+│   ├── layers/          # Konva layer implementations
+│   └── utils/           # Canvas utilities
+├── stores/              # Svelte stores
+├── ui/                  # UI components
+├── providers/           # Data providers
+├── constants/           # Application constants
+└── utils/               # Utility functions
+```
+
+## Documentation
+
+For detailed documentation, see [docs/index.md](docs/index.md)
 
 ## Recommended IDE Setup
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
 
-## Need an official Svelte framework?
+## License
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+MIT
 
-## Technical considerations
-
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from "svelte/store";
-export default writable(0);
-```

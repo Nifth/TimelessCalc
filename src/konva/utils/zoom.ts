@@ -2,6 +2,7 @@ import Konva from "konva";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { canvas } from "$lib/konva/canvasContext";
+import { DEBOUNCE_MS } from "$lib/constants/performance";
 
 function debounce<T extends (e: Konva.KonvaEventObject<WheelEvent>) => void>(
   func: T,
@@ -47,7 +48,7 @@ export function setupZoom() {
     stage.scale({ x: storeState.scale, y: storeState.scale });
     stage.position(newPos);
     stage.batchDraw();
-  }, 16); // ~60fps debounce
+  }, DEBOUNCE_MS); // ~60fps debounce
 
   stage.on("wheel", debouncedZoom);
 }

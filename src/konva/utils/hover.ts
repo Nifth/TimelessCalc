@@ -5,6 +5,7 @@ import { canvas } from "$lib/konva/canvasContext";
 import { get } from "svelte/store";
 import type { Node } from "$lib/types";
 import { getNodeWithFallback } from "$lib/utils/nodeUtils";
+import { THROTTLE_MS } from "$lib/constants/performance";
 
 function throttle<T extends (...args: never[]) => void>(
   func: T,
@@ -94,7 +95,7 @@ export function setupHover() {
         document.body.style.cursor = "default";
       }
     }
-  }, 16); // throttle to ~60fps
+  }, THROTTLE_MS); // throttle to ~60fps
 
   stage.on("mousemove", throttledHover);
 
