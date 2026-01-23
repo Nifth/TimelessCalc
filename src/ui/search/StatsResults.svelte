@@ -9,6 +9,10 @@
   } from "$lib/utils/sidebar/tradeQuery";
   import Konva from "konva";
   import TradeButton from "$lib/ui/common/TradeButton.svelte";
+  import ExportButton from "$lib/ui/common/ExportButton.svelte";
+  import { exportJewelToPobFormat } from "$lib/utils/export/jewelExporter";
+  import { copyToClipboard } from "$lib/utils/sharing/shareUtils";
+  import { showNotification } from "$lib/stores/notificationStore";
 
   import type { Translation } from "$lib/types";
 
@@ -85,6 +89,29 @@
       const statKeys = Object.keys(item.statCounts).map((k) => parseInt(k));
       highlightNodesWithStatKeys(statKeys);
     }, 50);
+  }
+
+  async function handleExportSeed(seed: number) {
+    try {
+      const pobFormat = await exportJewelToPobFormat(
+        $searchStore.jewelType!,
+        seed,
+        $searchStore.conqueror!,
+      );
+      const success = await copyToClipboard(pobFormat);
+
+      if (success) {
+        showNotification("export", `Seed ${seed} copied to clipboard!`);
+      } else {
+        throw new Error("Clipboard write failed");
+      }
+    } catch (error) {
+      console.error("Export failed:", error);
+      showNotification(
+        "error",
+        "Failed to copy. Please check browser permissions.",
+      );
+    }
   }
 </script>
 
@@ -241,15 +268,18 @@
                 <span class="font-semibold text-blue-300"
                   >Seed: {item.seed}</span
                 >
-                <TradeButton
-                  variant="secondary"
-                  onclick={(e) => {
-                    e.stopPropagation();
-                    openTradeForSeed(item.seed);
-                  }}
-                >
-                  Trade
-                </TradeButton>
+                <div class="flex gap-2">
+                  <ExportButton onclick={() => handleExportSeed(item.seed)} />
+                  <TradeButton
+                    variant="secondary"
+                    onclick={(e) => {
+                      e.stopPropagation();
+                      openTradeForSeed(item.seed);
+                    }}
+                  >
+                    Trade
+                  </TradeButton>
+                </div>
               </div>
               <div class="mt-2 space-y-1">
                 {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}

@@ -2,7 +2,7 @@ import Konva from "konva";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { canvas } from "$lib/konva/canvasContext";
-import { updateAllocatedDisplay } from "./jewelHighlight";
+import { updateAllocatedDisplay, clearHighlights } from "./jewelHighlight";
 import { findNodeBySkill } from "$lib/utils/nodeUtils";
 
 export function setupClick() {
@@ -20,10 +20,19 @@ export function setupClick() {
       const nodeId = String(node.skill);
       if (node.isJewelSocket) {
         if (treeState.chosenSocket === node) {
+          const socketSkill = treeState.chosenSocket.skill;
           treeStore.update((state) => {
             state.chosenSocket = null;
             return state;
           });
+          clearHighlights();
+          const socketNodeIds = canvas.treeData.socketNodes[socketSkill];
+          for (const nodeId of socketNodeIds) {
+            const node = canvas.treeData.nodes[nodeId];
+            node.timelessStats = undefined;
+            node.timelessStatKeys = undefined;
+            node.timelessStatValues = undefined;
+          }
         } else {
           treeStore.update((state) => {
             state.chosenSocket = node;

@@ -34,6 +34,7 @@
   let showSaveFavoriteModal = $state(false);
   let favoriteSuggestion = $state("");
   let favoriteNotificationName = $state("");
+  let showShareTooltip = $state(false);
 
   let canShare = $derived(
     !!$searchStore.jewelType &&
@@ -279,28 +280,46 @@
       </svg>
     </button>
 
-    <button
-      onclick={handleShare}
-      disabled={!canShare}
-      class="p-2 cursor-pointer rounded-lg transition-all duration-200 {canShare
-        ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
-        : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
-      aria-label="Share Configuration"
-    >
-      <svg
-        class="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+    <div class="relative inline-flex">
+      <button
+        onclick={handleShare}
+        disabled={!canShare}
+        class="p-2 cursor-pointer rounded-lg transition-all duration-200 {canShare
+          ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
+          : 'bg-slate-700 text-slate-400 cursor-not-allowed'}"
+        aria-label="Share Configuration"
+        onmouseenter={() => (showShareTooltip = true)}
+        onmouseleave={() => (showShareTooltip = false)}
+        onfocus={() => (showShareTooltip = true)}
+        onblur={() => (showShareTooltip = false)}
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-        />
-      </svg>
-    </button>
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+          />
+        </svg>
+      </button>
+
+      {#if showShareTooltip}
+        <div
+          class="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 bg-slate-800 text-white text-xs rounded whitespace-nowrap z-50 shadow-lg border border-slate-600 pointer-events-none"
+          role="tooltip"
+        >
+          Copy share link
+          <div
+            class="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 border-t border-l border-slate-600 rotate-45"
+          ></div>
+        </div>
+      {/if}
+    </div>
 
     {#if Object.keys($searchStore.statsResults).length > 0}
       <button
@@ -335,7 +354,7 @@
       nextPage();
       logNextPage();
     }}
-    ontargetposition={ontargetposition}
+    {ontargetposition}
   >
     {#snippet league()}
       <LeagueSelector />
