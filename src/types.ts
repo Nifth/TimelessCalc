@@ -43,11 +43,11 @@ export interface Node {
   isJewelSocket?: boolean;
   expansionJewel?: ExpansionJewel;
   stats?: string[];
-  group?: number;
-  orbit?: number;
-  orbitIndex?: number;
-  out?: string[];
-  in?: string[];
+  group: number;
+  orbit: number;
+  orbitIndex: number;
+  out: string[];
+  in: string[];
   reminderText?: string[];
   inactiveIcon?: string;
   conqueredName?: string | null;

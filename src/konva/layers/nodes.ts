@@ -3,6 +3,7 @@ import type { Node } from "$lib/types";
 import { createSprite } from "../utils/sprites";
 import { TREE_CONSTANTS } from "$lib/constants/tree";
 import { canvas } from "$lib/konva/canvasContext";
+import { NODE_DRAW_CHUNK_SIZE } from "$lib/constants/performance";
 
 export function drawNodesProgressive(
   onProgress?: (progress: number, step: string) => void,
@@ -14,7 +15,7 @@ export function drawNodesProgressive(
       jewelSocketImages = canvas.jewelImages;
     const nodeEntries = Object.entries(data.nodes);
     const totalNodes = nodeEntries.length;
-    const chunkSize = 150; // ~20 chunks for 3000 nodes
+    const chunkSize = NODE_DRAW_CHUNK_SIZE;
     let currentIndex = 0;
 
     function processChunk() {

@@ -164,7 +164,7 @@ function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
 }
 
 // Cleanup function to stop all jewel animations
-function stopAllJewelAnimations() {
+export function stopAllJewelAnimations() {
   jewelAnimations.forEach((anim) => {
     anim.stop();
   });
@@ -321,7 +321,6 @@ export function changeKeystone(chosenSocket: Node | null) {
       keystoneNode!.node.timelessStatValues = [];
     } else {
       keystoneNode!.node.conqueredName = null;
-      keystoneNode!.node.timelessStats = undefined;
       keystoneNode!.node.timelessStatKeys = undefined;
       keystoneNode!.node.timelessStatValues = undefined;
     }

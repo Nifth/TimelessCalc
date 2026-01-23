@@ -20,6 +20,7 @@ import {
   setSearchComplete,
 } from "./searchUtils";
 import { validateSocket } from "$lib/utils/socketValidation";
+import { SEARCH_DEBOUNCE_MS } from "$lib/constants/performance";
 
 const COLORBLIND_FRIENDLY_COLORS = [
   "#C71585", // Magenta
@@ -246,7 +247,7 @@ export async function handleSearch(
       setSearchNotFound();
       return;
     }
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
     const jewelData = await loadJewelData(jewelType, String(chosenSocket));
     if (!jewelData) {
       setSearchLoading(false);

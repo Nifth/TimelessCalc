@@ -1,4 +1,4 @@
-import { writable, type Writable } from "svelte/store";
+import { writable, get, type Writable } from "svelte/store";
 import type { BaseEntry } from "$lib/stores/utils/storeUtils";
 import {
   createLocalStorageManager,
@@ -40,9 +40,7 @@ export function createPersistedStore<
     },
 
     getEntry(id: string): T | undefined {
-      let entries: T[] = [];
-      store.subscribe((value) => (entries = value))();
-      return entries.find((entry) => entry.id === id);
+      return get(store).find((entry) => entry.id === id);
     },
 
     updateEntry(id: string, updater: (entry: T) => T): void {
@@ -60,9 +58,7 @@ export function createPersistedStore<
     },
 
     exists(id: string): boolean {
-      let entries: T[] = [];
-      store.subscribe((value) => (entries = value))();
-      return entries.some((entry) => entry.id === id);
+      return get(store).some((entry) => entry.id === id);
     },
   };
 

@@ -38,7 +38,17 @@ export function createLocalStorageManager<T>(key: string) {
       const stored = localStorage.getItem(key);
       return stored ? JSON.parse(stored) : [];
     } catch (e) {
-      console.warn(`Failed to load ${key} from localStorage:`, e);
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (
+        error.name === "QuotaExceededError" ||
+        error.message.includes("quota")
+      ) {
+        console.warn(
+          `Storage quota exceeded while loading ${key}, returning empty array`,
+        );
+      } else {
+        console.warn(`Failed to load ${key} from localStorage:`, e);
+      }
       return [];
     }
   }
@@ -47,7 +57,17 @@ export function createLocalStorageManager<T>(key: string) {
     try {
       localStorage.setItem(key, JSON.stringify(data));
     } catch (e) {
-      console.warn(`Failed to save ${key} to localStorage:`, e);
+      const error = e instanceof Error ? e : new Error(String(e));
+      if (
+        error.name === "QuotaExceededError" ||
+        error.message.includes("quota")
+      ) {
+        console.warn(
+          `Storage quota exceeded while saving ${key}, data not persisted`,
+        );
+      } else {
+        console.warn(`Failed to save ${key} to localStorage:`, e);
+      }
     }
   }
 
