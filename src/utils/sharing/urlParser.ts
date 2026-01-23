@@ -16,6 +16,33 @@ import {
 } from "$lib/utils/sidebar/searchUtils";
 import { reconstructAllocatedNodes } from "$lib/utils/socketNodeProcessor";
 
+function validateStatsArray(data: unknown): Stat[] {
+  if (!Array.isArray(data)) return [];
+  const maxArrayLength = 50;
+  if (data.length > maxArrayLength) return [];
+
+  return data.filter((item): item is Stat => {
+    if (typeof item !== "object" || item === null) return false;
+    const stat = item as Partial<Stat>;
+    return (
+      typeof stat.statKey === "number" &&
+      stat.statKey >= 0 &&
+      typeof stat.label === "string" &&
+      stat.label.length <= 200 &&
+      typeof stat.weight === "number" &&
+      stat.weight >= 0
+    );
+  });
+}
+
+function validateNumberArray(data: unknown, maxLength = 100): number[] {
+  if (!Array.isArray(data)) return [];
+  if (data.length > maxLength) return [];
+  return data.filter(
+    (item): item is number => typeof item === "number" && !isNaN(item),
+  );
+}
+
 /**
  * Parses URL parameters and initializes the application state
  */
@@ -82,7 +109,8 @@ export async function parseUrlAndInitialize(
   let selectedStats: Stat[] = [];
   if (selectedStatsJson) {
     try {
-      selectedStats = JSON.parse(selectedStatsJson);
+      const parsed = JSON.parse(selectedStatsJson);
+      selectedStats = validateStatsArray(parsed);
     } catch (e) {
       console.error("Failed to parse selected stats from URL:", e);
       return false;
@@ -147,17 +175,21 @@ export async function parseUrlAndInitialize(
   let unallocatedSkills: number[] | null = null;
 
   try {
-    allocatedSkills = urlParams.get("a")
-      ? JSON.parse(urlParams.get("a")!)
-      : null;
+    const allocatedRaw = urlParams.get("a");
+    if (allocatedRaw) {
+      const parsed = JSON.parse(allocatedRaw);
+      allocatedSkills = validateNumberArray(parsed);
+    }
   } catch (e) {
     console.error("Failed to parse allocated nodes from URL:", e);
   }
 
   try {
-    unallocatedSkills = urlParams.get("un")
-      ? JSON.parse(urlParams.get("un")!)
-      : null;
+    const unallocatedRaw = urlParams.get("un");
+    if (unallocatedRaw) {
+      const parsed = JSON.parse(unallocatedRaw);
+      unallocatedSkills = validateNumberArray(parsed);
+    }
   } catch (e) {
     console.error("Failed to parse unallocated nodes from URL:", e);
   }

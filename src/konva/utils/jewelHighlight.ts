@@ -13,7 +13,7 @@ import { resetFull } from "$lib/utils/search/resetStore";
 // Global animation registry for proper cleanup
 const jewelAnimations: Map<string, Konva.Animation> = new Map();
 
-// Cache pour éviter de recréer les animations inutilement
+// Cache to avoid recreating animations unnecessarily
 let lastSocketSkill: number | null = null;
 let lastJewelType: string | null = null;
 
