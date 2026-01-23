@@ -4,6 +4,8 @@
   import { loadJewel, cache } from "$lib/providers/jewels";
   import { setJewelLoadError } from "$lib/stores/searchStore";
   import { searchStore } from "$lib/stores/searchStore";
+  import { treeStore } from "$lib/stores/treeStore";
+  import { get } from "svelte/store";
   import RadioButton from "$lib/ui/common/RadioButton.svelte";
 
   interface Props {
@@ -18,19 +20,24 @@
   $effect(() => {
     if (jewelType !== null) {
       const jewelId = jewelType.name;
+      const chosenSocket = get(treeStore).chosenSocket?.skill;
 
-      // Skip if already loaded (check cache directly)
-      if (cache.has(jewelId)) {
+      if (!chosenSocket) {
         return;
       }
 
-      // Skip if already loading this jewel
-      if (loadingFor === jewelId) {
+      const cacheKey = `${jewelId}-${chosenSocket}`;
+
+      if (cache.has(cacheKey)) {
         return;
       }
 
-      loadingFor = jewelId;
-      loadJewel(jewelId)
+      if (loadingFor === cacheKey) {
+        return;
+      }
+
+      loadingFor = cacheKey;
+      loadJewel(jewelId, String(chosenSocket))
         .catch((err: unknown) => {
           const message = err instanceof Error ? err.message : String(err);
           if (jewelType) {
@@ -38,7 +45,7 @@
           }
         })
         .finally(() => {
-          if (loadingFor === jewelId) {
+          if (loadingFor === cacheKey) {
             loadingFor = null;
           }
         });

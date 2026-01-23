@@ -22,21 +22,27 @@ export interface SearchStoreInitParams {
 
 export async function loadJewelData(
   jewelType: JewelType,
+  socketSkill?: string,
 ): Promise<Record<number, JewelEntry> | null> {
-  const cached = getJewelData(jewelType.name);
+  if (!socketSkill) {
+    console.warn("loadJewelData called without socketSkill");
+    return null;
+  }
+
+  const cached = getJewelData(jewelType.name, socketSkill);
   if (cached) {
     return cached;
   }
 
   try {
-    await loadJewel(jewelType.name);
+    await loadJewel(jewelType.name, socketSkill);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     setJewelLoadError(jewelType, message);
     return null;
   }
 
-  const jewelData = getJewelData(jewelType.name);
+  const jewelData = getJewelData(jewelType.name, socketSkill);
   return jewelData ?? null;
 }
 

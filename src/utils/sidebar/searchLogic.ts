@@ -160,7 +160,11 @@ export async function applySeed(
   jewelType: JewelType,
   translation: Record<string, Translation[]>,
 ) {
-  const jewelData = await loadJewelData(jewelType);
+  const chosenSocket = get(treeStore).chosenSocket?.skill;
+  if (!chosenSocket) {
+    return;
+  }
+  const jewelData = await loadJewelData(jewelType, String(chosenSocket));
   if (!jewelData) {
     return;
   }
@@ -176,10 +180,6 @@ export async function applySeed(
   }
 
   treeStore.update((state) => {
-    const chosenSocket = state.chosenSocket?.skill;
-    if (!chosenSocket) {
-      return state;
-    }
     const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
     applySeedModifications(entry, socketNodeIds, translation, jewelType);
     return state;
@@ -201,7 +201,12 @@ export async function handleSearch(
       setSearchNotFound();
       return;
     }
-    const jewelData = await loadJewelData(jewelType);
+    const chosenSocket = get(treeStore).chosenSocket?.skill;
+    if (!chosenSocket) {
+      setSearchNotFound();
+      return;
+    }
+    const jewelData = await loadJewelData(jewelType, String(chosenSocket));
     if (!jewelData) {
       setSearchLoading(false);
       return;
@@ -220,11 +225,6 @@ export async function handleSearch(
     }
 
     treeStore.update((state) => {
-      const chosenSocket = state.chosenSocket?.skill;
-      if (!chosenSocket) {
-        setSearchNotFound();
-        return state;
-      }
       const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
 
       applySeedModifications(entry, socketNodeIds, translation, jewelType);
@@ -237,8 +237,13 @@ export async function handleSearch(
       setSearchNotFound();
       return;
     }
+    const chosenSocket = get(treeStore).chosenSocket?.skill;
+    if (!chosenSocket) {
+      setSearchNotFound();
+      return;
+    }
     await new Promise((resolve) => setTimeout(resolve, 200));
-    const jewelData = await loadJewelData(jewelType);
+    const jewelData = await loadJewelData(jewelType, String(chosenSocket));
     if (!jewelData) {
       setSearchLoading(false);
       return;
