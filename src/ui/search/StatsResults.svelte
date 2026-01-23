@@ -1,8 +1,7 @@
 <script lang="ts">
-
-   import { searchStore } from "$lib/stores/searchStore";
-   import { treeStore } from "$lib/stores/treeStore";
-   import { URLS } from "$lib/constants/urls";
+  import { searchStore } from "$lib/stores/searchStore";
+  import { treeStore } from "$lib/stores/treeStore";
+  import { URLS } from "$lib/constants/urls";
   import { canvas } from "$lib/konva/canvasContext";
   import {
     getSeedsPerPage,
@@ -11,29 +10,29 @@
   import Konva from "konva";
   import TradeButton from "$lib/ui/common/TradeButton.svelte";
 
-   import type { Translation } from "$lib/types";
+  import type { Translation } from "$lib/types";
 
- interface Props {
-     expandedGroups: Record<number, boolean>;
-     groupPages: Record<string, number>;
-     hasGroupTraded: Record<string, boolean>;
-     translation: Record<string, Translation[]>;
-     onapplyseed: (seed: number) => void;
-     ongrouptrade: (total: string) => void;
-     ongroupnext: (total: string) => void;
-     onexpand: (total: number) => void;
-   }
+  interface Props {
+    expandedGroups: Record<number, boolean>;
+    groupPages: Record<string, number>;
+    hasGroupTraded: Record<string, boolean>;
+    translation: Record<string, Translation[]>;
+    onapplyseed: (seed: number) => void;
+    ongrouptrade: (total: string) => void;
+    ongroupnext: (total: string) => void;
+    onexpand: (total: number) => void;
+  }
 
-   let {
-     expandedGroups = $bindable({}),
-     groupPages = $bindable({}),
-     hasGroupTraded = $bindable({}),
-     translation,
-     onapplyseed,
-     ongrouptrade,
-     ongroupnext,
-     onexpand,
-   }: Props = $props();
+  let {
+    expandedGroups = $bindable({}),
+    groupPages = $bindable({}),
+    hasGroupTraded = $bindable({}),
+    translation,
+    onapplyseed,
+    ongrouptrade,
+    ongroupnext,
+    onexpand,
+  }: Props = $props();
 
   function openTradeForSeed(seed: number) {
     const platform =
@@ -97,14 +96,14 @@
         class="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white text-left font-medium transition-all duration-200 flex items-center justify-between"
         role="button"
         tabindex="0"
-        aria-expanded={expandedGroups[parseFloat(total)] ? 'true' : 'false'}
+        aria-expanded={expandedGroups[parseFloat(total)] ? "true" : "false"}
         aria-label="Expand group"
         onclick={() => {
           const t = parseFloat(total);
           onexpand(t);
         }}
         onkeydown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             const t = parseFloat(total);
             onexpand(t);
@@ -112,68 +111,69 @@
         }}
       >
         {#if $searchStore.statsResults[total].length > 0}
-          <button
-            type="button"
-            class="flex-1 text-left w-full h-full"
-          >
-            Total weight {total} ({$searchStore.statsResults[total].length} {#if $searchStore.statsResults[total].length === 1}seed{:else}seeds{/if})
+          <button type="button" class="flex-1 text-left w-full h-full">
+            Total weight {total} ({$searchStore.statsResults[total].length}
+            {#if $searchStore.statsResults[total].length === 1}seed{:else}seeds{/if})
           </button>
           {@const groupSeeds = $searchStore.statsResults[total].map(
             (g) => g.seed,
           )}
-           {@const seedsPerPage = getSeedsPerPage($searchStore.jewelType!, $searchStore.conqueror)}
+          {@const seedsPerPage = getSeedsPerPage(
+            $searchStore.jewelType!,
+            $searchStore.conqueror,
+          )}
           {@const currentGroupPage = groupPages[total] || 0}
           {@const maxGroupPage = Math.floor(
             (groupSeeds.length - 1) / seedsPerPage,
           )}
-           <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <TradeButton
-               onclick={(e) => {
-                 e.stopPropagation();
-                 ongrouptrade(total);
-               }}
-             >
-               Trade
-             </TradeButton>
-             {#if hasGroupTraded[total] && currentGroupPage < maxGroupPage}
-               <TradeButton
-                 onclick={(e) => {
-                   e.stopPropagation();
-                   ongroupnext(total);
-                 }}
-               >
-                 Next
-               </TradeButton>
-             {/if}
-             <button
-               type="button"
-               onclick={(e) => {
-                 e.stopPropagation();
-                 const t = parseFloat(total);
-                 onexpand(t);
-               }}
-               aria-label="Expand group"
-               class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
-             >
-               <svg
-                 class="w-4 h-4 transition-transform duration-200 {expandedGroups[
-                   parseFloat(total)
-                 ]
-                   ? 'rotate-180'
-                   : ''}"
-                 fill="none"
-                 stroke="currentColor"
-                 viewBox="0 0 24 24"
-               >
-                 <path
-                   stroke-linecap="round"
-                   stroke-linejoin="round"
-                   stroke-width="2"
-                   d="M19 9l-7 7-7-7"
-                 />
-               </svg>
-             </button>
-           </div>
+              onclick={(e) => {
+                e.stopPropagation();
+                ongrouptrade(total);
+              }}
+            >
+              Trade
+            </TradeButton>
+            {#if hasGroupTraded[total] && currentGroupPage < maxGroupPage}
+              <TradeButton
+                onclick={(e) => {
+                  e.stopPropagation();
+                  ongroupnext(total);
+                }}
+              >
+                Next
+              </TradeButton>
+            {/if}
+            <button
+              type="button"
+              onclick={(e) => {
+                e.stopPropagation();
+                const t = parseFloat(total);
+                onexpand(t);
+              }}
+              aria-label="Expand group"
+              class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
+            >
+              <svg
+                class="w-4 h-4 transition-transform duration-200 {expandedGroups[
+                  parseFloat(total)
+                ]
+                  ? 'rotate-180'
+                  : ''}"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </div>
         {:else}
           <button
             type="button"
@@ -182,44 +182,44 @@
           >
             0 matches (0 results)
           </button>
-           <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <TradeButton
-               onclick={(e) => {
-                 e.stopPropagation();
-                 ongrouptrade(total);
-               }}
-             >
-               Trade
-             </TradeButton>
-             <button
-               type="button"
-               onclick={(e) => {
-                 e.stopPropagation();
-                 const t = parseFloat(total);
-                 onexpand(t);
-               }}
-               aria-label="Expand group"
-               class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
-             >
-               <svg
-                 class="w-4 h-4 transition-transform duration-200 {expandedGroups[
-                   parseFloat(total)
-                 ]
-                   ? 'rotate-180'
-                   : ''}"
-                 fill="none"
-                 stroke="currentColor"
-                 viewBox="0 0 24 24"
-               >
-                 <path
-                   stroke-linecap="round"
-                   stroke-linejoin="round"
-                   stroke-width="2"
-                   d="M19 9l-7 7-7-7"
-                 />
-               </svg>
-             </button>
-           </div>
+              onclick={(e) => {
+                e.stopPropagation();
+                ongrouptrade(total);
+              }}
+            >
+              Trade
+            </TradeButton>
+            <button
+              type="button"
+              onclick={(e) => {
+                e.stopPropagation();
+                const t = parseFloat(total);
+                onexpand(t);
+              }}
+              aria-label="Expand group"
+              class="p-0.5 rounded hover:bg-slate-600 transition-all duration-200"
+            >
+              <svg
+                class="w-4 h-4 transition-transform duration-200 {expandedGroups[
+                  parseFloat(total)
+                ]
+                  ? 'rotate-180'
+                  : ''}"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </div>
         {/if}
       </div>
       {#if expandedGroups[parseFloat(total)]}
@@ -237,43 +237,46 @@
                 }
               }}
             >
-               <div class="flex items-center justify-between">
-                 <span class="font-semibold text-blue-300"
-                   >Seed: {item.seed}</span
-                 >
-                 <TradeButton
-                   variant="secondary"
-                   onclick={(e) => {
-                     e.stopPropagation();
-                     openTradeForSeed(item.seed);
-                   }}
-                 >
-                   Trade
-                 </TradeButton>
-               </div>
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-blue-300"
+                  >Seed: {item.seed}</span
+                >
+                <TradeButton
+                  variant="secondary"
+                  onclick={(e) => {
+                    e.stopPropagation();
+                    openTradeForSeed(item.seed);
+                  }}
+                >
+                  Trade
+                </TradeButton>
+              </div>
               <div class="mt-2 space-y-1">
-                 {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
-                   {@const stat = $searchStore.selectedStats.find(
-                     (s) => s.statKey === parseInt(statKey),
-                   )}
-                   {@const total = item.statTotals?.[parseInt(statKey)] ?? 0}
-                   {@const transEntry = translation[statKey]?.[0]}
-                   {@const divider = transEntry?.divider ?? 1}
-                   {@const displayTotal = total / divider}
-                    {#if stat}
-                      <div class="text-sm text-slate-300 flex justify-between" style="color: {$searchStore.statKeyColors[parseInt(statKey)] || '#10B981'}">
-                        <div>
-                          <span>({count})</span>
-                          {stat.label}
-                        </div>
-                        <span
-                          class="font-semibold"
-                        >
-                          total: [{displayTotal}]
-                        </span>
+                {#each Object.entries(item.statCounts) as [statKey, count] (statKey)}
+                  {@const stat = $searchStore.selectedStats.find(
+                    (s) => s.statKey === parseInt(statKey),
+                  )}
+                  {@const total = item.statTotals?.[parseInt(statKey)] ?? 0}
+                  {@const transEntry = translation[statKey]?.[0]}
+                  {@const divider = transEntry?.divider ?? 1}
+                  {@const displayTotal = total / divider}
+                  {#if stat}
+                    <div
+                      class="text-sm text-slate-300 flex justify-between"
+                      style="color: {$searchStore.statKeyColors[
+                        parseInt(statKey)
+                      ] || '#10B981'}"
+                    >
+                      <div>
+                        <span>({count})</span>
+                        {stat.label}
                       </div>
-                    {/if}
-                 {/each}
+                      <span class="font-semibold">
+                        total: [{displayTotal}]
+                      </span>
+                    </div>
+                  {/if}
+                {/each}
               </div>
             </div>
           {/each}

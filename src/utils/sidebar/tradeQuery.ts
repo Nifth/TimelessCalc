@@ -152,7 +152,11 @@ export function getPageRangeFromOrdered(
   };
 }
 
-export function buildTradeUrl(query: object, platform: string, league: string): string {
+export function buildTradeUrl(
+  query: object,
+  platform: string,
+  league: string,
+): string {
   const platformPath = platform === "PC" ? "" : platform.toLowerCase() + "/";
   const encodedLeague = encodeURIComponent(league);
   return `${URLS.POE_TRADE_SEARCH}${platformPath}${encodedLeague}?q=${encodeURIComponent(JSON.stringify(query))}`;

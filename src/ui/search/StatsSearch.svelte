@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { JewelType, Stat, Translation, StatSearchMode } from "$lib/types";
+  import type { JewelType, Stat, StatSearchMode } from "$lib/types";
   import { searchStore } from "$lib/stores/searchStore";
   import { filterStats } from "$lib/utils/sidebar/sidebarUtils";
   import { getStatsOptions } from "$lib/utils/sidebar/options";
@@ -17,7 +17,11 @@
   let inputElement: HTMLInputElement;
 
   let filteredStats = $derived.by(() => {
-    const computedOptions = getStatsOptions(jewelType, jewelStats, translations);
+    const computedOptions = getStatsOptions(
+      jewelType,
+      jewelStats,
+      translations,
+    );
     return filterStats(
       searchValue,
       computedOptions,
@@ -122,7 +126,8 @@
       <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
         <button
           onclick={() => handleStatSearchModeChange("occurrences")}
-          class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 {$searchStore.statSearchMode === 'occurrences'
+          class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 {$searchStore.statSearchMode ===
+          'occurrences'
             ? 'bg-blue-600 text-white shadow-md'
             : 'text-slate-300 hover:text-white hover:bg-slate-700'}"
         >
@@ -130,7 +135,8 @@
         </button>
         <button
           onclick={() => handleStatSearchModeChange("totalValue")}
-          class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 {$searchStore.statSearchMode === 'totalValue'
+          class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 {$searchStore.statSearchMode ===
+          'totalValue'
             ? 'bg-blue-600 text-white shadow-md'
             : 'text-slate-300 hover:text-white hover:bg-slate-700'}"
         >
@@ -142,7 +148,9 @@
 
   <div class="space-y-2">
     {#if $searchStore.selectedStats.length > 0}
-      <div class="flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-slate-300 text-xs">
+      <div
+        class="flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-slate-300 text-xs"
+      >
         <span class="flex-1">Stat</span>
         <span class="w-16 text-center">Weight</span>
         <span class="w-16 text-center">{minLabel}</span>

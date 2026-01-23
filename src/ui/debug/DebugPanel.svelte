@@ -1,9 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { perfMonitor } from "$lib/utils/performanceMonitor";
+  import type { PerformanceMetrics } from "$lib/types";
 
   export let isVisible: boolean = true;
-  export let metrics: any = {};
+  export let metrics: PerformanceMetrics = {
+    timing: {},
+    memory: { initial: 0, current: 0, total: 0, limit: 0, delta: 0 },
+    network: { totalTransferred: 0, totalDuration: 0, requestCount: 0 },
+  };
   export let fps: number = 0;
 
   let expanded: boolean = false;
@@ -74,7 +79,7 @@
           <p>Delta: {formatBytes(metrics.memory?.delta || 0)}</p>
           <p>Limit: {formatBytes(metrics.memory?.limit || 0)}</p>
           <div class="memory-graph">
-            {#each memoryHistory as mem, i}
+            {#each memoryHistory as mem, _i (_i)}
               <div
                 class="memory-bar"
                 style="height: {(mem / (metrics.memory?.limit || 1)) * 100}%"

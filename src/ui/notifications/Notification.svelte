@@ -1,12 +1,16 @@
 <script lang="ts">
   import { fly } from "svelte/transition";
   import { cubicOut } from "svelte/easing";
-  import { hideNotification, notificationStore } from "$lib/stores/notificationStore";
+  import { SvelteMap } from "svelte/reactivity";
+  import {
+    hideNotification,
+    notificationStore,
+  } from "$lib/stores/notificationStore";
 
-  let timeouts = new Map<number, number>();
+  let timeouts = new SvelteMap<number, number>();
 
   $effect(() => {
-    const currentIds = new Set($notificationStore.map(n => n.id));
+    const currentIds = new Set($notificationStore.map((n) => n.id));
 
     // Clear timeouts for removed notifications
     for (const [id, timeoutId] of timeouts) {
@@ -35,7 +39,7 @@
     transition:fly={{ x: 320, duration: 500, easing: cubicOut }}
   >
     <div class="flex items-center gap-2">
-      {#if notification.type === 'share'}
+      {#if notification.type === "share"}
         <svg
           class="w-5 h-5 text-green-400"
           fill="none"
@@ -49,7 +53,7 @@
             d="M5 13l4 4L19 7"
           />
         </svg>
-      {:else if notification.type === 'favorite'}
+      {:else if notification.type === "favorite"}
         <svg
           class="w-5 h-5 text-yellow-400"
           fill="none"
@@ -64,14 +68,20 @@
           />
         </svg>
       {/if}
-      <span class="text-slate-200 text-sm font-medium">{notification.text}</span>
+      <span class="text-slate-200 text-sm font-medium">{notification.text}</span
+      >
     </div>
     <button
       onclick={() => hideNotification(notification.id)}
       class="text-slate-400 hover:text-white p-1 transition-colors duration-200 ml-auto"
       aria-label="Dismiss"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"

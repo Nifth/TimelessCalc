@@ -1,13 +1,15 @@
 <script lang="ts">
   import type { SearchHistoryEntry, Node, TreeData } from "$lib/types";
   import { historyStore, historyActions } from "$lib/stores/historyStore";
-  import { searchStore } from "$lib/stores/searchStore";
-  import { treeStore } from "$lib/stores/treeStore";
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
   import { translations } from "$lib/providers/translations";
   import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
-  import { formatDate, formatStats, findNearbyKeystone } from "$lib/utils/formatters";
+  import {
+    formatDate,
+    formatStats,
+    findNearbyKeystone,
+  } from "$lib/utils/formatters";
 
   let {
     onswitchtotab,

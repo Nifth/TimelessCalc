@@ -15,16 +15,16 @@ The `PerformanceMonitor` class provides low-level performance tracking capabilit
 ### Usage
 
 ```typescript
-import { perfMonitor } from '$lib/utils/performanceMonitor';
+import { perfMonitor } from "$lib/utils/performanceMonitor";
 
 // Mark performance points
-perfMonitor.mark('operation-start');
+perfMonitor.mark("operation-start");
 
 // Execute some code
 doSomethingExpensive();
 
 // Measure the duration
-perfMonitor.measure('operation-duration', 'operation-start', 'operation-end');
+perfMonitor.measure("operation-duration", "operation-start", "operation-end");
 
 // Get all metrics
 const metrics = perfMonitor.getAllMetrics();
@@ -36,24 +36,30 @@ const jsonData = perfMonitor.exportMetrics();
 ### API Methods
 
 #### `mark(name: string): void`
+
 Creates a performance mark at the current time.
 
 #### `measure(name: string, startMark: string, endMark: string): PerformanceMeasure | null`
+
 Measures the duration between two marks. Returns null if measurement fails.
 
 #### `getAllMetrics(): PerformanceMetrics`
+
 Returns a comprehensive object containing all tracked metrics.
 
 #### `exportMetrics(): string`
+
 Exports all metrics as a formatted JSON string.
 
 #### Memory Methods
+
 - `getMemoryUsage(): number` - Current JS heap usage
 - `getMemoryDelta(): number` - Memory usage change since initialization
 - `getTotalMemory(): number` - Total allocated heap
 - `getMemoryLimit(): number` - Heap size limit
 
 #### Network Methods
+
 - `getNetworkStats(): object` - Returns total transferred bytes, duration, and request count
 - `getResourceTiming(urlPattern?: string): PerformanceResourceTiming[]` - Get resource timing data
 
@@ -65,11 +71,11 @@ The DebugPanel provides a real-time visualization of performance metrics in the 
 
 ```typescript
 interface DebugPanelProps {
-  isVisible?: boolean;        // Show/hide the panel
+  isVisible?: boolean; // Show/hide the panel
   metrics?: PerformanceMetrics; // Metrics data
-  progress?: number;          // Loading progress (0-100)
-  currentStep?: string;       // Current loading step
-  fps?: number;              // Current FPS
+  progress?: number; // Loading progress (0-100)
+  currentStep?: string; // Current loading step
+  fps?: number; // Current FPS
 }
 ```
 
@@ -86,15 +92,15 @@ interface DebugPanelProps {
 
 ```svelte
 <script lang="ts">
-  import DebugPanel from '$lib/ui/DebugPanel.svelte';
-  import { perfMonitor } from '$lib/utils/performanceMonitor';
+  import DebugPanel from "$lib/ui/DebugPanel.svelte";
+  import { perfMonitor } from "$lib/utils/performanceMonitor";
 </script>
 
 <DebugPanel
   isVisible={true}
   metrics={perfMonitor.getAllMetrics()}
   progress={loadingProgress}
-  currentStep={currentStep}
+  {currentStep}
   fps={currentFps}
 />
 ```
@@ -105,18 +111,18 @@ TypeScript interface defining the structure of performance data.
 
 ```typescript
 interface PerformanceMetrics {
-  timing: Record<string, PerformanceMeasure>;  // Performance measures
+  timing: Record<string, PerformanceMeasure>; // Performance measures
   memory: {
-    initial: number;    // Memory at startup
-    current: number;    // Current memory usage
-    total: number;      // Total allocated heap
-    limit: number;      // Heap size limit
-    delta: number;      // Memory change since startup
+    initial: number; // Memory at startup
+    current: number; // Current memory usage
+    total: number; // Total allocated heap
+    limit: number; // Heap size limit
+    delta: number; // Memory change since startup
   };
   network: {
-    totalTransferred: number;  // Bytes downloaded
-    totalDuration: number;     // Total network time
-    requestCount: number;      // Number of requests
+    totalTransferred: number; // Bytes downloaded
+    totalDuration: number; // Total network time
+    requestCount: number; // Number of requests
   };
 }
 ```
@@ -128,13 +134,17 @@ interface PerformanceMetrics {
 The main application component integrates performance monitoring:
 
 ```typescript
-import { perfMonitor } from '$lib/utils/performanceMonitor';
+import { perfMonitor } from "$lib/utils/performanceMonitor";
 
 // Mark initialization phases
-perfMonitor.mark('init-start');
-perfMonitor.mark('sprite-preload-start');
+perfMonitor.mark("init-start");
+perfMonitor.mark("sprite-preload-start");
 // ... rendering code ...
-perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-end');
+perfMonitor.measure(
+  "sprite-preload",
+  "sprite-preload-start",
+  "sprite-preload-end",
+);
 ```
 
 ## Best Practices
@@ -142,19 +152,20 @@ perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-en
 ### When to Use Marks and Measures
 
 1. **Mark** key application phases:
+
    ```typescript
-   perfMonitor.mark('app-init-start');
+   perfMonitor.mark("app-init-start");
    // Initialization code
-   perfMonitor.mark('app-init-end');
-   perfMonitor.measure('app-init', 'app-init-start', 'app-init-end');
+   perfMonitor.mark("app-init-end");
+   perfMonitor.measure("app-init", "app-init-start", "app-init-end");
    ```
 
 2. **Measure** performance-critical operations:
    ```typescript
-   perfMonitor.mark('search-start');
+   perfMonitor.mark("search-start");
    const results = performSearch(query);
-   perfMonitor.mark('search-end');
-   perfMonitor.measure('search-operation', 'search-start', 'search-end');
+   perfMonitor.mark("search-end");
+   perfMonitor.measure("search-operation", "search-start", "search-end");
    ```
 
 ### Memory Monitoring
@@ -203,4 +214,4 @@ perfMonitor.measure('sprite-preload', 'sprite-preload-start', 'sprite-preload-en
 - Implement performance regression detection
 - Add user experience metrics (FID, CLS, LCP)
 - Create performance dashboards for CI/CD integration</content>
-<parameter name="filePath">C:\Users\alexa\Documents\Projects\TimelessCalc\docs\performance-monitoring.md
+  <parameter name="filePath">C:\Users\alexa\Documents\Projects\TimelessCalc\docs\performance-monitoring.md

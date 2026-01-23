@@ -5,6 +5,7 @@
 ### Core Data Structures
 
 #### Group
+
 - **Purpose**: Represents a group of passive skill nodes in the tree
 - **Fields**:
   - `x`, `y`: Position coordinates
@@ -14,6 +15,7 @@
   - `nodes`: Array of node IDs in this group
 
 #### Node
+
 - **Purpose**: Individual passive skill node
 - **Fields**:
   - `skill`: Skill ID
@@ -34,6 +36,7 @@
   - `x`, `y`: Position coordinates
 
 #### TreeData
+
 - **Purpose**: Complete passive skill tree data
 - **Fields**:
   - `tree`: Tree identifier
@@ -48,6 +51,7 @@
 ### Timeless Jewel Structures
 
 #### JewelType
+
 - **Purpose**: Timeless jewel type definition
 - **Fields**:
   - `label`: Display label
@@ -56,6 +60,7 @@
   - `min`, `max`: Seed range
 
 #### Conqueror
+
 - **Purpose**: Timeless conqueror definition
 - **Fields**:
   - `label`: Display label
@@ -64,6 +69,7 @@
   - `type`: Conqueror type
 
 #### Stat
+
 - **Purpose**: Jewel stat definition for search
 - **Fields**:
   - `statKey`: Stat key ID
@@ -72,6 +78,7 @@
   - `minWeight`: Minimum weight
 
 #### JewelEntry
+
 - **Purpose**: Individual jewel data entry
 - **Fields**:
   - `r`: Record of stat replacements
@@ -80,6 +87,7 @@
 ### Application State
 
 #### SearchStore
+
 - **Purpose**: Main application search state
 - **Fields**:
   - `jewelType`: Selected jewel type
@@ -99,6 +107,7 @@
 ### Supporting Types
 
 #### League
+
 - **Purpose**: PoE league information
 - **Fields**:
   - `name`: League name
@@ -106,10 +115,12 @@
   - `end_date?`: End date
 
 #### Platform
+
 - **Type**: Union type
 - **Values**: "PC" | "Xbox" | "Playstation"
 
 #### Translation
+
 - **Purpose**: Stat translation mapping
 - **Fields**:
   - `from`: Source value
@@ -117,12 +128,14 @@
   - `translation`: Translated text
 
 #### Coords
+
 - **Purpose**: Coordinate definition
 - **Fields**:
   - `x`, `y`: Position
   - `w`, `h`: Dimensions
 
 #### Sprite
+
 - **Purpose**: Sprite sheet definition
 - **Fields**:
   - `filename`: Sprite file
@@ -130,6 +143,7 @@
   - `coords`: Coordinate mappings
 
 #### ExpansionJewel
+
 - **Purpose**: Expansion jewel data
 - **Fields**:
   - `size`: Size

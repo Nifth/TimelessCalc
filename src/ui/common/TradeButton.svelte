@@ -8,11 +8,7 @@
     children: Snippet;
   }
 
-  let {
-    variant = "primary",
-    onclick,
-    children,
-  }: Props = $props();
+  let { variant = "primary", onclick, children }: Props = $props();
 
   const classes =
     variant === "primary"

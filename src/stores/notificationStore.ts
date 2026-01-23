@@ -1,6 +1,6 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
-export type NotificationType = 'share' | 'favorite';
+export type NotificationType = "share" | "favorite";
 
 export interface Notification {
   id: number;
@@ -11,16 +11,20 @@ export interface Notification {
 
 export const notificationStore = writable<Notification[]>([]);
 
-export function showNotification(type: NotificationType, text: string, timeout = 2000) {
+export function showNotification(
+  type: NotificationType,
+  text: string,
+  timeout = 2000,
+) {
   const id = Date.now();
-  notificationStore.update(notifications => [
+  notificationStore.update((notifications) => [
     ...notifications,
-    { id, type, text, timeout }
+    { id, type, text, timeout },
   ]);
 }
 
 export function hideNotification(id: number) {
-  notificationStore.update(notifications =>
-    notifications.filter(n => n.id !== id)
+  notificationStore.update((notifications) =>
+    notifications.filter((n) => n.id !== id),
   );
 }

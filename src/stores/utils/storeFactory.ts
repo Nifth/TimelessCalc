@@ -1,10 +1,15 @@
 import { writable, type Writable } from "svelte/store";
 import type { BaseEntry } from "$lib/stores/utils/storeUtils";
-import { createLocalStorageManager, hasCurrentConfiguration as checkCurrentConfiguration, loadConfiguration } from "$lib/stores/utils/storeUtils";
+import {
+  createLocalStorageManager,
+  hasCurrentConfiguration as checkCurrentConfiguration,
+} from "$lib/stores/utils/storeUtils";
 
 export interface StoreFactoryConfig<T extends BaseEntry, TActions> {
   storageKey: string;
-  initialActions: Omit<TActions, keyof BaseStoreActions<T>>;
+  initialActions: (
+    baseActions: BaseStoreActions<T>,
+  ) => Omit<TActions, keyof BaseStoreActions<T>>;
 }
 
 export interface BaseStoreActions<T extends BaseEntry> {
@@ -16,7 +21,10 @@ export interface BaseStoreActions<T extends BaseEntry> {
   exists(id: string): boolean;
 }
 
-export function createPersistedStore<T extends BaseEntry, TActions extends BaseStoreActions<T>>(
+export function createPersistedStore<
+  T extends BaseEntry,
+  TActions extends BaseStoreActions<T>,
+>(
   config: StoreFactoryConfig<T, TActions>,
 ): { store: Writable<T[]>; actions: TActions } {
   const { storageKey, initialActions } = config;
@@ -26,15 +34,14 @@ export function createPersistedStore<T extends BaseEntry, TActions extends BaseS
 
   store.subscribe(save);
 
-  const actions = {
-    ...initialActions,
+  const baseActions: BaseStoreActions<T> = {
     createEntry(entry: T): void {
       store.update((entries) => [entry, ...entries]);
     },
 
     getEntry(id: string): T | undefined {
       let entries: T[] = [];
-      store.subscribe((value) => entries = value)();
+      store.subscribe((value) => (entries = value))();
       return entries.find((entry) => entry.id === id);
     },
 
@@ -54,9 +61,16 @@ export function createPersistedStore<T extends BaseEntry, TActions extends BaseS
 
     exists(id: string): boolean {
       let entries: T[] = [];
-      store.subscribe((value) => entries = value)();
+      store.subscribe((value) => (entries = value))();
       return entries.some((entry) => entry.id === id);
     },
+  };
+
+  const extraActions = initialActions(baseActions);
+
+  const actions = {
+    ...extraActions,
+    ...baseActions,
   } as TActions;
 
   return { store, actions };

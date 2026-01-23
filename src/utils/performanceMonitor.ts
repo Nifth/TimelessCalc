@@ -38,17 +38,17 @@ export class PerformanceMonitor {
   }
 
   getMemoryUsage(): number {
-    // @ts-expect-error - Chrome-specific
+    // @ts-expect-error Chrome-specific performance.memory API
     return performance.memory?.usedJSHeapSize || 0;
   }
 
   getTotalMemory(): number {
-    // @ts-expect-error
+    // @ts-expect-error Chrome-specific performance.memory API
     return performance.memory?.totalJSHeapSize || 0;
   }
 
   getMemoryLimit(): number {
-    // @ts-expect-error
+    // @ts-expect-error Chrome-specific performance.memory API
     return performance.memory?.jsHeapSizeLimit || 0;
   }
 

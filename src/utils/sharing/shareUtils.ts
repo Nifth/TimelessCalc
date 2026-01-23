@@ -1,6 +1,16 @@
-import type { SearchStore, TreeStore, Stat, JewelType, Conqueror, Node } from "$lib/types";
+import type {
+  SearchStore,
+  TreeStore,
+  Stat,
+  JewelType,
+  Conqueror,
+  Node,
+} from "$lib/types";
 import { canvas } from "$lib/konva/canvasContext";
-import { getSocketNodeIds, prepareNodeListForEncoding } from "$lib/utils/socketNodeProcessor";
+import {
+  getSocketNodeIds,
+  prepareNodeListForEncoding,
+} from "$lib/utils/socketNodeProcessor";
 
 /**
  * Copies text to clipboard using modern API
@@ -31,7 +41,7 @@ export function generateShareUrl(
     searchState.statSearchMode,
     searchState.league,
     searchState.platform,
-  )
+  );
 }
 
 export function generateShareUrlFromData(
@@ -69,11 +79,11 @@ export function generateShareUrlFromData(
     params.set("sm", statSearchMode);
   }
   if (chosenSocket) {
-    params.set('so', chosenSocket.skill.toString());
+    params.set("so", chosenSocket.skill.toString());
     if (allocatedSkills.length > 0) {
       const { list, param } = prepareNodeListForEncoding(
         getSocketNodeIds(chosenSocket.skill.toString(), treeData),
-        allocatedSkills
+        allocatedSkills,
       );
       params.set(param, JSON.stringify(list));
     }

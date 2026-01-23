@@ -1,6 +1,12 @@
 import type { FavoriteEntry } from "$lib/types";
-import { createPersistedStore, type BaseStoreActions } from "$lib/stores/utils/storeFactory";
-import { loadConfiguration, createBaseEntry } from "$lib/stores/utils/storeUtils";
+import {
+  createPersistedStore,
+  type BaseStoreActions,
+} from "$lib/stores/utils/storeFactory";
+import {
+  loadConfiguration,
+  createBaseEntry,
+} from "$lib/stores/utils/storeUtils";
 
 const FAVORITES_KEY = "timelessCalc_favorites";
 
@@ -11,34 +17,38 @@ interface FavoritesExtraActions {
   deleteFavorite(id: string): void;
 }
 
-export const { store: favoritesStore, actions: favoritesActions } = createPersistedStore<
-  FavoriteEntry,
-  BaseStoreActions<FavoriteEntry> & FavoritesExtraActions
->({
-  storageKey: FAVORITES_KEY,
-  initialActions: {
-    saveFavorite(name: string): void {
-      const baseEntry = createBaseEntry();
-      if (!baseEntry) return;
+export const { store: favoritesStore, actions: favoritesActions } =
+  createPersistedStore<
+    FavoriteEntry,
+    BaseStoreActions<FavoriteEntry> & FavoritesExtraActions
+  >({
+    storageKey: FAVORITES_KEY,
+    initialActions: (baseActions) => ({
+      saveFavorite(name: string): void {
+        const baseEntry = createBaseEntry();
+        if (!baseEntry) return;
 
-      const entry: FavoriteEntry = {
-        ...baseEntry,
-        name,
-      };
+        const entry: FavoriteEntry = {
+          ...baseEntry,
+          name,
+        };
 
-      (this as any).createEntry(entry);
-    },
+        baseActions.createEntry(entry);
+      },
 
-    loadFavorite(entry: FavoriteEntry): void {
-      loadConfiguration(entry);
-    },
+      loadFavorite(entry: FavoriteEntry): void {
+        loadConfiguration(entry);
+      },
 
-    updateName(id: string, newName: string): void {
-      (this as any).updateEntry(id, (entry: FavoriteEntry) => ({ ...entry, name: newName }));
-    },
+      updateName(id: string, newName: string): void {
+        baseActions.updateEntry(id, (entry: FavoriteEntry) => ({
+          ...entry,
+          name: newName,
+        }));
+      },
 
-    deleteFavorite(id: string): void {
-      (this as any).deleteEntry(id);
-    },
-  },
-});
+      deleteFavorite(id: string): void {
+        baseActions.deleteEntry(id);
+      },
+    }),
+  });

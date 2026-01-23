@@ -7,7 +7,7 @@
 
   let leagues: League[] = [];
   let loading = $state(true);
-  let dropdownOptions: { value: string; display: string; }[] = $state([]);
+  let dropdownOptions: { value: string; display: string }[] = $state([]);
   onMount(() => {
     const cached = getCachedLeagues();
     if (cached) {
@@ -38,6 +38,6 @@
   options={dropdownOptions}
   selectedValue={$searchStore.league}
   onSelect={selectLeague}
-  loading={loading}
+  {loading}
   loadingText="Loading leagues..."
 />

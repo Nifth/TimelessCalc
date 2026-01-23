@@ -11,7 +11,8 @@ export function getHighlighteableNodes() {
   for (const [_, nodeIds] of Object.entries(data.socketNodes)) {
     for (const element of nodeIds) {
       const node = data.nodes[element];
-      if (node.isJewelSocket || node.isMastery || node.classStartIndex) continue;
+      if (node.isJewelSocket || node.isMastery || node.classStartIndex)
+        continue;
       highlightableNodes.set(element, node);
     }
   }

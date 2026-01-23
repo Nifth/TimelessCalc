@@ -16,7 +16,7 @@
     onnext,
     ontargetposition,
   }: Props = $props();
-  
+
   const jewelType = get(searchStore).jewelType;
   const conqueror = get(searchStore).conqueror;
 

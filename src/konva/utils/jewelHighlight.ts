@@ -21,7 +21,7 @@ export function updateJewelSockets() {
   const chosenSocket = get(treeStore).chosenSocket;
 
   resetFull();
-  
+
   updateSocketVisualSelection();
 
   changeRadius(chosenSocket);
@@ -37,7 +37,7 @@ export function updateSocketVisualSelection() {
   const chosenSocket = get(treeStore).chosenSocket;
   const nodes = data.nodes;
   let needsRedraw = false;
-  
+
   jewelImages.forEach((img, skill) => {
     const node = Object.values(nodes).find((n: Node) => n.skill === skill);
     if (!node?.isJewelSocket) return;
@@ -61,7 +61,7 @@ export function updateSocketVisualSelection() {
       } else {
         canvas.nodesHighlight.get(skill)?.opacity(1);
       }
-      
+
       const sprite = createSprite(
         TREE_CONSTANTS.SPRITES.FRAME,
         type,
@@ -86,18 +86,20 @@ export function updateSocketVisualSelection() {
 export function changeRadius(chosenSocket: Node | null) {
   const jewelRadiusImages = canvas.jewelRadiusImages;
   const radiusImages = jewelRadiusImages.get("default"); // use a store
-  const currentJewelType = get(searchStore).jewelType?.name as JewelCode | undefined;
-  
+  const currentJewelType = get(searchStore).jewelType?.name as
+    | JewelCode
+    | undefined;
+
   // Check if we need to cleanup animations (socket or jewelType changed)
   const socketChanged = chosenSocket?.skill !== lastSocketSkill;
   const jewelTypeChanged = currentJewelType !== lastJewelType;
-  
+
   if (socketChanged || jewelTypeChanged) {
     stopAllJewelAnimations();
     lastSocketSkill = chosenSocket?.skill || null;
     lastJewelType = currentJewelType || null;
   }
-  
+
   if (chosenSocket && radiusImages) {
     const socketX = chosenSocket.x || 0;
     const socketY = chosenSocket.y || 0;
@@ -127,7 +129,7 @@ export function changeRadius(chosenSocket: Node | null) {
         0,
       );
       radiusImg2.crop(sprit2.crop());
-      
+
       // Start animations only if they're not already running
       if (!radiusImg.getAttr("rotating")) {
         startJewelRotation(radiusImg, true);
@@ -147,8 +149,8 @@ export function changeRadius(chosenSocket: Node | null) {
 function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
   if (image.getAttr("rotating")) return;
 
-  const animKey = `${reverse ? 'reverse' : 'forward'}_${image.id()}`;
-  
+  const animKey = `${reverse ? "reverse" : "forward"}_${image.id()}`;
+
   image.setAttr("rotating", true);
 
   const anim = new Konva.Animation((frame) => {
@@ -163,11 +165,11 @@ function startJewelRotation(image: Konva.Image, reverse: boolean = false) {
 
 // Cleanup function to stop all jewel animations
 function stopAllJewelAnimations() {
-  jewelAnimations.forEach(anim => {
+  jewelAnimations.forEach((anim) => {
     anim.stop();
   });
   jewelAnimations.clear();
-  
+
   // Reset rotating attributes on all radius images
   const radiusImages = canvas.jewelRadiusImages.get("default");
   if (radiusImages) {
@@ -195,10 +197,12 @@ function setAllocatedNodes(socket: Node | null) {
   data.socketNodes[socket.skill].forEach((nodeId) => {
     allocatedNodes.set(nodeId, data.nodes[nodeId]);
   });
-  
+
   // Only update if allocated nodes actually changed
-  if (currentAllocated.size !== allocatedNodes.size || 
-      !Array.from(allocatedNodes.keys()).every(key => currentAllocated.has(key))) {
+  if (
+    currentAllocated.size !== allocatedNodes.size ||
+    !Array.from(allocatedNodes.keys()).every((key) => currentAllocated.has(key))
+  ) {
     treeStore.update((state) => {
       state.allocated = allocatedNodes;
       return state;
@@ -208,7 +212,10 @@ function setAllocatedNodes(socket: Node | null) {
   }
 }
 
-function getSpriteKeys(node: Node, isActive: boolean): {
+function getSpriteKeys(
+  node: Node,
+  isActive: boolean,
+): {
   iconKey: string;
   frameKey: string;
 } {
@@ -246,7 +253,8 @@ function updateNodeSprites(node: Node, isActive: boolean): void {
 
   const { icon, frame } = canvas.nodes.get(node.skill)!;
   const { iconKey, frameKey } = getSpriteKeys(node, isActive);
-  const iconSource = node.icon ||
+  const iconSource =
+    node.icon ||
     (isActive ? undefined : node.inactiveIcon) ||
     TREE_CONSTANTS.SPRITES.DEFAULT_ICON;
 
@@ -262,7 +270,7 @@ function updateNodeSprites(node: Node, isActive: boolean): void {
     TREE_CONSTANTS.SPRITES.FRAME,
     frameKey,
     frame.x(),
-    frame.y()
+    frame.y(),
   );
   frame.crop(frameSprite.crop());
   frame.offsetX(frameSprite.offsetX());

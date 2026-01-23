@@ -14,7 +14,7 @@ export function getSelectedSocket(): Node | null {
 
 export function withSocket<T>(
   callback: (socket: Node) => T,
-  onNoSocket?: () => void
+  onNoSocket?: () => void,
 ): T | undefined {
   const socket = getSelectedSocket();
   if (!socket) {
@@ -25,7 +25,8 @@ export function withSocket<T>(
 }
 
 export function showSocketWarning(message?: string): void {
-  const warning = message ||
+  const warning =
+    message ||
     "No jewel socket selected. Please select a socket on the passive tree.";
   alert(warning);
 }

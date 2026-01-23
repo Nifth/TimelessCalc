@@ -1,6 +1,6 @@
 <script lang="ts">
-   import type { JewelType } from "$lib/types";
-   import { URLS } from "$lib/constants/urls";
+  import type { JewelType } from "$lib/types";
+  import { URLS } from "$lib/constants/urls";
 
   interface Props {
     jewel: JewelType;
@@ -11,7 +11,7 @@
   let { jewel, errorMessage, onclose }: Props = $props();
 
   // Todo: move to constants file
-   const issueUrl = URLS.GITHUB_ISSUES;
+  const issueUrl = URLS.GITHUB_ISSUES;
 
   function copyError() {
     const text = `Jewel: ${jewel.name}\nError: ${errorMessage}`;

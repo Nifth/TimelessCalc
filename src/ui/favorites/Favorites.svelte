@@ -4,12 +4,10 @@
     generateShareUrlFromData,
     copyToClipboard,
   } from "$lib/utils/sharing/shareUtils";
-  import { searchStore } from "$lib/stores/searchStore";
-  import { treeStore } from "$lib/stores/treeStore";
   import { canvas } from "$lib/konva/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
   import { showNotification } from "$lib/stores/notificationStore";
-  import type { FavoriteEntry, Stat } from "$lib/types";
+  import type { FavoriteEntry } from "$lib/types";
   import { translations } from "$lib/providers/translations";
   import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
   import { formatDate, formatStats } from "$lib/utils/formatters";
@@ -22,7 +20,7 @@
   let pendingLoadEntry: FavoriteEntry | null = $state(null);
   let editingId: string | null = $state(null);
   let editValue = $state("");
-   let editInput: HTMLInputElement | null = $state(null);
+  let editInput: HTMLInputElement | null = $state(null);
 
   function handleLoadEntry(entry: FavoriteEntry) {
     if (favoritesActions.hasCurrentConfiguration()) {
@@ -52,7 +50,6 @@
       pendingLoadEntry = null;
     }
   }
-
 
   function startEdit(id: string, currentName: string) {
     editingId = id;
@@ -90,13 +87,13 @@
       entry.minTotalWeight,
       entry.statSearchMode || null,
       null,
-      null
+      null,
     );
     const success = await copyToClipboard(shareUrl);
     if (success) {
-      showNotification('share', 'Link copied to clipboard!');
+      showNotification("share", "Link copied to clipboard!");
     }
-   }
+  }
 
   $effect(() => {
     if (editingId && editInput) {
@@ -236,4 +233,3 @@
     }}
   />
 {/if}
-

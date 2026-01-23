@@ -45,16 +45,17 @@
   let previousSkill: number | null = null;
 
   let parsedFromUrl = false;
-  let isLoading = true;
-  let loadingComplete = false;
-  let loadingProgress = 0;
+  let isLoading = $state(true);
+  let loadingComplete = $state(false);
+  let loadingProgress = $state(0);
   let currentLoadingStep = "Initializing...";
   let debugMode = false;
 
   onMount(() => {
     let cleanup: () => void = () => {};
     (async () => {
-      perfMonitor.mark("init-start");
+      try {
+        perfMonitor.mark("init-start");
 
       perfMonitor.mark("stage-setup-start");
       canvas.stage = new Konva.Stage({
@@ -105,7 +106,7 @@
       currentLoadingStep = "Canvas initialized";
 
       perfMonitor.mark("background-draw-start");
-      getHighlighteableNodes(); // initialize the highlighteable nodes cache
+      getHighlighteableNodes();
       drawBackground();
       perfMonitor.mark("background-draw-end");
       perfMonitor.measure(
@@ -193,7 +194,6 @@
         translations,
       );
 
-
       const handleResize = () => {
         if (canvas.stage) {
           canvas.stage.width(window.innerWidth);
@@ -217,26 +217,39 @@
         window.removeEventListener("keydown", handleKeydown);
         canvas.stage?.destroy();
       };
+      } catch (e) {
+        console.error("Error during initialization:", e);
+        if (e instanceof Error) {
+          console.error("Stack:", e.stack);
+        }
+        loadingComplete = true;
+        isLoading = false;
+      }
     })();
 
     return () => cleanup();
   });
 
-  $: currentSkill = $treeStore.chosenSocket?.skill ?? null;
-  $: if (canvas.mainLayer && currentSkill !== previousSkill) {
-    if (!get(searchStore).automated && !parsedFromUrl) {
-      updateJewelSockets();
-      parsedFromUrl = false;
-    }
-    previousSkill = currentSkill;
-  }
+  const currentSkill = $derived($treeStore.chosenSocket?.skill ?? null);
 
-  $: if (loadingComplete) {
-    // Allow progress bar to complete its animation before hiding preloader
-    setTimeout(() => {
-      isLoading = false;
-    }, 50);
-  }
+  $effect(() => {
+    if (canvas.mainLayer && currentSkill !== previousSkill) {
+      if (!get(searchStore).automated && !parsedFromUrl) {
+        updateJewelSockets();
+        parsedFromUrl = false;
+      }
+      previousSkill = currentSkill;
+    }
+  });
+
+  $effect(() => {
+    if (loadingComplete) {
+      const timeoutId = setTimeout(() => {
+        isLoading = false;
+      }, 50);
+      return () => clearTimeout(timeoutId);
+    }
+  });
 
   function handleErrorClose() {
     // Reset jewelType selection so user can try another jewel

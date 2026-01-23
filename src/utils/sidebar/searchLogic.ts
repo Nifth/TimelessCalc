@@ -134,8 +134,12 @@ function applySeedModifications(
         node.timelessStats = [];
         node.timelessStatKeys = [];
         node.timelessStatValues = [];
-        if (baseStat !== 'void') {
-          const isTravelStat = ["Strength", "Dexterity", "Intelligence"].includes(node.name);
+        if (baseStat !== "void") {
+          const isTravelStat = [
+            "Strength",
+            "Dexterity",
+            "Intelligence",
+          ].includes(node.name);
           if (isTravelStat) {
             if (!travelReplace) {
               node.stats?.forEach((stat) => {
@@ -323,8 +327,7 @@ export async function handleSearch(
             : total >= stat.minWeight;
         if (meetsMin) {
           // Weight is based on mode: occurrences or total value
-          const weightValue =
-            statSearchMode === "occurrences" ? count : total;
+          const weightValue = statSearchMode === "occurrences" ? count : total;
           totalWeight += weightValue * stat.weight;
         }
       }

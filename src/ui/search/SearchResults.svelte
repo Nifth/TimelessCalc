@@ -4,10 +4,7 @@
   import { treeStore } from "$lib/stores/treeStore";
   import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
   import { applySeed } from "$lib/utils/sidebar/searchLogic";
-  import {
-    getSeedsPerPage,
-    openTradeUrl,
-  } from "$lib/utils/sidebar/tradeQuery";
+  import { getSeedsPerPage, openTradeUrl } from "$lib/utils/sidebar/tradeQuery";
   import {
     generateShareUrl,
     copyToClipboard,
@@ -21,18 +18,22 @@
   import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
   import { favoritesActions } from "$lib/stores/favoritesStore";
   import { showNotification } from "$lib/stores/notificationStore";
-    import { canvas } from "$lib/konva/canvasContext";
+  import { canvas } from "$lib/konva/canvasContext";
 
-   let { ontargetposition }: { ontargetposition?: (pos: { top: number; left: number } | null) => void } = $props();
+  let {
+    ontargetposition,
+  }: {
+    ontargetposition?: (pos: { top: number; left: number } | null) => void;
+  } = $props();
 
-   let expandedGroups: Record<number, boolean> = $state({});
-   let groupPages: Record<string, number> = $state({});
-   let hasGroupTraded: Record<string, boolean> = $state({});
-   let _hasTraded = $state(false);
+  let expandedGroups: Record<number, boolean> = $state({});
+  let groupPages: Record<string, number> = $state({});
+  let hasGroupTraded: Record<string, boolean> = $state({});
+  let _hasTraded = $state(false);
 
-   let showSaveFavoriteModal = $state(false);
-   let favoriteSuggestion = $state("");
-   let favoriteNotificationName = $state("");
+  let showSaveFavoriteModal = $state(false);
+  let favoriteSuggestion = $state("");
+  let favoriteNotificationName = $state("");
 
   let canShare = $derived(
     !!$searchStore.jewelType &&
@@ -175,11 +176,7 @@
   }
 
   async function applySeedFromResults(seed: number) {
-    await applySeed(
-      seed,
-      $searchStore.jewelType!,
-      translations,
-    );
+    await applySeed(seed, $searchStore.jewelType!, translations);
     searchStore.update((s) => {
       s.searched = true;
       s.seed = seed;
@@ -192,21 +189,16 @@
   }
 
   async function handleShare() {
-    const shareUrl = generateShareUrl(
-      $searchStore,
-      $treeStore,
-    );
-      const success = await copyToClipboard(shareUrl);
-      if (success) {
-        showNotification('share', 'Link copied to clipboard!');
-      }
-   }
+    const shareUrl = generateShareUrl($searchStore, $treeStore);
+    const success = await copyToClipboard(shareUrl);
+    if (success) {
+      showNotification("share", "Link copied to clipboard!");
+    }
+  }
 
-   function findNearbyKeystone(socket: Node): string {
+  function findNearbyKeystone(socket: Node): string {
     const treeNodes = canvas.treeData.nodes;
-    const socketNodes = canvas.treeData.socketNodes[
-      socket.skill.toString()
-    ];
+    const socketNodes = canvas.treeData.socketNodes[socket.skill.toString()];
 
     if (!socketNodes) {
       return socket.name;
@@ -254,11 +246,15 @@
 
   function handleSaveFavorite(name: string) {
     const finalName = name.trim() === "" ? favoriteSuggestion : name;
-     favoritesActions.saveFavorite(finalName);
-     showSaveFavoriteModal = false;
-     favoriteNotificationName = finalName;
-      showNotification('favorite', `Saved as '${favoriteNotificationName}'`, 3000);
-   }
+    favoritesActions.saveFavorite(finalName);
+    showSaveFavoriteModal = false;
+    favoriteNotificationName = finalName;
+    showNotification(
+      "favorite",
+      `Saved as '${favoriteNotificationName}'`,
+      3000,
+    );
+  }
 </script>
 
 <div class="flex items-center justify-between gap-3 mb-4">
@@ -332,39 +328,36 @@
     {/if}
   </div>
 
-   <TradeControls
-     hasTraded={_hasTraded}
-     ontrade={handleTrade}
-     onnext={() => {
-       nextPage();
-       logNextPage();
-     }}
-     {ontargetposition}
-   >
+  <TradeControls
+    hasTraded={_hasTraded}
+    ontrade={handleTrade}
+    onnext={() => {
+      nextPage();
+      logNextPage();
+    }}
+    {ontargetposition}
+  >
     <LeagueSelector slot="league" />
     <PlatformSelector slot="platform" />
   </TradeControls>
 </div>
 
- {#if Object.keys($searchStore.statsResults).length > 0}
-   <StatsResults
-     translation={translations}
-     bind:expandedGroups
-     bind:groupPages
-     bind:hasGroupTraded
-     onapplyseed={applySeedFromResults}
-     ongrouptrade={handleGroupTrade}
-     ongroupnext={handleGroupNext}
-     onexpand={expandGroup}
-   />
+{#if Object.keys($searchStore.statsResults).length > 0}
+  <StatsResults
+    translation={translations}
+    bind:expandedGroups
+    bind:groupPages
+    bind:hasGroupTraded
+    onapplyseed={applySeedFromResults}
+    ongrouptrade={handleGroupTrade}
+    ongroupnext={handleGroupNext}
+    onexpand={expandGroup}
+  />
 {:else}
   <div class="bg-slate-800 rounded-lg p-8 text-center">
     <p class="text-slate-400 italic">No results to display.</p>
   </div>
 {/if}
-
-
-
 
 {#if showSaveFavoriteModal}
   <SaveFavoriteModal
@@ -373,4 +366,3 @@
     onCancel={() => (showSaveFavoriteModal = false)}
   />
 {/if}
-

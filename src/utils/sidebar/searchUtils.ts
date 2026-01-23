@@ -1,6 +1,12 @@
 import { loadJewel, getJewelData } from "$lib/providers/jewels";
 import { searchStore, setJewelLoadError } from "$lib/stores/searchStore";
-import type { JewelType, JewelEntry, Stat, Conqueror, Platform } from "$lib/types";
+import type {
+  JewelType,
+  JewelEntry,
+  Stat,
+  Conqueror,
+  Platform,
+} from "$lib/types";
 import { resetFull } from "$lib/utils/search/resetStore";
 
 export interface JewelLoadResult {

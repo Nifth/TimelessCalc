@@ -43,7 +43,10 @@
     }
   }
 
-  function getDisplayValue(option: { value: string; display?: string }): string {
+  function getDisplayValue(option: {
+    value: string;
+    display?: string;
+  }): string {
     return option.display || option.value;
   }
 
@@ -53,9 +56,13 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if loading}
-  <div class="w-full py-2.5 px-4 rounded-lg bg-slate-700 border border-slate-600 text-slate-400 font-medium flex items-center justify-between">
+  <div
+    class="w-full py-2.5 px-4 rounded-lg bg-slate-700 border border-slate-600 text-slate-400 font-medium flex items-center justify-between"
+  >
     <span>{loadingText}</span>
-    <div class="w-4 h-4 border-2 border-slate-500 border-t-blue-400 rounded-full animate-spin"></div>
+    <div
+      class="w-4 h-4 border-2 border-slate-500 border-t-blue-400 rounded-full animate-spin"
+    ></div>
   </div>
 {:else}
   <div class="relative {dropdownClass}">
@@ -77,7 +84,9 @@
         aria-haspopup="listbox"
         class="w-full py-2.5 px-4 rounded-lg bg-slate-700 border border-slate-600 text-white text-left font-medium cursor-pointer transition-all duration-200 flex items-center justify-between hover:bg-slate-600 hover:border-slate-500"
       >
-        <span class="{truncate ? 'truncate' : ''} text-nowrap">{selectedValue}</span>
+        <span class="{truncate ? 'truncate' : ''} text-nowrap"
+          >{selectedValue}</span
+        >
         <svg
           class="w-4 h-4 transition-transform duration-200 {isOpen
             ? 'rotate-180'
@@ -110,7 +119,8 @@
               option.value
                 ? 'bg-blue-600 text-white'
                 : 'text-slate-200 hover:bg-slate-700'}"
-              onmousedown={(e) => handleSelectWithPreventDefault(option.value, e)}
+              onmousedown={(e) =>
+                handleSelectWithPreventDefault(option.value, e)}
             >
               {getDisplayValue(option)}
             </button>

@@ -56,7 +56,10 @@
     // Reset statSearchMode to 'occurrences' whenever jewelType changes
     if (jewelType !== null) {
       const currentJewelTypeName = jewelType.name;
-      if (previousJewelTypeName !== null && currentJewelTypeName !== previousJewelTypeName) {
+      if (
+        previousJewelTypeName !== null &&
+        currentJewelTypeName !== previousJewelTypeName
+      ) {
         searchStore.update((s) => ({ ...s, statSearchMode: "occurrences" }));
       }
       previousJewelTypeName = currentJewelTypeName;

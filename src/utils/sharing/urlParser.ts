@@ -71,7 +71,8 @@ export async function parseUrlAndInitialize(
 
   // Parse conqueror
   const jewelTypeConquerors = conquerors[jewelType.name] || [];
-  const conqueror = jewelTypeConquerors.find((c) => c.label === conquerorLabel) || null;
+  const conqueror =
+    jewelTypeConquerors.find((c) => c.label === conquerorLabel) || null;
   if (!conqueror) {
     console.log("Invalid conqueror:", conquerorLabel);
     return false;
@@ -123,7 +124,10 @@ export async function parseUrlAndInitialize(
   // Default to 'occurrences' for backward compatibility
   const statSearchModeParam = urlParams.get("sm");
   let statSearchMode: "occurrences" | "totalValue" = "occurrences";
-  if (statSearchModeParam === "occurrences" || statSearchModeParam === "totalValue") {
+  if (
+    statSearchModeParam === "occurrences" ||
+    statSearchModeParam === "totalValue"
+  ) {
     statSearchMode = statSearchModeParam;
   }
 
@@ -162,7 +166,7 @@ export async function parseUrlAndInitialize(
     socketSkillStr,
     allocatedSkills,
     unallocatedSkills,
-    treeData
+    treeData,
   );
 
   // Update stores

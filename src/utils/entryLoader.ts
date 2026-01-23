@@ -1,6 +1,7 @@
 import type { BaseEntry } from "$lib/stores/utils/storeUtils";
-import type { Translation } from "$lib/types";
+import type { Translation, TreeData } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
+import type Konva from "konva";
 import { treeStore } from "$lib/stores/treeStore";
 import { get } from "svelte/store";
 import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
@@ -11,11 +12,13 @@ export interface LoadEntryOptions<T extends BaseEntry> {
   entry: T;
   loadAction: (entry: T) => void;
   translation: Record<string, Translation[]>;
-  canvas: { stage: any; treeData: { nodes: any } };
+  canvas: { stage: Konva.Stage | null; treeData: TreeData };
   onSwitchToTab: () => void;
 }
 
-export async function loadEntry<T extends BaseEntry>(options: LoadEntryOptions<T>): Promise<void> {
+export async function loadEntry<T extends BaseEntry>(
+  options: LoadEntryOptions<T>,
+): Promise<void> {
   const { entry, loadAction, translation, canvas, onSwitchToTab } = options;
 
   searchStore.update((s) => ({
@@ -32,13 +35,7 @@ export async function loadEntry<T extends BaseEntry>(options: LoadEntryOptions<T
 
   onSwitchToTab();
 
-  await performSearch(
-    "stats",
-    null,
-    translation,
-    entry.jewelType,
-    entry.stats,
-  );
+  await performSearch("stats", null, translation, entry.jewelType, entry.stats);
 
   const currentSearchStore = get(searchStore);
   if (currentSearchStore.searched) {

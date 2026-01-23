@@ -16,8 +16,15 @@
   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
   import Modal from "$lib/ui/common/Modal.svelte";
   import Spinner from "$lib/ui/common/Spinner.svelte";
-  import { changeRadius, changeKeystone, resetHighlights } from "$lib/konva/utils/jewelHighlight";
-  import { resetDependentFields, resetForModeChange } from "$lib/utils/search/resetStore";
+  import {
+    changeRadius,
+    changeKeystone,
+    resetHighlights,
+  } from "$lib/konva/utils/jewelHighlight";
+  import {
+    resetDependentFields,
+    resetForModeChange,
+  } from "$lib/utils/search/resetStore";
   import { validateSocket } from "$lib/utils/socketValidation";
 
   let seedInput: number | null = $state(null);
@@ -112,57 +119,60 @@
 
 <div class="relative min-h-[200px]">
   {#if $searchStore.loading && $searchStore.mode === "stats"}
-    <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-md z-20 flex items-center justify-center rounded-lg">
+    <div
+      class="absolute inset-0 bg-slate-900/90 backdrop-blur-md z-20 flex items-center justify-center rounded-lg"
+    >
       <Spinner text="Loading results..." />
     </div>
   {/if}
 
-  <div class="space-y-6 {$searchStore.loading && $searchStore.mode === 'stats' ? 'opacity-50 pointer-events-none' : ''}">
-  <section>
-    <JewelTypeSelector bind:jewelType={$searchStore.jewelType} />
-  </section>
-
-  {#if $searchStore.jewelType}
+  <div
+    class="space-y-6 {$searchStore.loading && $searchStore.mode === 'stats'
+      ? 'opacity-50 pointer-events-none'
+      : ''}"
+  >
     <section>
-      <ConquerorSelector
-        bind:conqueror={$searchStore.conqueror}
-        options={conquerorOptions}
-      />
+      <JewelTypeSelector bind:jewelType={$searchStore.jewelType} />
     </section>
 
-    {#if $searchStore.conqueror}
+    {#if $searchStore.jewelType}
       <section>
-        <ModeSelector
-          mode={$searchStore.mode}
-          disabled={!$searchStore.jewelType}
-          onselectmode={setMode}
+        <ConquerorSelector
+          bind:conqueror={$searchStore.conqueror}
+          options={conquerorOptions}
         />
       </section>
 
-      {#if $searchStore.mode === "seed"}
-        <SeedSearch
-          bind:seed={seedInput}
-          onapplyseed={handleSeedInput}
-        />
-      {/if}
+      {#if $searchStore.conqueror}
+        <section>
+          <ModeSelector
+            mode={$searchStore.mode}
+            disabled={!$searchStore.jewelType}
+            onselectmode={setMode}
+          />
+        </section>
 
-      {#if $searchStore.mode === "stats"}
-        <StatsSearch jewelType={$searchStore.jewelType} />
-        <button
-          onclick={() => checkSocketAndSearch(handleSearch)}
-          class="w-full py-3 px-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-green-500/20"
-        >
-          Search
-        </button>
+        {#if $searchStore.mode === "seed"}
+          <SeedSearch bind:seed={seedInput} onapplyseed={handleSeedInput} />
+        {/if}
+
+        {#if $searchStore.mode === "stats"}
+          <StatsSearch jewelType={$searchStore.jewelType} />
+          <button
+            onclick={() => checkSocketAndSearch(handleSearch)}
+            class="w-full py-3 px-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold text-lg cursor-pointer transition-all duration-200 shadow-lg shadow-green-500/20"
+          >
+            Search
+          </button>
+        {/if}
       {/if}
     {/if}
-  {/if}
 
-  <NodeToggles />
-</div>
+    <NodeToggles />
+  </div>
 </div>
 
- {#if socketWarningMessage}
+{#if socketWarningMessage}
   <Modal
     message={socketWarningMessage}
     onCancel={() => (socketWarningMessage = "")}

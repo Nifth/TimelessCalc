@@ -1,5 +1,11 @@
 import { get } from "svelte/store";
-import type { Node as TreeNode, JewelType, Conqueror, Stat, StatSearchMode } from "$lib/types";
+import type {
+  Node as TreeNode,
+  JewelType,
+  Conqueror,
+  Stat,
+  StatSearchMode,
+} from "$lib/types";
 import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";

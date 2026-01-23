@@ -2,7 +2,7 @@ import type { TreeData, Node } from "$lib/types";
 
 export function getSocketNodeIds(
   socketSkill: string | number,
-  treeData: TreeData
+  treeData: TreeData,
 ): number[] {
   const socketNodes = treeData.socketNodes[socketSkill.toString()];
   if (!socketNodes) return [];
@@ -12,10 +12,10 @@ export function getSocketNodeIds(
 
 export function getOptimalEncodingType(
   socketNodes: number[],
-  allocatedSkills: number[]
+  allocatedSkills: number[],
 ): "allocated" | "unallocated" {
   const unallocatedCount = socketNodes.length - allocatedSkills.length;
-  
+
   return allocatedSkills.length <= unallocatedCount
     ? "allocated"
     : "unallocated";
@@ -23,13 +23,13 @@ export function getOptimalEncodingType(
 
 export function prepareNodeListForEncoding(
   socketNodes: number[],
-  allocatedSkills: number[]
+  allocatedSkills: number[],
 ): { list: number[]; param: "a" | "un" } {
   const encodingType = getOptimalEncodingType(socketNodes, allocatedSkills);
 
   if (encodingType === "unallocated") {
     const unallocated = socketNodes.filter(
-      (skill) => !allocatedSkills.includes(skill)
+      (skill) => !allocatedSkills.includes(skill),
     );
     return { list: unallocated, param: "un" };
   } else {
@@ -41,7 +41,7 @@ export function reconstructAllocatedNodes(
   socketSkill: string | number,
   allocatedSkills: number[] | null,
   unallocatedSkills: number[] | null,
-  treeData: TreeData
+  treeData: TreeData,
 ): Map<string, Node> {
   const socketNodes = getSocketNodeIds(socketSkill, treeData);
   const allocated = new Map<string, Node>();
@@ -52,7 +52,7 @@ export function reconstructAllocatedNodes(
     finalAllocated = allocatedSkills;
   } else if (unallocatedSkills) {
     finalAllocated = socketNodes.filter(
-      (skill) => !unallocatedSkills.includes(skill)
+      (skill) => !unallocatedSkills.includes(skill),
     );
   }
 

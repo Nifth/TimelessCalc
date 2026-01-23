@@ -18,7 +18,10 @@
   let seedInput: number | null = $state(null);
   let searchTimeout: number | null = $state(null);
 
-  function getTimelessStats(): Record<number, { count: number; total: number }> {
+  function getTimelessStats(): Record<
+    number,
+    { count: number; total: number }
+  > {
     const chosenSocket = $treeStore.chosenSocket;
     if (!chosenSocket) return {};
     const statData: Record<number, { count: number; total: number }> = {};
@@ -30,7 +33,11 @@
 
           const statEntry = translations[statKey.toString()]?.[0];
           if (statEntry && node.stats) {
-            const statLabel = formatStatTranslation(statKey, value, translations);
+            const statLabel = formatStatTranslation(
+              statKey,
+              value,
+              translations,
+            );
             if (node.stats.includes(statLabel)) continue;
           }
 
@@ -48,7 +55,10 @@
   function highlightNodesWithStat(statKey: number) {
     canvas.highlightLayer?.destroyChildren();
     for (const node of $treeStore.allocated.values()) {
-      if (node?.timelessStatKeys?.includes(statKey) && node?.timelessStatValues) {
+      if (
+        node?.timelessStatKeys?.includes(statKey) &&
+        node?.timelessStatValues
+      ) {
         const index = node.timelessStatKeys.indexOf(statKey);
         const value = node.timelessStatValues[index];
         const statLabel = formatStatTranslation(statKey, value, translations);
@@ -81,7 +91,9 @@
   }
 
   let timelessStats = $derived(
-    $treeStore.chosenSocket && $searchStore.seedSearched ? getTimelessStats() : {},
+    $treeStore.chosenSocket && $searchStore.seedSearched
+      ? getTimelessStats()
+      : {},
   );
 </script>
 
@@ -108,7 +120,8 @@
           {@const transEntry = translations[statKeyStr]?.[0]}
           {@const divider = transEntry?.divider ?? 1}
           {@const displayTotal = data.total / divider}
-          {@const translation = transEntry?.translation?.replace('{0}', '#') || statKey}
+          {@const translation =
+            transEntry?.translation?.replace("{0}", "#") || statKey}
 
           <button
             class="w-full px-3 py-1 hover:bg-slate-700 rounded cursor-pointer transition-all duration-200 text-sm"
