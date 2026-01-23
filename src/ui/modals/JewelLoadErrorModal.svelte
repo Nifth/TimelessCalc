@@ -35,6 +35,8 @@
     onclick={(e) => e.stopPropagation()}
     role="dialog"
     aria-modal="true"
+    tabindex="-1"
+    onkeydown={(e) => (e.key === "Enter" || e.key === " ") && onclose()}
   >
     <h2>Failed to load {jewel.name} data</h2>
     <p class="error-message">{errorMessage}</p>

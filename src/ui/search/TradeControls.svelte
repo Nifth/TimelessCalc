@@ -2,12 +2,15 @@
   import { searchStore } from "$lib/stores/searchStore";
   import { getSeedsPerPage } from "$lib/utils/sidebar/tradeQuery";
   import { get } from "svelte/store";
+  import type { Snippet } from "svelte";
 
   interface Props {
     hasTraded?: boolean;
     ontrade: () => void;
     onnext: () => void;
     ontargetposition?: (pos: { top: number; left: number } | null) => void;
+    league?: Snippet;
+    platform?: Snippet;
   }
 
   let {
@@ -15,6 +18,8 @@
     ontrade,
     onnext,
     ontargetposition,
+    league,
+    platform,
   }: Props = $props();
 
   const jewelType = get(searchStore).jewelType;
@@ -47,10 +52,10 @@
 
 <div class="flex flex-wrap gap-2 items-center">
   <div class="w-36">
-    <slot name="league" />
+    {@render league?.()}
   </div>
   <div class="w-22">
-    <slot name="platform" />
+    {@render platform?.()}
   </div>
   <button
     type="button"

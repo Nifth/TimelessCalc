@@ -49,7 +49,7 @@
   let loadingComplete = $state(false);
   let loadingProgress = $state(0);
   let currentLoadingStep = "Initializing...";
-  let debugMode = false;
+  let debugMode = $state(false);
 
   onMount(() => {
     let cleanup: () => void = () => {};
@@ -272,7 +272,8 @@
 <div
   id="tree"
   style="position:fixed;inset:0;background:#070c11"
-  on:mouseleave={() => treeStore.update((s) => ({ ...s, hovered: null }))}
+  role="region"
+  onmouseleave={() => treeStore.update((s) => ({ ...s, hovered: null }))}
 ></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />

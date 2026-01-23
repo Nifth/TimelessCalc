@@ -335,10 +335,14 @@
       nextPage();
       logNextPage();
     }}
-    {ontargetposition}
+    ontargetposition={ontargetposition}
   >
-    <LeagueSelector slot="league" />
-    <PlatformSelector slot="platform" />
+    {#snippet league()}
+      <LeagueSelector />
+    {/snippet}
+    {#snippet platform()}
+      <PlatformSelector />
+    {/snippet}
   </TradeControls>
 </div>
 

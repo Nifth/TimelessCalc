@@ -64,9 +64,15 @@
   });
 </script>
 
-{#if isVisible}
+ {#if isVisible}
   <div class="debug-panel" class:expanded>
-    <div class="header" on:click={() => (expanded = !expanded)}>
+    <div
+      class="header"
+      role="button"
+      tabindex="0"
+      onclick={() => (expanded = !expanded)}
+      onkeydown={(e) => (e.key === "Enter" || e.key === " ") && (expanded = !expanded)}
+    >
       <span class="title">Debug Panel</span>
       <span class="fps">{fps} FPS</span>
     </div>
@@ -110,7 +116,7 @@
           </p>
         </div>
 
-        <button on:click={exportMetrics}>Export Metrics</button>
+        <button onclick={exportMetrics}>Export Metrics</button>
       </div>
     {/if}
   </div>

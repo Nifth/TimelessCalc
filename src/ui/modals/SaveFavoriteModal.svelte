@@ -35,7 +35,11 @@
 
 <div
   class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+  tabindex="-1"
   onclick={handleBackdropClick}
+  onkeydown={(e) => e.key === "Escape" && onCancel()}
 >
   <div
     class="bg-slate-800 rounded-xl shadow-2xl p-6 max-w-md w-full border border-slate-700"
