@@ -30,6 +30,8 @@ export async function loadEntry<T extends BaseEntry>(options: LoadEntryOptions<T
     treeStore.update((s) => ({ ...s, scale: 0.2 }));
   }
 
+  onSwitchToTab();
+
   await performSearch(
     "stats",
     null,
@@ -37,8 +39,6 @@ export async function loadEntry<T extends BaseEntry>(options: LoadEntryOptions<T
     entry.jewelType,
     entry.stats,
   );
-
-  onSwitchToTab();
 
   const currentSearchStore = get(searchStore);
   if (currentSearchStore.searched) {

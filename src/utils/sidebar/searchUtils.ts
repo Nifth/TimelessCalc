@@ -83,8 +83,8 @@ export function initializeSearchStore(params: SearchStoreInitParams): void {
     mode: params.mode,
     minTotalWeight: params.minTotalWeight,
     statSearchMode: params.statSearchMode ?? "occurrences",
-    statsSearched: params.mode === "stats",
-    seedSearched: params.mode === "seed",
+    statsSearched: false,
+    seedSearched: false,
     automated: true,
   }));
 }

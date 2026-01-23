@@ -16,7 +16,7 @@
   import NodeToggles from "$lib/ui/search/NodeToggles.svelte";
   import Modal from "$lib/ui/common/Modal.svelte";
   import Spinner from "$lib/ui/common/Spinner.svelte";
-  import { changeRadius, changeKeystone, clearHighlights } from "$lib/konva/utils/jewelHighlight";
+  import { changeRadius, changeKeystone, resetHighlights } from "$lib/konva/utils/jewelHighlight";
   import { resetDependentFields, resetForModeChange } from "$lib/utils/search/resetStore";
   import { validateSocket } from "$lib/utils/socketValidation";
 
@@ -29,6 +29,7 @@
   $effect(() => {
     const current = $searchStore.jewelType;
     if (current !== previousJewelType) {
+      resetHighlights();
       changeRadius($treeStore.chosenSocket);
       // Only reset if changing jewelType AND conqueror doesn't match the new type
       // This allows history/URL loading to work (they set all fields correctly)
@@ -90,7 +91,7 @@
 
   function setMode(newMode: "seed" | "stats" | null) {
     resetForModeChange(newMode);
-    clearHighlights();
+    resetHighlights();
     seedInput = null;
   }
 
@@ -112,7 +113,7 @@
 <div class="relative min-h-[200px]">
   {#if $searchStore.loading && $searchStore.mode === "stats"}
     <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-md z-20 flex items-center justify-center rounded-lg">
-      <Spinner text="Searching..." />
+      <Spinner text="Loading results..." />
     </div>
   {/if}
 

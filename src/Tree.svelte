@@ -186,7 +186,7 @@
       loadingComplete = true;
 
       fetchLeagues();
-      parsedFromUrl = parseUrlAndInitialize(
+      parsedFromUrl = await parseUrlAndInitialize(
         data,
         canvas,
         performSearch,

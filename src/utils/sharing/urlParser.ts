@@ -19,7 +19,7 @@ import { reconstructAllocatedNodes } from "$lib/utils/socketNodeProcessor";
 /**
  * Parses URL parameters and initializes the application state
  */
-export function parseUrlAndInitialize(
+export async function parseUrlAndInitialize(
   treeData: TreeData,
   canvas: { stage: Konva.Stage | null },
   performSearch: (
@@ -30,7 +30,7 @@ export function parseUrlAndInitialize(
     selectedStats: Stat[],
   ) => Promise<void>,
   translation: Record<string, Translation[]>,
-): boolean {
+): Promise<boolean> {
   const urlParams = new URLSearchParams(window.location.search);
 
   // If no URL parameters, nothing to do
@@ -185,7 +185,6 @@ export function parseUrlAndInitialize(
     search: "",
     scale: 0.1,
     hovered: null,
-    loading: true,
   }));
 
   // Update visual display of jewel sockets (selected state)
@@ -198,9 +197,6 @@ export function parseUrlAndInitialize(
     centerCanvasOnSocket(canvas.stage, chosenSocket, 0.2);
   }
 
-  // Mark loading complete
-  treeStore.update((t) => ({ ...t, loading: false }));
-
   // Update radius and keystone display without overwriting allocated nodes
   if (chosenSocket) {
     changeRadius(chosenSocket);
@@ -209,7 +205,11 @@ export function parseUrlAndInitialize(
 
   // Trigger search if we have search parameters
   if (jewelType && conqueror && selectedStats.length > 0) {
-    performSearch("stats", null, translation, jewelType, selectedStats);
+    await performSearch("stats", null, translation, jewelType, selectedStats);
+    searchStore.update((s) => ({
+      ...s,
+      statsSearched: true,
+    }));
   } else if (jewelType && conqueror && seed) {
     // For seed mode, just set the stores without calling applySeed to preserve allocated from URL
     searchStore.update((s) => ({
