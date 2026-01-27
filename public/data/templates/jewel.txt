@@ -1,0 +1,13 @@
+Item Class: Jewels
+Rarity: Unique
+{{JEWEL_NAME}}
+Timeless Jewel
+--------
+Limited to: 1 Historic
+Radius: Large
+--------
+Item Level: 69
+--------
+{{SEED_TEXT}}
+Passives in radius are Conquered by the {{FACTION}}
+Historic
