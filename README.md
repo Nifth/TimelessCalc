@@ -66,6 +66,8 @@ src/
 
 For detailed documentation, see [docs/index.md](docs/index.md)
 
+Tree, translation, stats, jewel data preprocessed with [Nifth/TimelessCalclPreprocess](https://github.com/Nifth/TimelessCalcPreprocess)
+
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
