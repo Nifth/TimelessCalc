@@ -251,11 +251,11 @@
       </div>
       {#if expandedGroups[parseFloat(total)]}
         <div class="divide-y divide-slate-700">
-          {#each $searchStore.statsResults[total] as item (item.seed)}
+          {#each $searchStore.statsResults[total] as item, i (item.seed)}
             <div
               role="button"
               tabindex="0"
-              class="w-full px-4 py-3 text-left hover:bg-slate-700/50 cursor-pointer transition-all duration-200"
+              class="w-full px-4 py-3 text-left cursor-pointer transition-all duration-200 {i % 2 === 1 ? 'bg-slate-800 hover:bg-slate-700/50' : 'bg-slate-700/40 hover:bg-slate-700/70'}"
               onclick={() => handleSeedClick(item)}
               onkeydown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {

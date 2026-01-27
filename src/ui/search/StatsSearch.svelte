@@ -131,9 +131,9 @@
         class="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl z-10 max-h-48 overflow-y-auto"
       >
         {#if filteredStats.length > 0}
-          {#each filteredStats as stat (stat.statKey)}
+        {#each filteredStats as stat, i (stat.statKey)}
             <button
-              class="w-full px-4 py-3 text-left text-slate-200 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-150 border-b border-slate-700 last:border-b-0"
+              class="w-full px-4 py-3 text-left text-slate-200 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-150 border-b border-slate-700 last:border-b-0 {i % 2 !== 1 ? 'bg-slate-700/40' : ''}"
               onmousedown={(e) => {
                 e.preventDefault();
                 selectStat(stat);
