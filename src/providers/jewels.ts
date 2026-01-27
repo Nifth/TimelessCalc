@@ -64,7 +64,7 @@ export async function loadJewel(
   }
 
   const fileName = `${jewel.label.replace(/\s+/g, "")}-${socketSkill}.jsonl.gz`;
-  const url = `${import.meta.env.BASE_URL}data/jewels/${fileName}`;
+  const url = `./data/jewels/${fileName}`;
 
   loadingJewels.update((s) => new Set(s).add(jewelId));
 
