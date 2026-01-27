@@ -44,6 +44,8 @@ npm run build
 npm run check
 ```
 
+## Tree, translation, stats, jewel data preprocessed with [Nifth/TimelessCalclPreprocess](https://github.com/Nifth/TimelessCalcPreprocess)
+
 ## Project Structure
 
 ```
