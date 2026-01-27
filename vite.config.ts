@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [
     svelte(),
   ],
-  base: process.env.VITE_BASE_URL || '/',
   resolve: {
     alias: {
       $lib: "/src",
