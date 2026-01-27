@@ -4,6 +4,7 @@ import { jewelTypes } from "$lib/constants/timeless";
 import { perfMonitor } from "$lib/utils/performanceMonitor";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
+import pako from "pako";
 
 // Clear typing for data in each file
 export interface JewelEntry {
@@ -25,7 +26,19 @@ async function fetchText(url: string): Promise<string> {
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
   }
-  return response.text();
+
+  const arrayBuffer = await response.arrayBuffer();
+  const uint8Array = new Uint8Array(arrayBuffer);
+
+  // Check first byte: if it's `{` (ASCII 123), assume JSON
+  // Otherwise, assume gzipped data
+  if (uint8Array[0] === 123) {
+    return new TextDecoder().decode(uint8Array);
+  }
+
+  // Decompress gzipped data
+  const decompressed = pako.inflate(uint8Array);
+  return new TextDecoder().decode(decompressed);
 }
 
 /**
