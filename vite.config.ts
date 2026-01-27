@@ -11,5 +11,6 @@ export default defineConfig({
       $lib: "/src",
     },
   },
+  base: './',
   assetsInclude: ['**/*.gz'], // Dis à Vite de ne pas toucher à la structure de ces fichiers
 });
