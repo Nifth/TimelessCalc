@@ -48,7 +48,7 @@ export function setupZoom() {
     stage.scale({ x: storeState.scale, y: storeState.scale });
     stage.position(newPos);
     stage.batchDraw();
-  }, DEBOUNCE_MS); // ~60fps debounce
+  }, DEBOUNCE_MS);
 
   stage.on("wheel", debouncedZoom);
 }
