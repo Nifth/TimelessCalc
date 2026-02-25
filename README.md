@@ -68,11 +68,16 @@ For detailed documentation, see [docs/index.md](docs/index.md)
 
 Tree, translation, stats, jewel data preprocessed with [Nifth/TimelessCalclPreprocess](https://github.com/Nifth/TimelessCalcPreprocess)
 
-## Recommended IDE Setup
+## Assets files
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
+Assets files can be retrieved from [GGG skilltree-export](https://github.com/grindinggear/skilltree-export/releases):
+
+Download the release for your game version and extract:
+
+- `assets/` - Folder containing images and sprites
+
+We only need `frame-3.png`, `group-background-3.png`, `jewel-radius.png`, `mastery-3.png`, `mastery-disabled-3.png`, `skills-3.png` and `skills-disabled-3.png`
 
 ## License
 
 MIT
-
