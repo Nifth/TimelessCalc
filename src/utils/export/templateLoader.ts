@@ -11,7 +11,7 @@ export async function loadTemplate(): Promise<string> {
     return cachedTemplate;
   }
 
-  const url = "/data/templates/jewel.txt";
+  const url = "./data/templates/jewel.txt";
 
   try {
     const response = await fetch(url);
