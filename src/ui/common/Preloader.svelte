@@ -1,8 +1,13 @@
 <script lang="ts">
-  export let loadingComplete: boolean = false;
-  export let progress: number = 0;
+  let { loadingComplete = false, progress = 0 } = $props();
 
-  let displayProgress: number = 0;
+  let displayProgress = $state(0);
+
+  $effect(() => {
+    if (progress !== displayProgress) {
+      updateDisplayProgress();
+    }
+  });
 
   function updateDisplayProgress() {
     if (displayProgress < progress) {
@@ -12,10 +17,6 @@
       }
       requestAnimationFrame(updateDisplayProgress);
     }
-  }
-
-  $: if (progress !== displayProgress) {
-    updateDisplayProgress();
   }
 </script>
 

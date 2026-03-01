@@ -1,25 +1,30 @@
 <script lang="ts">
   import type { Node } from "$lib/types";
 
-  export let node: Node | null = null;
-  export let x: number = 0;
-  export let y: number = 0;
+  interface Props {
+    node: Node | null;
+    x: number;
+    y: number;
+  }
 
-  $: baseStats = node?.stats || [];
-  $: timelessStats = node?.timelessStats;
-  $: statsToDisplay = timelessStats ? timelessStats : baseStats;
-  $: isExtraStat = timelessStats
-    ? timelessStats.map((stat, i) => {
-        const statIndexInBase = baseStats.indexOf(stat);
-        if (statIndexInBase === -1) return true;
-        const occurrencesInBase = baseStats.filter((s) => s === stat).length;
-        const occurrencesUpToI = timelessStats
-          .slice(0, i + 1)
-          .filter((s) => s === stat).length;
-        return occurrencesUpToI > occurrencesInBase;
-      })
-    : [];
-  $: header = node?.conqueredName || node?.name || "";
+  let { node, x, y }: Props = $props();
+
+  let baseStats = $derived(node?.stats || []);
+  let timelessStats = $derived(node?.timelessStats);
+  let statsToDisplay = $derived(timelessStats ? timelessStats : baseStats);
+  let isExtraStat = $derived.by(() => {
+    if (!timelessStats) return [];
+    return timelessStats.map((stat, i) => {
+      const statIndexInBase = baseStats.indexOf(stat);
+      if (statIndexInBase === -1) return true;
+      const occurrencesInBase = baseStats.filter((s) => s === stat).length;
+      const occurrencesUpToI = timelessStats
+        .slice(0, i + 1)
+        .filter((s) => s === stat).length;
+      return occurrencesUpToI > occurrencesInBase;
+    });
+  });
+  let header = $derived(node?.conqueredName || node?.name || "");
 </script>
 
 {#if node}
