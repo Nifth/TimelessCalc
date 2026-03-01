@@ -22,17 +22,21 @@ export function updateJewelSockets() {
 
   resetFull();
 
-  updateSocketVisualSelection();
+  const socketSelectionChanged = updateSocketVisualSelection();
 
   changeRadius(chosenSocket);
   changeKeystone(chosenSocket);
-  setAllocatedNodes(chosenSocket);
+
+  const allocationChanged = setAllocatedNodes(chosenSocket);
+
+  if (socketSelectionChanged || allocationChanged) {
+    canvas.mainLayer?.batchDraw();
+  }
 }
 
 // Only updates the visual selection state of sockets without allocating nodes
-export function updateSocketVisualSelection() {
+export function updateSocketVisualSelection(): boolean {
   const jewelImages = canvas.jewelImages,
-    layer = canvas.mainLayer!,
     data = canvas.treeData;
   const chosenSocket = get(treeStore).chosenSocket;
   const nodes = data.nodes;
@@ -77,10 +81,7 @@ export function updateSocketVisualSelection() {
     }
   });
 
-  // Only batchDraw if something actually changed
-  if (needsRedraw) {
-    layer.batchDraw();
-  }
+  return needsRedraw;
 }
 
 export function changeRadius(chosenSocket: Node | null) {
@@ -178,7 +179,7 @@ export function stopAllJewelAnimations() {
   }
 }
 
-function setAllocatedNodes(socket: Node | null) {
+function setAllocatedNodes(socket: Node | null): boolean {
   const data = canvas.treeData;
   if (!socket) {
     const currentAllocated = get(treeStore).allocated;
@@ -187,9 +188,9 @@ function setAllocatedNodes(socket: Node | null) {
         state.allocated.clear();
         return state;
       });
-      updateAllocatedDisplay();
+      return updateAllocatedDisplay();
     }
-    return;
+    return false;
   }
 
   const currentAllocated = get(treeStore).allocated;
@@ -207,9 +208,9 @@ function setAllocatedNodes(socket: Node | null) {
       state.allocated = allocatedNodes;
       return state;
     });
-    updateAllocatedDisplay();
-    canvas.mainLayer?.batchDraw();
+    return updateAllocatedDisplay();
   }
+  return false;
 }
 
 function getSpriteKeys(
@@ -287,24 +288,57 @@ function showInactive(node: Node) {
   updateNodeSprites(node, false);
 }
 
-export function updateAllocatedDisplay() {
+export function updateAllocatedDisplay(): boolean {
   const allocatedNodes = get(treeStore).allocated;
   const highlightableNodes = getHighlightableNodes();
+  let needsRedraw = false;
 
   for (const [_nodeId, node] of allocatedNodes) {
-    showActive(node);
+    const { iconKey: currentIconKey, frameKey: currentFrameKey } = getSpriteKeys(
+      node,
+      true,
+    );
+    const { iconKey: newIconKey, frameKey: newFrameKey } = getSpriteKeys(
+      node,
+      false,
+    );
+
+    if (
+      currentIconKey !== newIconKey ||
+      currentFrameKey !== newFrameKey
+    ) {
+      showActive(node);
+      needsRedraw = true;
+    }
   }
 
   for (const [nodeId, node] of highlightableNodes) {
     if (!allocatedNodes.has(nodeId)) {
-      showInactive(node);
+      const { iconKey: currentIconKey, frameKey: currentFrameKey } =
+        getSpriteKeys(node, false);
+      const { iconKey: newIconKey, frameKey: newFrameKey } = getSpriteKeys(
+        node,
+        true,
+      );
+
+      if (
+        currentIconKey !== newIconKey ||
+        currentFrameKey !== newFrameKey
+      ) {
+        showInactive(node);
+        needsRedraw = true;
+      }
     }
   }
+
+  return needsRedraw;
 }
 
 export function changeKeystone(chosenSocket: Node | null) {
   const conqueror = get(searchStore).conqueror;
-  canvas.nodes.forEach((n) => (n.node.conqueredName = null));
+  canvas.nodes.forEach((n) => {
+    n.node.conqueredName = null;
+  });
   if (!chosenSocket) return;
   const treeData = canvas.treeData;
   const socketNodes = treeData.socketNodes[chosenSocket.skill];
