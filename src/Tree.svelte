@@ -46,7 +46,6 @@
   let isLoading = $state(true);
   let loadingComplete = $state(false);
   let loadingProgress = $state(0);
-  let currentLoadingStep = "Initializing...";
   let debugMode = $state(false);
 
   onMount(() => {
@@ -101,7 +100,6 @@
           "stage-setup-end",
         );
         loadingProgress = 25;
-        currentLoadingStep = "Canvas initialized";
 
         perfMonitor.mark("background-draw-start");
         getHighlightableNodes();
@@ -112,15 +110,12 @@
           "background-draw-start",
           "background-draw-end",
         );
-        currentLoadingStep = "Background drawn";
 
         perfMonitor.mark("nodes-draw-start");
         loadingProgress = 30;
-        currentLoadingStep = "Drawing nodes...";
         await drawNodesProgressive(
           (progress: number, step: string) => {
             loadingProgress = 30 + progress * 0.4; // 30-70% for nodes
-            currentLoadingStep = step;
           },
           () => {
             perfMonitor.mark("nodes-draw-end");
@@ -137,7 +132,6 @@
         perfMonitor.mark("lines-draw-end");
         perfMonitor.measure("lines-draw", "lines-draw-start", "lines-draw-end");
         loadingProgress = 75;
-        currentLoadingStep = "Lines drawn";
 
         perfMonitor.mark("base-radius-draw-start");
         drawBaseRadius();
@@ -148,7 +142,6 @@
           "base-radius-draw-end",
         );
         loadingProgress = 80;
-        currentLoadingStep = "Base radius drawn";
 
         perfMonitor.mark("hit-layer-setup-start");
         createHitLayer();
@@ -159,7 +152,6 @@
           "hit-layer-setup-end",
         );
         loadingProgress = 85;
-        currentLoadingStep = "Hit layer created";
 
         perfMonitor.mark("event-setup-start");
         setupZoom();
@@ -172,7 +164,6 @@
           "event-setup-end",
         );
         loadingProgress = 90;
-        currentLoadingStep = "Events set up";
 
         canvas.mainLayer.batchDraw();
         canvas.lineLayer.batchDraw();
@@ -181,7 +172,6 @@
         perfMonitor.measure("total-init", "init-start", "init-end");
 
         loadingProgress = 100;
-        currentLoadingStep = "Complete!";
         loadingComplete = true;
 
         fetchLeagues();

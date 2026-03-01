@@ -90,7 +90,6 @@ import { searchStore } from "$lib/stores/searchStore";
 ### Svelte Component Patterns
 
 - Use `<script lang="ts">` for TypeScript support
-- Reactive statements use `$:` prefix
 - Store subscriptions use `$store` syntax
 - Event handlers use `on:eventname` directive
 - Component props should be explicitly typed
