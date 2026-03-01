@@ -1,5 +1,5 @@
 import { treeStore } from "$lib/stores/treeStore";
-import { canvas } from "$lib/konva/canvasContext";
+import { canvas } from "$lib/canvas/canvasContext";
 import { parseKey, formatStatTranslation } from "./sidebarUtils";
 import type {
   JewelType,
@@ -11,7 +11,6 @@ import type {
 import { searchStore } from "$lib/stores/searchStore";
 import { get } from "svelte/store";
 import { tick } from "svelte";
-import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
 import {
   loadJewelData,
   getEntryForSeed,
@@ -143,13 +142,13 @@ function applySeedModifications(
           ].includes(node.name);
           if (isTravelStat) {
             if (!travelReplace) {
-              node.stats?.forEach((stat) => {
+              node.stats?.forEach((stat: string) => {
                 node.timelessStats!.push(stat);
               });
             }
             node.timelessStats.push(travelStat);
           } else {
-            node.stats?.forEach((stat) => {
+            node.stats?.forEach((stat: string) => {
               node.timelessStats!.push(stat);
             });
             node.timelessStats.push(baseStat);
@@ -197,9 +196,8 @@ export async function handleSearch(
   translation: Record<string, Translation[]>,
   jewelType: JewelType | null,
   selectedStats: Stat[],
-) {
+  ) {
   setSearchLoading(true);
-  clearHighlights();
   await tick();
   if (mode === "seed") {
     if (!seedInput || !jewelType) {

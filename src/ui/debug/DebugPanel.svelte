@@ -1,81 +1,67 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { perfMonitor } from "$lib/utils/performanceMonitor";
-  import type { PerformanceMetrics } from "$lib/types";
+import { onMount } from "svelte";
+import { perfMonitor } from "$lib/utils/performanceMonitor";
+import type { PerformanceMetrics } from "$lib/types";
 
-  export let isVisible: boolean = true;
-  export let metrics: PerformanceMetrics = {
-    timing: {},
-    memory: { initial: 0, current: 0, total: 0, limit: 0, delta: 0 },
-    network: { totalTransferred: 0, totalDuration: 0, requestCount: 0 },
-  };
-  export let fps: number = 0;
+export let isVisible: boolean = true;
+export let metrics: PerformanceMetrics = {
+	timing: {},
+	memory: { initial: 0, current: 0, total: 0, limit: 0, delta: 0 },
+	network: { totalTransferred: 0, totalDuration: 0, requestCount: 0 },
+};
+export let renderDuration: number = 0;
 
-  let expanded: boolean = false;
-  let lastTime: number = performance.now();
-  let frameCount: number = 0;
-  let memoryHistory: number[] = [];
-  let exportData: string = "";
+let expanded: boolean = false;
+let memoryHistory: number[] = [];
+let exportData: string = "";
 
-  function updateFPS() {
-    frameCount++;
-    const now = performance.now();
-    if (now - lastTime >= 1000) {
-      fps = frameCount;
-      frameCount = 0;
-      lastTime = now;
-    }
-    requestAnimationFrame(updateFPS);
-  }
+function updateMetrics() {
+	metrics = perfMonitor.getAllMetrics();
+	memoryHistory.push(metrics.memory.current);
+	if (memoryHistory.length > 20) memoryHistory.shift();
+	setTimeout(updateMetrics, 100);
+}
 
-  function updateMetrics() {
-    metrics = perfMonitor.getAllMetrics();
-    memoryHistory.push(metrics.memory.current);
-    if (memoryHistory.length > 20) memoryHistory.shift();
-    setTimeout(updateMetrics, 100);
-  }
+function exportMetrics() {
+	exportData = perfMonitor.exportMetrics();
+	const blob = new Blob([exportData], { type: "application/json" });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `timelesscalc-metrics-${Date.now()}.json`;
+	a.click();
+	URL.revokeObjectURL(url);
+}
 
-  function exportMetrics() {
-    exportData = perfMonitor.exportMetrics();
-    const blob = new Blob([exportData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `timelesscalc-metrics-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+function formatBytes(bytes: number): string {
+	if (bytes === 0) return "0 B";
+	const k = 1024;
+	const sizes = ["B", "KB", "MB", "GB"];
+	const i = Math.floor(Math.log(bytes) / Math.log(k));
+	return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}
 
-  function formatBytes(bytes: number): string {
-    if (bytes === 0) return "0 B";
-    const k = 1024;
-    const sizes = ["B", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  }
+function formatDuration(ms: number): string {
+	return ms < 1000 ? `${ms.toFixed(1)}ms` : `${(ms / 1000).toFixed(2)}s`;
+}
 
-  function formatDuration(ms: number): string {
-    return ms < 1000 ? `${ms.toFixed(1)}ms` : `${(ms / 1000).toFixed(2)}s`;
-  }
-
-  onMount(() => {
-    updateFPS();
-    updateMetrics();
-  });
+onMount(() => {
+	updateMetrics();
+});
 </script>
 
  {#if isVisible}
   <div class="debug-panel" class:expanded>
-    <div
-      class="header"
-      role="button"
-      tabindex="0"
-      onclick={() => (expanded = !expanded)}
-      onkeydown={(e) => (e.key === "Enter" || e.key === " ") && (expanded = !expanded)}
-    >
-      <span class="title">Debug Panel</span>
-      <span class="fps">{fps} FPS</span>
-    </div>
+     <div
+       class="header"
+       role="button"
+       tabindex="0"
+       onclick={() => (expanded = !expanded)}
+       onkeydown={(e) => (e.key === "Enter" || e.key === " ") && (expanded = !expanded)}
+     >
+       <span class="title">Debug Panel</span>
+       <span class="fps">{renderDuration.toFixed(2)} ms</span>
+     </div>
 
     {#if expanded}
       <div class="content">

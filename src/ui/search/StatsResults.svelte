@@ -2,12 +2,11 @@
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { URLS } from "$lib/constants/urls";
-  import { canvas } from "$lib/konva/canvasContext";
+  import { canvas } from "$lib/canvas/canvasContext";
   import {
     getSeedsPerPage,
     buildTradeQuery,
   } from "$lib/utils/sidebar/tradeQuery";
-  import Konva from "konva";
   import TradeButton from "$lib/ui/common/TradeButton.svelte";
   import ExportButton from "$lib/ui/common/ExportButton.svelte";
   import { exportJewelToPobFormat } from "$lib/utils/export/jewelExporter";
@@ -56,27 +55,8 @@
   }
 
   function highlightNodesWithStatKeys(statKeys: number[]) {
-    canvas.highlightLayer?.destroyChildren();
-
-    // Draw circles for each stat key individually
-    statKeys.forEach((statKey, _index) => {
-      const color = $searchStore.statKeyColors[statKey] || "yellow"; // fallback to yellow
-
-      for (const node of $treeStore.allocated.values()) {
-        if (node?.timelessStatKeys?.includes(statKey)) {
-          const circle = new Konva.Circle({
-            x: node.x,
-            y: node.y,
-            radius: node.isNotable ? 90 : 60,
-            stroke: color,
-            strokeWidth: 15,
-          });
-          canvas.highlightLayer?.add(circle);
-        }
-      }
-    });
-
-    canvas.highlightLayer?.batchDraw();
+    canvas.state.highlightedStatKeys = statKeys;
+    canvas.state.highlightVersion = (canvas.state.highlightVersion || 0) + 1;
   }
 
   async function handleSeedClick(item: {

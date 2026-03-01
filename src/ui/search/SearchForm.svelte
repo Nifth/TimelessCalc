@@ -17,13 +17,11 @@
   import Modal from "$lib/ui/common/Modal.svelte";
   import Spinner from "$lib/ui/common/Spinner.svelte";
   import {
-    changeRadius,
-    changeKeystone,
-    resetHighlights,
-  } from "$lib/konva/utils/jewelHighlight";
-  import {
     resetDependentFields,
     resetForModeChange,
+    resetHighlights,
+    changeRadius,
+    changeKeystone,
   } from "$lib/utils/search/resetStore";
   import { validateSocket } from "$lib/utils/socketValidation";
 

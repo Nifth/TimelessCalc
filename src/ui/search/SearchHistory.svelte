@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SearchHistoryEntry, Node, TreeData } from "$lib/types";
   import { historyStore, historyActions } from "$lib/stores/historyStore";
-  import { canvas } from "$lib/konva/canvasContext";
+  import { canvas } from "$lib/canvas/canvasContext";
   import Modal from "$lib/ui/common/Modal.svelte";
   import { translations } from "$lib/providers/translations";
   import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
@@ -31,7 +31,6 @@
         entry,
         loadAction: (e) => historyActions.loadSearch(e),
         translation: translations,
-        canvas,
         onSwitchToTab: () => onswitchtotab("search"),
       });
     }
@@ -43,7 +42,6 @@
         entry: pendingLoadEntry,
         loadAction: (e) => historyActions.loadSearch(e),
         translation: translations,
-        canvas,
         onSwitchToTab: () => onswitchtotab("search"),
       });
       showConfirmModal = false;

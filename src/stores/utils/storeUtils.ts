@@ -1,181 +1,171 @@
 import { get } from "svelte/store";
 import type {
-  Node as TreeNode,
-  JewelType,
-  Conqueror,
-  Stat,
-  StatSearchMode,
+	Node as TreeNode,
+	JewelType,
+	Conqueror,
+	Stat,
+	StatSearchMode,
 } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
-import {
-  updateAllocatedDisplay,
-  updateSocketVisualSelection,
-} from "$lib/konva/utils/jewelHighlight";
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
-import { canvas } from "$lib/konva/canvasContext";
+import { canvas } from "$lib/canvas/canvasContext";
 import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { DEBUG } from "$lib/constants/debug";
 
 export interface BaseEntry {
-  id: string;
-  timestamp: number;
-  socket: TreeNode;
-  jewelType: JewelType;
-  conqueror: Conqueror | null;
-  stats: Stat[];
-  minTotalWeight: number;
-  allocatedSkillIds: string[];
-  statSearchMode?: StatSearchMode;
+	id: string;
+	timestamp: number;
+	socket: TreeNode;
+	jewelType: JewelType;
+	conqueror: Conqueror | null;
+	stats: Stat[];
+	minTotalWeight: number;
+	allocatedSkillIds: string[];
+	statSearchMode?: StatSearchMode;
 }
 
 export function createLocalStorageManager<T>(key: string) {
-  function load(): T[] {
-    try {
-      const stored = localStorage.getItem(key);
-      return stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      const error = e instanceof Error ? e : new Error(String(e));
-      if (
-        error.name === "QuotaExceededError" ||
-        error.message.includes("quota")
-      ) {
-        console.warn(
-          `Storage quota exceeded while loading ${key}, returning empty array`,
-        );
-      } else {
-        console.warn(`Failed to load ${key} from localStorage:`, e);
-      }
-      return [];
-    }
-  }
+	function load(): T[] {
+		try {
+			const stored = localStorage.getItem(key);
+			return stored ? JSON.parse(stored) : [];
+		} catch (e) {
+			const error = e instanceof Error ? e : new Error(String(e));
+			if (
+				error.name === "QuotaExceededError" ||
+				error.message.includes("quota")
+			) {
+				console.warn(
+					`Storage quota exceeded while loading ${key}, returning empty array`,
+				);
+			} else {
+				console.warn(`Failed to load ${key} from localStorage:`, e);
+			}
+			return [];
+		}
+	}
 
-  function save(data: T[]): void {
-    try {
-      localStorage.setItem(key, JSON.stringify(data));
-    } catch (e) {
-      const error = e instanceof Error ? e : new Error(String(e));
-      if (
-        error.name === "QuotaExceededError" ||
-        error.message.includes("quota")
-      ) {
-        console.warn(
-          `Storage quota exceeded while saving ${key}, data not persisted`,
-        );
-      } else {
-        console.warn(`Failed to save ${key} to localStorage:`, e);
-      }
-    }
-  }
+	function save(data: T[]): void {
+		try {
+			localStorage.setItem(key, JSON.stringify(data));
+		} catch (e) {
+			const error = e instanceof Error ? e : new Error(String(e));
+			if (
+				error.name === "QuotaExceededError" ||
+				error.message.includes("quota")
+			) {
+				console.warn(
+					`Storage quota exceeded while saving ${key}, data not persisted`,
+				);
+			} else {
+				console.warn(`Failed to save ${key} to localStorage:`, e);
+			}
+		}
+	}
 
-  return { load, save };
+	return { load, save };
 }
 
 export function hasCurrentConfiguration(): boolean {
-  const currentSearchStore = get(searchStore);
-  const currentTreeStore = get(treeStore);
+	const currentSearchStore = get(searchStore);
+	const currentTreeStore = get(treeStore);
 
-  return !!(
-    currentTreeStore.chosenSocket ||
-    currentSearchStore.jewelType ||
-    currentSearchStore.conqueror ||
-    currentSearchStore.selectedStats.length > 0
-  );
+	return !!(
+		currentTreeStore.chosenSocket ||
+		currentSearchStore.jewelType ||
+		currentSearchStore.conqueror ||
+		currentSearchStore.selectedStats.length > 0
+	);
 }
 
 export function loadConfiguration(entry: BaseEntry): void {
-  // Find the correct object references from constants to ensure proper binding
-  const jewelType =
-    jewelTypes.find((jt) => jt.name === entry.jewelType.name) ||
-    entry.jewelType;
-  const conquerorOptions = jewelType ? conquerors[jewelType.name] || [] : [];
-  const conqueror =
-    conquerorOptions.find((c) => c.id === entry.conqueror?.id) ||
-    entry.conqueror;
+	// Find the correct object references from constants to ensure proper binding
+	const jewelType =
+		jewelTypes.find((jt) => jt.name === entry.jewelType.name) ||
+		entry.jewelType;
+	const conquerorOptions = jewelType ? conquerors[jewelType.name] || [] : [];
+	const conqueror =
+		conquerorOptions.find((c) => c.id === entry.conqueror?.id) ||
+		entry.conqueror;
 
-  // Update search store
-  searchStore.update((store) => {
-    store.jewelType = jewelType;
-    store.conqueror = conqueror;
-    store.selectedStats = [...entry.stats];
-    store.minTotalWeight = entry.minTotalWeight;
-    store.statSearchMode = entry.statSearchMode ?? "occurrences";
-    store.mode = "stats";
-    store.searched = false; // Will be set to true when search executes
-    store.statsResults = {};
-    store.currentPage = 0;
-    store.totalResults = 0;
-    store.orderedSeeds = [];
-    store.statsSearched = false;
-    return store;
-  });
+	// Update search store
+	searchStore.update((store) => {
+		store.jewelType = jewelType;
+		store.conqueror = conqueror;
+		store.selectedStats = [...entry.stats];
+		store.minTotalWeight = entry.minTotalWeight;
+		store.statSearchMode = entry.statSearchMode ?? "occurrences";
+		store.mode = "stats";
+		store.searched = false; // Will be set to true when search executes
+		store.statsResults = {};
+		store.currentPage = 0;
+		store.totalResults = 0;
+		store.orderedSeeds = [];
+		store.statsSearched = false;
+		return store;
+	});
 
-  // Update tree store socket and allocated nodes
-  treeStore.update((store) => {
-    // Reconstruct allocated Map from skill IDs using real node data
-    const nodes = canvas.treeData.nodes;
-    const allocated = new Map<string, TreeNode>();
+	// Update tree store socket and allocated nodes
+	treeStore.update((store) => {
+		// Reconstruct allocated Map from skill IDs using real node data
+		const nodes = canvas.treeData.nodes;
+		const allocated = new Map<string, TreeNode>();
 
-    for (const skillId of entry.allocatedSkillIds || []) {
-      const node = findNodeBySkill(parseInt(skillId, 10), nodes);
-      if (node) {
-        allocated.set(skillId, node);
-      }
-    }
+		for (const skillId of entry.allocatedSkillIds || []) {
+			const node = findNodeBySkill(parseInt(skillId, 10), nodes);
+			if (node) {
+				allocated.set(skillId, node);
+			}
+		}
 
-    store.chosenSocket = entry.socket as TreeNode | null;
-    store.allocated = allocated;
-    return store;
-  });
-
-  // Update visual display of jewel sockets (selected state)
-  updateSocketVisualSelection();
-
-  // Update visual display of allocated nodes
-  updateAllocatedDisplay();
+		store.chosenSocket = entry.socket as TreeNode | null;
+		store.allocated = allocated;
+		return store;
+	});
 }
 
 export function createBaseEntry(): BaseEntry | null {
-  const currentSearchStore = get(searchStore);
-  const currentTreeStore = get(treeStore);
+	const currentSearchStore = get(searchStore);
+	const currentTreeStore = get(treeStore);
 
-  if (DEBUG) {
-    console.log(
-      "Creating entry - allocated nodes:",
-      currentTreeStore.allocated.size,
-    );
-  }
+	if (DEBUG) {
+		console.log(
+			"Creating entry - allocated nodes:",
+			currentTreeStore.allocated.size,
+		);
+	}
 
-  // Only save if we have required data
-  if (
-    !currentTreeStore.chosenSocket ||
-    !currentSearchStore.jewelType ||
-    !currentSearchStore.conqueror
-  ) {
-    return null;
-  }
+	// Only save if we have required data
+	if (
+		!currentTreeStore.chosenSocket ||
+		!currentSearchStore.jewelType ||
+		!currentSearchStore.conqueror
+	) {
+		return null;
+	}
 
-  const allocatedSkillIds = Array.from(currentTreeStore.allocated.keys());
+	const allocatedSkillIds = Array.from(currentTreeStore.allocated.keys());
 
-  const entry: BaseEntry = {
-    id: crypto.randomUUID(),
-    timestamp: Date.now(),
-    socket: currentTreeStore.chosenSocket!,
-    jewelType: currentSearchStore.jewelType!,
-    conqueror: currentSearchStore.conqueror,
-    stats: [...currentSearchStore.selectedStats],
-    minTotalWeight: currentSearchStore.minTotalWeight,
-    allocatedSkillIds,
-    statSearchMode: currentSearchStore.statSearchMode,
-  };
+	const entry: BaseEntry = {
+		id: crypto.randomUUID(),
+		timestamp: Date.now(),
+		socket: currentTreeStore.chosenSocket!,
+		jewelType: currentSearchStore.jewelType!,
+		conqueror: currentSearchStore.conqueror,
+		stats: [...currentSearchStore.selectedStats],
+		minTotalWeight: currentSearchStore.minTotalWeight,
+		allocatedSkillIds,
+		statSearchMode: currentSearchStore.statSearchMode,
+	};
 
-  if (DEBUG) {
-    console.log(
-      "Entry allocated skill IDs:",
-      allocatedSkillIds.length,
-      allocatedSkillIds,
-    );
-  }
+	if (DEBUG) {
+		console.log(
+			"Entry allocated skill IDs:",
+			allocatedSkillIds.length,
+			allocatedSkillIds,
+		);
+	}
 
-  return entry;
+	return entry;
 }

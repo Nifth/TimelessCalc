@@ -51,10 +51,6 @@ src/
 ├── main.ts              # Application entry point
 ├── Tree.svelte          # Main application component
 ├── types.ts             # TypeScript type definitions
-├── konva/               # Canvas rendering logic
-│   ├── canvasContext.ts  # Canvas context management
-│   ├── layers/          # Konva layer implementations
-│   └── utils/           # Canvas utilities
 ├── stores/              # Svelte stores
 ├── ui/                  # UI components
 ├── providers/           # Data providers

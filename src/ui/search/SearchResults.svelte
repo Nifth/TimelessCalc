@@ -1,261 +1,261 @@
 <script lang="ts">
-  import type { Node } from "$lib/types";
-  import { searchStore } from "$lib/stores/searchStore";
-  import { treeStore } from "$lib/stores/treeStore";
-  import { clearHighlights } from "$lib/konva/utils/jewelHighlight";
-  import { applySeed } from "$lib/utils/sidebar/searchLogic";
-  import { getSeedsPerPage, openTradeUrl } from "$lib/utils/sidebar/tradeQuery";
-  import {
-    generateShareUrl,
-    copyToClipboard,
-  } from "$lib/utils/sharing/shareUtils";
-  import { translations } from "$lib/providers/translations";
+import type { Node } from "$lib/types";
+import { searchStore } from "$lib/stores/searchStore";
+import { treeStore } from "$lib/stores/treeStore";
+import { canvas } from "$lib/canvas/canvasContext";
+import { applySeed } from "$lib/utils/sidebar/searchLogic";
+import { getSeedsPerPage, openTradeUrl } from "$lib/utils/sidebar/tradeQuery";
+import {
+	generateShareUrl,
+	copyToClipboard,
+} from "$lib/utils/sharing/shareUtils";
+import { translations } from "$lib/providers/translations";
 
-  import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
-  import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
-  import StatsResults from "$lib/ui/search/StatsResults.svelte";
-  import TradeControls from "$lib/ui/search/TradeControls.svelte";
-  import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
-  import { favoritesActions } from "$lib/stores/favoritesStore";
-  import { showNotification } from "$lib/stores/notificationStore";
-  import { canvas } from "$lib/konva/canvasContext";
+import LeagueSelector from "$lib/ui/selectors/LeagueSelector.svelte";
+import PlatformSelector from "$lib/ui/selectors/PlatformSelector.svelte";
+import StatsResults from "$lib/ui/search/StatsResults.svelte";
+import TradeControls from "$lib/ui/search/TradeControls.svelte";
+import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
+import { favoritesActions } from "$lib/stores/favoritesStore";
+import { showNotification } from "$lib/stores/notificationStore";
 
-  let {
-    ontargetposition,
-  }: {
-    ontargetposition?: (pos: { top: number; left: number } | null) => void;
-  } = $props();
+let {
+	ontargetposition,
+}: {
+	ontargetposition?: (pos: { top: number; left: number } | null) => void;
+} = $props();
 
-  let expandedGroups: Record<number, boolean> = $state({});
-  let groupPages: Record<string, number> = $state({});
-  let hasGroupTraded: Record<string, boolean> = $state({});
-  let _hasTraded = $state(false);
+let expandedGroups: Record<number, boolean> = $state({});
+let groupPages: Record<string, number> = $state({});
+let hasGroupTraded: Record<string, boolean> = $state({});
+let _hasTraded = $state(false);
 
-  let showSaveFavoriteModal = $state(false);
-  let favoriteSuggestion = $state("");
-  let favoriteNotificationName = $state("");
-  let showShareTooltip = $state(false);
+let showSaveFavoriteModal = $state(false);
+let favoriteSuggestion = $state("");
+let favoriteNotificationName = $state("");
+let showShareTooltip = $state(false);
 
-  let canShare = $derived(
-    !!$searchStore.jewelType &&
-      !!$searchStore.conqueror &&
-      ($searchStore.selectedStats.length > 0 || $searchStore.seed !== null),
-  );
+let canShare = $derived(
+	!!$searchStore.jewelType &&
+		!!$searchStore.conqueror &&
+		($searchStore.selectedStats.length > 0 || $searchStore.seed !== null),
+);
 
-  function nextPage() {
-    const seedsPerPage = getSeedsPerPage(
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-    );
-    const maxPage = Math.floor(($searchStore.totalResults - 1) / seedsPerPage);
-    searchStore.update((s) => {
-      if (s.currentPage < maxPage) {
-        s.currentPage++;
-      }
-      return s;
-    });
-  }
+function nextPage() {
+	const seedsPerPage = getSeedsPerPage(
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+	);
+	const maxPage = Math.floor(($searchStore.totalResults - 1) / seedsPerPage);
+	searchStore.update((s) => {
+		if (s.currentPage < maxPage) {
+			s.currentPage++;
+		}
+		return s;
+	});
+}
 
-  function storeTradeInfo(seeds: number[], page: number, groupName?: string) {
-    const filtersPerPage = getSeedsPerPage(
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-    );
-    if (seeds.length < filtersPerPage) return;
+function storeTradeInfo(seeds: number[], page: number, groupName?: string) {
+	const filtersPerPage = getSeedsPerPage(
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+	);
+	if (seeds.length < filtersPerPage) return;
 
-    const conquerorLabel = $searchStore.conqueror?.label || "Any";
-    searchStore.update((s) => {
-      s.lastTradeInfo = { seeds, conquerorLabel, page, groupName };
-      return s;
-    });
-  }
+	const conquerorLabel = $searchStore.conqueror?.label || "Any";
+	searchStore.update((s) => {
+		s.lastTradeInfo = { seeds, conquerorLabel, page, groupName };
+		return s;
+	});
+}
 
-  function logNextPage() {
-    const nextPageNum = $searchStore.currentPage;
-    const seedsPerPage = getSeedsPerPage(
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-    );
-    const startIdx = nextPageNum * seedsPerPage;
-    const endIdx = Math.min(
-      startIdx + seedsPerPage,
-      $searchStore.orderedSeeds.length,
-    );
-    const pageSeeds = $searchStore.orderedSeeds.slice(startIdx, endIdx);
-    openTradeUrl(
-      $searchStore.orderedSeeds,
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-      nextPageNum,
-      $searchStore.platform,
-      $searchStore.league,
-    );
-    storeTradeInfo(pageSeeds, nextPageNum);
-  }
+function logNextPage() {
+	const nextPageNum = $searchStore.currentPage;
+	const seedsPerPage = getSeedsPerPage(
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+	);
+	const startIdx = nextPageNum * seedsPerPage;
+	const endIdx = Math.min(
+		startIdx + seedsPerPage,
+		$searchStore.orderedSeeds.length,
+	);
+	const pageSeeds = $searchStore.orderedSeeds.slice(startIdx, endIdx);
+	openTradeUrl(
+		$searchStore.orderedSeeds,
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+		nextPageNum,
+		$searchStore.platform,
+		$searchStore.league,
+	);
+	storeTradeInfo(pageSeeds, nextPageNum);
+}
 
-  function handleTrade() {
-    searchStore.update((s) => {
-      s.currentPage = 0;
-      return s;
-    });
-    _hasTraded = true;
-    const seedsPerPage = getSeedsPerPage(
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-    );
-    const pageSeeds = $searchStore.orderedSeeds.slice(0, seedsPerPage);
-    openTradeUrl(
-      $searchStore.orderedSeeds,
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-      0,
-      $searchStore.platform,
-      $searchStore.league,
-    );
-    storeTradeInfo(pageSeeds, 0);
-  }
+function handleTrade() {
+	searchStore.update((s) => {
+		s.currentPage = 0;
+		return s;
+	});
+	_hasTraded = true;
+	const seedsPerPage = getSeedsPerPage(
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+	);
+	const pageSeeds = $searchStore.orderedSeeds.slice(0, seedsPerPage);
+	openTradeUrl(
+		$searchStore.orderedSeeds,
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+		0,
+		$searchStore.platform,
+		$searchStore.league,
+	);
+	storeTradeInfo(pageSeeds, 0);
+}
 
-  function handleGroupTrade(total: string) {
-    const groupSeeds = $searchStore.statsResults[total].map((g) => g.seed);
-    const seedsPerPage = getSeedsPerPage(
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-    );
-    const pageSeeds = groupSeeds.slice(0, seedsPerPage);
-    groupPages = { ...groupPages, [total]: 0 };
-    hasGroupTraded = { ...hasGroupTraded, [total]: true };
-    openTradeUrl(
-      groupSeeds,
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-      0,
-      $searchStore.platform,
-      $searchStore.league,
-    );
-    storeTradeInfo(pageSeeds, 0, total);
-  }
+function handleGroupTrade(total: string) {
+	const groupSeeds = $searchStore.statsResults[total].map((g) => g.seed);
+	const seedsPerPage = getSeedsPerPage(
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+	);
+	const pageSeeds = groupSeeds.slice(0, seedsPerPage);
+	groupPages = { ...groupPages, [total]: 0 };
+	hasGroupTraded = { ...hasGroupTraded, [total]: true };
+	openTradeUrl(
+		groupSeeds,
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+		0,
+		$searchStore.platform,
+		$searchStore.league,
+	);
+	storeTradeInfo(pageSeeds, 0, total);
+}
 
-  function handleGroupNext(total: string) {
-    const groupSeeds = $searchStore.statsResults[total].map((g) => g.seed);
-    const currentPage = groupPages[total] || 0;
-    const seedsPerPage = getSeedsPerPage(
-      $searchStore.jewelType!,
-      $searchStore.conqueror,
-    );
-    const maxPage = Math.floor((groupSeeds.length - 1) / seedsPerPage);
-    if (currentPage < maxPage) {
-      const nextPage = currentPage + 1;
-      const startIdx = nextPage * seedsPerPage;
-      const endIdx = Math.min(startIdx + seedsPerPage, groupSeeds.length);
-      const pageSeeds = groupSeeds.slice(startIdx, endIdx);
-      groupPages = { ...groupPages, [total]: nextPage };
-      openTradeUrl(
-        groupSeeds,
-        $searchStore.jewelType!,
-        $searchStore.conqueror,
-        nextPage,
-        $searchStore.platform,
-        $searchStore.league,
-      );
-      storeTradeInfo(pageSeeds, nextPage, total);
-    }
-  }
+function handleGroupNext(total: string) {
+	const groupSeeds = $searchStore.statsResults[total].map((g) => g.seed);
+	const currentPage = groupPages[total] || 0;
+	const seedsPerPage = getSeedsPerPage(
+		$searchStore.jewelType!,
+		$searchStore.conqueror,
+	);
+	const maxPage = Math.floor((groupSeeds.length - 1) / seedsPerPage);
+	if (currentPage < maxPage) {
+		const nextPage = currentPage + 1;
+		const startIdx = nextPage * seedsPerPage;
+		const endIdx = Math.min(startIdx + seedsPerPage, groupSeeds.length);
+		const pageSeeds = groupSeeds.slice(startIdx, endIdx);
+		groupPages = { ...groupPages, [total]: nextPage };
+		openTradeUrl(
+			groupSeeds,
+			$searchStore.jewelType!,
+			$searchStore.conqueror,
+			nextPage,
+			$searchStore.platform,
+			$searchStore.league,
+		);
+		storeTradeInfo(pageSeeds, nextPage, total);
+	}
+}
 
-  function backToForm() {
-    clearHighlights();
-    expandedGroups = {};
-    searchStore.update((s) => {
-      s.searched = false;
-      s.statsResults = {};
-      s.currentPage = 0;
-      s.totalResults = 0;
-      s.orderedSeeds = [];
-      s.statsSearched = false;
-      s.seedSearched = false;
-      return s;
-    });
-  }
+function backToForm() {
+	clearHighlights();
+	expandedGroups = {};
+	searchStore.update((s) => {
+		s.searched = false;
+		s.statsResults = {};
+		s.currentPage = 0;
+		s.totalResults = 0;
+		s.orderedSeeds = [];
+		s.statsSearched = false;
+		s.seedSearched = false;
+		return s;
+	});
+}
 
-  async function applySeedFromResults(seed: number) {
-    await applySeed(seed, $searchStore.jewelType!, translations);
-    searchStore.update((s) => {
-      s.searched = true;
-      s.seed = seed;
-      return s;
-    });
-  }
+function clearHighlights() {
+	canvas.state.highlightedStatKeys = null;
+	canvas.state.highlightVersion++;
+}
 
-  function expandGroup(total: number) {
-    expandedGroups = { ...expandedGroups, [total]: !expandedGroups[total] };
-  }
+async function applySeedFromResults(seed: number) {
+	await applySeed(seed, $searchStore.jewelType!, translations);
+	searchStore.update((s) => {
+		s.searched = true;
+		s.seed = seed;
+		return s;
+	});
+}
 
-  async function handleShare() {
-    const shareUrl = generateShareUrl($searchStore, $treeStore);
-    const success = await copyToClipboard(shareUrl);
-    if (success) {
-      showNotification("share", "Link copied to clipboard!");
-    }
-  }
+function expandGroup(total: number) {
+	expandedGroups = { ...expandedGroups, [total]: !expandedGroups[total] };
+}
 
-  function findNearbyKeystone(socket: Node): string {
-    const treeNodes = canvas.treeData.nodes;
-    const socketNodes = canvas.treeData.socketNodes[socket.skill.toString()];
+async function handleShare() {
+	const shareUrl = generateShareUrl($searchStore, $treeStore);
+	const success = await copyToClipboard(shareUrl);
+	if (success) {
+		showNotification("share", "Link copied to clipboard!");
+	}
+}
 
-    if (!socketNodes) {
-      return socket.name;
-    }
+function findNearbyKeystone(socket: Node): string {
+	const treeNodes = canvas.treeData.nodes;
+	const socketNodes = canvas.treeData.socketNodes[socket.skill.toString()];
 
-    for (const nodeId of socketNodes) {
-      const node = treeNodes[nodeId];
-      if (node && node.isKeystone) {
-        return node.name;
-      }
-    }
+	if (!socketNodes) {
+		return socket.name;
+	}
 
-    for (const nodeId of socketNodes) {
-      const node = treeNodes[nodeId];
-      if (node && node.isNotable) {
-        return node.name;
-      }
-    }
+	for (const nodeId of socketNodes) {
+		const node = treeNodes[nodeId];
+		if (node && node.isKeystone) {
+			return node.name;
+		}
+	}
 
-    for (const nodeId of socketNodes) {
-      const node = treeNodes[nodeId];
-      if (
-        node &&
-        node.name &&
-        node.name !== "Basic Jewel Socket" &&
-        !node.name.includes("Jewel Socket")
-      ) {
-        return node.name;
-      }
-    }
+	for (const nodeId of socketNodes) {
+		const node = treeNodes[nodeId];
+		if (node && node.isNotable) {
+			return node.name;
+		}
+	}
 
-    return socket.name;
-  }
+	for (const nodeId of socketNodes) {
+		const node = treeNodes[nodeId];
+		if (
+			node &&
+			node.name &&
+			node.name !== "Basic Jewel Socket" &&
+			!node.name.includes("Jewel Socket")
+		) {
+			return node.name;
+		}
+	}
 
-  function generateFavoriteSuggestion(): string {
-    const conquerorLabel = $searchStore.conqueror?.label || "Any";
-    const jewelTypeLabel = $searchStore.jewelType?.label || "";
-    const socket = $treeStore.chosenSocket;
-    if (!socket) {
-      return `${conquerorLabel} (${jewelTypeLabel}) - No socket`;
-    }
-    const keystone = findNearbyKeystone(socket);
-    return `${conquerorLabel} (${jewelTypeLabel}) - ${keystone}`;
-  }
+	return socket.name;
+}
 
-  function handleSaveFavorite(name: string) {
-    const finalName = name.trim() === "" ? favoriteSuggestion : name;
-    favoritesActions.saveFavorite(finalName);
-    showSaveFavoriteModal = false;
-    favoriteNotificationName = finalName;
-    showNotification(
-      "favorite",
-      `Saved as '${favoriteNotificationName}'`,
-      3000,
-    );
-  }
+function generateFavoriteSuggestion(): string {
+	const conquerorLabel = $searchStore.conqueror?.label || "Any";
+	const jewelTypeLabel = $searchStore.jewelType?.label || "";
+	const socket = $treeStore.chosenSocket;
+	if (!socket) {
+		return `${conquerorLabel} (${jewelTypeLabel}) - No socket`;
+	}
+	const keystone = findNearbyKeystone(socket);
+	return `${conquerorLabel} (${jewelTypeLabel}) - ${keystone}`;
+}
+
+function handleSaveFavorite(name: string) {
+	const finalName = name.trim() === "" ? favoriteSuggestion : name;
+	favoritesActions.saveFavorite(finalName);
+	showSaveFavoriteModal = false;
+	favoriteNotificationName = finalName;
+	showNotification("favorite", `Saved as '${favoriteNotificationName}'`, 3000);
+}
 </script>
 
 <div class="flex items-center justify-between gap-3 mb-4">

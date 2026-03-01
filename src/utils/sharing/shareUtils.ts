@@ -6,7 +6,7 @@ import type {
   Conqueror,
   Node,
 } from "$lib/types";
-import { canvas } from "$lib/konva/canvasContext";
+import { canvas } from "$lib/canvas/canvasContext";
 import {
   getSocketNodeIds,
   prepareNodeListForEncoding,

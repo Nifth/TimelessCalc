@@ -173,9 +173,5 @@ export function openTradeUrl(
 ): void {
   const query = buildTradeQuery(seeds, jewelType, conqueror, page);
   const url = buildTradeUrl(query, platform, league);
-  if (DEBUG) {
-    console.log(query);
-    console.log(url);
-  }
   window.open(url, "_blank");
 }
