@@ -31,9 +31,15 @@ export const searchStore = writable<SearchStore>({
 export { resetDependentFields } from "$lib/utils/search/resetStore";
 
 export function setJewelLoadError(jewel: JewelType, message: string) {
-  searchStore.update((s) => ({ ...s, jewelLoadError: { jewel, message } }));
+  searchStore.update((s) => {
+    s.jewelLoadError = { jewel, message };
+    return s;
+  });
 }
 
 export function clearJewelLoadError() {
-  searchStore.update((s) => ({ ...s, jewelLoadError: null }));
+  searchStore.update((s) => {
+    s.jewelLoadError = null;
+    return s;
+  });
 }

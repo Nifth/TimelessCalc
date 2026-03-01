@@ -217,14 +217,14 @@ export async function parseUrlAndInitialize(
     statSearchMode,
   });
 
-  treeStore.update((t) => ({
-    ...t,
-    chosenSocket,
-    allocated,
-    search: "",
-    scale: 0.1,
-    hovered: null,
-  }));
+  treeStore.update((t) => {
+    t.chosenSocket = chosenSocket;
+    t.allocated = allocated;
+    t.search = "";
+    t.scale = 0.1;
+    t.hovered = null;
+    return t;
+  });
 
   // Update visual display of jewel sockets (selected state)
   updateSocketVisualSelection();
@@ -245,18 +245,18 @@ export async function parseUrlAndInitialize(
   // Trigger search if we have search parameters
   if (jewelType && conqueror && selectedStats.length > 0) {
     await performSearch("stats", null, translation, jewelType, selectedStats);
-    searchStore.update((s) => ({
-      ...s,
-      statsSearched: true,
-    }));
+    searchStore.update((s) => {
+      s.statsSearched = true;
+      return s;
+    });
   } else if (jewelType && conqueror && seed) {
-    // For seed mode, just set the stores without calling applySeed to preserve allocated from URL
-    searchStore.update((s) => ({
-      ...s,
-      searched: true,
-      seed,
-      seedSearched: true,
-    }));
+    // For seed mode, just set stores without calling applySeed to preserve allocated from URL
+    searchStore.update((s) => {
+      s.searched = true;
+      s.seed = seed;
+      s.seedSearched = true;
+      return s;
+    });
   }
 
   // Clear URL parameters after successful parsing to prevent re-initialization on reload

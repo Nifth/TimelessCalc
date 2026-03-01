@@ -60,7 +60,10 @@
         previousJewelTypeName !== null &&
         currentJewelTypeName !== previousJewelTypeName
       ) {
-        searchStore.update((s) => ({ ...s, statSearchMode: "occurrences" }));
+        searchStore.update((s) => {
+          s.statSearchMode = "occurrences";
+          return s;
+        });
       }
       previousJewelTypeName = currentJewelTypeName;
     }

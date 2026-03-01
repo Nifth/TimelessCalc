@@ -102,7 +102,10 @@
   }
 
   function handleStatSearchModeChange(mode: StatSearchMode) {
-    searchStore.update((s) => ({ ...s, statSearchMode: mode }));
+    searchStore.update((s) => {
+      s.statSearchMode = mode;
+      return s;
+    });
   }
 </script>
 

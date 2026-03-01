@@ -94,21 +94,21 @@ export function loadConfiguration(entry: BaseEntry): void {
     entry.conqueror;
 
   // Update search store
-  searchStore.update((store) => ({
-    ...store,
-    jewelType,
-    conqueror,
-    selectedStats: [...entry.stats],
-    minTotalWeight: entry.minTotalWeight,
-    statSearchMode: entry.statSearchMode ?? "occurrences",
-    mode: "stats",
-    searched: false, // Will be set to true when search executes
-    statsResults: {},
-    currentPage: 0,
-    totalResults: 0,
-    orderedSeeds: [],
-    statsSearched: false,
-  }));
+  searchStore.update((store) => {
+    store.jewelType = jewelType;
+    store.conqueror = conqueror;
+    store.selectedStats = [...entry.stats];
+    store.minTotalWeight = entry.minTotalWeight;
+    store.statSearchMode = entry.statSearchMode ?? "occurrences";
+    store.mode = "stats";
+    store.searched = false; // Will be set to true when search executes
+    store.statsResults = {};
+    store.currentPage = 0;
+    store.totalResults = 0;
+    store.orderedSeeds = [];
+    store.statsSearched = false;
+    return store;
+  });
 
   // Update tree store socket and allocated nodes
   treeStore.update((store) => {
@@ -123,11 +123,9 @@ export function loadConfiguration(entry: BaseEntry): void {
       }
     }
 
-    return {
-      ...store,
-      chosenSocket: entry.socket as TreeNode | null,
-      allocated,
-    };
+    store.chosenSocket = entry.socket as TreeNode | null;
+    store.allocated = allocated;
+    return store;
   });
 
   // Update visual display of jewel sockets (selected state)

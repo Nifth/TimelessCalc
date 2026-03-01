@@ -21,16 +21,19 @@ export async function loadEntry<T extends BaseEntry>(
 ): Promise<void> {
   const { entry, loadAction, translation, canvas, onSwitchToTab } = options;
 
-  searchStore.update((s) => ({
-    ...s,
-    automated: true,
-  }));
+  searchStore.update((s) => {
+    s.automated = true;
+    return s;
+  });
   loadAction(entry);
 
   if (canvas.stage && entry.socket) {
     centerCanvasOnSocket(canvas.stage, entry.socket, 0.2);
     changeRadius(entry.socket);
-    treeStore.update((s) => ({ ...s, scale: 0.2 }));
+    treeStore.update((s) => {
+      s.scale = 0.2;
+      return s;
+    });
   }
 
   onSwitchToTab();
@@ -39,13 +42,13 @@ export async function loadEntry<T extends BaseEntry>(
 
   const currentSearchStore = get(searchStore);
   if (currentSearchStore.searched) {
-    searchStore.update((s) => ({
-      ...s,
-      statsSearched: true,
-    }));
+    searchStore.update((s) => {
+      s.statsSearched = true;
+      return s;
+    });
   }
-  searchStore.update((s) => ({
-    ...s,
-    automated: false,
-  }));
+  searchStore.update((s) => {
+    s.automated = false;
+    return s;
+  });
 }

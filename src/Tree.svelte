@@ -257,7 +257,10 @@
   id="tree"
   style="position:fixed;inset:0;background:#070c11"
   role="region"
-  onmouseleave={() => treeStore.update((s) => ({ ...s, hovered: null }))}
+  onmouseleave={() => treeStore.update((s) => {
+    s.hovered = null;
+    return s;
+  })}
 ></div>
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />

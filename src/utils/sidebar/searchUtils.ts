@@ -60,50 +60,53 @@ export function getEntryForSeed(
 }
 
 export function setSearchLoading(loading: boolean): void {
-  searchStore.update((state) => ({ ...state, loading }));
+  searchStore.update((state) => {
+    state.loading = loading;
+    return state;
+  });
 }
 
 export function setSearchNotFound(): void {
-  searchStore.update((state) => ({
-    ...state,
-    searched: false,
-    loading: false,
-  }));
+  searchStore.update((state) => {
+    state.searched = false;
+    state.loading = false;
+    return state;
+  });
 }
 
 export function setSearchComplete(): void {
-  searchStore.update((state) => ({
-    ...state,
-    searched: true,
-    loading: false,
-  }));
+  searchStore.update((state) => {
+    state.searched = true;
+    state.loading = false;
+    return state;
+  });
 }
 
 export const ensureJewelDataLoaded = loadJewelData;
 
 export function initializeSearchStore(params: SearchStoreInitParams): void {
   resetFull();
-  searchStore.update((s) => ({
-    ...s,
-    jewelType: params.jewelType,
-    conqueror: params.conqueror,
-    selectedStats: params.selectedStats,
-    seed: params.seed,
-    league: params.league,
-    platform: params.platform,
-    lastTradeInfo: null,
-    mode: params.mode,
-    minTotalWeight: params.minTotalWeight,
-    statSearchMode: params.statSearchMode ?? "occurrences",
-    statsSearched: false,
-    seedSearched: false,
-    automated: true,
-  }));
+  searchStore.update((s) => {
+    s.jewelType = params.jewelType;
+    s.conqueror = params.conqueror;
+    s.selectedStats = params.selectedStats;
+    s.seed = params.seed;
+    s.league = params.league;
+    s.platform = params.platform;
+    s.lastTradeInfo = null;
+    s.mode = params.mode;
+    s.minTotalWeight = params.minTotalWeight;
+    s.statSearchMode = params.statSearchMode ?? "occurrences";
+    s.statsSearched = false;
+    s.seedSearched = false;
+    s.automated = true;
+    return s;
+  });
 }
 
 export function finalizeSearchStoreInitialization(): void {
-  searchStore.update((s) => ({
-    ...s,
-    automated: false,
-  }));
+  searchStore.update((s) => {
+    s.automated = false;
+    return s;
+  });
 }

@@ -64,10 +64,10 @@
     if (seeds.length < filtersPerPage) return;
 
     const conquerorLabel = $searchStore.conqueror?.label || "Any";
-    searchStore.update((s) => ({
-      ...s,
-      lastTradeInfo: { seeds, conquerorLabel, page, groupName },
-    }));
+    searchStore.update((s) => {
+      s.lastTradeInfo = { seeds, conquerorLabel, page, groupName };
+      return s;
+    });
   }
 
   function logNextPage() {
@@ -164,16 +164,16 @@
   function backToForm() {
     clearHighlights();
     expandedGroups = {};
-    searchStore.update((s) => ({
-      ...s,
-      searched: false,
-      statsResults: {},
-      currentPage: 0,
-      totalResults: 0,
-      orderedSeeds: [],
-      statsSearched: false,
-      seedSearched: false,
-    }));
+    searchStore.update((s) => {
+      s.searched = false;
+      s.statsResults = {};
+      s.currentPage = 0;
+      s.totalResults = 0;
+      s.orderedSeeds = [];
+      s.statsSearched = false;
+      s.seedSearched = false;
+      return s;
+    });
   }
 
   async function applySeedFromResults(seed: number) {
