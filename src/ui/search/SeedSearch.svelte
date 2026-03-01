@@ -1,8 +1,7 @@
 <script lang="ts">
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
-  import { canvas } from "$lib/konva/canvasContext";
-  import Konva from "konva";
+  import { canvas } from "$lib/canvas/canvasContext";
   import { get } from "svelte/store";
   import { translations } from "$lib/providers/translations";
   import { formatStatTranslation } from "$lib/utils/sidebar/sidebarUtils";
@@ -53,28 +52,8 @@
   }
 
   function highlightNodesWithStat(statKey: number) {
-    canvas.highlightLayer?.destroyChildren();
-    for (const node of $treeStore.allocated.values()) {
-      if (
-        node?.timelessStatKeys?.includes(statKey) &&
-        node?.timelessStatValues
-      ) {
-        const index = node.timelessStatKeys.indexOf(statKey);
-        const value = node.timelessStatValues[index];
-        const statLabel = formatStatTranslation(statKey, value, translations);
-        if (!node.stats?.includes(statLabel)) {
-          const circle = new Konva.Circle({
-            x: node.x,
-            y: node.y,
-            radius: node.isNotable ? 70 : 50,
-            stroke: "yellow",
-            strokeWidth: 10,
-          });
-          canvas.highlightLayer?.add(circle);
-        }
-      }
-    }
-    canvas.highlightLayer?.batchDraw();
+    canvas.state.highlightedStatKeys = [statKey];
+    canvas.state.highlightVersion = (canvas.state.highlightVersion || 0) + 1;
   }
 
   function handleInput() {

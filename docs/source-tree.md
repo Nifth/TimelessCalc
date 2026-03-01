@@ -14,17 +14,6 @@
 
 - `Tree.svelte`: Root component for passive tree visualization
 
-### konva/
-
-**Purpose**: Canvas rendering logic using Konva.js
-
-**Layers**:
-
-- `layers/background.ts`: Static background rendering
-- `layers/lines.ts`: Connection lines between nodes
-- `layers/nodes.ts`: Individual node rendering
-- `layers/hit.ts`: Mouse interaction hit detection
-
 **Utilities**:
 
 - Click, hover, zoom, and sprite management functions

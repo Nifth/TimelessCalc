@@ -8,8 +8,8 @@ import pako from "pako";
 
 // Clear typing for data in each file
 export interface JewelEntry {
-  r: Record<string, number[]>;
-  a: Record<string, number[]>;
+	r: Record<string, number[]>;
+	a: Record<string, number[]>;
 }
 
 // In-memory cache for jewel data
@@ -22,23 +22,23 @@ export const loadedJewels: Writable<Set<string>> = writable(new Set());
 
 // Function to load a file (browser automatically decompresses .gz files)
 async function fetchText(url: string): Promise<string> {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`HTTP ${response.status}`);
+	}
 
-  const arrayBuffer = await response.arrayBuffer();
-  const uint8Array = new Uint8Array(arrayBuffer);
+	const arrayBuffer = await response.arrayBuffer();
+	const uint8Array = new Uint8Array(arrayBuffer);
 
-  // Check first byte: if it's `{` (ASCII 123), assume JSON
-  // Otherwise, assume gzipped data
-  if (uint8Array[0] === 123) {
-    return new TextDecoder().decode(uint8Array);
-  }
+	// Check first byte: if it's `{` (ASCII 123), assume JSON
+	// Otherwise, assume gzipped data
+	if (uint8Array[0] === 123) {
+		return new TextDecoder().decode(uint8Array);
+	}
 
-  // Decompress gzipped data
-  const decompressed = pako.inflate(uint8Array);
-  return new TextDecoder().decode(decompressed);
+	// Decompress gzipped data
+	const decompressed = pako.inflate(uint8Array);
+	return new TextDecoder().decode(decompressed);
 }
 
 /**
@@ -49,63 +49,63 @@ async function fetchText(url: string): Promise<string> {
  * @throws Error if the file fails to load
  */
 export async function loadJewel(
-  jewelId: string,
-  socketSkill: string,
+	jewelId: string,
+	socketSkill: string,
 ): Promise<void> {
-  const cacheKey = `${jewelId}-${socketSkill}`;
+	const cacheKey = `${jewelId}-${socketSkill}`;
 
-  if (cache.has(cacheKey)) {
-    return;
-  }
+	if (cache.has(cacheKey)) {
+		return;
+	}
 
-  const jewel = jewelTypes.find((j) => j.name === jewelId);
-  if (!jewel) {
-    throw new Error(`Unknown jewel type: ${jewelId}`);
-  }
+	const jewel = jewelTypes.find((j) => j.name === jewelId);
+	if (!jewel) {
+		throw new Error(`Unknown jewel type: ${jewelId}`);
+	}
 
-  const fileName = `${jewel.label.replace(/\s+/g, "")}-${socketSkill}.jsonl.gz`;
-  const url = `./data/jewels/${fileName}`;
+	const fileName = `${jewel.label.replace(/\s+/g, "")}-${socketSkill}.jsonl.gz`;
+	const url = `./data/jewels/${fileName}`;
 
-  loadingJewels.update((s) => new Set(s).add(jewelId));
+	loadingJewels.update((s) => new Set(s).add(jewelId));
 
-  try {
-    perfMonitor.mark(jewel.label + "-" + socketSkill + " preload-start");
-    const text = await fetchText(url);
-    perfMonitor.mark(jewel.label + "-" + socketSkill + " preload-end");
-    perfMonitor.measure(
-      jewel.label + "-" + socketSkill + " preload",
-      jewel.label + "-" + socketSkill + " preload-start",
-      jewel.label + "-" + socketSkill + " preload-end",
-    );
+	try {
+		perfMonitor.mark(jewel.label + "-" + socketSkill + " preload-start");
+		const text = await fetchText(url);
+		perfMonitor.mark(jewel.label + "-" + socketSkill + " preload-end");
+		perfMonitor.measure(
+			jewel.label + "-" + socketSkill + " preload",
+			jewel.label + "-" + socketSkill + " preload-start",
+			jewel.label + "-" + socketSkill + " preload-end",
+		);
 
-    const lines = text.trim().split("\n").filter(Boolean);
-    const data: Record<number, JewelEntry> = {};
-    let i = jewel.min;
-    const step = jewelId === "eternal" ? 20 : 1;
-    for (const line of lines) {
-      const entry = JSON.parse(line) as JewelEntry;
-      data[i] = entry;
-      i += step;
-    }
+		const lines = text.trim().split("\n").filter(Boolean);
+		const data: Record<number, JewelEntry> = {};
+		let i = jewel.min;
+		const step = jewelId === "eternal" ? 20 : 1;
+		for (const line of lines) {
+			const entry = JSON.parse(line) as JewelEntry;
+			data[i] = entry;
+			i += step;
+		}
 
-    cache.set(cacheKey, data);
-    loadedJewels.update((s) => new Set(s).add(jewelId));
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    throw new Error(`Failed to load ${fileName}: ${message}`);
-  } finally {
-    loadingJewels.update((s) => {
-      const next = new Set(s);
-      next.delete(jewelId);
-      return next;
-    });
-  }
+		cache.set(cacheKey, data);
+		loadedJewels.update((s) => new Set(s).add(jewelId));
+	} catch (err) {
+		const message = err instanceof Error ? err.message : String(err);
+		throw new Error(`Failed to load ${fileName}: ${message}`);
+	} finally {
+		loadingJewels.update((s) => {
+			const next = new Set(s);
+			next.delete(jewelId);
+			return next;
+		});
+	}
 }
 
 export function getJewelData(
-  jewelId: string,
-  socketSkill: string,
+	jewelId: string,
+	socketSkill: string,
 ): Record<number, JewelEntry> | undefined {
-  const cacheKey = `${jewelId}-${socketSkill}`;
-  return cache.get(cacheKey);
+	const cacheKey = `${jewelId}-${socketSkill}`;
+	return cache.get(cacheKey);
 }

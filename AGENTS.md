@@ -4,7 +4,7 @@ This file contains essential information for agentic coding agents working in th
 
 ## Project Overview
 
-TimelessCalc is a Svelte + TypeScript application for calculating and visualizing Path of Exile passive tree jewel configurations. The app uses Vite for development and building, Konva.js for canvas rendering, and Svelte stores for state management.
+TimelessCalc is a Svelte + TypeScript application for calculating and visualizing Path of Exile passive tree jewel configurations. The app uses Vite for development and building, svelte-canvas for canvas rendering, and Svelte stores for state management.
 
 ## Development Commands
 
@@ -55,10 +55,6 @@ src/
 │   └── mouseStore.ts    # Mouse interaction state
 ├── utils/               # Utility functions
 │   └── sidebar/         # Sidebar-specific utilities
-├── konva/               # Canvas rendering logic
-│   ├── canvasContext.ts # Canvas context management
-│   ├── layers/          # Konva layer implementations
-│   └── utils/           # Canvas utilities
 ├── constants/           # Application constants
 ├── providers/           # Data providers
 └── data/                # Static JSON data files
@@ -74,7 +70,6 @@ src/
 - Example:
 
 ```ts
-import Konva from "konva";
 import type { Node, Group } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 ```
@@ -107,13 +102,6 @@ import { searchStore } from "$lib/stores/searchStore";
 - Use `writable` for mutable stores, `readable` for computed values
 - Store type definitions should be inline or exported from types.ts
 
-### Canvas/Konva Patterns
-
-- Canvas context managed in `konva/canvasContext.ts`
-- Separate layers for different visual elements
-- Use TypeScript for Konva configuration objects
-- Clean up Konva objects when components destroy
-
 ### Error Handling
 
 - Use try-catch blocks for async operations
@@ -143,7 +131,6 @@ import { searchStore } from "$lib/stores/searchStore";
 
 - Svelte 5.x with TypeScript support
 - Vite (rolldown-vite variant) for bundling
-- Konva.js for 2D canvas rendering
 
 ### Build Configuration
 
@@ -164,4 +151,3 @@ import { searchStore } from "$lib/stores/searchStore";
 - Use Svelte's reactivity efficiently
 - Debounce expensive operations (search, canvas updates)
 - Lazy load data when appropriate
-- Optimize Konva rendering with layer batching

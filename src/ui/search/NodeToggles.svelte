@@ -1,8 +1,11 @@
 <script lang="ts">
   import type { Node } from "$lib/types";
   import { treeStore } from "$lib/stores/treeStore";
-  import { canvas } from "$lib/konva/canvasContext";
-  import { updateAllocatedDisplay } from "$lib/konva/utils/jewelHighlight";
+  import { canvas } from "$lib/canvas/canvasContext";
+
+  function updateAllocatedDisplay() {
+    canvas.state.highlightVersion++;
+  }
 
   function toggleNotableNodes() {
     const chosenSocket = $treeStore.chosenSocket;

@@ -1,269 +1,95 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import Sidebar from "$lib/ui/sidebar/Sidebar.svelte";
-  import Tooltip from "$lib/ui/common/Tooltip.svelte";
-  import Preloader from "$lib/ui/common/Preloader.svelte";
-  import DebugPanel from "$lib/ui/debug/DebugPanel.svelte";
-  import JewelLoadErrorModal from "$lib/ui/modals/JewelLoadErrorModal.svelte";
-  import Konva from "konva";
-  import treeData from "$lib/data/tree.json" with { type: "json" };
-  import { preloadSprites } from "$lib/konva/utils/sprites";
-  import type { TreeData } from "$lib/types";
-  import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
-  import { translations } from "$lib/providers/translations";
-  import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
-  import { perfMonitor } from "$lib/utils/performanceMonitor";
+import { onMount } from "svelte";
+import Sidebar from "$lib/ui/sidebar/Sidebar.svelte";
+import Tooltip from "$lib/ui/common/Tooltip.svelte";
+import Preloader from "$lib/ui/common/Preloader.svelte";
+import DebugPanel from "$lib/ui/debug/DebugPanel.svelte";
+import JewelLoadErrorModal from "$lib/ui/modals/JewelLoadErrorModal.svelte";
+import TreeCanvas from "$lib/TreeCanvas.svelte";
+import { treeStore } from "$lib/stores/treeStore";
+import { searchStore, clearJewelLoadError } from "$lib/stores/searchStore";
+import { mouseStore } from "$lib/stores/mouseStore";
+import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
+import { translations } from "$lib/providers/translations";
+import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
+import { perfMonitor } from "$lib/utils/performanceMonitor";
+import { canvas } from "$lib/canvas/canvasContext";
+import { fetchLeagues } from "./providers/leagues";
+import Notification from "$lib/ui/notifications/Notification.svelte";
+import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 
-  import { canvas } from "$lib/konva/canvasContext";
-  import { drawBackground } from "$lib/konva/layers/background";
-  import { drawLines } from "$lib/konva/layers/lines";
-  import {
-    drawBaseRadius,
-    drawNodesProgressive,
-  } from "$lib/konva/layers/nodes";
-  import { createHitLayer } from "$lib/konva/layers/hit";
-  import { setupZoom } from "$lib/konva/utils/zoom";
-  import { setupHover } from "$lib/konva/utils/hover";
-  import { setupClick } from "$lib/konva/utils/click";
-  import {
-    updateJewelSockets,
-    stopAllJewelAnimations,
-  } from "$lib/konva/utils/jewelHighlight";
-  import { treeStore } from "$lib/stores/treeStore";
-  import { searchStore, clearJewelLoadError } from "$lib/stores/searchStore";
-  import { mouseStore } from "$lib/stores/mouseStore";
-  import { getHighlightableNodes } from "$lib/konva/utils/nodes";
-  import { fetchLeagues } from "./providers/leagues";
-  import { get } from "svelte/store";
-  import Notification from "$lib/ui/notifications/Notification.svelte";
-  import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
+let isLoading = $state(true);
+let loadingComplete = $state(false);
+let debugMode = $state(false);
+let renderDuration = $state(0);
 
-  const data: TreeData = JSON.parse(JSON.stringify(treeData));
+onMount(async () => {
+	try {
+		perfMonitor.mark("init-start");
 
-  let previousSkill: number | null = null;
+		loadingComplete = true;
 
-  let parsedFromUrl = false;
-  let isLoading = $state(true);
-  let loadingComplete = $state(false);
-  let loadingProgress = $state(0);
-  let debugMode = $state(false);
+		fetchLeagues();
+		await parseUrlAndInitialize(
+			canvas.treeData,
+			null,
+			performSearch,
+			translations,
+		);
 
-  onMount(() => {
-    let cleanup: () => void = () => {};
-    (async () => {
-      try {
-        perfMonitor.mark("init-start");
+		perfMonitor.mark("init-end");
+		perfMonitor.measure("total-init", "init-start", "init-end");
+	} catch (e) {
+		console.error("Error during initialization:", e);
+		loadingComplete = true;
+		isLoading = false;
+	}
+});
 
-        perfMonitor.mark("stage-setup-start");
-        canvas.stage = new Konva.Stage({
-          container: document.getElementById("tree")! as HTMLDivElement,
-          width: window.innerWidth,
-          height: window.innerHeight,
-          draggable: true,
-        });
+onMount(() => {
+	const handleKeydown = (e: KeyboardEvent) => {
+		if (e.ctrlKey && e.altKey && e.key === "f") {
+			e.preventDefault();
+			debugMode = !debugMode;
+		}
+	};
+	window.addEventListener("keydown", handleKeydown);
 
-        // initialization
-        canvas.stage.scale({ x: 0.2, y: 0.2 });
-        canvas.stage.position({
-          x: window.innerWidth / 2,
-          y: window.innerHeight / 2,
-        });
+	return () => {
+		window.removeEventListener("keydown", handleKeydown);
+	};
+});
 
-        canvas.backgroundLayer = new Konva.Layer({ listening: false });
-        canvas.mainLayer = new Konva.Layer({ listening: false });
-        canvas.lineLayer = new Konva.Layer({ listening: false });
-        canvas.hitLayer = new Konva.Layer({ listening: true });
-        canvas.highlightLayer = new Konva.Layer({ listening: false });
-        canvas.treeData = data;
+$effect(() => {
+	if (loadingComplete) {
+		const timeoutId = setTimeout(() => {
+			isLoading = false;
+		}, 50);
+		return () => clearTimeout(timeoutId);
+	}
+});
 
-        canvas.stage.add(
-          canvas.backgroundLayer,
-          canvas.lineLayer,
-          canvas.mainLayer,
-          canvas.hitLayer,
-          canvas.highlightLayer,
-        );
+function handleErrorClose() {
+	searchStore.update((s) => ({ ...s, jewelType: null }));
+	clearJewelLoadError();
+}
 
-        perfMonitor.mark("sprite-preload-start");
-        await preloadSprites(data.sprites);
-        perfMonitor.mark("sprite-preload-end");
-        perfMonitor.measure(
-          "sprite-preload",
-          "sprite-preload-start",
-          "sprite-preload-end",
-        );
-
-        perfMonitor.mark("stage-setup-end");
-        perfMonitor.measure(
-          "stage-setup",
-          "stage-setup-start",
-          "stage-setup-end",
-        );
-        loadingProgress = 25;
-
-        perfMonitor.mark("background-draw-start");
-        getHighlightableNodes();
-        drawBackground();
-        perfMonitor.mark("background-draw-end");
-        perfMonitor.measure(
-          "background-draw",
-          "background-draw-start",
-          "background-draw-end",
-        );
-
-        perfMonitor.mark("nodes-draw-start");
-        loadingProgress = 30;
-        await drawNodesProgressive(
-          (progress: number, step: string) => {
-            loadingProgress = 30 + progress * 0.4; // 30-70% for nodes
-          },
-          () => {
-            perfMonitor.mark("nodes-draw-end");
-            perfMonitor.measure(
-              "nodes-draw",
-              "nodes-draw-start",
-              "nodes-draw-end",
-            );
-          },
-        );
-
-        perfMonitor.mark("lines-draw-start");
-        drawLines();
-        perfMonitor.mark("lines-draw-end");
-        perfMonitor.measure("lines-draw", "lines-draw-start", "lines-draw-end");
-        loadingProgress = 75;
-
-        perfMonitor.mark("base-radius-draw-start");
-        drawBaseRadius();
-        perfMonitor.mark("base-radius-draw-end");
-        perfMonitor.measure(
-          "base-radius-draw",
-          "base-radius-draw-start",
-          "base-radius-draw-end",
-        );
-        loadingProgress = 80;
-
-        perfMonitor.mark("hit-layer-setup-start");
-        createHitLayer();
-        perfMonitor.mark("hit-layer-setup-end");
-        perfMonitor.measure(
-          "hit-layer-setup",
-          "hit-layer-setup-start",
-          "hit-layer-setup-end",
-        );
-        loadingProgress = 85;
-
-        perfMonitor.mark("event-setup-start");
-        setupZoom();
-        setupHover();
-        setupClick();
-        perfMonitor.mark("event-setup-end");
-        perfMonitor.measure(
-          "event-setup",
-          "event-setup-start",
-          "event-setup-end",
-        );
-        loadingProgress = 90;
-
-        canvas.mainLayer.batchDraw();
-        canvas.lineLayer.batchDraw();
-
-        perfMonitor.mark("init-end");
-        perfMonitor.measure("total-init", "init-start", "init-end");
-
-        loadingProgress = 100;
-        loadingComplete = true;
-
-        fetchLeagues();
-        parsedFromUrl = await parseUrlAndInitialize(
-          data,
-          canvas,
-          performSearch,
-          translations,
-        );
-
-        const handleResize = () => {
-          if (canvas.stage) {
-            canvas.stage.width(window.innerWidth);
-            canvas.stage.height(window.innerHeight);
-            canvas.stage.batchDraw();
-          }
-        };
-
-        window.addEventListener("resize", handleResize);
-
-        const handleKeydown = (e: KeyboardEvent) => {
-          if (e.ctrlKey && e.altKey && e.key === "f") {
-            e.preventDefault();
-            debugMode = !debugMode;
-          }
-        };
-        window.addEventListener("keydown", handleKeydown);
-
-        cleanup = () => {
-          window.removeEventListener("resize", handleResize);
-          window.removeEventListener("keydown", handleKeydown);
-          stopAllJewelAnimations();
-          canvas.stage?.destroy();
-        };
-      } catch (e) {
-        console.error("Error during initialization:", e);
-        if (e instanceof Error) {
-          console.error("Stack:", e.stack);
-        }
-        loadingComplete = true;
-        isLoading = false;
-      }
-    })();
-
-    return () => cleanup();
-  });
-
-  const currentSkill = $derived($treeStore.chosenSocket?.skill ?? null);
-
-  $effect(() => {
-    if (canvas.mainLayer && currentSkill !== previousSkill) {
-      if (!get(searchStore).automated && !parsedFromUrl) {
-        updateJewelSockets();
-        parsedFromUrl = false;
-      }
-      previousSkill = currentSkill;
-    }
-  });
-
-  $effect(() => {
-    if (loadingComplete) {
-      const timeoutId = setTimeout(() => {
-        isLoading = false;
-      }, 50);
-      return () => clearTimeout(timeoutId);
-    }
-  });
-
-  function handleErrorClose() {
-    // Reset jewelType selection so user can try another jewel
-    searchStore.update((s) => ({ ...s, jewelType: null }));
-    clearJewelLoadError();
-  }
+function handleRenderDuration(duration: number) {
+	renderDuration = duration;
+}
 </script>
 
  {#if isLoading}
-   <Preloader {loadingComplete} progress={loadingProgress} />
+  <Preloader {loadingComplete} progress={loadingComplete ? 100 : 0} />
  {/if}
 
-<DebugPanel isVisible={debugMode} />
+<DebugPanel isVisible={debugMode} {renderDuration} />
 
-<div
-  id="tree"
-  style="position:fixed;inset:0;background:#070c11"
-  role="region"
-  onmouseleave={() => treeStore.update((s) => {
-    s.hovered = null;
-    return s;
-  })}
-></div>
+<TreeCanvas onRender={handleRenderDuration} />
+
 <Tooltip node={$treeStore.hovered} x={$mouseStore.x} y={$mouseStore.y} />
 <Sidebar />
+
 {#if $searchStore.jewelLoadError}
   <JewelLoadErrorModal
     jewel={$searchStore.jewelLoadError.jewel}

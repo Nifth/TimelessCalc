@@ -1,56 +1,53 @@
 <script lang="ts">
-  let {
-    label,
-    options = [],
-    selectedValue,
-    onSelect,
-    loading = false,
-    loadingText = "Loading...",
-    dropdownClass = "",
-    id,
-    truncate = true,
-  }: {
-    label?: string;
-    options: Array<{ value: string; display?: string }>;
-    selectedValue: string;
-    onSelect: (value: string) => void;
-    loading?: boolean;
-    loadingText?: string;
-    dropdownClass?: string;
-    id?: string;
-    truncate?: boolean;
-  } = $props();
+let {
+	label,
+	options = [],
+	selectedValue,
+	onSelect,
+	loading = false,
+	loadingText = "Loading...",
+	dropdownClass = "",
+	id,
+	truncate = true,
+}: {
+	label?: string;
+	options: Array<{ value: string; display?: string }>;
+	selectedValue: string;
+	onSelect: (value: string) => void;
+	loading?: boolean;
+	loadingText?: string;
+	dropdownClass?: string;
+	id?: string;
+	truncate?: boolean;
+} = $props();
 
-  let isOpen = $state(false);
+let isOpen = $state(false);
 
-  function handleSelect(value: string) {
-    onSelect(value);
-    isOpen = false;
-  }
+function handleSelect(value: string) {
+	onSelect(value);
+	isOpen = false;
+}
 
-  function handleSelectWithPreventDefault(value: string, e: MouseEvent) {
-    e.preventDefault();
-    handleSelect(value);
-  }
+function handleSelectWithPreventDefault(value: string, e: MouseEvent) {
+	e.preventDefault();
+	handleSelect(value);
+}
 
-  function handleBlur() {
-    isOpen = false;
-  }
+function handleBlur() {
+	isOpen = false;
+}
 
-  function handleKeydown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
-      isOpen = false;
-    }
-  }
+function handleKeydown(e: KeyboardEvent) {
+	if (e.key === "Escape") {
+		isOpen = false;
+	}
+}
 
-  function getDisplayValue(option: {
-    value: string;
-    display?: string;
-  }): string {
-    return option.display || option.value;
-  }
+function getDisplayValue(option: { value: string; display?: string }): string {
+	return option.display || option.value;
+}
 
-  const uniqueId = id || `dropdown-${crypto.randomUUID()}`;
+const uniqueId = id || `dropdown-${crypto.randomUUID()}`;
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
