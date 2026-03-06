@@ -233,6 +233,18 @@
       "translation": "{0}% reduced Energy Shield Recharge Rate"
     }
   ],
+  "140": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% faster start of Energy Shield Recharge"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% slower start of Energy Shield Recharge"
+    }
+  ],
   "142": [
     {
       "divider": 1,
@@ -366,6 +378,42 @@
       "to": -1,
       "divider": 1,
       "translation": "{0}% reduced Stun Duration on Enemies"
+    }
+  ],
+  "420": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Endurance Charge Duration"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Endurance Charge Duration"
+    }
+  ],
+  "423": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Frenzy Charge Duration"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Frenzy Charge Duration"
+    }
+  ],
+  "429": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Power Charge Duration"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Power Charge Duration"
     }
   ],
   "436": [
@@ -689,7 +737,13 @@
       "translation": "{0}% Chance to Block Attack Damage"
     }
   ],
-  "1255": [
+  "1090": [
+    {
+      "divider": 1,
+      "translation": "{0}% Chance to Block Attack Damage"
+    }
+  ],
+  "1256": [
     {
       "from": 0,
       "to": 99,
@@ -703,19 +757,19 @@
       "translation": "Gain a Power Charge on Critical Strike"
     }
   ],
-  "1298": [
+  "1299": [
     {
       "divider": 1,
       "translation": "{0}% to Melee Critical Strike Multiplier"
     }
   ],
-  "1333": [
+  "1334": [
     {
       "divider": 1,
       "translation": "Ignites you inflict deal Damage {0}% faster"
     }
   ],
-  "1347": [
+  "1348": [
     {
       "from": 1,
       "divider": 1,
@@ -727,7 +781,7 @@
       "translation": "{0}% reduced Totem Placement speed"
     }
   ],
-  "1357": [
+  "1358": [
     {
       "from": 0,
       "to": 99,
@@ -741,7 +795,7 @@
       "translation": "Gain a Frenzy Charge on Kill"
     }
   ],
-  "1359": [
+  "1360": [
     {
       "from": 1,
       "divider": 1,
@@ -753,7 +807,7 @@
       "translation": "{0}% reduced Melee Critical Strike Chance"
     }
   ],
-  "1366": [
+  "1367": [
     {
       "from": 1,
       "divider": 1,
@@ -765,7 +819,7 @@
       "translation": "{0}% reduced Melee Damage"
     }
   ],
-  "1369": [
+  "1370": [
     {
       "from": 1,
       "divider": 1,
@@ -777,7 +831,7 @@
       "translation": "Lose {0} Life when you Block"
     }
   ],
-  "1392": [
+  "1393": [
     {
       "from": 1,
       "divider": 1,
@@ -789,14 +843,14 @@
       "translation": "{0}% reduced Effect of your Curses"
     }
   ],
-  "1409": [
+  "1410": [
     {
       "from": 1,
       "divider": 1,
       "translation": "You gain Onslaught for {0} seconds on Kill"
     }
   ],
-  "1660": [
+  "1691": [
     {
       "from": 1,
       "divider": 1,
@@ -808,7 +862,7 @@
       "translation": "{0}% reduced Damage per Frenzy Charge"
     }
   ],
-  "1794": [
+  "1825": [
     {
       "from": 1,
       "divider": 1,
@@ -820,7 +874,7 @@
       "translation": "{0}% reduced Totem Damage"
     }
   ],
-  "1914": [
+  "1947": [
     {
       "from": 1,
       "divider": 1,
@@ -832,7 +886,7 @@
       "translation": "{0}% reduced Attack and Cast Speed"
     }
   ],
-  "1984": [
+  "2018": [
     {
       "from": 1,
       "divider": 1,
@@ -844,7 +898,7 @@
       "translation": "{0}% reduced Damage over Time"
     }
   ],
-  "2039": [
+  "2073": [
     {
       "from": 1,
       "divider": 1,
@@ -856,7 +910,7 @@
       "translation": "{0}% reduced Dexterity"
     }
   ],
-  "2040": [
+  "2074": [
     {
       "from": 1,
       "divider": 1,
@@ -868,20 +922,20 @@
       "translation": "{0}% reduced Strength"
     }
   ],
-  "2100": [
+  "2134": [
     {
       "divider": 1,
       "translation": "{0}% Chance to Block Spell Damage"
     }
   ],
-  "2142": [
+  "2176": [
     {
       "from": 1,
       "divider": 100,
       "translation": "{0}% of Chaos Damage Leeched as Life"
     }
   ],
-  "2618": [
+  "2652": [
     {
       "from": 1,
       "divider": 1,
@@ -893,7 +947,7 @@
       "translation": "{0}% reduced Attack Damage"
     }
   ],
-  "2672": [
+  "2706": [
     {
       "from": 1,
       "divider": 1,
@@ -905,42 +959,42 @@
       "translation": "{0}% reduced Duration of Elemental Ailments on Enemies"
     }
   ],
-  "2707": [
+  "2742": [
     {
       "from": 1,
       "divider": 100,
       "translation": "{0}% of Attack Damage Leeched as Life"
     }
   ],
-  "3122": [
+  "3157": [
     {
       "from": 1,
       "divider": 100,
       "translation": "{0}% of Physical Damage Leeched as Life"
     }
   ],
-  "3123": [
+  "3158": [
     {
       "from": 1,
       "divider": 100,
       "translation": "{0}% of Fire Damage Leeched as Life"
     }
   ],
-  "3124": [
+  "3159": [
     {
       "from": 1,
       "divider": 100,
       "translation": "{0}% of Cold Damage Leeched as Life"
     }
   ],
-  "3125": [
+  "3160": [
     {
       "from": 1,
       "divider": 100,
       "translation": "{0}% of Lightning Damage Leeched as Life"
     }
   ],
-  "3382": [
+  "3418": [
     {
       "from": 1,
       "divider": 1,
@@ -952,7 +1006,7 @@
       "translation": "{0}% reduced Damage with Poison"
     }
   ],
-  "3409": [
+  "3445": [
     {
       "from": 1,
       "divider": 1,
@@ -964,7 +1018,7 @@
       "translation": "{0}% reduced Damage per Endurance Charge"
     }
   ],
-  "3582": [
+  "3618": [
     {
       "from": 1,
       "divider": 1,
@@ -976,7 +1030,7 @@
       "translation": "{0}% reduced Effect of Chill"
     }
   ],
-  "3583": [
+  "3619": [
     {
       "from": 1,
       "divider": 1,
@@ -988,7 +1042,7 @@
       "translation": "{0}% reduced Effect of Shock"
     }
   ],
-  "3859": [
+  "3895": [
     {
       "from": 1,
       "divider": 1,
@@ -1000,7 +1054,7 @@
       "translation": "{0}% reduced effect of Non-Curse Auras from your Skills"
     }
   ],
-  "3898": [
+  "3934": [
     {
       "from": 0,
       "to": 99,
@@ -1014,7 +1068,7 @@
       "translation": "Gain an Endurance Charge on Kill"
     }
   ],
-  "4974": [
+  "5023": [
     {
       "from": 1,
       "divider": 1,
@@ -1026,7 +1080,7 @@
       "translation": "{0}% reduced Projectile Attack Damage"
     }
   ],
-  "5563": [
+  "5612": [
     {
       "from": 1,
       "divider": 1,
@@ -1038,13 +1092,13 @@
       "translation": "{0}% reduced Warcry Buff Effect"
     }
   ],
-  "5865": [
+  "5914": [
     {
       "divider": 1,
       "translation": "{0}% chance to deal Double Damage"
     }
   ],
-  "6092": [
+  "6143": [
     {
       "from": 1,
       "divider": 1,
@@ -1056,7 +1110,7 @@
       "translation": "{0}% reduced Damage with Bleeding"
     }
   ],
-  "6098": [
+  "6149": [
     {
       "from": 1,
       "divider": 1,
@@ -1068,7 +1122,7 @@
       "translation": "{0}% reduced Fire Damage with Attack Skills"
     }
   ],
-  "6099": [
+  "6150": [
     {
       "from": 1,
       "divider": 1,
@@ -1080,7 +1134,7 @@
       "translation": "{0}% reduced Cold Damage with Attack Skills"
     }
   ],
-  "6100": [
+  "6151": [
     {
       "from": 1,
       "divider": 1,
@@ -1092,14 +1146,14 @@
       "translation": "{0}% reduced Lightning Damage with Attack Skills"
     }
   ],
-  "6135": [
+  "6188": [
     {
       "from": 1,
       "divider": 1,
       "translation": "{0}% chance to Avoid being Stunned"
     }
   ],
-  "6187": [
+  "6240": [
     {
       "from": 1,
       "divider": 1,
@@ -1111,7 +1165,7 @@
       "translation": "{0}% reduced Damage per Power Charge"
     }
   ],
-  "6359": [
+  "6415": [
     {
       "from": 1,
       "divider": 1,
@@ -1123,7 +1177,7 @@
       "translation": "{0}% reduced Effect of Non-Damaging Ailments"
     }
   ],
-  "7557": [
+  "7614": [
     {
       "from": 1,
       "to": 1,
@@ -1136,7 +1190,7 @@
       "translation": "Gain {0} Endurance Charges every second if you've been Hit Recently"
     }
   ],
-  "8241": [
+  "8301": [
     {
       "from": 0,
       "to": 99,
@@ -1150,26 +1204,26 @@
       "translation": "Intimidate Enemies for 4 seconds on Hit"
     }
   ],
-  "8283": [
+  "8343": [
     {
       "divider": 1,
       "translation": "{0}% increased Armour per Endurance Charge"
     }
   ],
-  "8285": [
+  "8345": [
     {
       "divider": 1,
       "translation": "{0}% increased Energy Shield per Power Charge"
     }
   ],
-  "8902": [
+  "8965": [
     {
       "from": 1,
       "divider": 100,
       "translation": "{0}% of Spell Damage Leeched as Energy Shield"
     }
   ],
-  "8958": [
+  "9021": [
     {
       "from": 1,
       "divider": 1,
@@ -1181,141 +1235,141 @@
       "translation": "Curse Skills have {0}% reduced Skill Effect Duration"
     }
   ],
-  "9140": [
+  "9203": [
     {
       "divider": 1,
       "translation": "Poisons you inflict deal Damage {0}% faster"
     }
   ],
-  "9141": [
+  "9204": [
     {
       "divider": 1,
       "translation": "Bleeding you inflict deals Damage {0}% faster"
     }
   ],
-  "9444": [
+  "9511": [
     {
       "divider": 1,
       "translation": "Inner Conviction"
     }
   ],
-  "9454": [
+  "9521": [
     {
       "divider": 1,
       "translation": "Eternal Youth"
     }
   ],
-  "9496": [
+  "9563": [
     {
       "divider": 1,
       "translation": "Corrupted Soul"
     }
   ],
-  "9497": [
+  "9564": [
     {
       "divider": 1,
       "translation": "The Agnostic"
     }
   ],
-  "9498": [
+  "9565": [
     {
       "divider": 1,
       "translation": "Divine Flesh"
     }
   ],
-  "9626": [
+  "9694": [
     {
       "divider": 1,
       "translation": "Glancing Blows"
     }
   ],
-  "9635": [
+  "9703": [
     {
       "divider": 1,
       "translation": "Supreme Decadence"
     }
   ],
-  "9671": [
+  "9739": [
     {
       "translation": "+{0} to Devotion"
     }
   ],
-  "9679": [
+  "9747": [
     {
       "divider": 1,
       "translation": "Wind Dancer"
     }
   ],
-  "9761": [
+  "9829": [
     {
       "from": 1,
       "divider": 1,
       "translation": "{0}% of Physical Damage Converted to Fire Damage while you have at least 150 Devotion"
     }
   ],
-  "9762": [
+  "9830": [
     {
       "from": 1,
       "divider": 1,
       "translation": "{0}% of Physical Damage Converted to Cold Damage while you have at least 150 Devotion"
     }
   ],
-  "9763": [
+  "9831": [
     {
       "from": 1,
       "divider": 1,
       "translation": "{0}% of Physical Damage Converted to Lightning Damage while you have at least 150 Devotion"
     }
   ],
-  "9764": [
+  "9832": [
     {
       "divider": 1,
       "translation": "Gain {0}% of Maximum Mana as Extra Maximum Energy Shield while you have at least 150 Devotion"
     }
   ],
-  "9765": [
+  "9833": [
     {
       "divider": 1,
       "translation": "Gain Arcane Surge on Hit with Spells if you have at least 150 Devotion"
     }
   ],
-  "9766": [
+  "9834": [
     {
       "divider": 1,
       "translation": "{0} to Minimum Endurance Charges while you have at least 150 Devotion"
     }
   ],
-  "9767": [
+  "9835": [
     {
       "divider": 1,
       "translation": "{0} to Minimum Power Charges while you have at least 150 Devotion"
     }
   ],
-  "9768": [
+  "9836": [
     {
       "divider": 1,
       "translation": "{0} to Minimum Frenzy Charges while you have at least 150 Devotion"
     }
   ],
-  "9769": [
+  "9837": [
     {
       "divider": 1,
       "translation": "Immune to Elemental Ailments while on Consecrated Ground if you have at least 150 Devotion"
     }
   ],
-  "9770": [
+  "9838": [
     {
       "divider": 1,
       "translation": "{0}% additional Physical Damage Reduction while you have at least 150 Devotion"
     }
   ],
-  "9771": [
+  "9839": [
     {
       "divider": 1,
       "translation": "{0}% to all maximum Resistances if you have at least 150 Devotion"
     }
   ],
-  "9772": [
+  "9840": [
     {
       "from": 0,
       "to": 99,
@@ -1329,7 +1383,7 @@
       "translation": "Inflict Fire Exposure on Hit if you have at least 150 Devotion"
     }
   ],
-  "9773": [
+  "9841": [
     {
       "from": 0,
       "to": 99,
@@ -1343,7 +1397,7 @@
       "translation": "Inflict Cold Exposure on Hit if you have at least 150 Devotion"
     }
   ],
-  "9774": [
+  "9842": [
     {
       "from": 0,
       "to": 99,
@@ -1357,13 +1411,13 @@
       "translation": "Inflict Lightning Exposure on Hit if you have at least 150 Devotion"
     }
   ],
-  "9790": [
+  "9858": [
     {
       "divider": 1,
       "translation": "Supreme Ego"
     }
   ],
-  "9822": [
+  "9890": [
     {
       "from": 0,
       "to": 99,
@@ -1377,13 +1431,13 @@
       "translation": "Inflict Withered for 2 seconds on Hit"
     }
   ],
-  "11951": [
+  "12036": [
     {
       "divider": 1,
       "translation": "Transcendence"
     }
   ],
-  "12111": [
+  "12196": [
     {
       "divider": 1,
       "translation": "Immortal Ambition"
@@ -1393,7 +1447,7 @@
       "translation": "Your Energy Shield starts at zero"
     }
   ],
-  "12152": [
+  "12237": [
     {
       "from": 0,
       "to": 99,
@@ -1407,7 +1461,31 @@
       "translation": "Gain Alchemist's Genius when you use a Flask"
     }
   ],
-  "14783": [
+  "14501": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Ward"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Ward"
+    }
+  ],
+  "14506": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% faster Restoration of Ward"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% slower Restoration of Ward"
+    }
+  ],
+  "14882": [
     {
       "from": 1,
       "divider": 1,
@@ -1419,22 +1497,218 @@
       "translation": "{0}% reduced Mana Reservation Efficiency of Skills"
     }
   ],
-  "14819": [
+  "14918": [
     {
       "divider": 1,
       "translation": "{0}% chance to Suppress Spell Damage"
     }
   ],
-  "14894": [
+  "14995": [
     {
       "divider": 1,
       "translation": "{0} to maximum Fortification"
     }
   ],
-  "20682": [
+  "20777": [
     {
       "divider": 1,
       "translation": "Gain {0} Rage on Melee Hit"
+    }
+  ],
+  "21874": [
+    {
+      "divider": 1,
+      "translation": "{0}% increased Ward from Equipped Armour Items"
+    }
+  ],
+  "22490": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Ward during any Flask Effect"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Ward during any Flask Effect"
+    }
+  ],
+  "22491": [
+    {
+      "divider": 1,
+      "translation": "{0}% chance for Ward to be Restored when you Use a Flask"
+    }
+  ],
+  "22492": [
+    {
+      "from": 1,
+      "to": 1,
+      "divider": 1,
+      "translation": "Gain {0} Endurance Charge when Ward Breaks"
+    },
+    {
+      "from": 2,
+      "divider": 1,
+      "translation": "Gain {0} Endurance Charges when Ward Breaks"
+    }
+  ],
+  "22493": [
+    {
+      "from": 1,
+      "to": 1,
+      "divider": 1,
+      "translation": "Gain {0} Power Charge when Ward Breaks"
+    },
+    {
+      "from": 2,
+      "divider": 1,
+      "translation": "Gain {0} Power Charges when Ward Breaks"
+    }
+  ],
+  "22494": [
+    {
+      "from": 1,
+      "to": 1,
+      "divider": 1,
+      "translation": "Gain {0} Frenzy Charge when Ward Breaks"
+    },
+    {
+      "from": 2,
+      "divider": 1,
+      "translation": "Gain {0} Frenzy Charges when Ward Breaks"
+    }
+  ],
+  "22495": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Armour while you have Unbroken Ward"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Armour while you have Unbroken Ward"
+    }
+  ],
+  "22496": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Evasion Rating while you have Unbroken Ward"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Evasion Rating while you have Unbroken Ward"
+    }
+  ],
+  "22498": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "+{0} to Ward per 10 Armour on Equipped Helmet"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0} to Ward per 10 Armour on Equipped Helmet"
+    }
+  ],
+  "22499": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "+{0} to Ward per 10 Evasion Rating on Equipped Gloves"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0} to Ward per 10 Evasion Rating on Equipped Gloves"
+    }
+  ],
+  "22500": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "+{0} to Ward per 10 Energy Shield on Equipped Boots"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0} to Ward per 10 Energy Shield on Equipped Boots"
+    }
+  ],
+  "22501": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased Damage while you have Unbroken Ward"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced Damage while you have Unbroken Ward"
+    }
+  ],
+  "22502": [
+    {
+      "divider": 1,
+      "translation": "Damage Penetrates {0}% Elemental Resistances while your Ward is Broken"
+    }
+  ],
+  "22503": [
+    {
+      "from": 1,
+      "divider": 1,
+      "translation": "{0}% increased effect of Non-Curse Auras from your skills while your Ward is Broken"
+    },
+    {
+      "to": -1,
+      "divider": 1,
+      "translation": "{0}% reduced effect of Non-Curse Auras from your skills while your Ward is Broken"
+    }
+  ],
+  "22504": [
+    {
+      "divider": 1,
+      "translation": "{0}% chance to Restore Ward when you Block"
+    }
+  ],
+  "22505": [
+    {
+      "from": 1,
+      "to": 1,
+      "divider": 1,
+      "translation": "Iron Flasks gain {0} charge when your Ward Breaks"
+    },
+    {
+      "from": 2,
+      "divider": 1,
+      "translation": "Iron Flasks gain {0} charges when your Ward Breaks"
+    }
+  ],
+  "22507": [
+    {
+      "divider": 1,
+      "translation": "Remove a random Damaging Ailment when Ward is Restored"
+    }
+  ],
+  "22514": [
+    {
+      "divider": 1,
+      "translation": "Black Scythe Training"
+    }
+  ],
+  "22515": [
+    {
+      "divider": 1,
+      "translation": "Celestial Mathematics"
+    }
+  ],
+  "22516": [
+    {
+      "divider": 1,
+      "translation": "The Unbreaking Circle"
     }
   ]
 }
