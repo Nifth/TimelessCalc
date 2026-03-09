@@ -76,7 +76,7 @@
     >Jewel Type</span
   >
 </div>
-<div class="grid grid-cols-5 gap-3 items-stretch">
+<div class="grid grid-cols-6 gap-3 items-stretch">
   {#each jewelTypes as jewel (jewel.name)}
     <label class="relative cursor-pointer h-full">
       <input

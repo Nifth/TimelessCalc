@@ -16,7 +16,8 @@ const seedTextFormats: Record<string, string> = {
   vaal: "Bathed in the blood of {{SEED}} sacrificed in the name of {{CONQUEROR}}",
   karui: "Commanded leadership over {{SEED}} warriors under {{CONQUEROR}}",
   maraketh:
-    "Denoted service of {{SEED}} dekhara in the akhara of {{CONQUEROR}}",
+        "Denoted service of {{SEED}} dekhara in the akhara of {{CONQUEROR}}",
+  kalguur: "Remembrancing {{SEED}} songworthy deeds by the line of {{CONQUEROR}}",
 };
 
 function resolveConqueror(

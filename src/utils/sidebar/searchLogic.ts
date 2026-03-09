@@ -122,6 +122,9 @@ function applySeedModifications(
   } else if (label === "eternal") {
     baseStat = "void";
     travelStat = "void";
+  } else if (label === "kalguur") {
+      travelStat = "+1 to Ward";
+      baseStat = "+2 to Ward";
   }
   if (baseStat) {
     for (const nodeId of socketNodeIds) {

@@ -6,6 +6,7 @@ export const jewelTypes = [
 	{ label: "Brutal Restraint", name: "maraketh", id: 3, min: 500, max: 8000 },
 	{ label: "Militant Faith", name: "templar", id: 4, min: 2000, max: 10000 },
 	{ label: "Elegant Hubris", name: "eternal", id: 5, min: 2000, max: 160000 },
+	{ label: "Heroic Tragedy", name: "kalguur", id: 6, min: 100, max: 8000 },
 ] as JewelType[];
 
 export const conquerors = {
@@ -48,5 +49,11 @@ export const conquerors = {
 			keystone: "Supreme Ostentation",
 			type: "eternal",
 		},
-	],
+    ],
+    kalguur: [
+        { label: "Any", id: 1, keystone: "Any", type: "kalguur"},
+        { label: "Vorana", id: 1, keystone: "Black Scythe Training", type: "kalguur"},
+        { label: "Uhtred", id: 1, keystone: "The Unbreaking Circle", type: "kalguur"},
+        { label: "Medved", id: 1, keystone: "Celestial Mathematics", type: "kalguur"},
+	]
 } as Record<string, Conqueror[]>;

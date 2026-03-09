@@ -56,7 +56,11 @@ export const TREE_CONSTANTS = {
 			maraketh: {
 				default: "MarakethJewelCircle1",
 				inverse: "MarakethJewelCircle2",
-			},
+            },
+            kalguur: {
+                default: "KalguurJewelCircle1",
+                inverse: "KalguurJewelCircle2",
+			}
 		},
 		OPACITY: 0.5,
 		DEFAULT: "default",
@@ -68,4 +72,3 @@ export const TREE_CONSTANTS = {
 export type HalfDirectionValue = (typeof TREE_CONSTANTS.SPRITES)[
 	| "HALF_UP"
 	| "HALF_DOWN"];
-export type JewelCode = "karui" | "vaal" | "templar" | "eternal" | "maraketh";
