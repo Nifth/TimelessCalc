@@ -123,8 +123,8 @@ function applySeedModifications(
     baseStat = "void";
     travelStat = "void";
   } else if (label === "kalguur") {
-      travelStat = "+1 to Ward";
-      baseStat = "+2 to Ward";
+    travelStat = "1% increased Ward";
+    baseStat = "2% increased Ward";
   }
   if (baseStat) {
     for (const nodeId of socketNodeIds) {
