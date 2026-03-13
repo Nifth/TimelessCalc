@@ -10,7 +10,6 @@
 
   let { jewel, errorMessage, onclose }: Props = $props();
 
-  // Todo: move to constants file
   const issueUrl = URLS.GITHUB_ISSUES;
 
   function copyError() {
