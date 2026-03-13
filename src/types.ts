@@ -110,6 +110,7 @@ export interface Stat {
   label: string;
   weight: number;
   minWeight: number;
+  exclude?: boolean;
 }
 
 export type StatSearchMode = "occurrences" | "totalValue";

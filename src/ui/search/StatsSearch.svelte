@@ -83,6 +83,7 @@
           statKey: stat.statKey,
           weight: 1,
           minWeight: 0,
+          exclude: false,
         });
         return state;
       });
@@ -105,6 +106,16 @@
     searchStore.update((s) => {
       s.statSearchMode = mode;
       return s;
+    });
+  }
+
+  function handleExcludeChange(stat: Stat, newValue: boolean) {
+    searchStore.update((state) => {
+      const statToUpdate = state.selectedStats.find((s) => s.statKey === stat.statKey);
+      if (statToUpdate) {
+        statToUpdate.exclude = newValue;
+      }
+      return state;
     });
   }
 </script>
@@ -189,14 +200,29 @@
         class="flex items-center gap-2 px-3 py-1 rounded-lg font-semibold text-slate-300 text-xs"
       >
         <span class="flex-1">Stat</span>
+        <span class="w-12 text-center">Exclude</span>
         <span class="w-16 text-center">Weight</span>
         <span class="w-16 text-center">{minLabel}</span>
         <span class="w-8"></span>
       </div>
     {/if}
     {#each $searchStore.selectedStats as stat, i (i)}
-      <div class="flex items-center gap-2 px-3 py-2 bg-slate-800 rounded-lg">
+      <div class="flex items-center gap-2 px-3 py-2 bg-slate-800 rounded-lg transition-all duration-200 {stat.exclude ? 'opacity-50' : ''}">
         <span class="flex-1 text-sm text-slate-200 truncate">{stat.label}</span>
+        <label class="relative inline-flex items-center cursor-pointer w-12 justify-center">
+          <input
+            type="checkbox"
+            class="sr-only peer"
+            checked={stat.exclude || false}
+            oninput={(e) => {
+              const target = e.target as HTMLInputElement;
+              handleExcludeChange(stat, target.checked);
+            }}
+          />
+          <div
+            class="w-9 h-5 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600"
+          ></div>
+        </label>
         <input
           type="number"
           value={stat.weight}

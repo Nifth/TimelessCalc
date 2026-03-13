@@ -293,6 +293,7 @@ export async function handleSearch(
       // Check based on statSearchMode: occurrences or total value
       const statSearchMode = get(searchStore).statSearchMode;
       const meetsMinRequirement = selectedStats.every((stat) => {
+        if (stat.exclude) return true; // Excluded stats don't need to meet requirements
         if (statSearchMode === "occurrences") {
           return (statCounts[stat.statKey] || 0) >= stat.minWeight;
         } else {
@@ -316,34 +317,14 @@ export async function handleSearch(
       }[]
     > = {};
     const statSearchMode = get(searchStore).statSearchMode;
-    for (const [seed, { statCounts, statTotals }] of Object.entries(results)) {
-      let totalWeight = 0;
+    for (const [seed, data] of Object.entries(results)) {
       const minTotalWeight = get(searchStore).minTotalWeight;
-      for (const stat of selectedStats) {
-        const count = statCounts[stat.statKey] || 0;
-        const total = statTotals[stat.statKey] || 0;
-        // Check min requirement for this stat based on mode
-        const meetsMin =
-          statSearchMode === "occurrences"
-            ? count >= stat.minWeight
-            : total >= stat.minWeight;
-        if (meetsMin) {
-          // Weight is based on mode: occurrences or total value
-          const weightValue = statSearchMode === "occurrences" ? count : total;
-          totalWeight += weightValue * stat.weight;
-        }
-      }
-      if (totalWeight >= minTotalWeight) {
-        const key = totalWeight.toFixed(1);
-        if (!totalWeight) continue;
-        if (!grouped[key]) grouped[key] = [];
-        grouped[key].push({
-          seed: parseInt(seed),
-          statCounts,
-          statTotals,
-          totalWeight,
-        });
-      }
+      const totalWeight = calculateWeight(data, selectedStats, statSearchMode);
+      
+      if (totalWeight === null || totalWeight < minTotalWeight || totalWeight === 0) continue;
+
+      const key = totalWeight.toFixed(1);
+      (grouped[key] ??= []).push({ seed: parseInt(seed), ...data, totalWeight });
     }
 
     const sortedWeights = Object.keys(grouped).sort(
@@ -375,4 +356,19 @@ export async function handleSearch(
       return state;
     });
   }
+}
+
+function calculateWeight(
+  data: {statCounts: Record<number, number>, statTotals: Record<number, number>},
+  selectedStats: Stat[],
+  mode: string,
+) {
+  let currentWeight = 0;
+  for (const stat of selectedStats) {
+    const val = mode === "occurrences" ? (data.statCounts[stat.statKey] || 0) : (data.statTotals[stat.statKey] || 0);
+    // excluded stats breaks the weight calculation and are filtered out earlier, so we can skip them here
+    if (val > 0 && stat.exclude) return null;
+    if (val >= stat.minWeight) currentWeight += val * stat.weight;
+  }
+  return currentWeight;
 }
