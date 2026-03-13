@@ -1,105 +1,109 @@
 <script lang="ts">
-import { favoritesStore, favoritesActions } from "$lib/stores/favoritesStore";
-import {
-	generateShareUrlFromData,
-	copyToClipboard,
-} from "$lib/utils/sharing/shareUtils";
-import Modal from "$lib/ui/common/Modal.svelte";
-import { showNotification } from "$lib/stores/notificationStore";
-import type { FavoriteEntry } from "$lib/types";
-import { translations } from "$lib/providers/translations";
-import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
-import { formatDate, formatStats } from "$lib/utils/formatters";
+  import { favoritesStore, favoritesActions } from "$lib/stores/favoritesStore";
+  import {
+    generateShareUrlFromData,
+    copyToClipboard,
+  } from "$lib/utils/sharing/shareUtils";
+  import Modal from "$lib/ui/common/Modal.svelte";
+  import { showNotification } from "$lib/stores/notificationStore";
+  import type { FavoriteEntry } from "$lib/types";
+  import { translations } from "$lib/providers/translations";
+  import { loadEntry as loadEntryUtil } from "$lib/utils/entryLoader";
+  import {
+    formatDate,
+    formatStats,
+    formatExcludedStats,
+  } from "$lib/utils/formatters";
 
-let { onswitchtotab } = $props<{
-	onswitchtotab: (tab: "search" | "favorites" | "history") => void;
-}>();
+  let { onswitchtotab } = $props<{
+    onswitchtotab: (tab: "search" | "favorites" | "history") => void;
+  }>();
 
-let showConfirmModal = $state(false);
-let pendingLoadEntry: FavoriteEntry | null = $state(null);
-let editingId: string | null = $state(null);
-let editValue = $state("");
-let editInput: HTMLInputElement | null = $state(null);
-let showShareTooltip = $state(false);
-let shareTooltipEntryId: string | null = $state(null);
+  let showConfirmModal = $state(false);
+  let pendingLoadEntry: FavoriteEntry | null = $state(null);
+  let editingId: string | null = $state(null);
+  let editValue = $state("");
+  let editInput: HTMLInputElement | null = $state(null);
+  let showShareTooltip = $state(false);
+  let shareTooltipEntryId: string | null = $state(null);
 
-function handleLoadEntry(entry: FavoriteEntry) {
-	if (favoritesActions.hasCurrentConfiguration()) {
-		pendingLoadEntry = entry;
-		showConfirmModal = true;
-	} else {
-		loadEntryUtil({
-			entry,
-			loadAction: (e) => favoritesActions.loadFavorite(e),
-			translation: translations,
-			onSwitchToTab: () => onswitchtotab("search"),
-		});
-	}
-}
+  function handleLoadEntry(entry: FavoriteEntry) {
+    if (favoritesActions.hasCurrentConfiguration()) {
+      pendingLoadEntry = entry;
+      showConfirmModal = true;
+    } else {
+      loadEntryUtil({
+        entry,
+        loadAction: (e) => favoritesActions.loadFavorite(e),
+        translation: translations,
+        onSwitchToTab: () => onswitchtotab("search"),
+      });
+    }
+  }
 
-async function confirmLoad() {
-	if (pendingLoadEntry) {
-		await loadEntryUtil({
-			entry: pendingLoadEntry,
-			loadAction: (e) => favoritesActions.loadFavorite(e),
-			translation: translations,
-			onSwitchToTab: () => onswitchtotab("search"),
-		});
-		showConfirmModal = false;
-		pendingLoadEntry = null;
-	}
-}
+  async function confirmLoad() {
+    if (pendingLoadEntry) {
+      await loadEntryUtil({
+        entry: pendingLoadEntry,
+        loadAction: (e) => favoritesActions.loadFavorite(e),
+        translation: translations,
+        onSwitchToTab: () => onswitchtotab("search"),
+      });
+      showConfirmModal = false;
+      pendingLoadEntry = null;
+    }
+  }
 
-function startEdit(id: string, currentName: string) {
-	editingId = id;
-	editValue = currentName;
-}
+  function startEdit(id: string, currentName: string) {
+    editingId = id;
+    editValue = currentName;
+  }
 
-function saveEdit() {
-	if (editingId) {
-		favoritesActions.updateName(editingId, editValue);
-		editingId = null;
-		editInput = null;
-	}
-}
+  function saveEdit() {
+    if (editingId) {
+      favoritesActions.updateName(editingId, editValue);
+      editingId = null;
+      editInput = null;
+    }
+  }
 
-function cancelEdit() {
-	editingId = null;
-	editInput = null;
-}
+  function cancelEdit() {
+    editingId = null;
+    editInput = null;
+  }
 
-function handleEditKeydown(event: KeyboardEvent) {
-	if (event.key === "Enter") {
-		saveEdit();
-	} else if (event.key === "Escape") {
-		cancelEdit();
-	}
-}
+  function handleEditKeydown(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      saveEdit();
+    } else if (event.key === "Escape") {
+      cancelEdit();
+    }
+  }
 
-async function handleShare(entry: FavoriteEntry) {
-	const shareUrl = generateShareUrlFromData(
-		entry.jewelType,
-		entry.conqueror,
-		entry.stats,
-		entry.socket,
-		entry.allocatedSkillIds.map((i) => Number(i)),
-		entry.minTotalWeight,
-		entry.statSearchMode || null,
-		null,
-		null,
-	);
-	const success = await copyToClipboard(shareUrl);
-	if (success) {
-		showNotification("share", "Link copied to clipboard!");
-	}
-}
+  async function handleShare(entry: FavoriteEntry) {
+    const shareUrl = generateShareUrlFromData(
+      entry.jewelType,
+      entry.conqueror,
+      entry.stats,
+      entry.socket,
+      entry.allocatedSkillIds.map((i) => Number(i)),
+      entry.minTotalWeight,
+      entry.statSearchMode || null,
+      null,
+      null,
+    );
+    const success = await copyToClipboard(shareUrl);
+    if (success) {
+      showNotification("share", "Link copied to clipboard!");
+    }
+  }
 
-$effect(() => {
-	if (editingId && editInput) {
-		editInput.focus();
-		editInput.select();
-	}
-});
+  $effect(() => {
+    if (editingId && editInput) {
+      editInput.focus();
+      editInput.select();
+    }
+  });
 </script>
 
 <div class="space-y-4">
@@ -161,6 +165,12 @@ $effect(() => {
               <div class="text-xs text-slate-400 mb-1">
                 {formatStats(entry.stats)}
               </div>
+
+              {#if formatExcludedStats(entry.stats)}
+                <div class="text-xs text-red-300 mb-1">
+                  {formatExcludedStats(entry.stats)}
+                </div>
+              {/if}
 
               <div class="flex items-center gap-4 text-xs text-slate-500">
                 <span>{entry.allocatedSkillIds?.length || 0} allocated</span>

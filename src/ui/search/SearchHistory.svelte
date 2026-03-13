@@ -8,6 +8,7 @@
   import {
     formatDate,
     formatStats,
+    formatExcludedStats,
     findNearbyKeystone,
   } from "$lib/utils/formatters";
 
@@ -91,6 +92,12 @@
               <div class="text-xs text-slate-400 mb-1">
                 {formatStats(entry.stats)}
               </div>
+
+              {#if formatExcludedStats(entry.stats)}
+                <div class="text-xs text-red-300 mb-1">
+                  {formatExcludedStats(entry.stats)}
+                </div>
+              {/if}
 
               <div class="flex items-center gap-4 text-xs text-slate-500">
                 <span>{entry.allocatedSkillIds?.length || 0} allocated</span>
