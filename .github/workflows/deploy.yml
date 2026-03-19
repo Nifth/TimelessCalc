@@ -20,12 +20,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install and Build 🔧
         run: |
           npm install
           npm run build
+
+      - name: Add Google Search Console Verification 🔍
+        run: |
+          echo "google-site-verification: google1172ef6a21a93386.html" > dist/google1172ef6a21a93386.html
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
