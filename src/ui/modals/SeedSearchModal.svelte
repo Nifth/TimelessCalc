@@ -6,7 +6,6 @@
   import { calculateSeed } from "$lib/utils/Timeless/calculator";
   import { canvas } from "$lib/canvas/canvasContext";
   import { parseClipboard } from "$lib/utils/clipboard/clipboardParser";
-  import { loadJewel } from "$lib/providers/jewels";
   import { findNearbyKeystone } from "$lib/utils/formatters";
   import { formatStatTranslation } from "$lib/utils/sidebar/sidebarUtils";
   import { translations } from "$lib/providers/translations";
