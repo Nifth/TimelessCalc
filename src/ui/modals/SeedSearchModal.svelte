@@ -13,9 +13,10 @@
   interface Props {
     onclose: () => void;
     onresults: (results: SeedSearchResults) => void;
+    triggerPaste: boolean;
   }
 
-  let { onclose, onresults }: Props = $props();
+  let { onclose, onresults, triggerPaste = false }: Props = $props();
 
   let seedInput = $state("");
   let selectedJewelType = $state<JewelType | null>(null);
@@ -29,6 +30,26 @@
       analyzeSeed();
     }, 50);
   }
+
+  onMount(async () => {
+    try {
+      if (triggerPaste) {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          const parsed = parseClipboard(text);
+          if (parsed) {
+            seedInput = parsed.seed.toString();
+            if (parsed.jewelType) {
+              selectedJewelType = parsed.jewelType;
+            }
+            analyzeSeed();
+          }
+        }
+      }
+    } catch {
+      silentlyIgnore();
+    }
+  });
 
   async function parseClipboardAndFill() {
     try {

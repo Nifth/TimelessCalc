@@ -30,6 +30,7 @@ let debugMode = $state(false);
 let renderDuration = $state(0);
 let showHelp = $state(false);
 let showSeedSearch = $state(false);
+let triggerPaste = $state(false);
 let _seedSearchResults = $state<SeedSearchResults | null>(null);
 
 onMount(async () => {
@@ -70,6 +71,7 @@ onMount(() => {
 					const text = await navigator.clipboard.readText();
 					if (text && parseClipboard(text)) {
 						showSeedSearch = true;
+						triggerPaste = true;
 					}
 				} catch {
 					// clipboard read failed, do nothing
@@ -141,6 +143,7 @@ function handleRenderDuration(duration: number) {
 {#if showSeedSearch}
   <SeedSearchModal
     onclose={() => showSeedSearch = false}
+    triggerPaste={triggerPaste}
     onresults={(results) => _seedSearchResults = results}
   />
 {/if}

@@ -5,9 +5,9 @@
 
   let { onclose }: Props = $props();
 
-  let activeTab = $state<"search" | "favorites" | "share">("search");
+  let activeTab = $state<"search" | "favorites" | "share" | "seed">("search");
 
-  function setTab(tab: "search" | "favorites" | "share") {
+  function setTab(tab: "search" | "favorites" | "share" | "seed") {
     activeTab = tab;
   }
 </script>
@@ -56,6 +56,15 @@
         onclick={() => setTab("share")}
       >
         Share &amp; Export
+      </button>
+      <button
+        class="flex-1 py-2 transition-colors cursor-pointer {activeTab ===
+        'seed'
+          ? 'text-white border-b-2 border-blue-400'
+          : 'text-slate-400 hover:text-slate-200'}"
+        onclick={() => setTab("seed")}
+      >
+        Seed Analyzer
       </button>
     </div>
 
@@ -154,6 +163,46 @@
             <p>Export your jewel configuration in <strong class="text-blue-300">PoB format</strong> for Path of Building.</p>
             <p>Copy and paste directly into your build to import the jewel data.</p>
           </div>
+        </div>
+
+      {:else if activeTab === "seed"}
+        <div class="overflow-y-auto custom-scrollbar flex-1 pr-2">
+          <p class="mb-4 text-base font-semibold text-slate-100">Overview</p>
+          <p class="mb-6">The Seed Analyzer lets you inspect any specific jewel seed directly, showing every stat modification it applies across all jewel sockets on the passive tree — without needing to run a full stats search.</p>
+
+          <p class="mb-3 text-base font-semibold text-slate-100">Entering a Seed</p>
+          <div class="mb-4 space-y-2">
+            <p><strong class="text-blue-300">Type a seed number</strong> into the input field and select a jewel type. Results appear automatically after a short delay — no need to press Enter.</p>
+            <p><strong class="text-blue-300">Valid range</strong> is shown below the input once a jewel type is selected. Seeds outside the range are ignored.</p>
+          </div>
+
+          <p class="mb-3 text-base font-semibold text-slate-100">Paste from Clipboard</p>
+          <div class="mb-6 space-y-2">
+            <p>Copy a Timeless Jewel item in-game (<kbd class="bg-slate-700 px-1.5 py-0.5 rounded text-xs font-mono">Ctrl+C</kbd> on the item tooltip) and either:</p>
+            <div class="pl-4 border-l-2 border-slate-600 space-y-1">
+              <p>Click the <strong class="text-blue-300">clipboard icon</strong> inside the seed input field, or</p>
+              <p>Paste (<kbd class="bg-slate-700 px-1.5 py-0.5 rounded text-xs font-mono">Ctrl+V</kbd>) directly from anywhere.</p>
+            </div>
+            <p>Both actions automatically extract the seed number and jewel type from the item text and trigger analysis immediately.</p>
+          </div>
+
+          <p class="mb-3 text-base font-semibold text-slate-100">Reading the Results</p>
+          <div class="mb-4 space-y-2">
+            <p>Results are displayed in a grid, one card per jewel socket. Each card shows:</p>
+            <div class="pl-4 border-l-2 border-slate-600 space-y-1">
+              <p><strong class="text-blue-300">Socket name</strong> — identified by the nearest keystone.</p>
+              <p><span class="text-green-400 font-semibold">(N) stat label</span> — <strong class="text-green-400">green</strong> count means <em>replacements</em>: passive nodes whose stats are replaced by this jewel.</p>
+              <p><span class="text-blue-400 font-semibold">(N) stat label</span> — <strong class="text-blue-400">blue</strong> count means <em>additions</em>: extra stats added on top of existing node stats.</p>
+            </div>
+          </div>
+
+          <div class="mb-6 p-4 bg-amber-900/30 border border-amber-700 rounded-lg">
+            <p class="mb-2 font-semibold text-amber-400">Cluster Jewel Warning</p>
+            <p class="leading-relaxed">Sockets marked <strong class="text-amber-400">/!\ Cluster Jewel</strong> are expansion jewel sockets. Timeless Jewels are rarely used on cluster jewel nodes, so them as informational only.</p>
+          </div>
+
+          <p class="mb-3 text-base font-semibold text-slate-100">How It Differs from Stats Search</p>
+          <p class="mb-2">The Seed Analyzer is a quick inspection tool. It shows you <em>what a specific seed does</em> across all sockets, regardless of your allocated nodes. The Stats Search (main tool) finds the <em>best seeds for your build</em> based on allocated nodes within a chosen socket's radius.</p>
         </div>
       {/if}
     </div>
