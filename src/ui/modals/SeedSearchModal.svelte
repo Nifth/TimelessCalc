@@ -30,24 +30,6 @@
     }, 50);
   }
 
-  onMount(async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      if (text) {
-        const parsed = parseClipboard(text);
-        if (parsed) {
-          seedInput = parsed.seed.toString();
-          if (parsed.jewelType) {
-            selectedJewelType = parsed.jewelType;
-          }
-          analyzeSeed();
-        }
-      }
-    } catch {
-      silentlyIgnore();
-    }
-  });
-
   async function parseClipboardAndFill() {
     try {
       const text = await navigator.clipboard.readText();
