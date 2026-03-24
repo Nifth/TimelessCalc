@@ -6,6 +6,8 @@ import Preloader from "$lib/ui/common/Preloader.svelte";
 import DebugPanel from "$lib/ui/debug/DebugPanel.svelte";
 import JewelLoadErrorModal from "$lib/ui/modals/JewelLoadErrorModal.svelte";
 import HelpModal from "$lib/ui/modals/HelpModal.svelte";
+import SeedSearchModal from "$lib/ui/modals/SeedSearchModal.svelte";
+import SeedSearchButton from "$lib/ui/common/SeedSearchButton.svelte";
 import TreeCanvas from "$lib/TreeCanvas.svelte";
 import { treeStore } from "$lib/stores/treeStore";
 import { searchStore, clearJewelLoadError } from "$lib/stores/searchStore";
@@ -19,13 +21,15 @@ import { fetchLeagues } from "./providers/leagues";
 import Notification from "$lib/ui/notifications/Notification.svelte";
 import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 import { URLS } from "$lib/constants/urls";
-    import { calculateSeed } from "./utils/Timeless/calculator";
+import type { SeedSearchResults } from "$lib/types";
 
 let isLoading = $state(true);
 let loadingComplete = $state(false);
 let debugMode = $state(false);
 let renderDuration = $state(0);
 let showHelp = $state(false);
+let showSeedSearch = $state(false);
+let _seedSearchResults = $state<SeedSearchResults | null>(null);
 
 onMount(async () => {
 	try {
@@ -40,7 +44,6 @@ onMount(async () => {
 			performSearch,
 			translations,
 		);
-		calculateSeed(10200, 2);
 
 		perfMonitor.mark("init-end");
 		perfMonitor.measure("total-init", "init-start", "init-end");
@@ -56,6 +59,14 @@ onMount(() => {
 		if (e.ctrlKey && e.altKey && e.key === "f") {
 			e.preventDefault();
 			debugMode = !debugMode;
+		}
+
+		if (e.ctrlKey && e.key === "v") {
+			const activeTag = document.activeElement?.tagName.toLowerCase();
+			if (activeTag !== "input" && activeTag !== "textarea") {
+				e.preventDefault();
+				showSeedSearch = true;
+			}
 		}
 	};
 	window.addEventListener("keydown", handleKeydown);
@@ -119,6 +130,13 @@ function handleRenderDuration(duration: number) {
   <HelpModal onclose={() => showHelp = false} />
 {/if}
 
+{#if showSeedSearch}
+  <SeedSearchModal
+    onclose={() => showSeedSearch = false}
+    onresults={(results) => _seedSearchResults = results}
+  />
+{/if}
+
 <div class="fixed bottom-2 right-2 flex gap-2 z-[1]">
   <a
     href={URLS.GITHUB_REPO}
@@ -141,6 +159,7 @@ function handleRenderDuration(duration: number) {
       <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
     </svg>
   </button>
+  <SeedSearchButton onclick={() => showSeedSearch = true} />
 </div>
 
 <style>

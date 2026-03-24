@@ -10,7 +10,7 @@ const factionNames: Record<string, string> = {
   eternal: "Eternal Empire",
 };
 
-const seedTextFormats: Record<string, string> = {
+export const seedTextFormats: Record<string, string> = {
   eternal: "Commissioned {{SEED}} coins to commemorate {{CONQUEROR}}",
   templar: "Carved to glorify {{SEED}} new faithful converted by {{CONQUEROR}}",
   vaal: "Bathed in the blood of {{SEED}} sacrificed in the name of {{CONQUEROR}}",

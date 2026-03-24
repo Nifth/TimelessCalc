@@ -80,6 +80,7 @@ function calculateModifications(timelessJewel: TimelessJewel, socketNodeIds: str
       const entry = { r: replacedMap, a: addedMap };
       socketModifications[socketNodeId] = entry;
     }
+    return socketModifications;
 }
 
 async function initializeSeedsCalculator() {

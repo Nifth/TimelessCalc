@@ -198,3 +198,27 @@ export interface TreeStore {
   hovered: Node | null;
   loading: boolean;
 }
+
+export interface SeedSearchResults {
+  seed: number;
+  jewelType: JewelType;
+  socketResults: Record<string, SocketResult>;
+}
+
+export interface SocketResult {
+  socketId: string;
+  replacements: StatModification[];
+  additions: StatModification[];
+}
+
+export interface StatModification {
+  statKey: number;
+  statLabel: string;
+  nodeIds: number[];
+  occurrenceCount: number;
+}
+
+export interface ParsedClipboard {
+  seed: number;
+  jewelType: JewelType | null;
+}
