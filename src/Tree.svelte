@@ -13,6 +13,7 @@ import { treeStore } from "$lib/stores/treeStore";
 import { searchStore, clearJewelLoadError } from "$lib/stores/searchStore";
 import { mouseStore } from "$lib/stores/mouseStore";
 import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
+import { parseClipboard } from "$lib/utils/clipboard/clipboardParser";
 import { translations } from "$lib/providers/translations";
 import { handleSearch as performSearch } from "$lib/utils/sidebar/searchLogic";
 import { perfMonitor } from "$lib/utils/performanceMonitor";
@@ -55,7 +56,7 @@ onMount(async () => {
 });
 
 onMount(() => {
-	const handleKeydown = (e: KeyboardEvent) => {
+	const handleKeydown = async (e: KeyboardEvent) => {
 		if (e.ctrlKey && e.altKey && e.key === "f") {
 			e.preventDefault();
 			debugMode = !debugMode;
@@ -65,7 +66,14 @@ onMount(() => {
 			const activeTag = document.activeElement?.tagName.toLowerCase();
 			if (activeTag !== "input" && activeTag !== "textarea") {
 				e.preventDefault();
-				showSeedSearch = true;
+				try {
+					const text = await navigator.clipboard.readText();
+					if (text && parseClipboard(text)) {
+						showSeedSearch = true;
+					}
+				} catch {
+					// clipboard read failed, do nothing
+				}
 			}
 		}
 	};
