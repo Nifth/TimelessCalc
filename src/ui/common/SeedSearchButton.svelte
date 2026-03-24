@@ -8,6 +8,7 @@
 
 <button
   onclick={onclick}
+  title="Analyze seed accross all sockets"
   class="w-8 h-8 flex items-center justify-center text-[rgba(200,200,200,0.8)] hover:text-white transition-colors rounded cursor-pointer"
   aria-label="Analyze Seed"
 >

@@ -213,6 +213,7 @@ export interface SocketResult {
 
 export interface StatModification {
   statKey: number;
+  statValues: Record<string, number>;
   statLabel: string;
   nodeIds: number[];
   occurrenceCount: number;

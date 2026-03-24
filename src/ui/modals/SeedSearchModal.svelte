@@ -103,34 +103,61 @@
           if (modifications) {
             const socketMod = modifications[socketId];
             if (socketMod) {
-              const replacements: StatModification[] = [];
-              const additions: StatModification[] = [];
+              const replacementsMap: Map<number, StatModification> = new Map();
+              const additionsMap: Map<number, StatModification> = new Map();
 
               for (const [key, nodeIds] of Object.entries(socketMod.r)) {
-			if (nodeIds && nodeIds.length > 0) {
-					const { rid } = parseKey(key);
-					const statLabel = getStatLabel(key);
-					replacements.push({
-						statKey: rid,
-						statLabel,
-						nodeIds,
-						occurrenceCount: nodeIds.length
-					});
-				}
+                if (nodeIds && nodeIds.length > 0) {
+                  const { rid, stats } = parseKey(key);
+                  const existing = replacementsMap.get(rid);
+                  if (existing) {
+                    for (const [statId, value] of Object.entries(stats)) {
+                      existing.statValues[statId] = (existing.statValues[statId] || 0) + value;
+                    }
+                    existing.nodeIds.push(...nodeIds);
+                    existing.occurrenceCount += nodeIds.length;
+                    existing.statLabel = getStatLabel(existing.statValues);
+                  } else {
+                    const statValues = { ...stats };
+                    if (Object.entries(statValues).length > 0) {
+                        replacementsMap.set(rid, {
+                            statKey: rid,
+                            statValues,
+                            statLabel: getStatLabel(statValues),
+                            nodeIds: [...nodeIds],
+                            occurrenceCount: nodeIds.length
+                        });
+                    }
+                  }
+                }
               }
 
               for (const [key, nodeIds] of Object.entries(socketMod.a)) {
-			if (nodeIds && nodeIds.length > 0) {
-					const { rid } = parseKey(key);
-					const statLabel = getStatLabel(key);
-					additions.push({
-						statKey: rid,
-						statLabel,
-						nodeIds,
-						occurrenceCount: nodeIds.length
-					});
-				}
+                if (nodeIds && nodeIds.length > 0) {
+                  const { rid, stats } = parseKey(key);
+                  const existing = additionsMap.get(rid);
+                  if (existing) {
+                    for (const [statId, value] of Object.entries(stats)) {
+                      existing.statValues[statId] = (existing.statValues[statId] || 0) + value;
+                    }
+                    existing.nodeIds.push(...nodeIds);
+                    existing.occurrenceCount += nodeIds.length;
+                    existing.statLabel = getStatLabel(existing.statValues);
+                  } else {
+                    const statValues = { ...stats };
+                    additionsMap.set(rid, {
+                      statKey: rid,
+                      statValues,
+                      statLabel: getStatLabel(statValues),
+                      nodeIds: [...nodeIds],
+                      occurrenceCount: nodeIds.length
+                    });
+                  }
+                }
               }
+
+              const replacements: StatModification[] = Array.from(replacementsMap.values());
+              const additions: StatModification[] = Array.from(additionsMap.values());
 
               replacements.sort((a, b) => b.occurrenceCount - a.occurrenceCount);
               additions.sort((a, b) => b.occurrenceCount - a.occurrenceCount);
@@ -169,9 +196,8 @@
     return { rid, stats };
   }
 
-  function getStatLabel(key: string): string {
-    const { stats } = parseKey(key);
-    const labels = Object.entries(stats)
+  function getStatLabel(statValues: Record<string, number>): string {
+    const labels = Object.entries(statValues)
       .map(([statId, value]) => formatStatTranslation(parseInt(statId), value, translations))
       .filter(Boolean);
     return labels.join(" / ");

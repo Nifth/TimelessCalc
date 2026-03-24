@@ -27,7 +27,8 @@ export function formatStatTranslation(
   }
   if (!entry) return `No translation for ${statId}`;
   let str = entry.translation;
-  const displayValue = entry.divider ? value / entry.divider : value;
+  const rawValue = entry.divider ? value / entry.divider : value;
+  const displayValue = Math.round(rawValue * 100) / 100;
   str = str.replace(new RegExp(`\\{0\\}`, "g"), displayValue.toString());
   return str;
 }
