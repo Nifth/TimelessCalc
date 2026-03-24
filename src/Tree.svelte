@@ -19,6 +19,7 @@ import { fetchLeagues } from "./providers/leagues";
 import Notification from "$lib/ui/notifications/Notification.svelte";
 import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 import { URLS } from "$lib/constants/urls";
+    import { calculateSeed } from "./utils/Timeless/calculator";
 
 let isLoading = $state(true);
 let loadingComplete = $state(false);
@@ -39,6 +40,7 @@ onMount(async () => {
 			performSearch,
 			translations,
 		);
+		calculateSeed(10200, 2);
 
 		perfMonitor.mark("init-end");
 		perfMonitor.measure("total-init", "init-start", "init-end");

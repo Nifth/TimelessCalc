@@ -1,0 +1,1826 @@
+[
+  {
+    "_rid": 0,
+    "Id": "vaal_small_fire_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      42
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 1,
+    "Id": "vaal_small_cold_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      49
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 2,
+    "Id": "vaal_small_lightning_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      56
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 3,
+    "Id": "vaal_small_physical_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      26
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 4,
+    "Id": "vaal_small_chaos_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      63
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 5,
+    "Id": "vaal_small_minion_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      490
+    ],
+    "Stat1Min": 8,
+    "Stat1Max": 13,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 6,
+    "Id": "vaal_small_attack_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      2652
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 7,
+    "Id": "vaal_small_spell_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      25
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 8,
+    "Id": "vaal_small_area_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      621
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 9,
+    "Id": "vaal_small_projectile_damage",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      500
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 10,
+    "Id": "vaal_small_damage_over_time",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      2018
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 11,
+    "Id": "vaal_small_area_of_effect",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      436
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 7,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 12,
+    "Id": "vaal_small_projectile_speed",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      177
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 13,
+    "Id": "vaal_small_critical_strike_chance",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      556
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 14,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 14,
+    "Id": "vaal_small_critical_strike_multiplier",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      95
+    ],
+    "Stat1Min": 6,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 15,
+    "Id": "vaal_small_attack_speed",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      70
+    ],
+    "Stat1Min": 3,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 16,
+    "Id": "vaal_small_cast_speed",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      218
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 3,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 17,
+    "Id": "vaal_small_movement_speed",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      179
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 3,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 18,
+    "Id": "vaal_small_chance_to_ignite",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      613
+    ],
+    "Stat1Min": 3,
+    "Stat1Max": 6,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 19,
+    "Id": "vaal_small_chance_to_freeze",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      457
+    ],
+    "Stat1Min": 3,
+    "Stat1Max": 6,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 20,
+    "Id": "vaal_small_chance_to_shock",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      661
+    ],
+    "Stat1Min": 3,
+    "Stat1Max": 6,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 21,
+    "Id": "vaal_small_duration",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      217
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 7,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 22,
+    "Id": "vaal_small_life",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      125
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 23,
+    "Id": "vaal_small_mana",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      129
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 6,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 24,
+    "Id": "vaal_small_mana_regeneration",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      131
+    ],
+    "Stat1Min": 12,
+    "Stat1Max": 17,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 25,
+    "Id": "vaal_small_armour",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      117
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 26,
+    "Id": "vaal_small_evasion",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      120
+    ],
+    "Stat1Min": 7,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 27,
+    "Id": "vaal_small_energy_shield",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      135
+    ],
+    "Stat1Min": 3,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 28,
+    "Id": "vaal_small_attack_block",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      1085
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 2,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 29,
+    "Id": "vaal_small_spell_block",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      2134
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 2,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 30,
+    "Id": "vaal_small_attack_dodge",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      622
+    ],
+    "Stat1Min": 3,
+    "Stat1Max": 3,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 31,
+    "Id": "vaal_small_spell_dodge",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      14918
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 32,
+    "Id": "vaal_small_aura_effect",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      3895
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 33,
+    "Id": "vaal_small_curse_effect",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      1393
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 2,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 34,
+    "Id": "vaal_small_fire_resistance",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      146
+    ],
+    "Stat1Min": 9,
+    "Stat1Max": 14,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 35,
+    "Id": "vaal_small_cold_resistance",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      148
+    ],
+    "Stat1Min": 9,
+    "Stat1Max": 14,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 36,
+    "Id": "vaal_small_lightning_resistance",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      150
+    ],
+    "Stat1Min": 9,
+    "Stat1Max": 14,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 37,
+    "Id": "vaal_small_chaos_resistance",
+    "AlternateTreeVersionsKey": 1,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      152
+    ],
+    "Stat1Min": 6,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 38,
+    "Id": "karui_attribute_strength",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      575
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 2,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      1
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 39,
+    "Id": "karui_small_strength",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      575
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      2
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 40,
+    "Id": "karui_notable_add_strength",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      575
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 41,
+    "Id": "karui_notable_add_percent_strength",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      2074
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 42,
+    "Id": "karui_notable_add_armour",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      117
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 43,
+    "Id": "karui_notable_add_leech",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      2742
+    ],
+    "Stat1Min": 40,
+    "Stat1Max": 40,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 44,
+    "Id": "karui_notable_add_double_damage",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      5914
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 45,
+    "Id": "karui_notable_add_life",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      125
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 46,
+    "Id": "karui_notable_add_fortify_effect",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      14995
+    ],
+    "Stat1Min": 1,
+    "Stat1Max": 1,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 47,
+    "Id": "karui_notable_add_life_regen",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      453
+    ],
+    "Stat1Min": 60,
+    "Stat1Max": 60,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 48,
+    "Id": "karui_notable_add_fire_resistance",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      146
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 49,
+    "Id": "karui_notable_add_melee_damage",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      1367
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 50,
+    "Id": "karui_notable_add_damage_from_crits",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      97
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 51,
+    "Id": "karui_notable_add_melee_crit_chance",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      1360
+    ],
+    "Stat1Min": 30,
+    "Stat1Max": 30,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 52,
+    "Id": "karui_notable_add_burning_damage",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      211
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 53,
+    "Id": "karui_notable_add_totem_damage",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      1825
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 54,
+    "Id": "karui_notable_add_melee_crit_multi",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      1299
+    ],
+    "Stat1Min": 15,
+    "Stat1Max": 15,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 55,
+    "Id": "karui_notable_add_physical_damage",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      26
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 56,
+    "Id": "karui_notable_add_warcry_buff_effect",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      5612
+    ],
+    "Stat1Min": 8,
+    "Stat1Max": 8,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 57,
+    "Id": "karui_notable_add_totem_placement_speed",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      1348
+    ],
+    "Stat1Min": 12,
+    "Stat1Max": 12,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 58,
+    "Id": "karui_notable_add_stun_duration",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      342
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 59,
+    "Id": "karui_notable_add_faster_burn",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      1334
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 60,
+    "Id": "karui_notable_add_reduced_stun_threshold",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      108
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 61,
+    "Id": "karui_notable_add_physical_added_as_fire",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      449
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 62,
+    "Id": "karui_notable_add_physical_taken_as_fire",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      20777
+    ],
+    "Stat1Min": 1,
+    "Stat1Max": 1,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 63,
+    "Id": "karui_notable_add_endurance_charge_on_kill",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 15,
+    "StatsKeys": [
+      3934
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 64,
+    "Id": "karui_notable_add_intimidate",
+    "AlternateTreeVersionsKey": 2,
+    "SpawnWeight": 15,
+    "StatsKeys": [
+      8301
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 65,
+    "Id": "maraketh_attribute_dex",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      581
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 2,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      1
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 66,
+    "Id": "maraketh_small_dex",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      581
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      2
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 67,
+    "Id": "maraketh_notable_add_dexterity",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      581
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 68,
+    "Id": "maraketh_notable_add_percent_dexterity",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      2073
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 69,
+    "Id": "maraketh_notable_add_evasion",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      120
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 70,
+    "Id": "maraketh_notable_add_flask_charges",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      462
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 71,
+    "Id": "maraketh_notable_add_speed",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      1947
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 72,
+    "Id": "maraketh_notable_add_life",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      125
+    ],
+    "Stat1Min": 4,
+    "Stat1Max": 4,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 73,
+    "Id": "maraketh_notable_add_blind",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      976
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 74,
+    "Id": "maraketh_notable_add_movement_speed",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      179
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 75,
+    "Id": "maraketh_notable_add_cold_resistance",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      148
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 76,
+    "Id": "maraketh_notable_add_projectile_damage",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      500
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 77,
+    "Id": "maraketh_notable_add_ailment_avoid",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      6188
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 78,
+    "Id": "maraketh_notable_add_global_crit_chance",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      556
+    ],
+    "Stat1Min": 25,
+    "Stat1Max": 25,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 79,
+    "Id": "maraketh_notable_add_poison_damage",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      3418
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 80,
+    "Id": "maraketh_notable_add_minion_damage",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      490
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 81,
+    "Id": "maraketh_notable_add_accuracy",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      84
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 82,
+    "Id": "maraketh_notable_add_elemental_damage",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      488
+    ],
+    "Stat1Min": 20,
+    "Stat1Max": 20,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 83,
+    "Id": "maraketh_notable_add_aura_effect",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      3895
+    ],
+    "Stat1Min": 8,
+    "Stat1Max": 8,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 84,
+    "Id": "maraketh_notable_add_minion_movement_speed",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      619
+    ],
+    "Stat1Min": 15,
+    "Stat1Max": 15,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 85,
+    "Id": "maraketh_notable_add_ailment_duration",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      2706
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 86,
+    "Id": "maraketh_notable_add_faster_poison",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      9203
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 87,
+    "Id": "maraketh_notable_add_ailment_effect",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 70,
+    "StatsKeys": [
+      6415
+    ],
+    "Stat1Min": 10,
+    "Stat1Max": 10,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 88,
+    "Id": "maraketh_notable_add_physical_added_as_cold",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      450
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 89,
+    "Id": "maraketh_notable_add_flask_effect",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 40,
+    "StatsKeys": [
+      12237
+    ],
+    "Stat1Min": 25,
+    "Stat1Max": 25,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 90,
+    "Id": "maraketh_notable_add_frenzy_charge_on_kill",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 15,
+    "StatsKeys": [
+      1358
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 91,
+    "Id": "maraketh_notable_add_onslaught",
+    "AlternateTreeVersionsKey": 3,
+    "SpawnWeight": 15,
+    "StatsKeys": [
+      1410
+    ],
+    "Stat1Min": 8000,
+    "Stat1Max": 8000,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 92,
+    "Id": "templar_small_devotion",
+    "AlternateTreeVersionsKey": 4,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      9739
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      2
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 93,
+    "Id": "templar_notable_devotion",
+    "AlternateTreeVersionsKey": 4,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      9739
+    ],
+    "Stat1Min": 5,
+    "Stat1Max": 5,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      3
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 94,
+    "Id": "kalguuran_small_ward",
+    "AlternateTreeVersionsKey": 6,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      14501
+    ],
+    "Stat1Min": 2,
+    "Stat1Max": 2,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      2
+    ],
+    "Unknown12": 0
+  },
+  {
+    "_rid": 95,
+    "Id": "kalguuran_attribute_ward",
+    "AlternateTreeVersionsKey": 6,
+    "SpawnWeight": 100,
+    "StatsKeys": [
+      14501
+    ],
+    "Stat1Min": 1,
+    "Stat1Max": 1,
+    "Unknown7": 0,
+    "Unknown8": 0,
+    "Unknown9": 0,
+    "Unknown10": 0,
+    "PassiveType": [
+      1
+    ],
+    "Unknown12": 0
+  }
+]
