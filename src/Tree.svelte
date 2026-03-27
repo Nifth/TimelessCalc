@@ -23,6 +23,7 @@ import Notification from "$lib/ui/notifications/Notification.svelte";
 import TradeNotification from "$lib/ui/notifications/TradeNotification.svelte";
 import { URLS } from "$lib/constants/urls";
 import type { SeedSearchResults } from "$lib/types";
+    import ReleaseModal from "./ui/modals/ReleaseModal.svelte";
 
 let isLoading = $state(true);
 let loadingComplete = $state(false);
@@ -147,6 +148,31 @@ function handleRenderDuration(duration: number) {
     onresults={(results) => _seedSearchResults = results}
   />
 {/if}
+
+<ReleaseModal releaseData={{
+  version: "1.0.0",
+  title: "What's New in TimelessCalc",
+  date: "March 27, 2026",
+  features: [
+    {
+      name: "New changelog modal",
+      description: "From now on, when I add a new feature / fix something critical (hope there's nothing like that right now), You'll have this window that explains briefly what's new/fixed. <br/>If you've got any issue or feature request, you can always open an issue on <a href='https://github.com/Nifth/TimelessCalc' target='_blank' class='font-bold cursor-pointer'>github</a>"
+    },
+    {
+      name: "Seed Analyzer",
+      description: "Quickly inspect any seed across all jewel sockets. <br/>It can be accessed by pasting a jewel you copied from ingame, trade or pob, or by clicking the lightning icon in the bottom right corner.<br/>",
+      mediaUrl: "./assets/changelog/analyzer.png"
+    },
+    {
+      name: '"Lock" a notable',
+      description: "I did not know how to call this feature, but here's the thing:<br/> You can now \"lock\" a notable so that this notable will always have one of your searched stats. This is particurlarly useful when searching for <strong>Elegant Hubris</strong> seeds, as the small nodes give nothing, so you could take any notable with a given length path, as the small nodes give nothing, but you might want one fixed notable to have access to its mastery.<br/> You toggle the \"lock\" on a notable by using CTRL + click on it. <br/>There is no limitations to the number of locked notable.<br/>A locked notable will be displayed with a small lock icon next to it",
+    },
+    {
+      name: "Help modal",
+      description: "Remember there is always the help modal accessible from the \"?\" button in the bottom right corner. I try to give as much information about the different features as possible there"
+    }
+  ]
+}} />
 
 <div class="fixed bottom-2 right-2 flex gap-2 z-[1]">
   <a
