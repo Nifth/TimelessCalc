@@ -160,12 +160,13 @@ function handleRenderDuration(duration: number) {
     },
     {
       name: "Seed Analyzer",
-      description: "Quickly inspect any seed across all jewel sockets. <br/>It can be accessed by pasting a jewel you copied from ingame, trade or pob, or by clicking the lightning icon in the bottom right corner.<br/>",
+      description: "Quickly inspect any seed across all jewel sockets. Useful for estimating how strong a seed may be. <br/>It can be accessed by pasting a jewel you copied from ingame, trade or pob, or by clicking the lightning icon in the bottom right corner.<br/>",
       mediaUrl: "./assets/changelog/analyzer.png"
     },
     {
       name: '"Lock" a notable',
-      description: "I did not know how to call this feature, but here's the thing:<br/> You can now \"lock\" a notable so that this notable will always have one of your searched stats. This is particurlarly useful when searching for <strong>Elegant Hubris</strong> seeds, as the small nodes give nothing, so you could take any notable with a given length path, as the small nodes give nothing, but you might want one fixed notable to have access to its mastery.<br/> You toggle the \"lock\" on a notable by using CTRL + click on it. <br/>There is no limitations to the number of locked notable.<br/>A locked notable will be displayed with a small lock icon next to it",
+      description: "I did not know how to call this feature, but here's the thing:<br/> You can now \"lock\" a node so that it will always have one of your searched stats. This is particurlarly useful when searching for <strong>Elegant Hubris</strong> seeds, as the small nodes give nothing, so you could allocate any notable with a given length path, since the small nodes give nothing, but you might want one fixed notable to have access to its mastery.<br/> You toggle the \"lock\" on a node by using CTRL + click on it. <br/>There is no limitations to the number of locked nodes.<br/>A locked node will be displayed with a small lock icon next to it",
+      mediaUrl: "./assets/changelog/locked_node.png"
     },
     {
       name: "Help modal",
@@ -174,7 +175,7 @@ function handleRenderDuration(duration: number) {
   ]
 }} />
 
-<div class="fixed bottom-2 right-2 flex gap-2 z-[1]">
+<div class="fixed bottom-2 right-2 flex gap-2 z-1">
   <a
     href={URLS.GITHUB_REPO}
     target="_blank"

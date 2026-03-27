@@ -26,6 +26,7 @@
 
   onMount(() => {
     const lastSeen = localStorage.getItem("last_seen_version");
+    visible = true;
     if (lastSeen !== releaseData.version) {
       localStorage.setItem("last_seen_version", releaseData.version);
       visible = true;
@@ -87,11 +88,11 @@
               <p class="text-sm text-slate-300 leading-relaxed mt-1">{@html feature.description}</p>
 
               {#if feature.mediaUrl}
-                <div class="mt-2 relative rounded-lg overflow-hidden bg-slate-900 border-2 border-teal-400">
+                <div class="mt-2 relative rounded-lg overflow-hidden">
                   <img
                     src={feature.mediaUrl}
                     alt={feature.name}
-                    class="object-cover rounded-lg"
+                    class="object-cover rounded-lg  border-2 border-teal-400"
                     loading="lazy"
                   />
                 </div>

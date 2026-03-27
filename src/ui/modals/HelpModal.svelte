@@ -115,6 +115,19 @@
             <p>Use the <strong class="text-blue-300">Notable/Small toggles</strong> to quickly allocate all nodes of that type in the jewel's radius.</p>
           </div>
 
+          <p class="mb-3 text-base font-semibold text-slate-100">Node Locking</p>
+          <div class="mb-4 space-y-2">
+            <p>You can <strong class="text-blue-300">lock</strong> an allocated node so that the search results will only include seeds where that node has at least one of your searched stats.</p>
+            <p>Toggle the lock on a node using <strong class="text-blue-300">Ctrl + Click</strong> on it. A locked node is displayed with a lock icon next to it.</p>
+            <p>There is no limit to the number of locked nodes.</p>
+            <p>If a node is already locked, <strong class="text-blue-300">Ctrl + Click</strong> unlocks it while keeping it allocated.</p>
+          </div>
+
+          <div class="mb-6 p-4 bg-slate-800 rounded-lg">
+            <p class="mb-2 font-semibold text-amber-400">Use Case Example</p>
+            <p class="leading-relaxed">This is particularly useful when searching for <strong>Elegant Hubris</strong> seeds. Since small nodes give nothing, you could allocate any notable with a given path length, but you might want a specific notable to always roll a useful stat so you can access its mastery. Locking that notable ensures only seeds where it gets a searched stat are returned.</p>
+          </div>
+
           <p class="mb-3 text-base font-semibold text-slate-100">Trade Integration</p>
           <p class="mb-2">Browse results grouped by total weight, click any seed to preview it on the tree, then click <strong class="text-blue-300">Trade</strong> to search PoE Trade. Pagination handles large result sets automatically.</p>
         </div>
