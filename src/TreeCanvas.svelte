@@ -164,14 +164,15 @@ function handleClick(event: MouseEvent) {
 		const scaledRadius = touchRadius / scaling;
 
 		if (dist < scaledRadius) {
-			handleNodeClick(node);
+			handleNodeClick(node, event);
 			return;
 		}
 	}
 }
 
-function handleNodeClick(node: Node) {
+function handleNodeClick(node: Node, event: MouseEvent) {
 	const treeState = get(treeStore);
+	const isCtrlClick = event.ctrlKey || event.metaKey;
 
 	if (node.isJewelSocket) {
 		const socketNodes = canvas.treeData.socketNodes[node.skill];
@@ -180,6 +181,7 @@ function handleNodeClick(node: Node) {
 			treeStore.update((s) => {
 				s.chosenSocket = null;
 				s.allocated = new Map();
+				s.locked = new Map();
 				return s;
 			});
 		} else {
@@ -195,6 +197,7 @@ function handleNodeClick(node: Node) {
 					}
 				}
 				s.allocated = newAllocated;
+				s.locked = new Map();
 				return s;
 			});
 		}
@@ -204,16 +207,31 @@ function handleNodeClick(node: Node) {
 			canvas.treeData.socketNodes[treeState.chosenSocket.skill];
 
 		if (socketNodes?.includes(nodeId)) {
-			treeStore.update((s) => {
-				const newAllocated = new Map(s.allocated);
-				if (newAllocated.has(nodeId)) {
-					newAllocated.delete(nodeId);
-				} else {
-					newAllocated.set(nodeId, node);
-				}
-				s.allocated = newAllocated;
-				return s;
-			});
+			if (isCtrlClick) {
+				treeStore.update((s) => {
+					if (s.locked.has(nodeId)) {
+						s.locked.delete(nodeId);
+					} else {
+						if (!s.allocated.has(nodeId)) {
+							s.allocated.set(nodeId, node);
+						}
+						s.locked.set(nodeId, node);
+					}
+					return s;
+				});
+			} else {
+				treeStore.update((s) => {
+					const newAllocated = new Map(s.allocated);
+					if (newAllocated.has(nodeId)) {
+						newAllocated.delete(nodeId);
+						s.locked.delete(nodeId);
+					} else {
+						newAllocated.set(nodeId, node);
+					}
+					s.allocated = newAllocated;
+					return s;
+				});
+			}
 		}
 	}
 }
@@ -290,6 +308,7 @@ const render = ({ context, width, height }: RenderParams) => {
 	const { offsetX, offsetY, scaling } = canvas.state;
 	const chosenSocket = get(treeStore).chosenSocket;
 	const allocated = get(treeStore).allocated;
+	const locked = get(treeStore).locked;
 
 	context.clearRect(0, 0, width, height);
 	context.fillStyle = "#070c11";
@@ -598,6 +617,55 @@ const render = ({ context, width, height }: RenderParams) => {
 				frameCoords.h * drawScale,
 			);
 		}
+	}
+
+	for (const [nodeId, node] of locked) {
+		if (!allocated.has(nodeId)) continue;
+		const pos = calculateNodePos(node, offsetX, offsetY, scaling);
+		const lockSize = 40 / scaling;
+
+		context.save();
+
+		const lockX = pos.x + lockSize * 0.6;
+		const lockY = pos.y - lockSize * 1.2;
+		const bodyW = lockSize * 0.7;
+		const bodyH = lockSize * 0.5;
+		const shackleW = lockSize * 0.4;
+
+		context.fillStyle = "#FFD700";
+		context.strokeStyle = "#1a1a2e";
+		context.lineWidth = 2 / scaling;
+
+		context.beginPath();
+		context.arc(
+			lockX,
+			lockY - bodyH * 0.05,
+			shackleW,
+			Math.PI,
+			0,
+			false,
+		);
+		context.stroke();
+
+		context.fillRect(
+			lockX - bodyW / 2,
+			lockY,
+			bodyW,
+			bodyH,
+		);
+		context.strokeRect(
+			lockX - bodyW / 2,
+			lockY,
+			bodyW,
+			bodyH,
+		);
+
+		context.beginPath();
+		context.arc(lockX, lockY + bodyH * 0.2, lockSize * 0.08, 0, Math.PI * 2);
+		context.fillStyle = "#1a1a2e";
+		context.fill();
+
+		context.restore();
 	}
 
 	if (chosenSocket) {

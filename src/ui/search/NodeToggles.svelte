@@ -24,6 +24,7 @@
       if (allNotableAllocated) {
         for (const node of notableNodes) {
           state.allocated.delete(node.skill.toString());
+          state.locked.delete(node.skill.toString());
         }
       } else {
         for (const node of notableNodes) {
@@ -60,6 +61,7 @@
       if (allSmallAllocated) {
         for (const node of smallNodes) {
           state.allocated.delete(node.skill.toString());
+          state.locked.delete(node.skill.toString());
         }
       } else {
         for (const node of smallNodes) {

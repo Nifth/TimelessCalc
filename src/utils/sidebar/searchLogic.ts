@@ -263,6 +263,9 @@ export async function handleSearch(
       }
     > = {};
 
+    const lockedNodes = get(treeStore).locked;
+    const selectedStatKeys = new Set(selectedStats.map((s) => s.statKey));
+
     for (const seedStr of Object.keys(jewelData)) {
       const seed = parseInt(seedStr);
       const entry = jewelData[seed];
@@ -270,18 +273,20 @@ export async function handleSearch(
 
       const statCounts: Record<number, number> = {};
       const statTotals: Record<number, number> = {};
+      const nodeStatIds: Record<string, Set<number>> = {};
 
       // Process 'r' and 'a'
       for (const type of ["r", "a"] as const) {
         for (const [key, nodeIds] of Object.entries(entry[type] || {})) {
           const stats = parseKey(key);
           for (const { statId, value } of stats) {
-            if (selectedStats.some((s) => s.statKey === statId)) {
+            if (selectedStatKeys.has(statId)) {
               // Count for each allocated nodeId
               for (const nodeId of nodeIds) {
                 if (get(treeStore).allocated.has(nodeId.toString())) {
                   statCounts[statId] = (statCounts[statId] || 0) + 1;
                   statTotals[statId] = (statTotals[statId] || 0) + value;
+                  (nodeStatIds[nodeId.toString()] ??= new Set()).add(statId);
                 }
               }
             }
@@ -301,7 +306,14 @@ export async function handleSearch(
         }
       });
 
-      if (meetsMinRequirement) {
+      // Each locked node must have at least one selected stat
+      const meetsLockedRequirement =
+        lockedNodes.size === 0 ||
+        [...lockedNodes.keys()].every(
+          (nodeId) => nodeStatIds[nodeId] && nodeStatIds[nodeId].size > 0,
+        );
+
+      if (meetsMinRequirement && meetsLockedRequirement) {
         results[seed] = { statCounts, statTotals };
       }
     }

@@ -193,6 +193,7 @@ export interface FavoriteEntry extends SearchHistoryEntry {
 export interface TreeStore {
   chosenSocket: Node | null;
   allocated: Map<string, Node>;
+  locked: Map<string, Node>;
   search: string;
   scale: number;
   hovered: Node | null;
