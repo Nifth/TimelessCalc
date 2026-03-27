@@ -26,7 +26,6 @@
 
   onMount(() => {
     const lastSeen = localStorage.getItem("last_seen_version");
-    visible = true;
     if (lastSeen !== releaseData.version) {
       localStorage.setItem("last_seen_version", releaseData.version);
       visible = true;
