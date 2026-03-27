@@ -183,6 +183,7 @@ export interface SearchHistoryEntry {
   stats: Stat[];
   minTotalWeight: number;
   allocatedSkillIds: string[];
+  lockedSkillIds: string[];
   statSearchMode?: StatSearchMode;
 }
 

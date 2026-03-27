@@ -91,6 +91,7 @@
       entry.statSearchMode || null,
       null,
       null,
+      (entry.lockedSkillIds || []).map((i) => Number(i)),
     );
     const success = await copyToClipboard(shareUrl);
     if (success) {

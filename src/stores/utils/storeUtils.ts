@@ -22,6 +22,7 @@ export interface BaseEntry {
 	stats: Stat[];
 	minTotalWeight: number;
 	allocatedSkillIds: string[];
+	lockedSkillIds: string[];
 	statSearchMode?: StatSearchMode;
 }
 
@@ -108,7 +109,6 @@ export function loadConfiguration(entry: BaseEntry): void {
 
 	// Update tree store socket and allocated nodes
 	treeStore.update((store) => {
-		// Reconstruct allocated Map from skill IDs using real node data
 		const nodes = canvas.treeData.nodes;
 		const allocated = new Map<string, TreeNode>();
 
@@ -119,8 +119,17 @@ export function loadConfiguration(entry: BaseEntry): void {
 			}
 		}
 
+		const locked = new Map<string, TreeNode>();
+		for (const skillId of entry.lockedSkillIds || []) {
+			const node = findNodeBySkill(parseInt(skillId, 10), nodes);
+			if (node) {
+				locked.set(skillId, node);
+			}
+		}
+
 		store.chosenSocket = entry.socket as TreeNode | null;
 		store.allocated = allocated;
+		store.locked = locked;
 		return store;
 	});
 }
@@ -146,6 +155,7 @@ export function createBaseEntry(): BaseEntry | null {
 	}
 
 	const allocatedSkillIds = Array.from(currentTreeStore.allocated.keys());
+	const lockedSkillIds = Array.from(currentTreeStore.locked.keys());
 
 	const entry: BaseEntry = {
 		id: crypto.randomUUID(),
@@ -156,6 +166,7 @@ export function createBaseEntry(): BaseEntry | null {
 		stats: [...currentSearchStore.selectedStats],
 		minTotalWeight: currentSearchStore.minTotalWeight,
 		allocatedSkillIds,
+		lockedSkillIds,
 		statSearchMode: currentSearchStore.statSearchMode,
 	};
 

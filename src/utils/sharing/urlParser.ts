@@ -169,6 +169,7 @@ export async function parseUrlAndInitialize(
 
 	let allocatedSkills: number[] | null = null;
 	let unallocatedSkills: number[] | null = null;
+	let lockedSkills: number[] = [];
 
 	try {
 		const allocatedRaw = urlParams.get("a");
@@ -190,12 +191,30 @@ export async function parseUrlAndInitialize(
 		console.error("Failed to parse unallocated nodes from URL:", e);
 	}
 
+	try {
+		const lockedRaw = urlParams.get("lk");
+		if (lockedRaw) {
+			const parsed = JSON.parse(lockedRaw);
+			lockedSkills = validateNumberArray(parsed);
+		}
+	} catch (e) {
+		console.error("Failed to parse locked nodes from URL:", e);
+	}
+
 	const allocated = reconstructAllocatedNodes(
 		socketSkillStr,
 		allocatedSkills,
 		unallocatedSkills,
 		treeData,
 	);
+
+	const locked = new Map<string, import("$lib/types").Node>();
+	for (const skill of lockedSkills) {
+		const node = treeData.nodes[skill.toString()];
+		if (node) {
+			locked.set(skill.toString(), node);
+		}
+	}
 
 	// Update stores
 	initializeSearchStore({
@@ -213,6 +232,7 @@ export async function parseUrlAndInitialize(
 	treeStore.update((t) => {
 		t.chosenSocket = chosenSocket;
 		t.allocated = allocated;
+		t.locked = locked;
 		t.search = "";
 		t.scale = 0.1;
 		t.hovered = null;

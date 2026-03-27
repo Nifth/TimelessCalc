@@ -41,6 +41,7 @@ export function generateShareUrl(
     searchState.statSearchMode,
     searchState.league,
     searchState.platform,
+    Array.from(treeState.locked.values()).map((n) => n.skill),
   );
 }
 
@@ -54,6 +55,7 @@ export function generateShareUrlFromData(
   statSearchMode: string | null,
   league: string | null,
   platform: string | null,
+  lockedSkills: number[] = [],
 ): string {
   const treeData = canvas.treeData;
   const params = new URLSearchParams();
@@ -86,6 +88,9 @@ export function generateShareUrlFromData(
         allocatedSkills,
       );
       params.set(param, JSON.stringify(list));
+    }
+    if (lockedSkills.length > 0) {
+      params.set("lk", JSON.stringify(lockedSkills));
     }
   }
 
