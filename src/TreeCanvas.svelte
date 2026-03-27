@@ -295,6 +295,40 @@ function handleWheel(event: WheelEvent) {
 	});
 }
 
+function drawLockIcon(
+	context: CanvasRenderingContext2D,
+	x: number,
+	y: number,
+	scaling: number,
+) {
+	const lockSize = 80 / scaling;
+
+	const lockX = x + lockSize * 1;
+	const lockY = y - lockSize * 1.4;
+	const bodyW = lockSize * 0.7;
+	const bodyH = lockSize * 0.5;
+	const shackleW = lockSize * 0.35;
+
+	context.save();
+
+	context.fillStyle = "#FFD700";
+	context.strokeStyle = "#FFD700";
+	context.lineWidth = 6 / scaling;
+
+	context.beginPath();
+	context.arc(lockX, lockY - bodyH * 0.05, shackleW, Math.PI, 0, false);
+	context.stroke();
+
+	context.fillRect(lockX - bodyW / 2, lockY, bodyW, bodyH);
+	context.strokeRect(lockX - bodyW / 2, lockY, bodyW, bodyH);
+
+	context.beginPath();
+	context.arc(lockX, lockY + bodyH * 0.2, lockSize * 0.08, 0, Math.PI * 2);
+	context.fill();
+
+	context.restore();
+}
+
 type RenderParams = {
 	context: CanvasRenderingContext2D;
 	width: number;
@@ -622,50 +656,7 @@ const render = ({ context, width, height }: RenderParams) => {
 	for (const [nodeId, node] of locked) {
 		if (!allocated.has(nodeId)) continue;
 		const pos = calculateNodePos(node, offsetX, offsetY, scaling);
-		const lockSize = 40 / scaling;
-
-		context.save();
-
-		const lockX = pos.x + lockSize * 0.6;
-		const lockY = pos.y - lockSize * 1.2;
-		const bodyW = lockSize * 0.7;
-		const bodyH = lockSize * 0.5;
-		const shackleW = lockSize * 0.4;
-
-		context.fillStyle = "#FFD700";
-		context.strokeStyle = "#1a1a2e";
-		context.lineWidth = 2 / scaling;
-
-		context.beginPath();
-		context.arc(
-			lockX,
-			lockY - bodyH * 0.05,
-			shackleW,
-			Math.PI,
-			0,
-			false,
-		);
-		context.stroke();
-
-		context.fillRect(
-			lockX - bodyW / 2,
-			lockY,
-			bodyW,
-			bodyH,
-		);
-		context.strokeRect(
-			lockX - bodyW / 2,
-			lockY,
-			bodyW,
-			bodyH,
-		);
-
-		context.beginPath();
-		context.arc(lockX, lockY + bodyH * 0.2, lockSize * 0.08, 0, Math.PI * 2);
-		context.fillStyle = "#1a1a2e";
-		context.fill();
-
-		context.restore();
+		drawLockIcon(context, pos.x, pos.y, scaling);
 	}
 
 	if (chosenSocket) {
