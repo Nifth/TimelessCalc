@@ -1,8 +1,29 @@
 import { canvas } from "../canvasContext";
+import type { Node } from "$lib/types";
+import { TREE_CONSTANTS } from "$lib/constants/tree";
 
 export interface Point {
 	x: number;
 	y: number;
+}
+
+export function centerOnSocket(socket: Node): number {
+	const radius = TREE_CONSTANTS.SOCKET.RADIUS;
+	const margin = 600;
+	const sidebarWidth = window.innerWidth >= 768 ? 650 : 0;
+	const availWidth = window.innerWidth - sidebarWidth;
+	const viewportScale = Math.max(
+		((radius + margin) * 2) / availWidth,
+		((radius + margin) * 2) / window.innerHeight,
+	);
+
+	canvas.state.scaling = viewportScale;
+	canvas.state.offsetX =
+		socket.x - (sidebarWidth + availWidth / 2) * viewportScale;
+	canvas.state.offsetY =
+		socket.y - (window.innerHeight / 2) * viewportScale;
+
+	return viewportScale;
 }
 
 export function toCanvasCoords(

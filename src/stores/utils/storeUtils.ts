@@ -10,6 +10,7 @@ import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
 import { canvas } from "$lib/canvas/canvasContext";
+import { centerOnSocket } from "$lib/canvas/utils/coordinate";
 import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { DEBUG } from "$lib/constants/debug";
 
@@ -131,6 +132,11 @@ export function loadConfiguration(entry: BaseEntry): void {
 		store.chosenSocket = entry.socket as TreeNode | null;
 		store.allocated = allocated;
 		store.locked = locked;
+
+		if (store.chosenSocket) {
+			const viewportScale = centerOnSocket(store.chosenSocket);
+			store.scale = viewportScale;
+		}
 		return store;
 	});
 }

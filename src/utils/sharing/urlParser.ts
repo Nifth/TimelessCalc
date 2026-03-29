@@ -1,15 +1,16 @@
-import { jewelTypes, conquerors } from "$lib/constants/timeless";
-import type { TreeData, Stat, Translation, JewelType } from "$lib/types";
-import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import { canvas } from "$lib/canvas/canvasContext";
+import { centerOnSocket } from "$lib/canvas/utils/coordinate";
+import { DEBUG } from "$lib/constants/debug";
+import { conquerors, jewelTypes } from "$lib/constants/timeless";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
+import type { JewelType, Stat, Translation, TreeData } from "$lib/types";
+import { findNodeBySkill } from "$lib/utils/nodeUtils";
 import {
-	initializeSearchStore,
 	finalizeSearchStoreInitialization,
+	initializeSearchStore,
 } from "$lib/utils/sidebar/searchUtils";
 import { reconstructAllocatedNodes } from "$lib/utils/socketNodeProcessor";
-import { DEBUG } from "$lib/constants/debug";
 
 function validateStatsArray(data: unknown): Stat[] {
 	if (!Array.isArray(data)) return [];
@@ -162,7 +163,11 @@ export async function parseUrlAndInitialize(
 		console.warn("Invalid socket skill:", socketSkillStr);
 		return false;
 	}
-	const chosenSocket = findNodeBySkill(socketSkill, treeData.nodes, canvas.skillIndex);
+	const chosenSocket = findNodeBySkill(
+		socketSkill,
+		treeData.nodes,
+		canvas.skillIndex,
+	);
 	if (!chosenSocket) {
 		console.warn("Socket not found:", socketSkill);
 		return false;
@@ -235,8 +240,10 @@ export async function parseUrlAndInitialize(
 		t.allocated = allocated;
 		t.locked = locked;
 		t.search = "";
-		t.scale = 0.1;
 		t.hovered = null;
+
+		const viewportScale = centerOnSocket(chosenSocket);
+		t.scale = viewportScale;
 		return t;
 	});
 

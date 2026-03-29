@@ -2,6 +2,7 @@
 import { onMount } from "svelte";
 import { Canvas, Layer } from "svelte-canvas";
 import { canvas } from "$lib/canvas/canvasContext";
+import { centerOnSocket } from "$lib/canvas/utils/coordinate";
 import { buildSkillIndex } from "$lib/utils/nodeUtils";
 import { distance, toCanvasCoords, type Point } from "$lib/canvas/utils/coordinate";
 import {
@@ -85,6 +86,11 @@ onMount(() => {
 			centerX - (window.innerWidth / 2) * canvas.state.scaling;
 		canvas.state.offsetY =
 			centerY - (window.innerHeight / 2) * canvas.state.scaling;
+
+		if (cachedTreeState.chosenSocket) {
+			const viewportScale = centerOnSocket(cachedTreeState.chosenSocket);
+			canvas.state.scaling = viewportScale;
+		}
 
 		treeStore.update((s) => ({ ...s, scale: canvas.state.scaling }));
 
