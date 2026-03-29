@@ -52,8 +52,8 @@ export const conquerors = {
     ],
     kalguur: [
         { label: "Any", id: 1, keystone: "Any", type: "kalguur"},
-        { label: "Vorana", id: 1, keystone: "Black Scythe Training", type: "kalguur"},
-        { label: "Uhtred", id: 1, keystone: "The Unbreaking Circle", type: "kalguur"},
-        { label: "Medved", id: 1, keystone: "Celestial Mathematics", type: "kalguur"},
+        { label: "Vorana", id: 2, keystone: "Black Scythe Training", type: "kalguur"},
+        { label: "Uhtred", id: 3, keystone: "The Unbreaking Circle", type: "kalguur"},
+        { label: "Medved", id: 4, keystone: "Celestial Mathematics", type: "kalguur"},
 	]
 } as Record<string, Conqueror[]>;
