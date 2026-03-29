@@ -2,11 +2,19 @@
   import { fly } from "svelte/transition";
   import { cubicOut } from "svelte/easing";
 
-  export let seeds: number[];
-  export let conquerorLabel: string;
-  export let page: number;
-  export let groupName: string | undefined = undefined;
-  export let onDismiss: () => void;
+  let {
+    seeds,
+    conquerorLabel,
+    page,
+    groupName = undefined,
+    onDismiss,
+  }: {
+    seeds: number[];
+    conquerorLabel: string;
+    page: number;
+    groupName?: string;
+    onDismiss: () => void;
+  } = $props();
 </script>
 
 <div
@@ -23,7 +31,7 @@
       {/if}
     </div>
     <button
-      on:click={onDismiss}
+      onclick={onDismiss}
       class="text-slate-400 hover:text-white p-1 transition-colors duration-200"
       aria-label="Dismiss"
     >

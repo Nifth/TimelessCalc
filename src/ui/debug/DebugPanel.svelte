@@ -3,16 +3,22 @@ import { onMount } from "svelte";
 import { perfMonitor } from "$lib/utils/performanceMonitor";
 import type { PerformanceMetrics } from "$lib/types";
 
-export let isVisible: boolean = true;
-export let metrics: PerformanceMetrics = {
-	timing: {},
-	memory: { initial: 0, current: 0, total: 0, limit: 0, delta: 0 },
-	network: { totalTransferred: 0, totalDuration: 0, requestCount: 0 },
-};
-export let renderDuration: number = 0;
+let {
+	isVisible = true,
+	metrics = {
+		timing: {},
+		memory: { initial: 0, current: 0, total: 0, limit: 0, delta: 0 },
+		network: { totalTransferred: 0, totalDuration: 0, requestCount: 0 },
+	},
+	renderDuration = 0,
+}: {
+	isVisible?: boolean;
+	metrics?: PerformanceMetrics;
+	renderDuration?: number;
+} = $props();
 
-let expanded: boolean = false;
-let memoryHistory: number[] = [];
+let expanded = $state(false);
+let memoryHistory = $state<number[]>([]);
 let exportData: string = "";
 
 function updateMetrics() {
