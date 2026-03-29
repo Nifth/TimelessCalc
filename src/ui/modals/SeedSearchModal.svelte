@@ -96,83 +96,79 @@
     error = null;
 
     try {
-      const socketIds = Object.keys(canvas.treeData.socketNodes);
+      const modifications = await calculateSeed(seed, selectedJewelType.id);
       const socketResults: Record<string, SocketResult> = {};
 
-      for (const socketId of socketIds) {
-        try {
-          const modifications = await calculateSeed(seed, selectedJewelType.id);
-          if (modifications) {
-            const socketMod = modifications[socketId];
-            if (socketMod) {
-              const replacementsMap: Map<number, StatModification> = new Map();
-              const additionsMap: Map<number, StatModification> = new Map();
+      if (modifications) {
+        for (const [socketId, socketMod] of Object.entries(modifications)) {
+          try {
+            const replacementsMap: Map<number, StatModification> = new Map();
+            const additionsMap: Map<number, StatModification> = new Map();
 
-              for (const [key, nodeIds] of Object.entries(socketMod.r)) {
-                if (nodeIds && nodeIds.length > 0) {
-                  const { rid, stats } = parseKey(key);
-                  const existing = replacementsMap.get(rid);
-                  if (existing) {
-                    for (const [statId, value] of Object.entries(stats)) {
-                      existing.statValues[statId] = (existing.statValues[statId] || 0) + value;
-                    }
-                    existing.nodeIds.push(...nodeIds);
-                    existing.occurrenceCount += nodeIds.length;
-                    existing.statLabel = getStatLabel(existing.statValues);
-                  } else {
-                    const statValues = { ...stats };
-                    if (Object.entries(statValues).length > 0) {
-                        replacementsMap.set(rid, {
-                            statKey: rid,
-                            statValues,
-                            statLabel: getStatLabel(statValues),
-                            nodeIds: [...nodeIds],
-                            occurrenceCount: nodeIds.length
-                        });
-                    }
+            for (const [key, nodeIds] of Object.entries(socketMod.r)) {
+              if (nodeIds && nodeIds.length > 0) {
+                const { rid, stats } = parseKey(key);
+                const existing = replacementsMap.get(rid);
+                if (existing) {
+                  for (const [statId, value] of Object.entries(stats)) {
+                    existing.statValues[statId] = (existing.statValues[statId] || 0) + value;
+                  }
+                  existing.nodeIds.push(...nodeIds);
+                  existing.occurrenceCount += nodeIds.length;
+                  existing.statLabel = getStatLabel(existing.statValues);
+                } else {
+                  const statValues = { ...stats };
+                  if (Object.entries(statValues).length > 0) {
+                      replacementsMap.set(rid, {
+                          statKey: rid,
+                          statValues,
+                          statLabel: getStatLabel(statValues),
+                          nodeIds: [...nodeIds],
+                          occurrenceCount: nodeIds.length
+                      });
                   }
                 }
               }
-
-              for (const [key, nodeIds] of Object.entries(socketMod.a)) {
-                if (nodeIds && nodeIds.length > 0) {
-                  const { rid, stats } = parseKey(key);
-                  const existing = additionsMap.get(rid);
-                  if (existing) {
-                    for (const [statId, value] of Object.entries(stats)) {
-                      existing.statValues[statId] = (existing.statValues[statId] || 0) + value;
-                    }
-                    existing.nodeIds.push(...nodeIds);
-                    existing.occurrenceCount += nodeIds.length;
-                    existing.statLabel = getStatLabel(existing.statValues);
-                  } else {
-                    const statValues = { ...stats };
-                    additionsMap.set(rid, {
-                      statKey: rid,
-                      statValues,
-                      statLabel: getStatLabel(statValues),
-                      nodeIds: [...nodeIds],
-                      occurrenceCount: nodeIds.length
-                    });
-                  }
-                }
-              }
-
-              const replacements: StatModification[] = Array.from(replacementsMap.values());
-              const additions: StatModification[] = Array.from(additionsMap.values());
-
-              replacements.sort((a, b) => b.occurrenceCount - a.occurrenceCount);
-              additions.sort((a, b) => b.occurrenceCount - a.occurrenceCount);
-
-              socketResults[socketId] = {
-                socketId,
-                replacements,
-                additions
-              };
             }
+
+            for (const [key, nodeIds] of Object.entries(socketMod.a)) {
+              if (nodeIds && nodeIds.length > 0) {
+                const { rid, stats } = parseKey(key);
+                const existing = additionsMap.get(rid);
+                if (existing) {
+                  for (const [statId, value] of Object.entries(stats)) {
+                    existing.statValues[statId] = (existing.statValues[statId] || 0) + value;
+                  }
+                  existing.nodeIds.push(...nodeIds);
+                  existing.occurrenceCount += nodeIds.length;
+                  existing.statLabel = getStatLabel(existing.statValues);
+                } else {
+                  const statValues = { ...stats };
+                  additionsMap.set(rid, {
+                    statKey: rid,
+                    statValues,
+                    statLabel: getStatLabel(statValues),
+                    nodeIds: [...nodeIds],
+                    occurrenceCount: nodeIds.length
+                  });
+                }
+              }
+            }
+
+            const replacements: StatModification[] = Array.from(replacementsMap.values());
+            const additions: StatModification[] = Array.from(additionsMap.values());
+
+            replacements.sort((a, b) => b.occurrenceCount - a.occurrenceCount);
+            additions.sort((a, b) => b.occurrenceCount - a.occurrenceCount);
+
+            socketResults[socketId] = {
+              socketId,
+              replacements,
+              additions
+            };
+          } catch {
+            silentlyIgnore();
           }
-        } catch {
-          silentlyIgnore();
         }
       }
 
