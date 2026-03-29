@@ -2,6 +2,7 @@
 import { onMount } from "svelte";
 import { Canvas, Layer } from "svelte-canvas";
 import { canvas } from "$lib/canvas/canvasContext";
+import { buildSkillIndex } from "$lib/utils/nodeUtils";
 import { distance, toCanvasCoords, type Point } from "$lib/canvas/utils/coordinate";
 import {
 	calculateNodePos,
@@ -68,6 +69,7 @@ onMount(() => {
 		canvasHeight = window.innerHeight;
 
 		canvas.treeData = JSON.parse(JSON.stringify(treeData));
+		canvas.skillIndex = buildSkillIndex(canvas.treeData.nodes);
 
 		await preloadSprites(canvas.treeData.sprites);
 

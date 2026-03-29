@@ -1,6 +1,7 @@
 import { jewelTypes, conquerors } from "$lib/constants/timeless";
 import type { TreeData, Stat, Translation, JewelType } from "$lib/types";
 import { findNodeBySkill } from "$lib/utils/nodeUtils";
+import { canvas } from "$lib/canvas/canvasContext";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import {
@@ -161,7 +162,7 @@ export async function parseUrlAndInitialize(
 		console.warn("Invalid socket skill:", socketSkillStr);
 		return false;
 	}
-	const chosenSocket = findNodeBySkill(socketSkill, treeData.nodes);
+	const chosenSocket = findNodeBySkill(socketSkill, treeData.nodes, canvas.skillIndex);
 	if (!chosenSocket) {
 		console.warn("Socket not found:", socketSkill);
 		return false;

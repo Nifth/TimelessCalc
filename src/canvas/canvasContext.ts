@@ -1,4 +1,5 @@
 import type { Node, TreeData, Sprite, Group } from "$lib/types";
+import type { SkillIndex } from "$lib/utils/nodeUtils";
 
 export interface CanvasState {
 	width: number;
@@ -17,6 +18,7 @@ export interface CanvasState {
 
 export const canvas = {
 	treeData: null! as TreeData,
+	skillIndex: null! as SkillIndex,
 	spriteCache: new Map<string, HTMLImageElement>(),
 	spriteConfig: new Map<string, Sprite>(),
 	drawnGroups: new Map<number, Group>(),

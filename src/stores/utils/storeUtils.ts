@@ -110,10 +110,11 @@ export function loadConfiguration(entry: BaseEntry): void {
 	// Update tree store socket and allocated nodes
 	treeStore.update((store) => {
 		const nodes = canvas.treeData.nodes;
+		const skillIndex = canvas.skillIndex;
 		const allocated = new Map<string, TreeNode>();
 
 		for (const skillId of entry.allocatedSkillIds || []) {
-			const node = findNodeBySkill(parseInt(skillId, 10), nodes);
+			const node = findNodeBySkill(parseInt(skillId, 10), nodes, skillIndex);
 			if (node) {
 				allocated.set(skillId, node);
 			}
@@ -121,7 +122,7 @@ export function loadConfiguration(entry: BaseEntry): void {
 
 		const locked = new Map<string, TreeNode>();
 		for (const skillId of entry.lockedSkillIds || []) {
-			const node = findNodeBySkill(parseInt(skillId, 10), nodes);
+			const node = findNodeBySkill(parseInt(skillId, 10), nodes, skillIndex);
 			if (node) {
 				locked.set(skillId, node);
 			}
