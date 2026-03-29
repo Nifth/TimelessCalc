@@ -281,8 +281,11 @@ export async function handleSearch(
       }
     > = {};
 
-    const lockedNodes = get(treeStore).locked;
+    const treeState = get(treeStore);
+    const lockedNodes = treeState.locked;
+    const allocatedNodes = treeState.allocated;
     const selectedStatKeys = new Set(selectedStats.map((s) => s.statKey));
+    const statSearchMode = get(searchStore).statSearchMode;
 
     for (const seedStr of Object.keys(jewelData)) {
       const seed = parseInt(seedStr);
@@ -301,7 +304,7 @@ export async function handleSearch(
             if (selectedStatKeys.has(statId)) {
               // Count for each allocated nodeId
               for (const nodeId of nodeIds) {
-                if (get(treeStore).allocated.has(nodeId.toString())) {
+                if (allocatedNodes.has(nodeId.toString())) {
                   statCounts[statId] = (statCounts[statId] || 0) + 1;
                   statTotals[statId] = (statTotals[statId] || 0) + value;
                   (nodeStatIds[nodeId.toString()] ??= new Set()).add(statId);
@@ -312,9 +315,6 @@ export async function handleSearch(
         }
       }
 
-      // All selected stats must meet their minimum weight requirement
-      // Check based on statSearchMode: occurrences or total value
-      const statSearchMode = get(searchStore).statSearchMode;
       const meetsMinRequirement = selectedStats.every((stat) => {
         if (stat.exclude) return true; // Excluded stats don't need to meet requirements
         if (statSearchMode === "occurrences") {
@@ -346,9 +346,8 @@ export async function handleSearch(
         totalWeight: number;
       }[]
     > = {};
-    const statSearchMode = get(searchStore).statSearchMode;
+    const minTotalWeight = get(searchStore).minTotalWeight;
     for (const [seed, data] of Object.entries(results)) {
-      const minTotalWeight = get(searchStore).minTotalWeight;
       const totalWeight = calculateWeight(data, selectedStats, statSearchMode);
       
       if (totalWeight === null || totalWeight < minTotalWeight || totalWeight === 0) continue;
