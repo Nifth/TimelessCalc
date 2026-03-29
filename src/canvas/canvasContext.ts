@@ -21,7 +21,11 @@ export const canvas = {
 	spriteConfig: new Map<string, Sprite>(),
 	drawnGroups: new Map<number, Group>(),
 	drawnNodes: new Map<number, Node>(),
-	connections: new Set<string>(),
+	precomputedConnections: [] as Array<{
+		nodeA: Node;
+		nodeB: Node;
+		isArc: boolean;
+	}>,
 	state: {
 		width: typeof window !== "undefined" ? window.innerWidth : 0,
 		height: typeof window !== "undefined" ? window.innerHeight : 0,

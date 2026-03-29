@@ -1,9 +1,8 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import { get } from "svelte/store";
 import { Canvas, Layer } from "svelte-canvas";
 import { canvas } from "$lib/canvas/canvasContext";
-import { distance, toCanvasCoords } from "$lib/canvas/utils/coordinate";
+import { distance, toCanvasCoords, type Point } from "$lib/canvas/utils/coordinate";
 import {
 	calculateNodePos,
 	initializeDrawnData,
@@ -14,7 +13,7 @@ import treeData from "$lib/data/tree.json" with { type: "json" };
 import { mouseStore } from "$lib/stores/mouseStore";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
-import type { Node } from "$lib/types";
+import type { Node, TreeStore, SearchStore } from "$lib/types";
 
 function drawClippedImage(
 	ctx: CanvasRenderingContext2D,
@@ -40,6 +39,8 @@ let isInitialized = $state(false);
 let canvasWidth = $state(0);
 let canvasHeight = $state(0);
 let cursorStyle = $state("default");
+let cachedTreeState: TreeStore = { chosenSocket: null, allocated: new Map(), locked: new Map(), search: "", scale: 10, hovered: null, loading: false };
+let cachedSearchState: SearchStore = { jewelType: null, conqueror: null, seed: null, selectedStats: [], searched: false, statsResults: {}, statKeyColors: {}, minTotalWeight: 0, statSearchMode: "occurrences", league: "Keepers", platform: "PC", currentPage: 0, totalResults: 0, orderedSeeds: [], lastTradeInfo: null, loading: false, mode: null, statsSearched: false, seedSearched: false, automated: false, jewelLoadError: null };
 let { onRender = () => {} } = $props();
 
 onMount(() => {
@@ -50,6 +51,16 @@ onMount(() => {
 		canvas.state.height = canvasHeight;
 	};
 	window.addEventListener("resize", handleResize);
+
+	const unsubTree = treeStore.subscribe((v) => {
+		cachedTreeState = v;
+		if (Math.abs(canvas.state.scaling - v.scale) > 0.001) {
+			canvas.state.scaling = v.scale;
+		}
+	});
+	const unsubSearch = searchStore.subscribe((v) => {
+		cachedSearchState = v;
+	});
 
 	(async () => {
 		canvasWidth = window.innerWidth;
@@ -77,14 +88,11 @@ onMount(() => {
 		isInitialized = true;
 	})();
 
-	return () => window.removeEventListener("resize", handleResize);
-});
-
-$effect(() => {
-	const storeScale = get(treeStore).scale;
-	if (Math.abs(canvas.state.scaling - storeScale) > 0.001) {
-		canvas.state.scaling = storeScale;
-	}
+	return () => {
+		window.removeEventListener("resize", handleResize);
+		unsubTree();
+		unsubSearch();
+	};
 });
 
 let hoverThrottle: number | null = null;
@@ -151,13 +159,13 @@ function handleClick(event: MouseEvent) {
 }
 
 function handleNodeClick(node: Node, event: MouseEvent) {
-	const treeState = get(treeStore);
+	const { chosenSocket } = cachedTreeState;
 	const isCtrlClick = event.ctrlKey || event.metaKey;
 
 	if (node.isJewelSocket) {
 		const socketNodes = canvas.treeData.socketNodes[node.skill];
 
-		if (treeState.chosenSocket?.skill === node.skill) {
+		if (chosenSocket?.skill === node.skill) {
 			treeStore.update((s) => {
 				s.chosenSocket = null;
 				s.allocated = new Map();
@@ -181,10 +189,10 @@ function handleNodeClick(node: Node, event: MouseEvent) {
 				return s;
 			});
 		}
-	} else if (treeState.chosenSocket) {
+	} else if (chosenSocket) {
 		const nodeId = node.skill.toString();
 		const socketNodes =
-			canvas.treeData.socketNodes[treeState.chosenSocket.skill];
+			canvas.treeData.socketNodes[chosenSocket.skill];
 
 		if (socketNodes?.includes(nodeId)) {
 			if (isCtrlClick) {
@@ -320,42 +328,62 @@ const render = ({ context, width, height }: RenderParams) => {
 
 	const start = performance.now();
 	const { offsetX, offsetY, scaling } = canvas.state;
-	const chosenSocket = get(treeStore).chosenSocket;
-	const allocated = get(treeStore).allocated;
-	const locked = get(treeStore).locked;
+	const { chosenSocket, allocated, locked } = cachedTreeState;
+	const drawScale = 2 / scaling;
+	const invScaling = 1 / scaling;
+	const lineWidth = 4 * invScaling;
+
+	const posCache = new Map<number, Point>();
+
+	const getCachedPos = (node: Node): Point => {
+		let pos = posCache.get(node.skill);
+		if (pos) return pos;
+		pos = toCanvasCoords(node.x, node.y, offsetX, offsetY, scaling);
+		posCache.set(node.skill, pos);
+		return pos;
+	};
+
+	const margin = 500;
+	const vpMinX = offsetX - margin;
+	const vpMaxX = offsetX + width * scaling + margin;
+	const vpMinY = offsetY - margin;
+	const vpMaxY = offsetY + height * scaling + margin;
+	const isInViewport = (x: number, y: number) =>
+		x >= vpMinX && x <= vpMaxX && y >= vpMinY && y <= vpMaxY;
 
 	context.clearRect(0, 0, width, height);
 	context.fillStyle = "#070c11";
 	context.fillRect(0, 0, width, height);
 
-	for (const [_, group] of canvas.drawnGroups) {
-		const groupPos = toCanvasCoords(
-			group.x,
-			group.y,
-			offsetX,
-			offsetY,
-			scaling,
-		);
+	const bgSprite = canvas.spriteConfig.get(
+		TREE_CONSTANTS.SPRITES.GROUP_BACKGROUND,
+	);
+	const bgImage = canvas.spriteCache.get(
+		TREE_CONSTANTS.SPRITES.GROUP_BACKGROUND,
+	);
 
-		if (group.background) {
-			const bg = canvas.spriteConfig.get(
-				TREE_CONSTANTS.SPRITES.GROUP_BACKGROUND,
+	if (bgSprite && bgImage) {
+		for (const [_, group] of canvas.drawnGroups) {
+			if (!group.background) continue;
+			if (!isInViewport(group.x, group.y)) continue;
+
+			const groupPos = toCanvasCoords(
+				group.x,
+				group.y,
+				offsetX,
+				offsetY,
+				scaling,
 			);
-			if (!bg) continue;
-			const coords = bg.coords[group.background.image];
+
+			const coords = bgSprite.coords[group.background.image];
 			if (!coords) continue;
-			const image = canvas.spriteCache.get(
-				TREE_CONSTANTS.SPRITES.GROUP_BACKGROUND,
-			);
-			if (!image) continue;
-			const drawScale = 2 / scaling;
+
 			const w = coords.w * drawScale;
 			const h = coords.h * drawScale;
 
 			if (group.background.isHalfImage) {
-				// First half - top
 				context.drawImage(
-					image,
+					bgImage,
 					coords.x,
 					coords.y,
 					coords.w,
@@ -365,12 +393,11 @@ const render = ({ context, width, height }: RenderParams) => {
 					w,
 					h,
 				);
-				// Second half - bottom with vertical flip
 				context.save();
 				context.translate(groupPos.x, groupPos.y + h);
 				context.scale(1, -1);
 				context.drawImage(
-					image,
+					bgImage,
 					coords.x,
 					coords.y,
 					coords.w,
@@ -384,7 +411,7 @@ const render = ({ context, width, height }: RenderParams) => {
 			} else {
 				drawClippedImage(
 					context,
-					image,
+					bgImage,
 					coords.x,
 					coords.y,
 					coords.w,
@@ -398,85 +425,80 @@ const render = ({ context, width, height }: RenderParams) => {
 		}
 	}
 
-	const connected = new Set<string>();
-	for (const [_, node] of canvas.drawnNodes) {
-		if (!node.out || node.isMastery) continue;
+	context.lineWidth = lineWidth;
+	context.strokeStyle = TREE_CONSTANTS.LINE_COLOR;
 
-		for (const targetId of node.out) {
-			const target = canvas.treeData.nodes[targetId];
-			if (
-				!target ||
-				target.isMastery ||
-				target.classStartIndex !== undefined ||
-				node.classStartIndex !== undefined
-			)
-				continue;
+	for (const conn of canvas.precomputedConnections) {
+		const { nodeA, nodeB, isArc } = conn;
 
-			const min = Math.min(node.skill, target.skill);
-			const max = Math.max(node.skill, target.skill);
-			const key = `${min}-${max}`;
-			if (connected.has(key)) continue;
-			connected.add(key);
+		if (!isInViewport(nodeA.x, nodeA.y) && !isInViewport(nodeB.x, nodeB.y))
+			continue;
 
-			const pos1 = calculateNodePos(node, offsetX, offsetY, scaling);
-			const pos2 = calculateNodePos(target, offsetX, offsetY, scaling);
+		if (isArc) {
+			const group = canvas.treeData.groups[nodeA.group.toString()];
+			const groupPos = toCanvasCoords(
+				group.x,
+				group.y,
+				offsetX,
+				offsetY,
+				scaling,
+			);
+			const count = canvas.treeData.constants.skillsPerOrbit[nodeA.orbit];
 
-			context.beginPath();
-			context.lineWidth = 4 / scaling;
-			context.strokeStyle = TREE_CONSTANTS.LINE_COLOR;
+			const angle1 =
+				(2 * Math.PI * nodeA.orbitIndex!) / count - Math.PI / 2;
+			const angle2 =
+				(2 * Math.PI * nodeB.orbitIndex!) / count - Math.PI / 2;
 
-			if (
-				node.group === target.group &&
-				node.orbit === target.orbit &&
-				node.orbit > 0
-			) {
-				const group = canvas.treeData.groups[node.group.toString()];
-				const groupPos = toCanvasCoords(
-					group.x,
-					group.y,
-					offsetX,
-					offsetY,
-					scaling,
-				);
-				const count = canvas.treeData.constants.skillsPerOrbit[node.orbit];
-
-				const angle1 = (2 * Math.PI * node.orbitIndex!) / count - Math.PI / 2;
-				const angle2 = (2 * Math.PI * target.orbitIndex!) / count - Math.PI / 2;
-
-				let delta = angle2 - angle1;
-				if (Math.abs(delta) > Math.PI) {
-					delta += delta > 0 ? -2 * Math.PI : 2 * Math.PI;
-				}
-
-				const radius =
-					canvas.treeData.constants.orbitRadii[node.orbit] / scaling;
-				context.arc(
-					groupPos.x,
-					groupPos.y,
-					radius,
-					angle1,
-					angle1 + delta,
-					delta < 0,
-				);
-			} else {
-				context.moveTo(pos1.x, pos1.y);
-				context.lineTo(pos2.x, pos2.y);
+			let delta = angle2 - angle1;
+			if (Math.abs(delta) > Math.PI) {
+				delta += delta > 0 ? -2 * Math.PI : 2 * Math.PI;
 			}
+
+			const radius =
+				canvas.treeData.constants.orbitRadii[nodeA.orbit] * invScaling;
+			context.beginPath();
+			context.arc(
+				groupPos.x,
+				groupPos.y,
+				radius,
+				angle1,
+				angle1 + delta,
+				delta < 0,
+			);
+			context.stroke();
+		} else {
+			const pos1 = getCachedPos(nodeA);
+			const pos2 = getCachedPos(nodeB);
+			context.beginPath();
+			context.moveTo(pos1.x, pos1.y);
+			context.lineTo(pos2.x, pos2.y);
 			context.stroke();
 		}
 	}
 
+	const frameSprite = canvas.spriteConfig.get(TREE_CONSTANTS.SPRITES.FRAME);
+	const frameImage = frameSprite
+		? canvas.spriteCache.get(TREE_CONSTANTS.SPRITES.FRAME)
+		: null;
+
 	for (const [_, node] of canvas.drawnNodes) {
-		const pos = calculateNodePos(node, offsetX, offsetY, scaling);
-		const drawScale = 2 / scaling;
+		if (!isInViewport(node.x, node.y)) continue;
+
+		const pos = getCachedPos(node);
 		const isActive = allocated.has(node.skill.toString());
 
 		if (node.classStartIndex !== undefined) {
-			const sprite = canvas.spriteConfig.get(TREE_CONSTANTS.SPRITES.START_NODE);
+			const sprite = canvas.spriteConfig.get(
+				TREE_CONSTANTS.SPRITES.START_NODE,
+			);
 			if (!sprite) continue;
-			const image = canvas.spriteCache.get(TREE_CONSTANTS.SPRITES.START_NODE);
+			const image = canvas.spriteCache.get(
+				TREE_CONSTANTS.SPRITES.START_NODE,
+			);
 			if (!image) continue;
-			const coords = sprite.coords[TREE_CONSTANTS.SPRITES.START_BACKGROUND];
+			const coords =
+				sprite.coords[TREE_CONSTANTS.SPRITES.START_BACKGROUND];
 			if (!coords) continue;
 			const w = coords.w * drawScale;
 			const h = coords.h * drawScale;
@@ -507,16 +529,13 @@ const render = ({ context, width, height }: RenderParams) => {
 					? TREE_CONSTANTS.SPRITES.JEWEL_FRAME_ACTIVE
 					: TREE_CONSTANTS.SPRITES.JEWEL_FRAME_UNALLOCATED;
 
-			const frame = canvas.spriteConfig.get(TREE_CONSTANTS.SPRITES.FRAME);
-			if (!frame) continue;
-			const coords = frame.coords[type];
+			if (!frameSprite || !frameImage) continue;
+			const coords = frameSprite.coords[type];
 			if (!coords) continue;
-			const image = canvas.spriteCache.get(TREE_CONSTANTS.SPRITES.FRAME);
-			if (!image) continue;
 
 			drawClippedImage(
 				context,
-				image,
+				frameImage,
 				coords.x,
 				coords.y,
 				coords.w,
@@ -529,10 +548,12 @@ const render = ({ context, width, height }: RenderParams) => {
 
 			if (!isSelected) {
 				context.beginPath();
-				context.arc(pos.x, pos.y, 100 / scaling, 0, Math.PI * 2);
+				context.arc(pos.x, pos.y, 100 * invScaling, 0, Math.PI * 2);
 				context.strokeStyle = "rgba(183, 0, 255, 1)";
-				context.lineWidth = 15 / scaling;
+				context.lineWidth = 15 * invScaling;
 				context.stroke();
+				context.lineWidth = lineWidth;
+				context.strokeStyle = TREE_CONSTANTS.LINE_COLOR;
 			}
 			continue;
 		}
@@ -544,7 +565,9 @@ const render = ({ context, width, height }: RenderParams) => {
 			const masterySprite = canvas.spriteConfig.get(masteryKey);
 			if (!masterySprite) continue;
 			const icon =
-				node.inactiveIcon || node.icon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON;
+				node.inactiveIcon ||
+				node.icon ||
+				TREE_CONSTANTS.SPRITES.DEFAULT_ICON;
 			const iconCoords = masterySprite.coords[icon];
 			if (!iconCoords) continue;
 			const masteryImage = canvas.spriteCache.get(masteryKey);
@@ -591,9 +614,10 @@ const render = ({ context, width, height }: RenderParams) => {
 		}
 
 		const icon =
-			node.icon || node.inactiveIcon || TREE_CONSTANTS.SPRITES.DEFAULT_ICON;
+			node.icon ||
+			node.inactiveIcon ||
+			TREE_CONSTANTS.SPRITES.DEFAULT_ICON;
 		const iconSprite = canvas.spriteConfig.get(iconKey);
-		const frameSprite = canvas.spriteConfig.get(TREE_CONSTANTS.SPRITES.FRAME);
 		if (!iconSprite || !frameSprite) continue;
 
 		const iconCoords = iconSprite.coords[icon];
@@ -601,7 +625,6 @@ const render = ({ context, width, height }: RenderParams) => {
 		if (!iconCoords || !frameCoords) continue;
 
 		const iconImage = canvas.spriteCache.get(iconKey);
-		const frameImage = canvas.spriteCache.get(TREE_CONSTANTS.SPRITES.FRAME);
 		if (!iconImage || !frameImage) continue;
 
 		drawClippedImage(
@@ -635,20 +658,22 @@ const render = ({ context, width, height }: RenderParams) => {
 
 	for (const [nodeId, node] of locked) {
 		if (!allocated.has(nodeId)) continue;
-		const pos = calculateNodePos(node, offsetX, offsetY, scaling);
+		const pos = getCachedPos(node);
 		drawLockIcon(context, pos.x, pos.y, scaling);
 	}
 
 	if (chosenSocket) {
-		const socketPos = calculateNodePos(chosenSocket, offsetX, offsetY, scaling);
+		const socketPos = getCachedPos(chosenSocket);
 		const radiusSprite = canvas.spriteConfig.get(
 			TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
 		);
 		if (!radiusSprite) {
+			const end = performance.now();
+			onRender(end - start);
 			return;
 		}
 
-		const jewelType = get(searchStore).jewelType;
+		const { jewelType } = cachedSearchState;
 		const jewelTypeName = (jewelType?.name ??
 			"default") as keyof typeof TREE_CONSTANTS.SOCKET.RADIUS_SPRITES;
 
@@ -662,6 +687,8 @@ const render = ({ context, width, height }: RenderParams) => {
 			];
 
 		if (!radiusCoords1 || !radiusCoords2) {
+			const end = performance.now();
+			onRender(end - start);
 			return;
 		}
 
@@ -669,12 +696,14 @@ const render = ({ context, width, height }: RenderParams) => {
 			TREE_CONSTANTS.SPRITES.JEWEL_RADIUS,
 		);
 		if (!radiusImage) {
+			const end = performance.now();
+			onRender(end - start);
 			return;
 		}
 
 		const jewelRadius = TREE_CONSTANTS.SOCKET.RADIUS;
 		const ratio = radiusCoords1.w / 2;
-		const drawScale = jewelRadius / ratio / scaling;
+		const radiusDrawScale = jewelRadius / ratio * invScaling;
 
 		context.save();
 		context.globalAlpha = TREE_CONSTANTS.SOCKET.OPACITY;
@@ -685,10 +714,10 @@ const render = ({ context, width, height }: RenderParams) => {
 			radiusCoords1.y,
 			radiusCoords1.w,
 			radiusCoords1.h,
-			socketPos.x - (radiusCoords1.w * drawScale) / 2,
-			socketPos.y - (radiusCoords1.h * drawScale) / 2,
-			radiusCoords1.w * drawScale,
-			radiusCoords1.h * drawScale,
+			socketPos.x - (radiusCoords1.w * radiusDrawScale) / 2,
+			socketPos.y - (radiusCoords1.h * radiusDrawScale) / 2,
+			radiusCoords1.w * radiusDrawScale,
+			radiusCoords1.h * radiusDrawScale,
 		);
 
 		if (jewelType) {
@@ -698,10 +727,10 @@ const render = ({ context, width, height }: RenderParams) => {
 				radiusCoords2.y,
 				radiusCoords2.w,
 				radiusCoords2.h,
-				socketPos.x - (radiusCoords2.w * drawScale) / 2,
-				socketPos.y - (radiusCoords2.h * drawScale) / 2,
-				radiusCoords2.w * drawScale,
-				radiusCoords2.h * drawScale,
+				socketPos.x - (radiusCoords2.w * radiusDrawScale) / 2,
+				socketPos.y - (radiusCoords2.h * radiusDrawScale) / 2,
+				radiusCoords2.w * radiusDrawScale,
+				radiusCoords2.h * radiusDrawScale,
 			);
 		}
 
@@ -709,37 +738,37 @@ const render = ({ context, width, height }: RenderParams) => {
 	}
 
 	if (canvas.state.highlightedStatKeys) {
-		const statKeyColors = get(searchStore).statKeyColors;
+		const { statKeyColors } = cachedSearchState;
+		const highlightedKeys = canvas.state.highlightedStatKeys;
 
 		for (const [_, node] of allocated) {
 			if (
 				node?.timelessStatKeys?.some((key) =>
-					canvas.state.highlightedStatKeys?.includes(key),
+					highlightedKeys.includes(key),
 				)
 			) {
-				const pos = calculateNodePos(node, offsetX, offsetY, scaling);
+				const pos = getCachedPos(node);
 				const radius = node.isNotable ? 90 : 60;
 
 				let color = "yellow";
 				for (const statKey of node.timelessStatKeys || []) {
-					if (canvas.state.highlightedStatKeys?.includes(statKey)) {
+					if (highlightedKeys.includes(statKey)) {
 						color = statKeyColors[statKey] || color;
 						break;
 					}
 				}
 
 				context.beginPath();
-				context.arc(pos.x, pos.y, radius / scaling, 0, Math.PI * 2);
+				context.arc(pos.x, pos.y, radius * invScaling, 0, Math.PI * 2);
 				context.strokeStyle = color;
-				context.lineWidth = 15 / scaling;
+				context.lineWidth = 15 * invScaling;
 				context.stroke();
 			}
 		}
 	}
 	const end = performance.now();
 
-	const renderDuration = end - start;
-	onRender(renderDuration);
+	onRender(end - start);
 };
 </script>
 

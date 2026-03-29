@@ -33,4 +33,35 @@ export function initializeDrawnData(): void {
 			drawnNodes.set(node.skill, node);
 		}
 	}
+
+	const seen = new Set<string>();
+	for (const [_, node] of drawnNodes) {
+		if (!node.out || node.isMastery) continue;
+
+		for (const targetId of node.out) {
+			const target = tree.nodes[targetId];
+			if (
+				!target ||
+				target.isMastery ||
+				target.classStartIndex !== undefined ||
+				node.classStartIndex !== undefined
+			)
+				continue;
+
+			const min = Math.min(node.skill, target.skill);
+			const max = Math.max(node.skill, target.skill);
+			const key = `${min}-${max}`;
+			if (seen.has(key)) continue;
+			seen.add(key);
+
+			canvas.precomputedConnections.push({
+				nodeA: node,
+				nodeB: target,
+				isArc:
+					node.group === target.group &&
+					node.orbit === target.orbit &&
+					node.orbit > 0,
+			});
+		}
+	}
 }
