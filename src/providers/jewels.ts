@@ -1,16 +1,11 @@
 // src/providers/jewels.ts
 
-import { jewelTypes } from "$lib/constants/timeless";
-import { perfMonitor } from "$lib/utils/performanceMonitor";
+import pako from "pako";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
-import pako from "pako";
-
-// Clear typing for data in each file
-export interface JewelEntry {
-	r: Record<string, number[]>;
-	a: Record<string, number[]>;
-}
+import { jewelTypes } from "$lib/constants/timeless";
+import type { JewelEntry } from "$lib/types";
+import { perfMonitor } from "$lib/utils/performanceMonitor";
 
 // In-memory cache for jewel data
 // Key format: "jewelId-socketId" (e.g., "vaal-2491", "vaal-6230")

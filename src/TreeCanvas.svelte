@@ -1,42 +1,22 @@
 <script lang="ts">
-import { Canvas, Layer } from "svelte-canvas";
 import { onMount } from "svelte";
-import { treeStore } from "$lib/stores/treeStore";
-import { searchStore } from "$lib/stores/searchStore";
-import { mouseStore } from "$lib/stores/mouseStore";
-import { canvas } from "$lib/canvas/canvasContext";
-import { preloadSprites } from "$lib/canvas/utils/sprites";
-import {
-	initializeDrawnData,
-	calculateNodePos,
-} from "$lib/canvas/utils/nodePositions";
-import { toCanvasCoords, distance } from "$lib/canvas/utils/coordinate";
-import { TREE_CONSTANTS } from "$lib/constants/tree";
-import type { Node } from "$lib/types";
 import { get } from "svelte/store";
+import { Canvas, Layer } from "svelte-canvas";
+import { canvas } from "$lib/canvas/canvasContext";
+import { distance, toCanvasCoords } from "$lib/canvas/utils/coordinate";
+import {
+	calculateNodePos,
+	initializeDrawnData,
+} from "$lib/canvas/utils/nodePositions";
+import { preloadSprites } from "$lib/canvas/utils/sprites";
+import { TREE_CONSTANTS } from "$lib/constants/tree";
 import treeData from "$lib/data/tree.json" with { type: "json" };
+import { mouseStore } from "$lib/stores/mouseStore";
+import { searchStore } from "$lib/stores/searchStore";
+import { treeStore } from "$lib/stores/treeStore";
+import type { Node } from "$lib/types";
 
 function drawClippedImage(
-	ctx: CanvasRenderingContext2D,
-	image: HTMLImageElement,
-	sx: number,
-	sy: number,
-	sw: number,
-	sh: number,
-	dx: number,
-	dy: number,
-	dw: number,
-	dh: number,
-) {
-	ctx.save();
-	ctx.beginPath();
-	ctx.ellipse(dx + dw / 2, dy + dh / 2, dw / 2, dh / 2, 0, 0, Math.PI * 2);
-	ctx.clip();
-	ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
-	ctx.restore();
-}
-
-function drawClippedBackground(
 	ctx: CanvasRenderingContext2D,
 	image: HTMLImageElement,
 	sx: number,
@@ -402,7 +382,7 @@ const render = ({ context, width, height }: RenderParams) => {
 				);
 				context.restore();
 			} else {
-				drawClippedBackground(
+				drawClippedImage(
 					context,
 					image,
 					coords.x,
