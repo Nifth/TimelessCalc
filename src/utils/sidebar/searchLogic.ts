@@ -34,6 +34,20 @@ const COLORBLIND_FRIENDLY_COLORS = [
   "#17BECF", // Cyan
 ];
 
+const modifiedNodeIds = new Set<string>();
+
+export function cleanupSeedModifications(): void {
+    for (const nodeId of modifiedNodeIds) {
+        const node = canvas.treeData.nodes[nodeId];
+        if (node) {
+            delete node.timelessStats;
+            delete node.timelessStatKeys;
+            delete node.timelessStatValues;
+        }
+    }
+    modifiedNodeIds.clear();
+}
+
 function generateStatKeyColors(statKeys: number[]): Record<number, string> {
   const colors: Record<number, string> = {};
   statKeys.forEach((key, index) => {
@@ -58,6 +72,7 @@ function processNodeModifications(
       if (!socketNodeIds.includes(nodeId.toString())) continue;
       const node = canvas.treeData.nodes[nodeId.toString()];
       if (!node) continue;
+      modifiedNodeIds.add(nodeId.toString());
       processor(node, stats);
     }
   }
@@ -69,6 +84,8 @@ function applySeedModifications(
   translation: Record<string, Translation[]>,
   jewelType: JewelType,
 ) {
+  cleanupSeedModifications();
+
   // Process replacements (r)
   processNodeModifications(
     entry.r,
@@ -134,6 +151,7 @@ function applySeedModifications(
         continue;
       }
       if (!node.isNotable && !node.isKeystone && !node.isJewelSocket) {
+        modifiedNodeIds.add(nodeId.toString());
         node.timelessStats = [];
         node.timelessStatKeys = [];
         node.timelessStatValues = [];

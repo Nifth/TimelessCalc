@@ -14,6 +14,7 @@ import { mouseStore } from "$lib/stores/mouseStore";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import type { Node, TreeStore, SearchStore } from "$lib/types";
+import { cleanupSeedModifications } from "$lib/utils/sidebar/searchLogic";
 
 function drawClippedImage(
 	ctx: CanvasRenderingContext2D,
@@ -166,6 +167,7 @@ function handleNodeClick(node: Node, event: MouseEvent) {
 		const socketNodes = canvas.treeData.socketNodes[node.skill];
 
 		if (chosenSocket?.skill === node.skill) {
+			cleanupSeedModifications();
 			treeStore.update((s) => {
 				s.chosenSocket = null;
 				s.allocated = new Map();
@@ -173,6 +175,7 @@ function handleNodeClick(node: Node, event: MouseEvent) {
 				return s;
 			});
 		} else {
+			cleanupSeedModifications();
 			treeStore.update((s) => {
 				s.chosenSocket = node;
 				const newAllocated = new Map<string, Node>();
