@@ -1,5 +1,6 @@
 <script lang="ts">
 import { onMount } from "svelte";
+import { onDestroy } from "svelte";
 import { perfMonitor } from "$lib/utils/performanceMonitor";
 import type { PerformanceMetrics } from "$lib/types";
 
@@ -21,11 +22,13 @@ let expanded = $state(false);
 let memoryHistory = $state<number[]>([]);
 let exportData: string = "";
 
+let timerId: ReturnType<typeof setTimeout> | null = null;
+
 function updateMetrics() {
 	metrics = perfMonitor.getAllMetrics();
 	memoryHistory.push(metrics.memory.current);
 	if (memoryHistory.length > 20) memoryHistory.shift();
-	setTimeout(updateMetrics, 100);
+	timerId = setTimeout(updateMetrics, 100);
 }
 
 function exportMetrics() {
@@ -53,6 +56,13 @@ function formatDuration(ms: number): string {
 
 onMount(() => {
 	updateMetrics();
+});
+
+onDestroy(() => {
+	if (timerId !== null) {
+		clearTimeout(timerId);
+		timerId = null;
+	}
 });
 </script>
 

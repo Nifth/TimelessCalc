@@ -8,7 +8,7 @@ import { TimelessJewel } from "./Game/TimelessJewel";
 import { AlternateTreeManager } from "./Game/AlternateTreeManager";
 import type { PassiveSkillNode } from "./Data/Models/PassiveSkill";
 
-const isInitialized = false;
+let isInitialized = false;
 let modifiableNodeIds: number[] = [];
 let socketNodeIds: string[] = [];
 
@@ -100,4 +100,5 @@ async function initializeSeedsCalculator() {
       return arr.indexOf(item) === index;
     });
     socketNodeIds = Object.keys(treeData.socketNodes) as string[];
+    isInitialized = true;
 }

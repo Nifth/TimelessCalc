@@ -50,7 +50,7 @@ function getDisplayValue(option: { value: string; display?: string }): string {
 const uniqueId = id || `dropdown-${crypto.randomUUID()}`;
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} />
 
 {#if loading}
   <div

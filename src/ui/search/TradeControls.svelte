@@ -1,7 +1,6 @@
 <script lang="ts">
   import { searchStore } from "$lib/stores/searchStore";
   import { getSeedsPerPage } from "$lib/utils/sidebar/tradeQuery";
-  import { get } from "svelte/store";
   import type { Snippet } from "svelte";
 
   interface Props {
@@ -22,8 +21,8 @@
     platform,
   }: Props = $props();
 
-  const jewelType = get(searchStore).jewelType;
-  const conqueror = get(searchStore).conqueror;
+  let jewelType = $derived($searchStore.jewelType);
+  let conqueror = $derived($searchStore.conqueror);
 
   let showTooltip = $state(false);
   let tooltipButton: HTMLButtonElement | undefined = $state();

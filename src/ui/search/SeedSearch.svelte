@@ -2,7 +2,6 @@
   import { searchStore } from "$lib/stores/searchStore";
   import { treeStore } from "$lib/stores/treeStore";
   import { canvas } from "$lib/canvas/canvasContext";
-  import { get } from "svelte/store";
   import { translations } from "$lib/providers/translations";
   import { formatStatTranslation } from "$lib/utils/sidebar/sidebarUtils";
 
@@ -13,9 +12,10 @@
 
   let { seed = $bindable(null), onapplyseed }: Props = $props();
 
-  const jewelType = get(searchStore).jewelType;
   let seedInput: number | null = $state(null);
   let searchTimeout: number | null = $state(null);
+
+  let jewelType = $derived($searchStore.jewelType);
 
   function getTimelessStats(): Record<
     number,

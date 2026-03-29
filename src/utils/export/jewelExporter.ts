@@ -8,6 +8,7 @@ const factionNames: Record<string, string> = {
   maraketh: "Maraketh",
   templar: "Templars",
   eternal: "Eternal Empire",
+  kalguur: "Kalguur",
 };
 
 export const seedTextFormats: Record<string, string> = {

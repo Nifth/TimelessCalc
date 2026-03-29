@@ -30,7 +30,10 @@
   });
 
   function selectLeague(name: string) {
-    $searchStore.league = name;
+    searchStore.update((s) => {
+      s.league = name;
+      return s;
+    });
   }
 </script>
 

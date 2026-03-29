@@ -2,7 +2,7 @@ import { canvas } from "$lib/canvas/canvasContext";
 import { centerOnSocket } from "$lib/canvas/utils/coordinate";
 import { DEBUG } from "$lib/constants/debug";
 import { conquerors, jewelTypes } from "$lib/constants/timeless";
-import { searchStore } from "$lib/stores/searchStore";
+import { searchStore, defaultLeague } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import type { JewelType, Stat, Translation, TreeData } from "$lib/types";
 import { findNodeBySkill } from "$lib/utils/nodeUtils";
@@ -126,8 +126,7 @@ export async function parseUrlAndInitialize(
 	}
 
 	// Parse league
-	// Todo: change default value to retrieve from API
-	const league = urlParams.get("l") || "Keepers";
+	const league = urlParams.get("l") || defaultLeague;
 
 	// Parse platform
 	const platform =

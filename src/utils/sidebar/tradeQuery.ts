@@ -1,7 +1,6 @@
 import type { Conqueror, JewelType } from "$lib/types";
 import { conquerors } from "$lib/constants/timeless";
 import { URLS } from "$lib/constants/urls";
-import { DEBUG } from "$lib/constants/debug";
 
 export const MAX_FILTERS = 150;
 
@@ -97,18 +96,6 @@ export function getSeedsPerPage(
   return Math.floor(MAX_FILTERS / numConquerors);
 }
 
-export function getTotalPages(
-  totalSeeds: number,
-  jewelType: JewelType,
-  conqueror: Conqueror | null,
-): number {
-  const allRanges = groupSeedsIntoRanges(
-    [...Array(totalSeeds).keys()].map((i) => i + 1),
-  );
-  const filtersPerPage = getSeedsPerPage(jewelType, conqueror);
-  return Math.ceil(allRanges.length / filtersPerPage);
-}
-
 export function getPageRange(
   seeds: number[],
   page: number,
@@ -158,7 +145,8 @@ export function buildTradeUrl(
   platform: string,
   league: string,
 ): string {
-  const platformPath = platform === "PC" ? "" : platform.toLowerCase() + "/";
+  const normalized = platform.toLowerCase() === "playstation" ? "sony" : platform.toLowerCase();
+  const platformPath = platform === "PC" ? "" : normalized + "/";
   const encodedLeague = encodeURIComponent(league);
   return `${URLS.POE_TRADE_SEARCH}${platformPath}${encodedLeague}?q=${encodeURIComponent(JSON.stringify(query))}`;
 }

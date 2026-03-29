@@ -38,10 +38,12 @@
   }: Props = $props();
 
   function openTradeForSeed(seed: number) {
+    const normalized =
+      $searchStore.platform.toLowerCase() === "playstation"
+        ? "sony"
+        : $searchStore.platform.toLowerCase();
     const platform =
-      $searchStore.platform === "PC"
-        ? ""
-        : $searchStore.platform.toLowerCase() + "/";
+      $searchStore.platform === "PC" ? "" : normalized + "/";
     const league = encodeURIComponent($searchStore.league);
     const query = buildTradeQuery(
       [seed],

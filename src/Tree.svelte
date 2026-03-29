@@ -10,7 +10,7 @@ import SeedSearchModal from "$lib/ui/modals/SeedSearchModal.svelte";
 import SeedSearchButton from "$lib/ui/common/SeedSearchButton.svelte";
 import TreeCanvas from "$lib/TreeCanvas.svelte";
 import { treeStore } from "$lib/stores/treeStore";
-import { searchStore, clearJewelLoadError } from "$lib/stores/searchStore";
+import { searchStore, clearJewelLoadError, initDefaultLeague } from "$lib/stores/searchStore";
 import { mouseStore } from "$lib/stores/mouseStore";
 import { parseUrlAndInitialize } from "$lib/utils/sharing/urlParser";
 import { parseClipboard } from "$lib/utils/clipboard/clipboardParser";
@@ -34,14 +34,15 @@ let showSeedSearch = $state(false);
 let triggerPaste = $state(false);
 let _seedSearchResults = $state<SeedSearchResults | null>(null);
 
-onMount(async () => {
-	try {
-		perfMonitor.mark("init-start");
+	onMount(async () => {
+		try {
+			perfMonitor.mark("init-start");
 
-		loadingComplete = true;
+			loadingComplete = true;
 
-		fetchLeagues();
-		await parseUrlAndInitialize(
+			await initDefaultLeague();
+			fetchLeagues();
+			await parseUrlAndInitialize(
 			canvas.treeData,
 			null,
 			performSearch,
@@ -165,7 +166,7 @@ function handleRenderDuration(duration: number) {
     },
     {
       name: '"Lock" a notable',
-      description: "I did not know how to call this feature, but here's the thing:<br/> You can now \"lock\" a node so that it will always have one of your searched stats. This is particurlarly useful when searching for <strong>Elegant Hubris</strong> seeds, as the small nodes give nothing, so you could allocate any notable with a given length path, since the small nodes give nothing, but you might want one fixed notable to have access to its mastery.<br/> You toggle the \"lock\" on a node by using CTRL + click on it. <br/>There is no limitations to the number of locked nodes.<br/>A locked node will be displayed with a small lock icon next to it",
+      description: "I did not know how to call this feature, but here's the thing:<br/> You can now \"lock\" a node so that it will always have one of your searched stats. This is particularly useful when searching for <strong>Elegant Hubris</strong> seeds, as the small nodes give nothing, so you could allocate any notable with a given length path, since the small nodes give nothing, but you might want one fixed notable to have access to its mastery.<br/> You toggle the \"lock\" on a node by using CTRL + click on it. <br/>There is no limitations to the number of locked nodes.<br/>A locked node will be displayed with a small lock icon next to it",
       mediaUrl: "./assets/changelog/locked_node.png"
     },
     {

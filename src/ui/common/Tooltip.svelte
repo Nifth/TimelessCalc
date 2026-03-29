@@ -25,12 +25,35 @@
     });
   });
   let header = $derived(node?.conqueredName || node?.name || "");
+
+  let tw = $state(0);
+  let th = $state(0);
+
+  let tooltipPos = $derived.by(() => {
+    const offset = 20;
+    let left = x + offset;
+    let top = y - offset;
+
+    if (left + tw > window.innerWidth) {
+      left = x - tw - offset;
+    }
+    if (top + th > window.innerHeight) {
+      top = window.innerHeight - th - offset;
+    }
+    if (top < 0) {
+      top = offset;
+    }
+
+    return { left, top };
+  });
 </script>
 
 {#if node}
   <div
+    bind:clientWidth={tw}
+    bind:clientHeight={th}
     class="fixed z-50 pointer-events-none bg-black/90 text-amber-100 p-3 rounded-lg font-fontin text-lg max-w-sm whitespace-pre-wrap shadow-lg"
-    style="left: {x + 20}px; top: {y - 20}px;"
+    style="left: {tooltipPos.left}px; top: {tooltipPos.top}px; {tw === 0 ? 'visibility: hidden;' : ''}"
   >
     <div class="font-bold mb-2">{header}</div>
     <div class="space-y-1">

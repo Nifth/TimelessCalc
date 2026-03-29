@@ -13,7 +13,10 @@
   });
 
   function selectPlatform(platform: string) {
-    $searchStore.platform = platform as Platform;
+    searchStore.update((s) => {
+      s.platform = platform as Platform;
+      return s;
+    });
   }
 </script>
 

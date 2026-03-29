@@ -211,179 +211,203 @@ export async function applySeed(
   });
 }
 
+export async function handleSeedSearch(
+  seedInput: number,
+  translation: Record<string, Translation[]>,
+  jewelType: JewelType,
+) {
+  setSearchLoading(true);
+  await tick();
+
+  const chosenSocket = get(treeStore).chosenSocket?.skill;
+  if (!chosenSocket) {
+    setSearchNotFound();
+    return;
+  }
+  const jewelData = await loadJewelData(jewelType, String(chosenSocket));
+  if (!jewelData) {
+    setSearchLoading(false);
+    return;
+  }
+  const entry = getEntryForSeed(jewelData, seedInput);
+  if (!entry) {
+    setSearchNotFound();
+    return;
+  }
+
+  const warning = validateSocket();
+  if (warning) {
+    alert(warning);
+    setSearchNotFound();
+    return;
+  }
+
+  treeStore.update((state) => {
+    const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
+    applySeedModifications(entry, socketNodeIds, translation, jewelType);
+    return state;
+  });
+  setSearchComplete();
+}
+
+export async function handleStatsSearch(
+  translation: Record<string, Translation[]>,
+  jewelType: JewelType,
+  selectedStats: Stat[],
+) {
+  setSearchLoading(true);
+  await tick();
+
+  if (selectedStats.length === 0 || !jewelType) {
+    setSearchNotFound();
+    return;
+  }
+  const chosenSocket = get(treeStore).chosenSocket?.skill;
+  if (!chosenSocket) {
+    setSearchNotFound();
+    return;
+  }
+  await new Promise((resolve) => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
+  const jewelData = await loadJewelData(jewelType, String(chosenSocket));
+  if (!jewelData) {
+    setSearchLoading(false);
+    return;
+  }
+  const results: Record<
+    number,
+    {
+      statCounts: Record<number, number>;
+      statTotals: Record<number, number>;
+    }
+  > = {};
+
+  const treeState = get(treeStore);
+  const lockedNodes = treeState.locked;
+  const allocatedNodes = treeState.allocated;
+  const selectedStatKeys = new Set(selectedStats.map((s) => s.statKey));
+  const statSearchMode = get(searchStore).statSearchMode;
+
+  for (const seedStr of Object.keys(jewelData)) {
+    const seed = parseInt(seedStr);
+    const entry = jewelData[seed];
+    if (!entry) continue;
+
+    const statCounts: Record<number, number> = {};
+    const statTotals: Record<number, number> = {};
+    const nodeStatIds: Record<string, Set<number>> = {};
+
+    for (const type of ["r", "a"] as const) {
+      for (const [key, nodeIds] of Object.entries(entry[type] || {})) {
+        const stats = parseKey(key);
+        for (const { statId, value } of stats) {
+          if (selectedStatKeys.has(statId)) {
+            for (const nodeId of nodeIds) {
+              if (allocatedNodes.has(nodeId.toString())) {
+                statCounts[statId] = (statCounts[statId] || 0) + 1;
+                statTotals[statId] = (statTotals[statId] || 0) + value;
+                if (!nodeStatIds[nodeId.toString()]) {
+                  nodeStatIds[nodeId.toString()] = new Set();
+                }
+                nodeStatIds[nodeId.toString()].add(statId);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    const meetsMinRequirement = selectedStats.every((stat) => {
+      if (stat.exclude) return true;
+      if (statSearchMode === "occurrences") {
+        return (statCounts[stat.statKey] || 0) >= stat.minWeight;
+      } else {
+        return (statTotals[stat.statKey] || 0) >= stat.minWeight;
+      }
+    });
+
+    const meetsLockedRequirement =
+      lockedNodes.size === 0 ||
+      [...lockedNodes.keys()].every(
+        (nodeId) => nodeStatIds[nodeId] && nodeStatIds[nodeId].size > 0,
+      );
+
+    if (meetsMinRequirement && meetsLockedRequirement) {
+      results[seed] = { statCounts, statTotals };
+    }
+  }
+
+  const grouped: Record<
+    string,
+    {
+      seed: number;
+      statCounts: Record<number, number>;
+      statTotals: Record<number, number>;
+      totalWeight: number;
+    }[]
+  > = {};
+  const minTotalWeight = get(searchStore).minTotalWeight;
+  for (const [seed, data] of Object.entries(results)) {
+    const totalWeight = calculateWeight(data, selectedStats, statSearchMode);
+    
+    if (totalWeight === null || totalWeight < minTotalWeight || totalWeight === 0) continue;
+
+    const key = totalWeight.toFixed(1);
+    if (!grouped[key]) {
+      grouped[key] = [];
+    }
+    grouped[key].push({ seed: parseInt(seed), ...data, totalWeight });
+  }
+
+  const sortedWeights = Object.keys(grouped).sort(
+    (a, b) => parseFloat(b) - parseFloat(a),
+  );
+  const orderedSeeds: number[] = [];
+  for (const weight of sortedWeights) {
+    const seedsInGroup = grouped[weight]
+      .sort((a, b) => a.seed - b.seed)
+      .map((g) => g.seed);
+    orderedSeeds.push(...seedsInGroup);
+  }
+
+  const allStatKeys = new Set<number>();
+  for (const { statCounts } of Object.values(results)) {
+    for (const key of Object.keys(statCounts)) {
+      allStatKeys.add(parseInt(key));
+    }
+  }
+  const statKeyColors = generateStatKeyColors(Array.from(allStatKeys));
+
+  searchStore.update((state) => {
+    state.searched = true;
+    state.loading = false;
+    state.statsResults = grouped;
+    state.statKeyColors = statKeyColors;
+    state.orderedSeeds = orderedSeeds;
+    state.totalResults = orderedSeeds.length;
+    state.currentPage = 0;
+    return state;
+  });
+}
+
 export async function handleSearch(
   mode: "seed" | "stats" | null,
   seedInput: number | null,
   translation: Record<string, Translation[]>,
   jewelType: JewelType | null,
   selectedStats: Stat[],
-  ) {
-  setSearchLoading(true);
-  await tick();
+) {
   if (mode === "seed") {
     if (!seedInput || !jewelType) {
       setSearchNotFound();
       return;
     }
-    const chosenSocket = get(treeStore).chosenSocket?.skill;
-    if (!chosenSocket) {
-      setSearchNotFound();
-      return;
-    }
-    const jewelData = await loadJewelData(jewelType, String(chosenSocket));
-    if (!jewelData) {
-      setSearchLoading(false);
-      return;
-    }
-    const entry = getEntryForSeed(jewelData, seedInput);
-    if (!entry) {
-      setSearchNotFound();
-      return;
-    }
-
-    const warning = validateSocket();
-    if (warning) {
-      alert(warning);
-      setSearchNotFound();
-      return;
-    }
-
-    treeStore.update((state) => {
-      const socketNodeIds = canvas.treeData.socketNodes[chosenSocket];
-
-      applySeedModifications(entry, socketNodeIds, translation, jewelType);
-
-      return state;
-    });
-    setSearchComplete();
+    await handleSeedSearch(seedInput, translation, jewelType);
   } else if (mode === "stats") {
-    if (selectedStats.length === 0 || !jewelType) {
+    if (!jewelType) {
       setSearchNotFound();
       return;
     }
-    const chosenSocket = get(treeStore).chosenSocket?.skill;
-    if (!chosenSocket) {
-      setSearchNotFound();
-      return;
-    }
-    await new Promise((resolve) => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
-    const jewelData = await loadJewelData(jewelType, String(chosenSocket));
-    if (!jewelData) {
-      setSearchLoading(false);
-      return;
-    }
-    // Results: for each seed, count occurrences of each selected stat on allocated nodes
-    const results: Record<
-      number,
-      {
-        statCounts: Record<number, number>;
-        statTotals: Record<number, number>;
-      }
-    > = {};
-
-    const treeState = get(treeStore);
-    const lockedNodes = treeState.locked;
-    const allocatedNodes = treeState.allocated;
-    const selectedStatKeys = new Set(selectedStats.map((s) => s.statKey));
-    const statSearchMode = get(searchStore).statSearchMode;
-
-    for (const seedStr of Object.keys(jewelData)) {
-      const seed = parseInt(seedStr);
-      const entry = jewelData[seed];
-      if (!entry) continue;
-
-      const statCounts: Record<number, number> = {};
-      const statTotals: Record<number, number> = {};
-      const nodeStatIds: Record<string, Set<number>> = {};
-
-      // Process 'r' and 'a'
-      for (const type of ["r", "a"] as const) {
-        for (const [key, nodeIds] of Object.entries(entry[type] || {})) {
-          const stats = parseKey(key);
-          for (const { statId, value } of stats) {
-            if (selectedStatKeys.has(statId)) {
-              // Count for each allocated nodeId
-              for (const nodeId of nodeIds) {
-                if (allocatedNodes.has(nodeId.toString())) {
-                  statCounts[statId] = (statCounts[statId] || 0) + 1;
-                  statTotals[statId] = (statTotals[statId] || 0) + value;
-                  (nodeStatIds[nodeId.toString()] ??= new Set()).add(statId);
-                }
-              }
-            }
-          }
-        }
-      }
-
-      const meetsMinRequirement = selectedStats.every((stat) => {
-        if (stat.exclude) return true; // Excluded stats don't need to meet requirements
-        if (statSearchMode === "occurrences") {
-          return (statCounts[stat.statKey] || 0) >= stat.minWeight;
-        } else {
-          return (statTotals[stat.statKey] || 0) >= stat.minWeight;
-        }
-      });
-
-      // Each locked node must have at least one selected stat
-      const meetsLockedRequirement =
-        lockedNodes.size === 0 ||
-        [...lockedNodes.keys()].every(
-          (nodeId) => nodeStatIds[nodeId] && nodeStatIds[nodeId].size > 0,
-        );
-
-      if (meetsMinRequirement && meetsLockedRequirement) {
-        results[seed] = { statCounts, statTotals };
-      }
-    }
-
-    // Group by total weight
-    const grouped: Record<
-      string,
-      {
-        seed: number;
-        statCounts: Record<number, number>;
-        statTotals: Record<number, number>;
-        totalWeight: number;
-      }[]
-    > = {};
-    const minTotalWeight = get(searchStore).minTotalWeight;
-    for (const [seed, data] of Object.entries(results)) {
-      const totalWeight = calculateWeight(data, selectedStats, statSearchMode);
-      
-      if (totalWeight === null || totalWeight < minTotalWeight || totalWeight === 0) continue;
-
-      const key = totalWeight.toFixed(1);
-      (grouped[key] ??= []).push({ seed: parseInt(seed), ...data, totalWeight });
-    }
-
-    const sortedWeights = Object.keys(grouped).sort(
-      (a, b) => parseFloat(b) - parseFloat(a),
-    );
-    const orderedSeeds: number[] = [];
-    for (const weight of sortedWeights) {
-      const seedsInGroup = grouped[weight]
-        .sort((a, b) => a.seed - b.seed)
-        .map((g) => g.seed);
-      orderedSeeds.push(...seedsInGroup);
-    }
-
-    // Generate colors for all unique stat keys found in results
-    const allStatKeys = new Set<number>();
-    for (const { statCounts } of Object.values(results)) {
-      Object.keys(statCounts).forEach((key) => allStatKeys.add(parseInt(key)));
-    }
-    const statKeyColors = generateStatKeyColors(Array.from(allStatKeys));
-
-    searchStore.update((state) => {
-      state.searched = true;
-      state.loading = false;
-      state.statsResults = grouped;
-      state.statKeyColors = statKeyColors;
-      state.orderedSeeds = orderedSeeds;
-      state.totalResults = orderedSeeds.length;
-      state.currentPage = 0;
-      return state;
-    });
+    await handleStatsSearch(translation, jewelType, selectedStats);
   }
 }
 

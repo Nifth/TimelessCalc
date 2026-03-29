@@ -1,8 +1,18 @@
 import type { Platform, SearchStore, JewelType } from "$lib/types";
 import { writable } from "svelte/store";
+import { fetchDefaultLeague } from "$lib/providers/leagues";
 
-export const defaultLeague = "Keepers";
+export let defaultLeague = "Standard";
 export const defaultPlatform: Platform = "PC";
+
+export async function initDefaultLeague(): Promise<void> {
+    const league = await fetchDefaultLeague();
+    defaultLeague = league;
+    searchStore.update((s) => {
+        s.league = league;
+        return s;
+    });
+}
 
 export const searchStore = writable<SearchStore>({
 	jewelType: null,

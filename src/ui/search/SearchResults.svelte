@@ -1,5 +1,4 @@
 <script lang="ts">
-import type { Node } from "$lib/types";
 import { searchStore } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import { canvas } from "$lib/canvas/canvasContext";
@@ -18,6 +17,7 @@ import TradeControls from "$lib/ui/search/TradeControls.svelte";
 import SaveFavoriteModal from "$lib/ui/modals/SaveFavoriteModal.svelte";
 import { favoritesActions } from "$lib/stores/favoritesStore";
 import { showNotification } from "$lib/stores/notificationStore";
+import { findNearbyKeystone } from "$lib/utils/formatters";
 
 let {
 	ontargetposition,
@@ -201,43 +201,6 @@ async function handleShare() {
 	}
 }
 
-function findNearbyKeystone(socket: Node): string {
-	const treeNodes = canvas.treeData.nodes;
-	const socketNodes = canvas.treeData.socketNodes[socket.skill.toString()];
-
-	if (!socketNodes) {
-		return socket.name;
-	}
-
-	for (const nodeId of socketNodes) {
-		const node = treeNodes[nodeId];
-		if (node && node.isKeystone) {
-			return node.name;
-		}
-	}
-
-	for (const nodeId of socketNodes) {
-		const node = treeNodes[nodeId];
-		if (node && node.isNotable) {
-			return node.name;
-		}
-	}
-
-	for (const nodeId of socketNodes) {
-		const node = treeNodes[nodeId];
-		if (
-			node &&
-			node.name &&
-			node.name !== "Basic Jewel Socket" &&
-			!node.name.includes("Jewel Socket")
-		) {
-			return node.name;
-		}
-	}
-
-	return socket.name;
-}
-
 function generateFavoriteSuggestion(): string {
 	const conquerorLabel = $searchStore.conqueror?.label || "Any";
 	const jewelTypeLabel = $searchStore.jewelType?.label || "";
@@ -245,7 +208,7 @@ function generateFavoriteSuggestion(): string {
 	if (!socket) {
 		return `${conquerorLabel} (${jewelTypeLabel}) - No socket`;
 	}
-	const keystone = findNearbyKeystone(socket);
+  const keystone = findNearbyKeystone(socket, canvas.treeData.nodes, canvas.treeData);
 	return `${conquerorLabel} (${jewelTypeLabel}) - ${keystone}`;
 }
 

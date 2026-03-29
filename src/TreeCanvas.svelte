@@ -13,7 +13,7 @@ import { preloadSprites } from "$lib/canvas/utils/sprites";
 import { TREE_CONSTANTS } from "$lib/constants/tree";
 import treeData from "$lib/data/tree.json" with { type: "json" };
 import { mouseStore } from "$lib/stores/mouseStore";
-import { searchStore } from "$lib/stores/searchStore";
+import { searchStore, defaultLeague } from "$lib/stores/searchStore";
 import { treeStore } from "$lib/stores/treeStore";
 import type { Node, TreeStore, SearchStore } from "$lib/types";
 import { cleanupSeedModifications } from "$lib/utils/sidebar/searchLogic";
@@ -43,7 +43,7 @@ let canvasWidth = $state(0);
 let canvasHeight = $state(0);
 let cursorStyle = $state("default");
 let cachedTreeState: TreeStore = { chosenSocket: null, allocated: new Map(), locked: new Map(), search: "", scale: 10, hovered: null, loading: false };
-let cachedSearchState: SearchStore = { jewelType: null, conqueror: null, seed: null, selectedStats: [], searched: false, statsResults: {}, statKeyColors: {}, minTotalWeight: 0, statSearchMode: "occurrences", league: "Keepers", platform: "PC", currentPage: 0, totalResults: 0, orderedSeeds: [], lastTradeInfo: null, loading: false, mode: null, statsSearched: false, seedSearched: false, automated: false, jewelLoadError: null };
+let cachedSearchState: SearchStore = { jewelType: null, conqueror: null, seed: null, selectedStats: [], searched: false, statsResults: {}, statKeyColors: {}, minTotalWeight: 0, statSearchMode: "occurrences", league: defaultLeague, platform: "PC", currentPage: 0, totalResults: 0, orderedSeeds: [], lastTradeInfo: null, loading: false, mode: null, statsSearched: false, seedSearched: false, automated: false, jewelLoadError: null };
 let { onRender = () => {} } = $props();
 
 onMount(() => {

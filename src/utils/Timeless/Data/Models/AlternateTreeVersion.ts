@@ -18,7 +18,7 @@ export class AlternateTreeVersion {
   }
 
   public get MaximumAdditions(): number {
-    return this.MinimumAdditions; // identique dans toutes les versions
+    return this.MinimumAdditions;
   }
 
   public get NotableReplacementSpawnWeight(): number {
