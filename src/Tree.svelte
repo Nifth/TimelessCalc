@@ -151,7 +151,7 @@ function handleRenderDuration(duration: number) {
 {/if}
 
 <ReleaseModal releaseData={{
-  version: "1.0.2",
+  version: "1.1.1",
   title: "Update with 3.29 tree",
   date: "July 28, 2026",
   features: [
