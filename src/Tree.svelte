@@ -151,27 +151,13 @@ function handleRenderDuration(duration: number) {
 {/if}
 
 <ReleaseModal releaseData={{
-  version: "1.0.0",
-  title: "What's New in TimelessCalc",
-  date: "March 27, 2026",
+  version: "1.0.1",
+  title: "Update with 3.29 tree",
+  date: "July 28, 2026",
   features: [
     {
-      name: "New changelog modal",
-      description: "From now on, when I add a new feature / fix something critical (hope there's nothing like that right now), You'll have this window that explains briefly what's new/fixed. <br/>If you've got any issue or feature request, you can always open an issue on <a href='https://github.com/Nifth/TimelessCalc' target='_blank' class='font-bold cursor-pointer'>github</a>"
-    },
-    {
-      name: "Seed Analyzer",
-      description: "Quickly inspect any seed across all jewel sockets. Useful for estimating how strong a seed may be. <br/>It can be accessed by pasting a jewel you copied from ingame, trade or pob, or by clicking the lightning icon in the bottom right corner.<br/>",
-      mediaUrl: "./assets/changelog/analyzer.png"
-    },
-    {
-      name: '"Lock" a notable',
-      description: "I did not know how to call this feature, but here's the thing:<br/> You can now \"lock\" a node so that it will always have one of your searched stats. This is particularly useful when searching for <strong>Elegant Hubris</strong> seeds, as the small nodes give nothing, so you could allocate any notable with a given length path, since the small nodes give nothing, but you might want one fixed notable to have access to its mastery.<br/> You toggle the \"lock\" on a node by using CTRL + click on it. <br/>There is no limitations to the number of locked nodes.<br/>A locked node will be displayed with a small lock icon next to it",
-      mediaUrl: "./assets/changelog/locked_node.png"
-    },
-    {
-      name: "Help modal",
-      description: "Remember there is always the help modal accessible from the \"?\" button in the bottom right corner. I try to give as much information about the different features as possible there"
+      name: "New passive clusters",
+      description: "Added the new <strong>Arcane Conservation</strong> cluster to the north-east of the Witch's starting location.<br/>Added the new <strong>Contemplative Meditation</strong> cluster to the north-west of the Templar's starting location."
     }
   ]
 }} />
